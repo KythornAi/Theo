@@ -1,0 +1,2 @@
+2026-04-27 16:45 - Reddit pain-point harvest: searched r/ADHD for daily planner, morning routine, daily reset, printable, overwhelm. Found top 5 posts, wrote to HERMES_INBOX.md Section 1 with 4 opportunity flags in Section 9.
+2026-05-05 20:53 - Pinterest scan: 25 pins across 10 queries, 10 angles identified, saved to research/. | Etsy listing structure: synthesized from prior research into recommended-etsy-listing-structure. | Bundle validation: 9 companion products evaluated, top 5 ranked, saved to research/.

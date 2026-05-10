@@ -1,0 +1,25 @@
+# Secrets and Hermes internals
+.env
+*.env
+~/.hermes/
+
+# OS and sync artifacts
+.DS_Store
+*.sync-conflict-*
+syncthing.log
+
+# Sync folders (Syncthing manages these)
+.stfolder/
+.stversions/
+
+# Editor / Python temp files
+*.swp
+__pycache__/
+*.pyc
+research/*.tmp
+
+# Sync conflicts in brain_out
+brain_out/*.sync-conflict-*
+
+# Excalidraw metadata (keep the .excalidraw files, exclude metadata)
+*.excalidraw-library
