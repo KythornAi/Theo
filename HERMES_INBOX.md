@@ -500,6 +500,10 @@
    500|   500|   500|- **Trust builders:** Creator has ADHD (stated explicitly), free trial/test version, ADHD researcher references (Dr. Russell Barkley), testimonials showing 2+ week sustained use, transparency about limitations
    501|
 
+---
+
+2026-05-10 — audit: Monthly skill audit completed. 110 skills reviewed, all annotated. 25 skills need minor fixes: 23 missing version in frontmatter, productivity/notion has stale 2025 refs, research/research-paper-writing has stale 2025 refs. Low-priority metadata only — no functional impact on current workflows.
+
 [BRAIN-WRITE] 2026-05-03 | Topic: adhd-opportunity-brief-full | File: brain_out/theo-adhd-opportunity-brief-full-2026-05-03.md
 
 
@@ -904,3 +908,19 @@ Read that skill file now if you haven't already. Everything you need is in there
 **No urgency.** Build is at Phase 1 — we won't need this until ~Phase 6 (screenshot/listing prep, several weeks away). Take your time, do it well, prefer fewer verified findings over many shaky ones.
 
 [RESEARCH] 2026-05-09 | Topic: Etsy demo patterns for premium ADHD planners | File: research/etsy-demo-patterns-2026-05-09.md
+
+---
+
+*Above: Previous entries. Below: 2026-05-11 Run 4 pain-point harvest.*
+
+[RESEARCH] 2026-05-11 | Topic: ADHD Pain Point Harvest — Run 4 | File: research/adhd-painpoints-2026-05-11.md
+*Spotted this:*
+- **Friction wins over willpower every time:** Doomscrolling, TV, and gaming are frictionless. Every productive action requires activation energy ADHD brains don't have on bad days. A tool must compete on friction, not motivation.
+- **Initiation > Planning:** Task initiation — the inability to start something already decided on — is rated worse than distractibility, forgetfulness, or impulsivity. Tools that only organise tasks without helping you start are solving the wrong symptom.
+- **Social context dictates executive function:** Being alone = executive dysfunction lifts; partner home = cognitive overload. Body doubling = initiation unlocked. Environment matters more than the planner.
+- **Burnout-overcommitment loop is predictable:** Day one full routine -> day seven quit everything. External constraints (tool-enforced limits like "max 3 habits") work where self-restraint fails.
+- **Variable rewards > planned rewards:** The ADHD brain pre-discounts planned rewards. Surprise/variable reinforcement is neurologically more effective — slot machine mechanics, basically.
+Full writeup: research/adhd-painpoints-2026-05-11.md
+
+[RESEARCH] 2026-05-11 | Topic: App Store ADHD Planner Competitor Scan — Love/Hate Signals | File: research/app-store-adhd-planners-2026-05-11.md
+*Spotted this: Task library / saved templates is the biggest gap in our current offering. Focus timer is table stakes. Voice input is a genuine differentiator. Pricing transparency beats subscription rage. The "saved lists" pattern directly addresses the abandonment cycle.*
