@@ -86,13 +86,52 @@ Add tasks one at a time. Do not set up all three at once until each runs cleanly
 
 ---
 
-## Model config reminder
+## Model config reminder (S39 — three-tier stack)
 
-- **OpenRouter model to use:** `qwen3.6-plus` (Qwen3.6 Plus by Alibaba) — 1M context, free during preview, agent-optimised. This is what the community calls "Qwen 3.6 plus preview" in Goldie's videos.
-- **Drop:** `qwen/qwen3-72b:free` — older 72B model, likely superseded. Do not use on Friday.
-- **MiMo-V2-Pro** — free for 2 weeks via Nous Research trial portal only, not a permanent free tier. Skip unless you specifically want to try the trial.
-- **Rate limits:** OpenRouter free tier caps at ~200 requests/day on unfunded accounts, ~1,000/day after a £7–10 deposit. Strongly recommended to put £10 on the account before Friday overnight runs.
-- Do not switch to a paid model for automated overnight cron jobs without explicitly deciding to.
+Theo's LLM stack is split across three tiers. See AGENTS.md "LLM stack" section for Theo's view. This is Kyle's operational cheat sheet.
+
+**Chat default (Tier 1):** `qwen/qwen3.6-plus` via OpenRouter. $0.325/M input, $1.95/M output. 1M context. Strong on agentic tasks. Kyle can swap this to any OpenRouter model any time — see "Swapping the chat model" below.
+
+**Cron jobs (Tier 2):** Both active cron jobs (`monthly-skill-audit`, `weekly-adhd-painpoints-research`) have `deepseek/deepseek-v4-flash` pinned explicitly in `~/.hermes/cron/jobs.json` (swapped from qwen/qwen3.6-plus on 2026-05-10 for cost savings). Cron ignores the chat default — changing `config.yaml` model does not affect cron.
+
+**Deep thinking (Tier 3):** Codex CLI via Kyle's ChatGPT Plus (£18/mo). No extra billing. Invoked via the `codex-think` skill. 10-60s per call. Rate-limited under Plus tier — use for hard strategy/reasoning only, not routine chats. Claude.ai is the manual backup if Codex rate-limits hit.
+
+**Why ChatGPT Plus can't power Theo chats directly:** The OAuth session is strictly bound to the Codex CLI binary — it does not expose an OpenAI-compatible HTTP endpoint. Hermes cannot use ChatGPT Plus as a chat backend. GPT-5.5 via OpenAI API would require a separate paid `OPENAI_API_KEY` (~$5/M input). Not worth it when Qwen 3.6 Plus handles routine work at 15x lower cost.
+
+---
+
+## Swapping the chat model
+
+The default chat model lives in `~/.hermes/config.yaml` under `model.default`. To swap:
+
+1. SSH to the active host: `ssh kyle@hermes-theo-pi` (Pi) or `ssh kyle@<laptop>` when laptop is primary.
+2. Edit `~/.hermes/config.yaml`, change `model.default:` to a new OpenRouter slug.
+3. Restart Hermes: kill the background process and relaunch (`kill <pid>; nohup hermes gateway run --replace > ~/.hermes/logs/gateway.log 2>&1 &`).
+
+Cron jobs are unaffected — they pin `deepseek/deepseek-v4-flash` in `~/.hermes/cron/jobs.json` regardless.
+
+---
+
+## Invoking deep thinking (Codex)
+
+Three patterns to trigger the `codex-think` skill from Telegram:
+
+- **Explicit:** "Use codex for this — [problem]"
+- **Explicit session:** "Let's strategy session, use codex throughout" — Theo holds the mode until you say "back to normal"
+- **Implicit:** hard reasoning questions sometimes trigger Theo's skill router automatically (unreliable early on — be explicit)
+
+Codex calls take 10-60s. Theo will tell you in Telegram that it's running. If rate-limited, Theo will say so — fall back to Claude.ai manually.
+
+---
+
+## Cron 401 troubleshooting
+
+If a cron fails with a 401 and the key is `sk-or-v1-*` being sent to `api.openai.com`:
+
+- Root cause is in `~/.hermes/config.yaml`, NOT in `~/.hermes/.env`.
+- Verify `providers.openai-api.base_url: https://openrouter.ai/api/v1` and `key_env: OPENROUTER_API_KEY`.
+- If a single cron job fails but chats work, check that job's `model` field in `~/.hermes/cron/jobs.json` — it may reference a model that doesn't exist on OpenRouter.
+- Rollback: `cp ~/.hermes/config.yaml.bak-s39 ~/.hermes/config.yaml` then restart Hermes.
 
 ---
 
@@ -139,7 +178,8 @@ ssh kyle@hermes-theo-pi "~/.hermes/hermes-agent/venv/bin/python3 -c 'from ddgs i
 
 | Package | Skill | Why |
 |---------|-------|-----|
-| `ddgs` v9.14.1 | duckduckgo-search | Provides `ddgs` CLI and Python library for web search |
+| `ddgs` v9.14.1 | duckduckgo-search | Provides `ddgs` CLI and Python library for web search (fallback — TinyFish is now primary) |
+| `tinyfish` v0.2.5 | tinyfish | Live browser-rendered search + page fetch. Reads `TINYFISH_API_KEY` from `~/.hermes/.env` automatically |
 
 If a skill reports a missing module, install it here. Do not use system `pip3` — Pi OS (Bookworm) blocks it under PEP 668.
 
@@ -160,14 +200,17 @@ If a skill reports a missing module, install it here. Do not use system `pip3` �
 4. When asked for a workspace directory, point it to `~/hermes_files/theo/` — this is where Hermes will look for `AGENTS.md` and where Theo will write outputs.
 5. Configure the Telegram gateway: `hermes gateway` — follow the prompts to connect your bot token.
 
-**File sync — Syncthing (live, bidirectional):**
-- Sync method: **Syncthing over Tailscale**. Installed 2026-04-30. Folder `theo-workspace` syncs `~/hermes_files/theo/` (Pi) ↔ `Side_Hustle/theo/` (Mac) with ~2 s latency.
-- Theo's writes appear on Mac within seconds. Your edits to SOUL.md/AGENTS.md etc. appear on Pi within seconds — no rsync step needed.
-- Mac side has **Staggered File Versioning** enabled. Deleted or overwritten files have a recoverable copy in `Side_Hustle/theo/.stversions/`.
-- Pi side runs as a **systemd user service** (`syncthing.service`) with linger enabled — survives reboot automatically.
-- Mac side runs as a direct process (LaunchAgent blocked by external-drive home dir). **Start it manually** after a Mac reboot with: `/opt/homebrew/opt/syncthing/bin/syncthing --no-browser --no-restart >> /tmp/syncthing-mac.log 2>&1 &`
-- Skills: Hermes auto-creates skills in `~/.hermes/skills/`. Theo copies finished skill files to `~/hermes_files/theo/skills/` — they appear on Mac immediately via sync.
-- `~/hermes_files/side_hustle/` and `~/.hermes/` are NOT synced. Emergency fallback: rsync (see below).
+**File sync — Git (primary, as of 2026-05-13):**
+- Both Mac (`Side_Hustle/theo/`) and Pi (`~/hermes_files/theo/`) are git repos pointing to `https://github.com/KythornAi/Theo.git`.
+- **Kyle → Theo:** Claude commits skill/config changes and pushes in each session. Theo runs `git pull` at session start to pick them up automatically.
+- **Theo → Kyle:** Theo uses the `git-commit` skill after completing tasks. Mac auto-pulls every 5 minutes via cron (`theo/scripts/git-pull-theo.sh`). Research outputs appear on Mac without any manual steps.
+- Pi SSH alias uses `github-theo` in `~/.ssh/config` (dedicated `theo_github` key). Mac uses HTTPS (no SSH key needed).
+- `~/.hermes/` is NOT synced — API keys and runtime stay on device only.
+
+**Syncthing — safety net only (no longer required):**
+- Pi Syncthing service still running (`systemd --user syncthing`). Leave it — it does no harm and provides a backup layer.
+- Mac Syncthing is unreliable (external drive LaunchAgent issue). Do not depend on it. Start manually only if needed: `/opt/homebrew/opt/syncthing/bin/syncthing --no-browser --no-restart >> /tmp/syncthing-mac.log 2>&1 &`
+- Mac has **Staggered File Versioning** — deleted/overwritten files recoverable from `Side_Hustle/theo/.stversions/`.
 
 **Syncthing management commands:**
 

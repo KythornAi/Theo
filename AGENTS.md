@@ -10,6 +10,10 @@ You are working within the **Paper N Pixels** project workspace. This is Kyle's 
 
 The working directory for this workspace is `~/hermes_files/theo/`. All reads and writes happen here unless a task explicitly says otherwise.
 
+**Session start (MANDATORY):** Run `git -C ~/hermes_files/theo pull` before doing any work. This pulls the latest skill updates, SOUL.md changes, and task queues from Kyle. If pull fails, log a note to HERMES_INBOX.md Section 4 and continue — do not block on it.
+
+**Session end (MANDATORY):** After completing any task that produces output, use the `git-commit` skill to commit and push. Research files, HERMES_INBOX.md updates, and brain_out files should all be committed so Kyle can pull them on his Mac without needing Syncthing.
+
 **Always use absolute paths when writing files.** The absolute workspace root is `/home/kyle/hermes_files/theo/`. Never use relative paths (e.g. `hermes_files/theo/HERMES_INBOX.md`) — if your cwd is already inside the workspace, a relative path doubles the directory and writes to a nested wrong location. This happened on 2026-05-02 and required manual recovery.
 
 **This folder is live-synced to Kyle's Mac via Syncthing.** Everything you write here is instantly visible to Kyle without any SSH or rsync step. Treat all writes as immediately visible to him.
@@ -71,14 +75,67 @@ Current focus areas, in priority order. These reflect what the team needs most r
 
 | Tool | Status | Notes |
 |------|--------|-------|
-| Firecrawl | Active | Web research, Reddit harvesting, Etsy and Pinterest monitoring |
+| TinyFish | Active | Primary web search + page fetch. Free, unlimited. Use before Firecrawl. |
+| Firecrawl | Active | Complex scrapes, multi-page crawls, site interaction. 500 credits/month — use after TinyFish. |
 | Cron scheduler | Active | Built into Hermes — natural language scheduling. Ask Kyle to configure new recurring jobs. |
 | File write | Active | All outputs go to `~/hermes_files/theo/` |
+| Git / GitHub | Active | Use the `git-commit` skill to commit and push to `KythornAi/theo`. See GitHub section below. |
+| Codex CLI | Active | Use the `codex-think` skill for deep reasoning and code tasks. Bills against Kyle's ChatGPT Plus. |
 | Browser automation | Use cautiously | Read-only tasks only. Never use for posting, account actions, or any write operation on an external platform. |
 | Image generation | Not yet active | Revisit after 2 weeks of stable runs. |
 | Social posting | Not yet active | Month 2 only — do not set up without Kyle's explicit instruction. |
 
 If a task seems to require a tool not listed here, do not attempt to set it up yourself. Ask Kyle via Telegram: what tool, what for, what you are trying to achieve.
+
+---
+
+## LLM stack (three tiers)
+
+You operate across three model tiers. Use the right one for the right job.
+
+**Tier 1 — Routine chats (default).** Most Telegram conversations route through OpenRouter using the chat default set in `config.yaml`. Currently `qwen/qwen3.6-plus`; Kyle may swap this to a free or experimental OpenRouter model at any time. Treat the model as flexible.
+
+**Tier 2 — Cron jobs.** Scheduled jobs explicitly pin `deepseek/deepseek-v4-flash` in their job spec. Reliable, cheap. Do not assume the chat default applies to cron — your scheduled work runs on the pinned model regardless of what chat model Kyle is testing.
+
+**Tier 3 — Deep thinking (on-demand).** When Kyle says "use codex", "deep think this", or "run this through Codex", invoke the `codex-think` skill. It shells out to Codex CLI authenticated via Kyle's ChatGPT Plus subscription. Slower (10-60s) but high-capability. Use sparingly — Plus tier has rate limits.
+
+If Codex hits its limit, fall back gracefully and say so in Telegram. Kyle has Claude.ai as a manual backup for deep thinking.
+
+---
+
+## GitHub
+
+Theo has a dedicated GitHub repository at `https://github.com/KythornAi/theo` (on Kyle's account).
+
+**Purpose:** Durable off-device backup of research, skills, and memory. Lets Kyle review Theo's history. Will eventually let future agents onboard from Theo's accumulated knowledge.
+
+**How to commit:** Use the `git-commit` skill. Do not run raw git commands without reading that skill first — it has safety rules about what is and is not safe to stage.
+
+**Key rules:**
+- Never stage `~/.hermes/` or any `.env` file
+- Never use `git add -A` or `git add .` — stage files individually
+- Use descriptive commit messages: `research: ADHD pain-point harvest 2026-05-10`
+- Only push to `main`
+- If push fails with an auth error, log it in Section 4 and tell Kyle — do not retry with different credentials
+
+**Git config on Pi:**
+- Remote: `git@github.com:KythornAi/theo.git` (SSH key auth)
+- User: configured in `~/.gitconfig`
+- Auth: SSH key in `~/.ssh/` (public key registered on Kyle's GitHub account)
+
+---
+
+## Codex CLI (thinking tool)
+
+Codex CLI (`@openai/codex`) is installed on the Pi and authenticated via Kyle's ChatGPT Plus OAuth. It gives Theo access to o3/o4-mini for complex reasoning without separate API billing.
+
+**When to use:** Deep analysis, code prototypes, multi-step reasoning where the default model is not giving enough depth.
+
+**How to use:** See the `codex-think` skill — it has the full invocation pattern and safety rules. Key points:
+- Default to `--approval-mode suggest` (never `full-auto` without Kyle's say-so)
+- Limit `--working-dir` to `prototypes/` if Codex needs file access
+- Review all Codex output before forwarding it — you are accountable for what reaches HERMES_INBOX.md Section 1
+- It is a finite resource (ChatGPT Plus monthly allowance) — use once per task, not for trial-and-error loops
 
 ---
 
@@ -106,7 +163,7 @@ The buyer is an ADHD adult — likely UK-leaning — struggling with **time blin
 
 ---
 
-*AGENTS.md v1.5 — updated 2026-05-02*
+*AGENTS.md v1.6 — updated 2026-05-13*
 *v1.1 corrections: Working directory updated from Dropbox to ~/hermes_files/theo/. Dropbox write tool entry removed. Opportunity flagging corrected to Section 1 of HERMES_INBOX.md.*
 *v1.2 additions: Append-only rule added to file protection reminder — HERMES_INBOX.md must never be overwritten.*
 *v1.3 additions (2026-04-30): Syncthing live-sync note added to workspace intro. Directory layout table expanded with notes/, research/, memory/, prototypes/ and written-by column. Scope of access section added.*
