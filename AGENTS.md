@@ -8,15 +8,15 @@
 
 You are working within the **Paper N Pixels** project workspace. This is Kyle's digital products business — ADHD productivity tools sold on Etsy and Gumroad. The business is in pre-launch phase: no products are live yet. Your role right now is intelligence-gathering and first-draft content.
 
-The working directory for this workspace is `~/hermes_files/theo/`. All reads and writes happen here unless a task explicitly says otherwise.
+The working directory for this workspace is `~/theo/`. All reads and writes happen here unless a task explicitly says otherwise.
 
-**Session start (MANDATORY):** Run `git -C ~/hermes_files/theo pull` before doing any work. This pulls the latest skill updates, SOUL.md changes, and task queues from Kyle. If pull fails, log a note to HERMES_INBOX.md Section 4 and continue — do not block on it.
+**Session start (MANDATORY):** Run `git -C ~/theo pull` before doing any work. This pulls the latest skill updates, SOUL.md changes, and task queues from Kyle. If pull fails, log a note to HERMES_INBOX.md Section 4 and continue — do not block on it.
 
-**Session end (MANDATORY):** After completing any task that produces output, use the `git-commit` skill to commit and push. Research files, HERMES_INBOX.md updates, and brain_out files should all be committed so Kyle can pull them on his Mac without needing Syncthing.
+**Session end (MANDATORY):** After completing any task that produces output, use the `git-commit` skill to commit and push. Research files, HERMES_INBOX.md updates, and any Brain vault notes should all be committed so Kyle can see them on his Mac.
 
-**Always use absolute paths when writing files.** The absolute workspace root is `/home/kyle/hermes_files/theo/`. Never use relative paths (e.g. `hermes_files/theo/HERMES_INBOX.md`) — if your cwd is already inside the workspace, a relative path doubles the directory and writes to a nested wrong location. This happened on 2026-05-02 and required manual recovery.
+**Always use absolute paths when writing files.** The absolute workspace root is `/home/kylemoore/theo/`. Never use relative paths (e.g. `theo/HERMES_INBOX.md`) — if your cwd is already inside the workspace, a relative path doubles the directory and writes to a nested wrong location. This happened on 2026-05-02 and required manual recovery.
 
-**This folder is live-synced to Kyle's Mac via Syncthing.** Everything you write here is instantly visible to Kyle without any SSH or rsync step. Treat all writes as immediately visible to him.
+**This folder is git-synced to Kyle's Mac.** Kyle's Mac auto-pulls every 5 minutes via cron. Everything you commit and push here is visible to Kyle on his Mac within minutes without any SSH step.
 
 ---
 
@@ -46,14 +46,21 @@ The working directory for this workspace is `~/hermes_files/theo/`. All reads an
 
 ## Scope of access
 
-You can read and write inside `~/hermes_files/theo/` — and because this folder is live-synced, what you write appears on Kyle's Mac within seconds.
+You can read and write inside `~/theo/` — what you commit and push here is visible to Kyle on his Mac within minutes via cron auto-pull.
+
+**You can also read and write the shared Brain vault at `~/Brain/`.** This is Kyle's Obsidian second brain — his research, session notes, and project hubs live here. Use it to read context and write session notes back to Kyle.
+
+**When writing to `~/Brain/`:**
+
+1. Write the file to the appropriate PARA folder (new notes → `~/Brain/00_Inbox/`, research → `~/Brain/03_Resources/`, etc.)
+2. Immediately commit and push: `git -C ~/Brain add <file> && git -C ~/Brain commit -m "chore: Theo <short description>" && git -C ~/Brain push`
+3. Kyle's Mac pulls it on the next cron cycle (every 30 min) and it appears in Obsidian automatically.
 
 **You cannot reach:**
 - `~/.hermes/` — the Hermes install (venv, `.env` with API keys, skills source). Do not navigate here.
-- Kyle's wider Mac filesystem — `~/Desktop/`, `~/Documents/`, or anything outside the synced workspace. Exception: `~/hermes_files/theo/brain_out/` is assigned Theo workspace and synced to Kyle's Obsidian Brain vault (`05_Attachments/Theo/`). Use the `obsidian-write` skill for this path.
-- `~/hermes_files/side_hustle/` — separate Pi working folder not currently synced.
+- Kyle's wider Mac filesystem — `~/Desktop/`, `~/Documents/`, or anything outside the scopes above.
 
-If you need a file that lives outside `~/hermes_files/theo/`, ask Kyle via HERMES_INBOX.md Section 1. Do not attempt to read or write outside the scope above.
+If you need a file that lives outside `~/theo/` or `~/Brain/`, ask Kyle via HERMES_INBOX.md Section 1. Do not attempt to read or write outside the scope above.
 
 ---
 
@@ -93,7 +100,7 @@ If a task seems to require a tool not listed here, do not attempt to set it up y
 
 You operate across three model tiers. Use the right one for the right job.
 
-**Tier 1 — Routine chats (default).** Most Telegram conversations route through OpenRouter using the chat default set in `config.yaml`. Currently `qwen/qwen3.6-plus`; Kyle may swap this to a free or experimental OpenRouter model at any time. Treat the model as flexible.
+**Tier 1 — Routine chats (default).** Most Telegram conversations route through OpenRouter using the chat default set in `config.yaml`. Currently `deepseek/deepseek-v4-flash`; Kyle may swap this to a free or experimental OpenRouter model at any time. Treat the model as flexible.
 
 **Tier 2 — Cron jobs.** Scheduled jobs explicitly pin `deepseek/deepseek-v4-flash` in their job spec. Reliable, cheap. Do not assume the chat default applies to cron — your scheduled work runs on the pinned model regardless of what chat model Kyle is testing.
 
@@ -118,16 +125,17 @@ Theo has a dedicated GitHub repository at `https://github.com/KythornAi/theo` (o
 - Only push to `main`
 - If push fails with an auth error, log it in Section 4 and tell Kyle — do not retry with different credentials
 
-**Git config on Pi:**
-- Remote: `git@github.com:KythornAi/theo.git` (SSH key auth)
+**Git config on laptop:**
+
+- Remote: `git@github-theo:KythornAi/theo.git` (SSH key auth via `github-theo` alias in `~/.ssh/config`)
 - User: configured in `~/.gitconfig`
-- Auth: SSH key in `~/.ssh/` (public key registered on Kyle's GitHub account)
+- Auth: SSH key `~/.ssh/id_ed25519` (registered on Kyle's GitHub account)
 
 ---
 
 ## Codex CLI (thinking tool)
 
-Codex CLI (`@openai/codex`) is installed on the Pi and authenticated via Kyle's ChatGPT Plus OAuth. It gives Theo access to o3/o4-mini for complex reasoning without separate API billing.
+Codex CLI (`@openai/codex`) is installed on the laptop and authenticated via Kyle's ChatGPT Plus OAuth. It gives Theo access to o3/o4-mini for complex reasoning without separate API billing.
 
 **When to use:** Deep analysis, code prototypes, multi-step reasoning where the default model is not giving enough depth.
 
@@ -163,8 +171,9 @@ The buyer is an ADHD adult — likely UK-leaning — struggling with **time blin
 
 ---
 
-*AGENTS.md v1.6 — updated 2026-05-13*
+*AGENTS.md v1.7 — updated 2026-05-15*
 *v1.1 corrections: Working directory updated from Dropbox to ~/hermes_files/theo/. Dropbox write tool entry removed. Opportunity flagging corrected to Section 1 of HERMES_INBOX.md.*
 *v1.2 additions: Append-only rule added to file protection reminder — HERMES_INBOX.md must never be overwritten.*
 *v1.3 additions (2026-04-30): Syncthing live-sync note added to workspace intro. Directory layout table expanded with notes/, research/, memory/, prototypes/ and written-by column. Scope of access section added.*
 *v1.4 additions (2026-05-02): Absolute path rule added to workspace intro (path-doubling incident, 2026-05-02). HERMES_INBOX.md scope narrowed to short flags/quarantine only. research-write skill added for full research output — writes to research/<topic>-YYYY-MM-DD.md.*
+*v1.7 corrections (2026-05-15): Pi decommissioned. All paths updated: ~/hermes_files/theo/ → ~/theo/, /home/kyle/ → /home/kylemoore/. Syncthing live-sync replaced by git-based sync. Brain vault section added (~/Brain/ access + commit protocol). Chat model updated to deepseek/deepseek-v4-flash. Git config updated to github-theo SSH alias. Codex CLI location updated to laptop.*

@@ -10,7 +10,7 @@
 |---------|-----|
 | Theo stopped responding in Telegram | Type `/new` in Telegram chat to start a new conversation and compact context |
 | `/new` didn't help | Type `/restart` in Telegram chat |
-| Still broken | Open terminal on Pi, press `Ctrl+C` to stop Hermes, then type `hermes` to relaunch |
+| Still broken | SSH into laptop (`ssh kylemoore@100.126.155.50`), press `Ctrl+C` to stop Hermes, then type `hermes` to relaunch |
 | Theo seems confused / looping | Check `HERMES_INBOX.md` Section 4 (BLOCKED) and Section 3 (QUARANTINE) for clues |
 | Skill stopped working | Check the skill `.md` file for the last lesson-learned entry — may point to what changed |
 | DuckDuckGo search not working (`ddgs: command not found` or `ModuleNotFoundError`) | Install `ddgs` into the Hermes venv — see "Skill Python dependencies" section below |
@@ -31,7 +31,7 @@
 1. Open Telegram.
 2. Type `/new` — wait 30 seconds.
 3. If no response: type `/restart` — wait 60 seconds.
-4. If still no response: SSH into Pi (or use Pi directly), open terminal.
+4. If still no response: SSH into laptop (`ssh kylemoore@100.126.155.50`), open terminal.
 5. Find the Hermes process: `ps aux | grep hermes`
 6. Press `Ctrl+C` if Hermes is running in the foreground, or `kill <pid>` if background.
 7. Relaunch: type `hermes` in terminal.
@@ -44,7 +44,7 @@
 Run through this each time you send Theo a task:
 
 - [ ] Give Theo a single, clear task (one Reddit subreddit, one Etsy keyword, one competitor)
-- [ ] Check `HERMES_INBOX.md` via SSH — does it update within a reasonable time? (`ssh kyle@hermes-theo-pi "cat ~/hermes_files/theo/HERMES_INBOX.md"`)
+- [ ] Check `HERMES_INBOX.md` via SSH — does it update within a reasonable time? (`ssh kylemoore@100.126.155.50 "cat ~/theo/HERMES_INBOX.md"`)
 - [ ] Read Section 1 (Theo's Notes) — are summaries in Theo's own words? Are source URLs present?
 - [ ] Check Section 3 (Quarantine) — did Theo flag anything suspicious?
 - [ ] Check Section 4 (Blocked) — did Theo get stuck anywhere?
@@ -90,13 +90,13 @@ Add tasks one at a time. Do not set up all three at once until each runs cleanly
 
 Theo's LLM stack is split across three tiers. See AGENTS.md "LLM stack" section for Theo's view. This is Kyle's operational cheat sheet.
 
-**Chat default (Tier 1):** `qwen/qwen3.6-plus` via OpenRouter. $0.325/M input, $1.95/M output. 1M context. Strong on agentic tasks. Kyle can swap this to any OpenRouter model any time — see "Swapping the chat model" below.
+**Chat default (Tier 1):** `deepseek/deepseek-v4-flash` via OpenRouter (switched S47 — cost-first policy). Kyle can swap this to any OpenRouter model any time — see "Swapping the chat model" below.
 
-**Cron jobs (Tier 2):** Both active cron jobs (`monthly-skill-audit`, `weekly-adhd-painpoints-research`) have `deepseek/deepseek-v4-flash` pinned explicitly in `~/.hermes/cron/jobs.json` (swapped from qwen/qwen3.6-plus on 2026-05-10 for cost savings). Cron ignores the chat default — changing `config.yaml` model does not affect cron.
+**Cron jobs (Tier 2):** Both active cron jobs (`monthly-skill-audit`, `weekly-adhd-painpoints-research`) have `deepseek/deepseek-v4-flash` pinned explicitly in `~/.hermes/cron/jobs.json`. Cron ignores the chat default — changing `config.yaml` model does not affect cron.
 
 **Deep thinking (Tier 3):** Codex CLI via Kyle's ChatGPT Plus (£18/mo). No extra billing. Invoked via the `codex-think` skill. 10-60s per call. Rate-limited under Plus tier — use for hard strategy/reasoning only, not routine chats. Claude.ai is the manual backup if Codex rate-limits hit.
 
-**Why ChatGPT Plus can't power Theo chats directly:** The OAuth session is strictly bound to the Codex CLI binary — it does not expose an OpenAI-compatible HTTP endpoint. Hermes cannot use ChatGPT Plus as a chat backend. GPT-5.5 via OpenAI API would require a separate paid `OPENAI_API_KEY` (~$5/M input). Not worth it when Qwen 3.6 Plus handles routine work at 15x lower cost.
+**Why ChatGPT Plus can't power Theo chats directly:** The OAuth session is strictly bound to the Codex CLI binary — it does not expose an OpenAI-compatible HTTP endpoint. Hermes cannot use ChatGPT Plus as a chat backend. A separate paid `OPENAI_API_KEY` would be needed — not worth it when DeepSeek V4 Flash handles routine work at much lower cost.
 
 ---
 
@@ -104,7 +104,7 @@ Theo's LLM stack is split across three tiers. See AGENTS.md "LLM stack" section 
 
 The default chat model lives in `~/.hermes/config.yaml` under `model.default`. To swap:
 
-1. SSH to the active host: `ssh kyle@hermes-theo-pi` (Pi) or `ssh kyle@<laptop>` when laptop is primary.
+1. SSH to the laptop: `ssh kylemoore@100.126.155.50`
 2. Edit `~/.hermes/config.yaml`, change `model.default:` to a new OpenRouter slug.
 3. Restart Hermes: kill the background process and relaunch (`kill <pid>; nohup hermes gateway run --replace > ~/.hermes/logs/gateway.log 2>&1 &`).
 
@@ -135,9 +135,9 @@ If a cron fails with a 401 and the key is `sk-or-v1-*` being sent to `api.openai
 
 ---
 
-## Files in `~/hermes_files/theo/` (Pi working folder — live-synced to Mac)
+## Files in `~/theo/` (laptop working folder — git-synced to Mac)
 
-This folder is live-synced to `Side_Hustle/theo/` on your Mac via Syncthing. You can read everything directly in VS Code or Finder without SSH.
+This folder is git-synced to `Side_Hustle/theo/` on your Mac. Theo commits and pushes after each task; Mac auto-pulls every 5 minutes via cron. You can read everything in VS Code without SSH once it's pulled.
 
 | File / Folder | Written by | Purpose |
 |------|-----------|---------|
@@ -165,13 +165,13 @@ The venv has no `pip` binary — use `python3 -m pip` after bootstrapping:
 
 ```bash
 # One-time bootstrap (only needed once)
-ssh kyle@hermes-theo-pi "~/.hermes/hermes-agent/venv/bin/python3 -m ensurepip --upgrade"
+ssh kylemoore@100.126.155.50 "~/.hermes/hermes-agent/venv/bin/python3 -m ensurepip --upgrade"
 
 # Install a package (e.g. ddgs for DuckDuckGo search)
-ssh kyle@hermes-theo-pi "~/.hermes/hermes-agent/venv/bin/python3 -m pip install ddgs"
+ssh kylemoore@100.126.155.50 "~/.hermes/hermes-agent/venv/bin/python3 -m pip install ddgs"
 
 # Verify install
-ssh kyle@hermes-theo-pi "~/.hermes/hermes-agent/venv/bin/python3 -c 'from ddgs import DDGS; print(\"OK\")'"
+ssh kylemoore@100.126.155.50 "~/.hermes/hermes-agent/venv/bin/python3 -c 'from ddgs import DDGS; print(\"OK\")'"
 ```
 
 **Packages installed (as of 2026-04-27):**
@@ -189,56 +189,33 @@ If a skill reports a missing module, install it here. Do not use system `pip3` �
 
 **What installs where:**
 - `~/.hermes/` — the full Hermes Agent installation (code, Python venv, config, skills, memory). Do not sync this directory — it contains node modules and a venv and will be enormous.
-- `~/hermes_files/theo/` — the working folder on the Pi. Theo writes outputs here. Kyle reads them via SSH over Tailscale (`ssh kyle@hermes-theo-pi`). Everything here is a document Kyle or Claude reads or writes.
+- `~/theo/` — the working folder on the laptop. Theo writes outputs here. Kyle reads them on Mac via git auto-pull (every 5 min). Everything here is a document Kyle or Claude reads or writes.
 
 **OpenClaw vs Hermes Agent:** These are separate projects with different creators. Theo is a fresh Hermes Agent install — no migration from OpenClaw needed. Ignore any community content that conflates them.
 
 **During first-time setup (`hermes setup`):**
 1. Run the install command: `curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash`
-2. The wizard will ask for your LLM provider — choose OpenRouter, paste your API key, select `qwen/qwen3.6-plus` as the model.
+2. The wizard will ask for your LLM provider — choose OpenRouter, paste your API key, select `deepseek/deepseek-v4-flash` as the model (cost-first policy).
 3. When asked for a persona file, point it to `~/.hermes/SOUL.md` (deploy SOUL.md there after setup).
-4. When asked for a workspace directory, point it to `~/hermes_files/theo/` — this is where Hermes will look for `AGENTS.md` and where Theo will write outputs.
+4. When asked for a workspace directory, point it to `~/theo/` — this is where Hermes will look for `AGENTS.md` and where Theo will write outputs.
 5. Configure the Telegram gateway: `hermes gateway` — follow the prompts to connect your bot token.
 
-**File sync — Git (primary, as of 2026-05-13):**
-- Both Mac (`Side_Hustle/theo/`) and Pi (`~/hermes_files/theo/`) are git repos pointing to `https://github.com/KythornAi/Theo.git`.
+**File sync — Git (primary):**
+- Both Mac (`Side_Hustle/theo/`) and laptop (`~/theo/`) are git repos pointing to `https://github.com/KythornAi/Theo.git`.
 - **Kyle → Theo:** Claude commits skill/config changes and pushes in each session. Theo runs `git pull` at session start to pick them up automatically.
 - **Theo → Kyle:** Theo uses the `git-commit` skill after completing tasks. Mac auto-pulls every 5 minutes via cron (`theo/scripts/git-pull-theo.sh`). Research outputs appear on Mac without any manual steps.
-- Pi SSH alias uses `github-theo` in `~/.ssh/config` (dedicated `theo_github` key). Mac uses HTTPS (no SSH key needed).
+- Laptop SSH alias uses `github-theo` in `~/.ssh/config` (`~/.ssh/id_ed25519`). Mac uses HTTPS with gh credential helper.
 - `~/.hermes/` is NOT synced — API keys and runtime stay on device only.
 
-**Syncthing — safety net only (no longer required):**
-- Pi Syncthing service still running (`systemd --user syncthing`). Leave it — it does no harm and provides a backup layer.
-- Mac Syncthing is unreliable (external drive LaunchAgent issue). Do not depend on it. Start manually only if needed: `/opt/homebrew/opt/syncthing/bin/syncthing --no-browser --no-restart >> /tmp/syncthing-mac.log 2>&1 &`
-- Mac has **Staggered File Versioning** — deleted/overwritten files recoverable from `Side_Hustle/theo/.stversions/`.
+**Brain vault sync (separate repo — `KythornAi/brain-vault`):**
+- Kyle writes to `~/Desktop/Brain/` on Mac (Obsidian). Theo reads from and writes to `~/Brain/` on laptop.
+- Mac cron pushes every 30 min (`Brain/scripts/brain-sync-mac.sh`). Laptop cron pulls every 30 min (`Brain/scripts/brain-sync-laptop.sh`).
+- When Theo writes a note to `~/Brain/`, he must immediately `git -C ~/Brain add <file> && git -C ~/Brain commit -m "chore: Theo <desc>" && git -C ~/Brain push`.
 
-**Syncthing management commands:**
+**Emergency rsync fallback (if git sync fails):**
 
 ```bash
-# Check Pi service status
-ssh kyle@hermes-theo-pi "systemctl --user is-active syncthing"
-
-# Restart Pi syncthing service
-ssh kyle@hermes-theo-pi "systemctl --user restart syncthing"
-
-# Check Mac syncthing process
-ps aux | grep syncthing | grep -v grep
-
-# Start Mac syncthing (after reboot)
-/opt/homebrew/opt/syncthing/bin/syncthing --no-browser --no-restart >> /tmp/syncthing-mac.log 2>&1 &
-
-# View Pi sync log
-ssh kyle@hermes-theo-pi "tail -20 /tmp/syncthing-pi.log"
-```
-
-**Versioning — recover a deleted file (Mac side):**
-```bash
-ls "Side_Hustle/theo/.stversions/"
-```
-
-**Emergency rsync fallback (if Syncthing is down):**
-```bash
-rsync -av kyle@hermes-theo-pi:~/hermes_files/theo/ "/Volumes/Home Ext/Home Ext/Desktop/Side_Hustle/theo/"
+rsync -av kylemoore@100.126.155.50:~/theo/ "/Volumes/Home Ext/Home Ext/Desktop/Side_Hustle/theo/"
 ```
 
 ---
@@ -259,7 +236,7 @@ Theo's §33 (first-week probation mode) enforces the same constraints at his end
 
 ---
 
-## Hermes hardening checklist — Pi install
+## Hermes hardening checklist — laptop install
 
 Run these during install, before Theo's first run. Hermes Agent provides defence-in-depth security — this checklist ensures it is actually configured correctly.
 
@@ -272,8 +249,8 @@ Run these during install, before Theo's first run. Hermes Agent provides defence
 - [ ] Never use `approvals.mode: off` or run with `--yolo` flag
 
 **Sandbox / terminal backend:**
-- [ ] Pi is a dedicated machine for Theo only — `local` backend acceptable
-- [ ] If Theo ever runs on a shared machine, switch to `docker` or `ssh` backend
+- [ ] Laptop is a shared machine — `local` backend acceptable (Hermes runs as kylemoore user only)
+- [ ] If security posture needs hardening, switch to `docker` or `ssh` backend
 
 **Context file scanning (default-on, verify):**
 - [ ] Confirm SOUL.md and AGENTS.md load with no `[BLOCKED: ... contained potential prompt injection]` warnings
@@ -286,7 +263,7 @@ Run these during install, before Theo's first run. Hermes Agent provides defence
 **Credential hygiene:**
 - [ ] OpenRouter API key stored in `~/.hermes/.env`, file permissions set to `0600` (owner read/write only)
 - [ ] State directory `~/.hermes/` permissions set to `0700`
-- [ ] No API keys in any file inside `~/hermes_files/theo/` — this folder is reviewed by Kyle and may be rsynced
+- [ ] No API keys in any file inside `~/theo/` — this folder is git-synced and reviewed by Kyle
 - [ ] Telegram bot token rotated if it was ever shared in chat or pasted into any document
 
 **Network exposure:**
@@ -315,14 +292,15 @@ Run these during install, before Theo's first run. Hermes Agent provides defence
 
 - **Hermes GitHub:** https://github.com/NousResearch/hermes-agent (setup reference)
 - **OpenRouter:** https://openrouter.ai (model list, API key)
-- **File sync:** Syncthing (live bidirectional) — see "File sync" section above. Maestral abandoned; rsync available as emergency fallback.
+- **File sync:** Git-based (primary) — `KythornAi/theo` for workspace, `KythornAi/brain-vault` for Obsidian Brain. rsync available as emergency fallback. Syncthing decommissioned with Pi (2026-05-15).
 - **Julian Goldie's Hermes overview:** https://www.youtube.com/watch?v=7T2UBNPmonU
 
 ---
 
-*THEO_OPS.md v2.4 — updated 2026-04-30*
+*THEO_OPS.md v2.5 — updated 2026-05-15*
+*v2.5 (2026-05-15): Pi decommissioned. All SSH hosts updated (kyle@hermes-theo-pi → kylemoore@100.126.155.50). All paths updated (~/hermes_files/theo/ → ~/theo/). Syncthing removed — git is sole sync. Brain vault section added (KythornAi/brain-vault, 30-min cron). Chat model Tier 1 updated to deepseek/deepseek-v4-flash. Hardening checklist updated for shared laptop context.*
 *v2.4 (2026-04-30): File sync section rewritten — rsync replaced by Syncthing (live bidirectional). Added Syncthing management commands, versioning recovery, and emergency rsync fallback. Files table expanded with notes/, research/, memory/, prototypes/. Contacts updated.*
 *v2.3: Added "Skill Python dependencies" section documenting Hermes venv path, pip bootstrap process, and ddgs install. Added ddgs quick-reference entry.*
-*v2.1 corrections: Section headers and file paths updated — Maestral abandoned, all references now reflect rsync over Tailscale and ~/hermes_files/theo/ working folder.*
+*v2.1 corrections: Section headers and file paths updated — Maestral abandoned, all references now reflect rsync over Tailscale and ~/theo/ working folder.*
 *v2.2 corrections: Remaining Dropbox references removed from supervised run checklist and setup steps.*
 *Update this file as you hit new edge cases during supervised runs.*
