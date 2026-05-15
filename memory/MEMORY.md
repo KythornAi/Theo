@@ -26,3 +26,17 @@ Operating philosophy: "Crawl drops" — recurring research so Kyle never starts 
 4. Business Health — token costs, weekly roundups
 
 Cost target: ~$0.02-0.04 per cron run.
+
+## Brain Vault (~/Brain/)
+
+Full clone of Kyle's Obsidian vault (306 notes, PARA structure). Remote: `git@github-theo:KythornAi/brain-vault.git`.
+Mac pushes changes; laptop auto-pulls every 30 minutes.
+
+**Write rules:**
+- New notes for Kyle → `~/Brain/00_Inbox/`
+- Research summaries → `~/Brain/03_Resources/`
+- Project-specific notes → `~/Brain/01_Projects/Paper and Pixels/`
+- After writing: `git add`, `git commit -m "chore: Theo <description>"`, `git push`
+- Do NOT touch `.obsidian/` files or Kyle's daily notes
+
+**Theo workspace (~/theo/):** unchanged, git sync as before. The two repos are independent — Brain vault and theo workspace don't cross-write.
