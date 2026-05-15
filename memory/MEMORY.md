@@ -4,8 +4,11 @@ Paper and Pixels = ADHD productivity digital products on Etsy/Gumroad. Hero = Da
 
 AGENTS.md v1.6: Syncthing = backup, Git = primary. Session rules: start with git pull, end with git commit + push after any output.
 
-Active cron jobs (all load tinyfish as first skill):
-- weekly-adhd-painpoints-research (Monday 5PM)
-- daily-intel-sweep (every morning 7AM)
-- etsy-competitor-check (Mon/Thu 10AM)
-- weekly-roundup (Sunday 5PM)
+Active cron jobs (all load tinyfish as first skill, all deliver to chat, write to ~/hermes_files/theo/briefings/):
+- daily-intel-sweep (7AM daily) → briefings/daily/
+- content-hooks (Mon/Wed/Fri 2PM) → briefings/hooks/
+- etsy-competitor-check (Mon/Thu 10AM) → briefings/etsy/
+- weekly-adhd-painpoints-research (Mon 5PM) → briefings/painpoints/
+- weekly-roundup (Sun 5PM) → briefings/weekly/ + video specs
+
+Inbox (HERMES_INBOX.md) reserved for PNP core only — research output goes to briefings/ folders.
