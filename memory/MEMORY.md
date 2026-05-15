@@ -12,3 +12,9 @@ Active cron jobs (all load tinyfish as first skill, all deliver to chat, write t
 - weekly-roundup (Sun 5PM) → briefings/weekly/ + video specs
 
 Inbox (HERMES_INBOX.md) reserved for PNP core only — research output goes to briefings/ folders.
+
+Model stack (3 tiers):
+- Tier 1 — Routine chat: deepseek/deepseek-v4-flash via OpenRouter (default)
+- Tier 2 — Cron jobs: pinned deepseek/deepseek-v4-flash (same model, pinned for reliability)
+- Tier 3 — Deep thinking: Codex CLI (ChatGPT Plus subscription). Kyle says "use codex" or "deep think this" to invoke.
+- Claude.ai = strategy + polish teammate, operates alongside this stack
