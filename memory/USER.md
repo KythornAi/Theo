@@ -1,0 +1,1 @@
+User goes by Kyle. Works with Claude too. Moving me to a laptop setup — wants my memories in git so nothing gets lost.
