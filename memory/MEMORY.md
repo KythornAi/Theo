@@ -18,3 +18,11 @@ Model stack (3 tiers):
 - Tier 2 — Cron jobs: pinned deepseek/deepseek-v4-flash (same model, pinned for reliability)
 - Tier 3 — Deep thinking: Codex CLI (ChatGPT Plus subscription). Kyle says "use codex" or "deep think this" to invoke.
 - Claude.ai = strategy + polish teammate, operates alongside this stack
+
+Operating philosophy: "Crawl drops" — recurring research so Kyle never starts cold. 4 research domains:
+1. Product Intel — pain points, competitors, reviews (feeds what to build next)
+2. Social & Marketing Prep — Pinterest angles, content hooks, trend watch (ready-to-go content)
+3. Etsy Store Prep — SEO keywords, category gaps, listing drafts
+4. Business Health — token costs, weekly roundups
+
+Cost target: ~$0.02-0.04 per cron run.
