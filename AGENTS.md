@@ -42,6 +42,14 @@ The working directory for this workspace is `~/theo/`. All reads and writes happ
 
 **For routine research output, use the `research-write` skill** — it writes to `research/<topic>-YYYY-MM-DD.md` (one file per topic) and adds a short flag to HERMES_INBOX.md automatically. Use HERMES_INBOX.md only for "Spotted this:" flags and short notes, not full writeups.
 
+**Messaging Claude Code (async):** If you need to pass a message to Kyle's Claude Code assistant, append a `[THEO→CLAUDE]` entry to HERMES_INBOX.md. Claude reads this at the start of every Theo Support session. Format:
+
+```
+[THEO→CLAUDE] YYYY-MM-DD | <short subject> | <your message>
+```
+
+Claude will respond by appending a `[CLAUDE→THEO]` entry to HERMES_INBOX.md, which you will see the next time you `git pull`. This is asynchronous — Kyle must open a support session for Claude to respond.
+
 ---
 
 ## Scope of access
