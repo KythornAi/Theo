@@ -1,13 +1,13 @@
 # Theo CLI Cheat Sheet — Kyle's Quick Reference
 
-All commands run from your Mac terminal. Tailscale must be active (not just connected — fully running).
+All commands run from your Mac terminal. Tailscale must be active.
 
 ---
 
 ## SSH In
 
 ```bash
-ssh kyle@hermes-theo-pi
+ssh kylemoore@100.126.155.50
 ```
 
 Exit with `exit` or `Ctrl+D`.
@@ -17,30 +17,35 @@ Exit with `exit` or `Ctrl+D`.
 ## Read Theo's Output
 
 ```bash
-# Read HERMES_INBOX.md (Theo's research notes)
-ssh kyle@hermes-theo-pi "cat ~/hermes_files/theo/HERMES_INBOX.md"
+# Read HERMES_INBOX.md (Theo's work queue and notes)
+ssh kylemoore@100.126.155.50 "cat ~/theo/HERMES_INBOX.md"
 
-# Read run log (one line per task)
-ssh kyle@hermes-theo-pi "cat ~/hermes_files/theo/THEO_RUNLOG.md"
+# Read run log
+ssh kylemoore@100.126.155.50 "cat ~/theo/THEO_RUNLOG.md"
 
 # Read SOUL.md version
-ssh kyle@hermes-theo-pi "head -5 ~/.hermes/SOUL.md"
+ssh kylemoore@100.126.155.50 "head -5 ~/.hermes/SOUL.md"
 ```
 
 ---
 
 ## Read Theo's Files on Mac (no SSH needed)
 
-Files are **live-synced** via Syncthing. Open them directly:
+Files sync via **git** — pull the repo on Mac to get the latest:
 
+```bash
+cd "/Volumes/Home Ext/Home Ext/Desktop/Side_Hustle" && git pull
 ```
-Side_Hustle/theo/HERMES_INBOX.md      ← Theo's research notes
+
+Key files are at:
+```
+Side_Hustle/theo/HERMES_INBOX.md      ← Theo's work queue
 Side_Hustle/theo/THEO_RUNLOG.md       ← run log
-Side_Hustle/theo/research/            ← research files
-Side_Hustle/theo/memory/              ← Theo's long-term memory
+Side_Hustle/theo/research/            ← research outputs
+Side_Hustle/theo/skills/              ← all custom skills
 ```
 
-No rsync or SSH needed for reading. If the file isn't there yet, wait 30 s — sync is near-instant but not atomic.
+Mac auto-pulls the Theo repo every 5 min via crontab (`scripts/git-pull-theo.sh`).
 
 ---
 
@@ -48,16 +53,16 @@ No rsync or SSH needed for reading. If the file isn't there yet, wait 30 s — s
 
 ```bash
 # Check if gateway is running
-ssh kyle@hermes-theo-pi "systemctl --user status hermes-gateway"
+ssh kylemoore@100.126.155.50 "systemctl --user status hermes-gateway"
 
 # Restart gateway (if Theo goes quiet)
-ssh kyle@hermes-theo-pi "systemctl --user restart hermes-gateway"
+ssh kylemoore@100.126.155.50 "systemctl --user restart hermes-gateway"
 
 # Stop gateway
-ssh kyle@hermes-theo-pi "systemctl --user stop hermes-gateway"
+ssh kylemoore@100.126.155.50 "systemctl --user stop hermes-gateway"
 
-# Start gateway
-ssh kyle@hermes-theo-pi "systemctl --user start hermes-gateway"
+# View live logs
+ssh kylemoore@100.126.155.50 "journalctl --user -u hermes-gateway -f"
 ```
 
 ---
@@ -66,40 +71,65 @@ ssh kyle@hermes-theo-pi "systemctl --user start hermes-gateway"
 
 ```bash
 # Health check
-ssh kyle@hermes-theo-pi "/home/kyle/.local/bin/hermes doctor"
+ssh kylemoore@100.126.155.50 "bash -l -c 'hermes doctor'"
 
-# Show current config (keys, model, etc.)
-ssh kyle@hermes-theo-pi "/home/kyle/.local/bin/hermes config show"
+# Show current config (model, keys, etc.)
+ssh kylemoore@100.126.155.50 "bash -l -c 'hermes config show'"
 
 # List cron jobs
-ssh kyle@hermes-theo-pi "/home/kyle/.local/bin/hermes cron list"
+ssh kylemoore@100.126.155.50 "bash -l -c 'hermes cron list'"
+
+# Check crontab directly
+ssh kylemoore@100.126.155.50 "crontab -l"
 ```
 
 ---
 
-## File Sync (Mac ↔ Pi)
+## Codex CLI (Deep Think)
 
-Files are **live-synced via Syncthing** — edit `Side_Hustle/theo/` on Mac and it appears on Pi within seconds. No rsync needed.
+Codex is installed at `~/.local/bin/codex`. Theo uses it via the `codex-think` skill.
 
-**Syncthing status:**
 ```bash
-# Is Pi syncthing running?
-ssh kyle@hermes-theo-pi "systemctl --user is-active syncthing"
+# Confirm Codex is installed
+ssh kylemoore@100.126.155.50 "bash -l -c 'which codex && codex --version'"
 
-# Is Mac syncthing running?
-ps aux | grep syncthing | grep -v grep
-
-# Start Mac syncthing after a reboot
-/opt/homebrew/opt/syncthing/bin/syncthing --no-browser --no-restart >> /tmp/syncthing-mac.log 2>&1 &
+# Run a quick test (non-interactive)
+ssh kylemoore@100.126.155.50 "bash -l -c 'codex exec -s read-only --skip-git-repo-check \"Say hello in 5 words.\"'"
 ```
 
-**Emergency rsync fallback (if Syncthing is down):**
-```bash
-# Pull Pi → Mac
-rsync -av kyle@hermes-theo-pi:~/hermes_files/theo/ "/Volumes/Home Ext/Home Ext/Desktop/Side_Hustle/theo/"
+Auth is via ChatGPT Plus OAuth. If it expires, open a terminal on the laptop and run `codex` to re-authenticate.
 
-# Push Mac → Pi (single file)
-rsync -av "/Volumes/Home Ext/Home Ext/Desktop/Side_Hustle/theo/SOUL.md" kyle@hermes-theo-pi:~/hermes_files/theo/SOUL.md
+---
+
+## File Sync (Mac ↔ Laptop)
+
+Files sync via **git** (Syncthing is gone). Theo repo: `KythornAi/Theo.git`.
+
+```bash
+# Pull latest from Theo's repo on laptop
+ssh kylemoore@100.126.155.50 "cd ~/theo && git pull"
+
+# Push a file edit (Mac → laptop) — push to GitHub then pull on laptop
+git -C "/Volumes/Home Ext/Home Ext/Desktop/Side_Hustle" push
+ssh kylemoore@100.126.155.50 "cd ~/theo && git pull"
+
+# Emergency rsync for a single file (skill update, etc.)
+rsync -av "/Volumes/Home Ext/Home Ext/Desktop/Side_Hustle/theo/skills/some-skill/SKILL.md" \
+  kylemoore@100.126.155.50:~/.hermes/skills/some-skill/SKILL.md
+```
+
+---
+
+## Brain Vault Sync
+
+Brain vault (`~/Brain/`) auto-syncs every 30 min on both sides via cron.
+
+```bash
+# Manual sync on laptop (pull latest from GitHub)
+ssh kylemoore@100.126.155.50 "bash ~/Brain/scripts/brain-sync-laptop.sh"
+
+# Manual sync on Mac (commit + push any new notes)
+bash "/Volumes/Home Ext/Home Ext/Desktop/Brain/scripts/brain-sync-mac.sh"
 ```
 
 ---
@@ -123,18 +153,20 @@ rsync -av "/Volumes/Home Ext/Home Ext/Desktop/Side_Hustle/theo/SOUL.md" kyle@her
 
 1. Send `/new` in Telegram — wait 30 seconds
 2. If no response: send `/restart` — wait 60 seconds
-3. If still nothing: `ssh kyle@hermes-theo-pi "systemctl --user restart hermes-gateway"`
+3. If still nothing: `ssh kylemoore@100.126.155.50 "systemctl --user restart hermes-gateway"`
 4. Confirm Theo responds in Telegram
+
+Full recovery detail in `THEO_OPS.md`.
 
 ---
 
 ## Check .env Keys (read only)
 
 ```bash
-ssh kyle@hermes-theo-pi "grep -v '#' ~/.hermes/.env | grep -v '^$'"
+ssh kylemoore@100.126.155.50 "grep -v '#' ~/.hermes/.env | grep -v '^$'"
 ```
 
 ---
 
-*THEO_CLI_CHEATSHEET.md v1.1 — 2026-04-30*
-*v1.1: Replaced rsync pull section with live-sync note (Syncthing). Replaced File Sync section with Syncthing status commands + emergency rsync fallback.*
+*THEO_CLI_CHEATSHEET.md v2.0 — 2026-05-16*
+*v2.0: Full rewrite post-Pi-decommission. Updated SSH host (kyle@hermes-theo-pi → kylemoore@100.126.155.50), paths (hermes_files/theo → ~/theo + ~/.hermes), sync method (Syncthing → git), added Codex CLI section and Brain vault sync.*
