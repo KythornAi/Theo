@@ -924,3 +924,10 @@ Full writeup: research/adhd-painpoints-2026-05-11.md
 
 [RESEARCH] 2026-05-11 | Topic: App Store ADHD Planner Competitor Scan — Love/Hate Signals | File: research/app-store-adhd-planners-2026-05-11.md
 *Spotted this: Task library / saved templates is the biggest gap in our current offering. Focus timer is table stakes. Voice input is a genuine differentiator. Pricing transparency beats subscription rage. The "saved lists" pattern directly addresses the abandonment cycle.*
+
+---
+
+*Above: Previous entries. Below: 2026-05-16 daily intel sweep.*
+
+[DAILY BRIEFING] 2026-05-16 | Topic: Daily Intel Sweep — Reddit, Pinterest, Etsy | File: briefings/daily/2026-05-16.md
+*Spotted this:* The dominant Reddit theme is "stop selling me systems I can't stick to" — tool fatigue and abandonment cycles dominate the conversation. The r/SideProject thread "Do daily reset planners actually help?" directly validates PNP's product direction. Meanwhile, FutureADHD has sold 100,000+ planners and expanded to book publishing. The key gap: nobody is selling a *mid-day time-blindness rescue tool* — just more planners that require executive function to use.

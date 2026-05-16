@@ -4,3 +4,4 @@
 2026-05-11 - Reddit ADHD pain-point harvest: 9 new entries, 5 themes (friction vs willpower, initiation > planning, social context, burnout loop, variable rewards)
 2026-05-11 - App store ADHD planner scan: 11 apps analysed (neurolist, Unique, Super Planner, Planwoo, Goblin Tools, Splitti, Tempus, Simplified, Easy-Do, Gravity Focus, RoutineFlow). Full report saved, inbox flagged.
 2026-05-14 | Etsy competitor scan — FutureADHD, DailyFocusClub, Manifestable stable. 9 new/notable listings scanned. Daily Reset architecture gap identified. Briefing saved to briefings/etsy/2026-05-14.md
+2026-05-16 | daily-intel-sweep | Reddit ADHD tool fatigue theme harvested, Pinterest pin format analysis, FutureADHD 100k+ sold check, DFC reMarkable niche. Briefing saved to briefings/daily/2026-05-16.md
