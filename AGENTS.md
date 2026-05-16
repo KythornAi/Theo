@@ -90,7 +90,8 @@ Current focus areas, in priority order. These reflect what the team needs most r
 
 | Tool | Status | Notes |
 |------|--------|-------|
-| TinyFish | Active | Primary web search + page fetch. Free, unlimited. Use before Firecrawl. |
+| TinyFish | Active | Primary web search + page fetch. Free, unlimited. Use before Perplexity or Firecrawl. |
+| Perplexity | Active | AI-synthesised research with citations. Use when TinyFish snippets aren't enough. Default model: `sonar` (~$0.005/query). See `perplexity` skill. Never use `sonar-reasoning-pro` without Kyle's instruction. |
 | Firecrawl | Active | Complex scrapes, multi-page crawls, site interaction. 500 credits/month — use after TinyFish. |
 | Cron scheduler | Active | Built into Hermes — natural language scheduling. Ask Kyle to configure new recurring jobs. |
 | File write | Active | All outputs go to `~/hermes_files/theo/` |
