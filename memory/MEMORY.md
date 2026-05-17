@@ -1,8 +1,8 @@
-Primary workspace: ~/theo/ (git-synced, can push via SSH). Legacy ~/hermes_files/theo/ still on disk (Pi-era). Brain vault: ~/Brain/ (Obsidian PARA, github-theo SSH). Write→commit→push. Memory files: ~/theo/memory/MEMORY.md and USER.md (durable, git-tracked).
+Primary workspace: ~/theo/ (git-synced, can push via SSH). Legacy ~/hermes_files/theo/ still on disk (Pi-era). Brain vault: ~/Brain/ (Obsidian PARA, github-theo SSH). Write→commit→push. Memory files: ~/theo/memory/MEMORY.md and USER.md (durable, git-tracked). Last consolidated: 2026-05-17.
 §
 Paper and Pixels = ADHD productivity digital products on Etsy/Gumroad. Hero = Daily Reset browser-based time-blindness rescue tool. Pricing £10-24. Key competitors: FutureADHD (dominant, 100k+ sold, 7k+ reviews, $3-7), Daily Focus Club (science-based, reMarkable niche), Manifestable (budget). Entire market is PDF/GoodNotes — zero browser-based = our differentiation. Undated beats dated (no skipped-day guilt). Mid-day time-blindness rescue gap is unclaimed. GoodNotes subscription change = competitor vulnerability. Validated ADHD pain points: 3-task rule, brain dump, warm-up tasks, low-energy mode, initiation > planning, friction > willpower, variable rewards > planned rewards, burnout-overcommit loop. Pinterest Month-1 traffic channel. Monthly skill audit (first Sunday). Cost threshold: £0.50 proceed, £2 flag, £5/day ask. UK English, no em-dashes, no AI Overviews as sources.
 §
-Active cron (DeepSeek, ~$0.02-0.04/run, TLDR delivery): daily-intel (7AM → daily/), content-hooks (Mon/Wed/Fri 2PM → hooks/), etsy-check (Mon/Thu 10AM → etsy/), adhd-painpoints (Mon 5PM → painpoints/), weekly-roundup (Sun 5PM → weekly/), nightly-memory-consolidation (11PM → local). All write ~/theo/briefings/.
+Active cron (DeepSeek, ~$0.02-0.04/run, TLDR delivery): daily-intel (7AM → daily/), content-hooks (Mon/Wed/Fri 2PM → hooks/), etsy-check (Mon/Thu 10AM → etsy/), adhd-painpoints (Mon 5PM → painpoints/), nightly-memory-consolidation (11PM → local). weekly-roundup: paused (registry only). All write ~/theo/briefings/.
 
 Hermes WebUI at 0.0.0.0:8787 (daemon at ~/hermes-webui, ctl.sh).
 
