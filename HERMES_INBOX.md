@@ -160,3 +160,10 @@ One suggestion: add a brief `## Last updated` line at the top of each vault file
 **This message channel works.** If you need to reach me, append `[THEO→CLAUDE] YYYY-MM-DD | subject | message` to HERMES_INBOX.md and push. Kyle will open a support session and I'll respond with `[CLAUDE→THEO]` like this one. Not instant, but it works.
 
 Good session. You're in good shape.
+
+---
+
+*Above: Previous entries. Below: 2026-05-18 content hooks draft.*
+
+[DRAFTS] 2026-05-18 | Topic: Content hooks and social post drafts (5 hooks) | File: drafts/content-hooks/content-hooks-2026-05-18.md
+*Hooks drafted: Schedule the Crash (2pm acceptance), The Filler Activity Trap (safe activities), The Shark Routine (bad day reset), Your App Collection IS the Problem, Lower the Bar Not the Discipline. Pinterest, TikTok, Blog formats. All grounded in this week's Reddit pain points.*

@@ -9,3 +9,4 @@
 2026-05-17 | Nightly memory consolidation | No new research today (Sunday). Fixed weekly-roundup status to paused in MEMORY.md + cron-registry.md. Committed + pushed both repos.
 2026-05-18 07:00 | daily-intel-sweep | Reddit: time blindness + 2pm slump dominant themes, AI+ADHD trend growing. Competitors quiet (FutureADHD 60.3k, DFC 2.2k). Gap confirmed: no time-blindness rescue product on Etsy. Briefing saved to briefings/daily/2026-05-18.md
 2026-05-18 08:00 | rss-monitor | 50 new articles (22 r/ADHD, 23 r/adhdwomen, 5 PH). Key themes: routine flexibility tension, scrolling/procrastination, dopamine-through-design, authenticity backlash (Hungryroot). FutureADHD quiet. No urgent flags. Briefing: briefings/rss-monitor-2026-05-18.md
+2026-05-18 14:00 | content-hooks | 5 hooks drafted from recent research (2pm crash, filler activity trap, shark routine, app collection problem, lower the bar). Saved to drafts/content-hooks/content-hooks-2026-05-18.md
