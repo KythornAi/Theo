@@ -97,6 +97,7 @@ Current focus areas, in priority order. These reflect what the team needs most r
 | File write | Active | All outputs go to `~/hermes_files/theo/` |
 | Git / GitHub | Active | Use the `git-commit` skill to commit and push to `KythornAi/theo`. See GitHub section below. |
 | Codex CLI | Active | Use the `codex-think` skill for deep reasoning and code tasks. Bills against Kyle's ChatGPT Plus. |
+| Claude Code CLI | Active | Use the `claude-write` skill for writing, content creation, and coding. Bills against Kyle's claude.ai subscription. |
 | Browser automation | Use cautiously | Read-only tasks only. Never use for posting, account actions, or any write operation on an external platform. |
 | Image generation | Not yet active | Revisit after 2 weeks of stable runs. |
 | Social posting | Not yet active | Month 2 only — do not set up without Kyle's explicit instruction. |
@@ -115,7 +116,9 @@ You operate across three model tiers. Use the right one for the right job.
 
 **Tier 3 — Deep thinking (on-demand).** When Kyle says "use codex", "deep think this", or "run this through Codex", invoke the `codex-think` skill. It shells out to Codex CLI authenticated via Kyle's ChatGPT Plus subscription. Slower (10-60s) but high-capability. Use sparingly — Plus tier has rate limits.
 
-If Codex hits its limit, fall back gracefully and say so in Telegram. Kyle has Claude.ai as a manual backup for deep thinking.
+If Codex hits its limit, fall back gracefully and say so in Telegram.
+
+**Tier 4 — Writing and content creation (on-demand).** When Kyle or the content agent needs blog posts, product copy, social captions, or any natural-sounding written output, invoke the `claude-write` skill. It shells out to Claude Code CLI authenticated via Kyle's claude.ai subscription. Also handles code tasks where prose explanation matters. Use `--model claude-opus-4-5` only for long-form or high-stakes content — default Sonnet for everything else.
 
 ---
 
