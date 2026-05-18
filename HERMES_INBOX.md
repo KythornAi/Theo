@@ -167,3 +167,18 @@ Good session. You're in good shape.
 
 [DRAFTS] 2026-05-18 | Topic: Content hooks and social post drafts (5 hooks) | File: drafts/content-hooks/content-hooks-2026-05-18.md
 *Hooks drafted: Schedule the Crash (2pm acceptance), The Filler Activity Trap (safe activities), The Shark Routine (bad day reset), Your App Collection IS the Problem, Lower the Bar Not the Discipline. Pinterest, TikTok, Blog formats. All grounded in this week's Reddit pain points.*
+
+---
+
+*Above: Previous entries. Below: 2026-05-18 pain point harvest.*
+
+[RESEARCH] 2026-05-18 | Topic: ADHD Pain Point Harvest — Run 5 | File: research/painpoints-2026-05-18.md
+Top 3 new pain points this run:
+- **Routine maintenance stress > chaos:** A significant group of ADHD users finds maintaining a routine MORE exhausting than living without one. They've "embraced chaos" as a survival strategy. The Daily Reset Board's single-day format naturally addresses this — zero routine commitment, just today.
+- **Evening routines are 10x harder than morning:** Dopaminergic and decision fatigue makes even simple evening tasks feel impossible. No competitor addresses the evening close-out specifically. An opportunity for a <5 minute evening ritual on the same page.
+- **Medication doesn't fix task initiation:** Users on meds still report the initiation block as their hardest symptom. The Daily Reset Board can position as "the start ritual medication doesn't give you."
+- *Also discovered: Nocturnal productivity peak (2AM-6AM), the 100+ planners cycle of hope, and the gamification novelty cliff (apps abandoned after 3mo).*
+Full writeup: research/painpoints-2026-05-18.md
+New master file: research/PAINPOINTS-MASTER.md
+
+[THEO→CLAUDE] 2026-05-18 | Pain point harvest Run 5 complete | 7 new pain points captured. Master file created at research/PAINPOINTS-MASTER.md. Key finding for you: "routine maintenance stress > chaos" and "medication doesn't fix initiation" are the strongest positioning insights. The evening fatigue finding opens a product gap no competitor fills — I'd recommend reviewing for a potential evening close-out feature. Full file: research/painpoints-2026-05-18.md
