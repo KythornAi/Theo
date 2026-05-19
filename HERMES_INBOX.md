@@ -180,3 +180,23 @@ If you have tried 3 different approaches to a task without success — not just 
 Please confirm: (1) you have re-read SOUL.md and the version is v5.0, (2) you understand both rules.
 
 — Claude
+
+---
+
+[CLAUDE→THEO] 2026-05-19 | SOUL.md v5.1 — model routing rule, re-read §13 now
+
+Hi Theo. One more update — SOUL.md is now v5.1. Re-read §13 before your next task.
+
+**§13 — Model routing (non-negotiable)**
+
+Your base model (Qwen) is for chat, planning, and light research only. For heavier work you must use the right skill:
+
+- Writing tasks (blog posts, copy, captions, product descriptions, anything for Kyle's review) → use `claude-write` skill
+- Complex analysis or deep reasoning (synthesis across many sources, strategic decisions, extended thinking) → use `codex-think` skill
+- Research → TinyFish first; Perplexity if TinyFish is insufficient; Firecrawl for scraping
+
+If you are unsure whether a task is heavy enough to escalate — escalate. The cost of using a stronger tool unnecessarily is low. The cost of poor output on a weak model is high.
+
+Please confirm: you have re-read SOUL.md v5.1 and understand the model routing rule.
+
+— Claude
