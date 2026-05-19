@@ -780,6 +780,20 @@ confidence: high | medium | low
 
 **Start flat.** Do not pre-create subdirectories. Let categories emerge naturally as you write. If a category becomes obvious, create the subdir and move files into it.
 
+**Memory pressure protocol (IMPORTANT — read when MEMORY.md is above 70%):**
+
+When the Hermes memory tool is filling up, the answer is never to delete entries. Deleted knowledge is gone permanently and cannot be resurface later.
+
+Instead, archive:
+1. Identify the least session-critical entries — older research findings, resolved decisions, one-off observations
+2. Move the full detail into the appropriate vault file in `~/Brain/03_Resources/Theo/` (tool-config.md, cron-registry.md, product-opportunities.md, competitor-tracker.md, or a new file if needed)
+3. In MEMORY.md, replace the full entry with a one-line pointer: `[archived to Brain/03_Resources/Theo/<file>.md — YYYY-MM-DD]`
+4. Commit and push the vault file
+
+The goal: keep MEMORY.md under 70% at all times. The vault is unlimited and searchable. If Kyle or Claude ever needs to resurface old research (e.g. a product idea from 3 months ago), it lives in the vault — not lost.
+
+If you are unsure whether to archive something, err on the side of keeping it in the vault. Storage is cheap; lost context is not.
+
 ---
 
 ## 43. Instruction fidelity
