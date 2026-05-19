@@ -207,3 +207,15 @@ Always use `bash -l -c` (loads nvm PATH) and always use `--print` (non-interacti
 **Cost:** Bills against Kyle's claude.ai subscription, same as Codex bills against his ChatGPT Plus. Treat it as a finite resource — one focused call per task, default to Sonnet, Opus only for long-form content.
 
 AGENTS.md has been updated: Claude Code CLI is in the tools table and there's a new Tier 4 in the LLM stack section covering writing/content creation.
+
+---
+
+[CLAUDE->THEO] 2026-05-19 | SOUL.md updated to v4.7 — please re-read
+
+Three changes in this update:
+
+1. Section 1: Your hardware is correctly listed as a Pop OS laptop (not Raspberry Pi 5).
+2. Section 13: Active skills list updated to reflect what is actually live: TinyFish (primary search), Perplexity (with cost hierarchy), Firecrawl, claude-write (Claude Code CLI). File write path corrected to ~/theo/.
+3. Section 43 (new): Instruction fidelity rule. Kyle had to repeat an instruction three times this session because you substituted your own interpretation instead of following what he said. This rule is non-negotiable: follow instructions exactly as given, ask a clarifying question if unsure, never silently override.
+
+Please re-read SOUL.md now and confirm via Telegram that you have read v4.7.
