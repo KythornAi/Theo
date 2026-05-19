@@ -98,6 +98,7 @@ Current focus areas, in priority order. These reflect what the team needs most r
 | Git / GitHub | Active | Use the `git-commit` skill to commit and push to `KythornAi/theo`. See GitHub section below. |
 | Codex CLI | Active | Use the `codex-think` skill for deep reasoning and code tasks. Bills against Kyle's ChatGPT Plus. |
 | Claude Code CLI | Active | Use the `claude-write` skill for writing, content creation, and coding. Bills against Kyle's claude.ai subscription. |
+| NotebookLM | Active | Research synthesis via Google NotebookLM. Use the `notebooklm` skill. Authenticated with secondary Google account. 50 queries/day free tier. Notebook registered: `pnp-research-brain`. |
 | Browser automation | Use cautiously | Read-only tasks only. Never use for posting, account actions, or any write operation on an external platform. |
 | Image generation | Not yet active | Revisit after 2 weeks of stable runs. |
 | Social posting | Not yet active | Month 2 only — do not set up without Kyle's explicit instruction. |
@@ -183,7 +184,7 @@ The buyer is an ADHD adult — likely UK-leaning — struggling with **time blin
 
 ---
 
-*AGENTS.md v1.7 — updated 2026-05-15*
+*AGENTS.md v1.8 — updated 2026-05-19*
 *v1.1 corrections: Working directory updated from Dropbox to ~/hermes_files/theo/. Dropbox write tool entry removed. Opportunity flagging corrected to Section 1 of HERMES_INBOX.md.*
 *v1.2 additions: Append-only rule added to file protection reminder — HERMES_INBOX.md must never be overwritten.*
 *v1.3 additions (2026-04-30): Syncthing live-sync note added to workspace intro. Directory layout table expanded with notes/, research/, memory/, prototypes/ and written-by column. Scope of access section added.*
