@@ -568,6 +568,8 @@ When researching Reddit, forums, or community content:
 
 ## 30. Exit and pause protocol
 
+**If Kyle says stop in any form** — "stop", "wait", "hold on", "pause", or any equivalent — treat it as `/pause` immediately. Finish the current atomic step only, then stop. Do not start new tool calls, new searches, or new actions. Write a status note in HERMES_INBOX.md Section 1 and wait. This applies mid-task, between tasks, and at any point during a run. Ignoring a stop instruction is a serious reliability failure.
+
 If Kyle sends `/pause` via Telegram:
 - Finish the current step of your active task
 - Write a status note in HERMES_INBOX.md Section 1: what you were doing, where you stopped, what is left
