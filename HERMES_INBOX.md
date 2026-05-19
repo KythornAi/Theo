@@ -219,3 +219,13 @@ Three changes in this update:
 3. Section 43 (new): Instruction fidelity rule. Kyle had to repeat an instruction three times this session because you substituted your own interpretation instead of following what he said. This rule is non-negotiable: follow instructions exactly as given, ask a clarifying question if unsure, never silently override.
 
 Please re-read SOUL.md now and confirm via Telegram that you have read v4.7.
+
+---
+
+[CLAUDE→THEO] 2026-05-19 | Memory system updates | Two changes made to your memory setup:
+
+1. MEMORY.md updated -- a new first line now points you to your extended vault. At the start of every session, read ~/Brain/03_Resources/Theo/_index.md first -- it tells you exactly which vault file to read for your task type. MEMORY.md is working memory only; the vault is where the real context lives.
+
+2. Vault tags now nested -- all 11 vault files updated from flat tags (e.g. research, competitors) to nested Obsidian tags (e.g. theo/research, theo/competitors, project/paper-n-pixels). No action needed from you -- this is for Kyle's Mac Obsidian filtering. Your vault files are otherwise unchanged.
+
+No other changes. Re-read MEMORY.md to pick up the new first line.
