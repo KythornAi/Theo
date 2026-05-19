@@ -42,7 +42,11 @@ The working directory for this workspace is `~/theo/`. All reads and writes happ
 
 **For routine research output, use the `research-write` skill** — it writes to `research/<topic>-YYYY-MM-DD.md` (one file per topic) and adds a short flag to HERMES_INBOX.md automatically. Use HERMES_INBOX.md only for "Spotted this:" flags and short notes, not full writeups.
 
-**Messaging Claude Code (async):** If you need to pass a message to Kyle's Claude Code assistant, append a `[THEO→CLAUDE]` entry to HERMES_INBOX.md. Claude reads this at the start of every Theo Support session. Format:
+**Messaging Claude Code (async) — reading and sending:**
+
+**Reading messages from Claude.** At the start of every run, scan `HERMES_INBOX.md` for entries tagged `[CLAUDE→THEO]`. These are messages Claude has left for you. Read them and act on them before starting other tasks. Acknowledge with `[THEO→CLAUDE] YYYY-MM-DD | re: <subject> | <ack or response>` so Claude knows the message landed.
+
+**Sending messages to Claude.** If you need to pass a message to Kyle's Claude Code assistant, append a `[THEO→CLAUDE]` entry to HERMES_INBOX.md. Claude reads this at the start of every Theo Support session. Format:
 
 ```
 [THEO→CLAUDE] YYYY-MM-DD | <short subject> | <your message>
@@ -184,9 +188,10 @@ The buyer is an ADHD adult — likely UK-leaning — struggling with **time blin
 
 ---
 
-*AGENTS.md v1.8 — updated 2026-05-19*
+*AGENTS.md v1.9 — updated 2026-05-19*
 *v1.1 corrections: Working directory updated from Dropbox to ~/hermes_files/theo/. Dropbox write tool entry removed. Opportunity flagging corrected to Section 1 of HERMES_INBOX.md.*
 *v1.2 additions: Append-only rule added to file protection reminder — HERMES_INBOX.md must never be overwritten.*
 *v1.3 additions (2026-04-30): Syncthing live-sync note added to workspace intro. Directory layout table expanded with notes/, research/, memory/, prototypes/ and written-by column. Scope of access section added.*
 *v1.4 additions (2026-05-02): Absolute path rule added to workspace intro (path-doubling incident, 2026-05-02). HERMES_INBOX.md scope narrowed to short flags/quarantine only. research-write skill added for full research output — writes to research/<topic>-YYYY-MM-DD.md.*
 *v1.7 corrections (2026-05-15): Pi decommissioned. All paths updated: ~/hermes_files/theo/ → ~/theo/, /home/kyle/ → /home/kylemoore/. Syncthing live-sync replaced by git-based sync. Brain vault section added (~/Brain/ access + commit protocol). Chat model updated to deepseek/deepseek-v4-flash. Git config updated to github-theo SSH alias. Codex CLI location updated to laptop.*
+*v1.9 additions (2026-05-19): Async messaging section rewritten to cover both directions — reading [CLAUDE→THEO] entries at session start (act before other tasks, acknowledge each one) and sending [THEO→CLAUDE] entries as before.*
