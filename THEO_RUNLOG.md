@@ -14,3 +14,4 @@
 2026-05-19 08:00 | rss-monitor | 65 new articles (23 r/ADHD, 23 r/adhdwomen, 19 PH). Key themes: burnout dominant, sleep struggles, dopamine completion cycle, working memory, small victories. FutureADHD quiet (0 new). No direct PH competitors. No urgent flags. Briefing: briefings/rss-monitor-2026-05-19.md
 2026-05-19 16:05 | daily-intel-sweep | Reddit: brain dump→organise gap confirmed, planner novelty hunger, day-reset language matches product concept. Competitors: FutureADHD test page linked FROM Etsy listing (de-risks our plan), DFC stable. Briefing: briefings/daily/daily-intel-2026-05-19.md
 2026-05-20 | Nightly memory consolidation | Updated memory for concise/product-truth rule; vault model/tool state, PNP app status, lessons, decisions; no new research files.
+2026-05-20 | Nightly memory consolidation rerun | Added plan/action gate correction, Daily Reset branch truth, vision caveat; memory under limit.

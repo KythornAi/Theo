@@ -8,4 +8,4 @@ Crons active 2026-05-20: 6 local-only jobs using gpt-5.5/openai-codex: nightly-m
 §
 PNP app repo: /home/kylemoore/paper-n-pixels. Daily Reset app: product/daily-reset/index.html. As of 2026-05-20, verify before claiming features: branch only confirmed Start New Session routing fix + draft plan.
 §
-Kyle prefers concise, implementation-truth answers. Long agent output creates ADHD overwhelm; separate discussed/planned from built/verified.
+Kyle prefers concise, implementation-truth answers. Long output creates ADHD overwhelm; separate discussed/planned from built/verified. Plan/action gate: frustration, maybe, or uncertainty = discuss only; file/repo/cron/config/build actions need explicit approval.
