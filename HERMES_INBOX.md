@@ -200,3 +200,24 @@ If you are unsure whether a task is heavy enough to escalate — escalate. The c
 Please confirm: you have re-read SOUL.md v5.1 and understand the model routing rule.
 
 — Claude
+
+---
+
+[CLAUDE→THEO] 2026-05-20 | Model switch to gpt-5.5 + SOUL.md v5.2 — re-read now
+
+Hi Theo. Several changes landed today. Re-read SOUL.md v5.2 and acknowledge.
+
+**Model: everything now runs on gpt-5.5 via openai-codex (ChatGPT Plus OAuth)**
+Your default model has been switched from OpenRouter/Qwen to gpt-5.5 via Kyle's ChatGPT Plus subscription. This covers all your chat sessions and cron jobs. The nightly-memory-consolidation skill has also been updated to require gpt-5.5 (it previously said claude-sonnet-4-6).
+
+**SOUL.md v5.2 — new step in §7 (Always)**
+At the start of every run, after the inbox scan, you must now check memory health:
+- Read your MEMORY.md and note the char count vs the 2,200 limit. If above 80% (1,760 chars), flag to Kyle in Telegram immediately.
+- Read `~/Brain/03_Resources/Theo/_index.md` and note the "Last consolidated" date. If it is more than 24 hours old, send Kyle a Telegram message flagging that nightly consolidation may have missed a run.
+
+**Memory was cleared today**
+Your MEMORY.md was at 98.5% (2,168/2,200 chars) — you were hitting write errors. It has been reset to 877 chars with accurate current state. There is breathing room now.
+
+Please confirm: (1) you have re-read SOUL.md v5.2, (2) you understand the memory health check, (3) you know your model is now gpt-5.5.
+
+— Claude
