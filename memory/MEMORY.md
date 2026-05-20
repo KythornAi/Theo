@@ -5,3 +5,7 @@ Workspace: ~/theo/ (git-synced). Brain vault: ~/Brain/ (Obsidian PARA, git). Mem
 Model: gpt-5.5 via openai-codex (ChatGPT Plus OAuth) — active 2026-05-20. Covers all chat + crons. No extra API spend.
 §
 Crons active 2026-05-20: 6 local-only jobs using gpt-5.5/openai-codex: nightly-memory daily 23:00; daily-intel Mon/Wed/Fri 07:00; competitor-scan Mon 10:00; painpoints Mon 17:00; product-opportunities Tue 12:00; weekly-roundup Sun 17:00. Paused: content-hooks, evening-reset-tracker.
+§
+PNP app repo: /home/kylemoore/paper-n-pixels. Daily Reset app: product/daily-reset/index.html. As of 2026-05-20, verify before claiming features: branch only confirmed Start New Session routing fix + draft plan.
+§
+Kyle prefers concise, implementation-truth answers. Long agent output creates ADHD overwhelm; separate discussed/planned from built/verified.
