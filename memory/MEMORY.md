@@ -1,11 +1,11 @@
-EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first. Task lookup: adhd-painpoints, competitor-tracker, product-catalog, positioning, project-status, decisions-log, lessons-learned, research-registry, cron-registry, tool-config.
+EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first. Key files: adhd-painpoints, competitor-tracker, product-catalog, product-opportunities, positioning, project-status, decisions-log, lessons-learned, research-registry, cron-registry, tool-config.
 §
-Workspace: ~/theo/ (git-synced). Brain vault: ~/Brain/ (Obsidian PARA, git). Memory: ~/theo/memory/MEMORY.md + USER.md (git-tracked).
+Workspace: ~/theo/ (primary git repo). Brain vault: ~/Brain/ (Obsidian PARA, git). Legacy cron workdir still points at ~/hermes_files/theo/; active workspace output belongs in ~/theo/ and Brain.
 §
-Model: gpt-5.5 via openai-codex (ChatGPT Plus OAuth) — active 2026-05-20. Covers all chat + crons. No extra API spend.
+Model strategy: gpt-5.5 via openai-codex (ChatGPT Plus OAuth) for chat and cron. Avoid paid Anthropic/OpenAI through OpenRouter; use existing subscriptions and free/low-cost tools where possible.
 §
-Crons active 2026-05-20: 6 local-only jobs using gpt-5.5/openai-codex: nightly-memory daily 23:00; daily-intel Mon/Wed/Fri 07:00; competitor-scan Mon 10:00; painpoints Mon 17:00; product-opportunities Tue 12:00; weekly-roundup Sun 17:00. Paused: content-hooks, evening-reset-tracker.
+Cron state verified 2026-05-21: only nightly-memory-consolidation is active (daily 23:00, local-only). Daily intel, weekly competitor scan, painpoints, product opportunities, weekly roundup, content hooks, and evening reset tracker are paused.
 §
-PNP app repo: /home/kylemoore/paper-n-pixels. Daily Reset app: product/daily-reset/index.html. As of 2026-05-20, verify before claiming features: branch only confirmed Start New Session routing fix + draft plan.
+Paper N Pixels researches ADHD productivity products plus a Discovery Lab for proven Etsy side-income models. Discovery filter: AI-operable replicability, profit, low fulfilment risk, ethical differentiation, and Kyle taste/direction oversight. Digital delivery is favoured over POD/dropshipping when shipping/fuel volatility or support risk is material.
 §
 Kyle prefers concise, implementation-truth answers. Long output creates ADHD overwhelm; separate discussed/planned from built/verified. Plan/action gate: frustration, maybe, or uncertainty = discuss only; file/repo/cron/config/build actions need explicit approval.
