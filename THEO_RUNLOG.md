@@ -19,3 +19,4 @@
 2026-05-21 | Git verification | Theo repo pushed e0891dc; Brain vault pushed 7798b1c. MEMORY.md 1,536 bytes (69.8% of 2,200). Legacy ~/hermes_files/theo had pre-existing HERMES_INBOX.md changes unrelated to this consolidation and was not staged.
 
 [2026-05-22 16:21 BST] git push: research: mirror Discovery Lab notes 2026-05-22 (55d0481)
+2026-05-22 | Nightly memory consolidation | Scheduled six MTD Checker research one-shot cron jobs for 2026-05-23/24; updated memory, cron registry, product opportunities, research registry, decisions log, and MTD Checker vault index.
