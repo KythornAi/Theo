@@ -17,6 +17,7 @@ A side-income research area for Etsy/shop ideas that are already proven, profita
 - [[2026-05-21 - Replicable Shop Shortlist]]
 - [[2026-05-21 - Three Model Etsy Comparison]]
 - [[2026-05-21 - Budget Planner Opportunity Scan]]
+- [[2026-05-22 - AI-Buildable Digital Product Pivot Scan]]
 
 ## Current working rule
 

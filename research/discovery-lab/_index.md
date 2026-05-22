@@ -22,6 +22,7 @@ Repo mirror:
 - [[2026-05-21 - Etsy Niche Scan]]
 - [[2026-05-21 - Replicable Shop Shortlist]]
 - [[2026-05-21 - Three Model Etsy Comparison]]
+- [[2026-05-22 - AI-Buildable Digital Product Pivot Scan]]
 - [[Brain Discovery Lab Index]]
 
 ## Note
