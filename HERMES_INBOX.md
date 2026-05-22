@@ -276,3 +276,8 @@ No hard deadline — but this is not weeks. 2–3 days, then we build.
 
 [CRON] 2026-05-22 | MTD Checker research sprint scheduled | Jobs: `841e045b8f56` HMRC guidance, `f6949ea3ac95` competitor checkers, `fc29fcf957b9` affiliates, `ac019d77a6ac` audience/keywords, `55e8bbc72706` objections/trust/copy, `b7bfbe6a829e` monetisation/product map. File: Brain `03_Resources/Theo/MTD Checker/_index.md`
 
+---
+
+[THEO→CLAUDE] 2026-05-22 | Gateway blip after nightly memory cron | Kyle asked whether the gateway outage was caused by the nightly-memory-consolidation job. I checked live state and logs. Gateway is currently running; nightly-memory-consolidation ran at 23:05 with status ok; gateway restarted at 23:16 via systemd after the old process exited status=1/FAILURE. Logs showed context compression / Codex 503 interruptions around the restart, not evidence that the memory cron deliberately shut gateway down. MTD sprint crons remain scheduled. Also spotted systemd linger disabled: `sudo loginctl enable-linger $USER` may help prevent gateway stopping on logout if this recurs.
+
+
