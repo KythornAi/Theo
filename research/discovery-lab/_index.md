@@ -1,30 +1,32 @@
 ---
-title: Discovery Lab Mirror Index
-last_updated: 2026-05-22
-source: /home/kylemoore/Brain/03_Resources/Theo/Discovery Lab/
+type: moc
+project: New Discovery Lab
+date: 2026-05-21
+status: in-progress
+source: theo
+tags: [theo, research]
 ---
 
-# Discovery Lab Mirror Index
+# Discovery Lab
 
-**Last updated:** 2026-05-22
+A side-income research area for Etsy/shop ideas that are already proven, profitable-looking, and highly operable with Theo/AI/subagents. Stress level is not a filter. The key question is whether AI can help replicate the model ethically: research, design direction, listing creation, Printify-style fulfilment setup, SEO, and ongoing shop management.
 
-This folder is a repo-side mirror/index of the Obsidian Discovery Lab notes so they are visible under `/home/kylemoore/theo/research/` and can be pulled/synced through the Theo repo.
+## Notes
 
-Canonical source on this laptop:
-`/home/kylemoore/Brain/03_Resources/Theo/Discovery Lab/`
-
-Repo mirror:
-`/home/kylemoore/theo/research/discovery-lab/`
-
-## Mirrored notes
-
-- [[2026-05-21 - Budget Planner Opportunity Scan]]
 - [[2026-05-21 - Etsy Niche Scan]]
 - [[2026-05-21 - Replicable Shop Shortlist]]
 - [[2026-05-21 - Three Model Etsy Comparison]]
+- [[2026-05-21 - Budget Planner Opportunity Scan]]
 - [[2026-05-22 - AI-Buildable Digital Product Pivot Scan]]
-- [[Brain Discovery Lab Index]]
+- [[2026-05-22 - Boring Utility and Checker Website Scan]]
 
-## Note
+## Current working rule
 
-These files are copied snapshots, not symlinks. That is intentional: symlinks can be fragile across GitHub, Syncthing, and different machines if the target path does not exist in the same place.
+Prioritise shops/products that are:
+
+- proven by sales data, not just guru claims
+- replicable ethically as a shop model, not by copying designs
+- strongly assisted by AI: ideation, design variants, mockups, listings, SEO, customer FAQ, trend monitoring
+- suitable for Theo/AI/subagents to manage with Kyle overseeing taste and direction
+- compatible with digital delivery, print-on-demand, or simple fulfilment
+- not dependent on jewellery or difficult handmade manufacturing
