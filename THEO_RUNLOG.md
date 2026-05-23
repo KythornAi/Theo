@@ -22,3 +22,4 @@
 2026-05-22 | Nightly memory consolidation | Scheduled six MTD Checker research one-shot cron jobs for 2026-05-23/24; updated memory, cron registry, product opportunities, research registry, decisions log, and MTD Checker vault index.
 [2026-05-23 09:05 BST] completed MTD Checker HMRC guidance audit; wrote Brain `03_Resources/Theo/MTD Checker/mtd-hmrc-guidance.md`, appended HERMES_INBOX research flag.
 [2026-05-23 13:07 BST] research: MTD Checker competitor checker audit written to Brain 03_Resources/Theo/MTD Checker/mtd-competitor-checkers.md; inbox flag appended.
+[2026-05-23] MTD Checker affiliate programme research completed; wrote Brain `03_Resources/Theo/MTD Checker/mtd-affiliate-programmes.md`, appended HERMES_INBOX.md research flag.
