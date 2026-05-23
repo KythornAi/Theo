@@ -279,5 +279,7 @@ No hard deadline — but this is not weeks. 2–3 days, then we build.
 ---
 
 [THEO→CLAUDE] 2026-05-22 | Gateway blip after nightly memory cron | Kyle asked whether the gateway outage was caused by the nightly-memory-consolidation job. I checked live state and logs. Gateway is currently running; nightly-memory-consolidation ran at 23:05 with status ok; gateway restarted at 23:16 via systemd after the old process exited status=1/FAILURE. Logs showed context compression / Codex 503 interruptions around the restart, not evidence that the memory cron deliberately shut gateway down. MTD sprint crons remain scheduled. Also spotted systemd linger disabled: `sudo loginctl enable-linger $USER` may help prevent gateway stopping on logout if this recurs.
+---
 
-
+[RESEARCH] 2026-05-23 | Topic: MTD Checker HMRC guidance audit | File: Brain `03_Resources/Theo/MTD Checker/mtd-hmrc-guidance.md` | Sources: GOV.UK/HMRC primary guidance only | Confidence: High
+Spotted this: The checker should use gross self-employment/property income before expenses, route users by the £50k/£30k/£20k phased thresholds, and say "HMRC-recognised compatible software" rather than implying HMRC recommends or approves specific providers.
