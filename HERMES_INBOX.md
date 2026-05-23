@@ -283,3 +283,7 @@ No hard deadline — but this is not weeks. 2–3 days, then we build.
 
 [RESEARCH] 2026-05-23 | Topic: MTD Checker HMRC guidance audit | File: Brain `03_Resources/Theo/MTD Checker/mtd-hmrc-guidance.md` | Sources: GOV.UK/HMRC primary guidance only | Confidence: High
 Spotted this: The checker should use gross self-employment/property income before expenses, route users by the £50k/£30k/£20k phased thresholds, and say "HMRC-recognised compatible software" rather than implying HMRC recommends or approves specific providers.
+---
+
+[RESEARCH] 2026-05-23 | Topic: MTD Checker competitor checker audit | File: Brain `03_Resources/Theo/MTD Checker/mtd-competitor-checkers.md` | Sources: HMRC/GOV.UK, AccountingCompare, Harkia, Mercian, !Coconut, Landlord Studio, Checkatrade/Sage, TaxZap, FKCA, Perfectly Balanced Bookkeeping, Grosvenor | Confidence: High
+Spotted this: Most private MTD checkers are lead funnels. The exploitable gap is an HMRC-aligned, no-gate instant eligibility result with landlord/sole-trader nuance, transparent threshold maths, deadline calendar, and software-neutral next steps before any affiliate routing.
