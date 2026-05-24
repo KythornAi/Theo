@@ -303,3 +303,7 @@ Spotted this: Best first route is a trust-first free checker with ungated result
 
 [BRAIN] 2026-05-24 | MTD Checker traffic channel teardown | File: Brain/03_Resources/Theo/MTD Checker/mtd-traffic-channel-teardown.md | Sources: TinyFish, Google autocomplete, Perplexity sonar secondary synthesis, GOV.UK/HMRC, competitor checker/software/accountant pages, trend articles | Date fetched: 2026-05-24 | Confidence: High for channel/content patterns, Medium for Google Trends/search-surge figures.
 Spotted this: MTD acquisition is mostly organic SEO into utility pages: checkers/calculators, deadline calendars, audience guides, software comparisons and FAQs. Kyle's best gap is an ungated checker + deadline/software/content cluster stack, not another generic MTD guide.
+---
+[RESEARCH] 2026-05-24 | Topic: MTD Checker objections, trust barriers and landing-page copy | File: Brain `03_Resources/Theo/MTD Checker/mtd-objections-trust-copy.md` | Sources: GOV.UK/HMRC, LITRG, ATT, MoneySavingExpert, ASA/CAP, ICO | Date fetched: 2026-05-24 | Confidence: High
+Spotted this: The checker should not feel like a hidden software funnel. Best trust pattern is an instant ungated result, HMRC-linked threshold maths, visible “not tax advice” language, neutral software wording, and explicit affiliate/email consent disclosures.
+

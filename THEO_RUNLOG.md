@@ -28,3 +28,4 @@
 [2026-05-24 11:00] research: MTD Checker monetisation and product map completed; wrote Brain/03_Resources/Theo/MTD Checker/mtd-monetisation-product-map.md and appended HERMES_INBOX flag.
 
 [2026-05-24 12:08 BST] Completed MTD Checker traffic channel teardown; wrote Brain `03_Resources/Theo/MTD Checker/mtd-traffic-channel-teardown.md`, updated MTD index and research registry, appended inbox flag.
+[2026-05-24] MTD objections/trust/copy sprint completed: wrote Brain/03_Resources/Theo/MTD Checker/mtd-objections-trust-copy.md; appended HERMES_INBOX research flag.
