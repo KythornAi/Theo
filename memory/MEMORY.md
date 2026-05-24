@@ -1,4 +1,4 @@
-EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first. Key files: adhd-painpoints, competitor-tracker, product-catalog, product-opportunities, positioning, project-status, decisions-log, lessons-learned, research-registry, cron-registry, tool-config.
+EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first. Key files: painpoints, competitors, catalog/opportunities, positioning/status, decisions, lessons, research, crons, tools.
 §
 Workspace: ~/theo/ (primary git repo). Brain vault: ~/Brain/ (Obsidian PARA, git). Legacy cron workdir still points at ~/hermes_files/theo/; active workspace output belongs in ~/theo/ and Brain.
 §

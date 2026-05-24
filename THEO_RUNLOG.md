@@ -31,3 +31,4 @@
 [2026-05-24] MTD objections/trust/copy sprint completed: wrote Brain/03_Resources/Theo/MTD Checker/mtd-objections-trust-copy.md; appended HERMES_INBOX research flag.
 2026-05-24 | Nightly memory consolidation | Updated MTD sprint statuses, cron registry, research registry, project/product state, decisions, lessons, tool config, and lean MEMORY.md.
 [2026-05-24 23:00 BST] git push: chore: nightly memory consolidation 2026-05-24 (Theo 2fc6f67, Brain ed721f0)
+[2026-05-24 23:00 BST] git push: chore: trim nightly memory below 70 percent 2026-05-24 (pending)
