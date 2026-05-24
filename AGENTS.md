@@ -102,6 +102,7 @@ Current focus areas, in priority order. These reflect what the team needs most r
 | Git / GitHub | Active | Use the `git-commit` skill to commit and push to `KythornAi/theo`. See GitHub section below. |
 | Codex CLI | Active | Use the `codex-think` skill for deep reasoning and code tasks. Bills against Kyle's ChatGPT Plus. |
 | Claude Code CLI | Active | Use the `claude-write` skill for writing, content creation, and coding. Bills against Kyle's claude.ai subscription. |
+| Antigravity CLI (`agy`) | Active | Gemini 3.5 Flash via Google Antigravity. Multimodal — use for images, screenshots, YouTube video analysis. Use the `agy` skill. Authenticated via Kyle's Google account. |
 | NotebookLM | Active | Research synthesis via Google NotebookLM. Use the `notebooklm` skill. Authenticated with secondary Google account. 50 queries/day free tier. Notebook registered: `pnp-research-brain`. |
 | Browser automation | Use cautiously | Read-only tasks only. Never use for posting, account actions, or any write operation on an external platform. |
 | Image generation | Not yet active | Revisit after 2 weeks of stable runs. |
@@ -124,6 +125,8 @@ You operate across three model tiers. Use the right one for the right job.
 If Codex hits its limit, fall back gracefully and say so in Telegram.
 
 **Tier 4 — Writing and content creation (on-demand).** When Kyle or the content agent needs blog posts, product copy, social captions, or any natural-sounding written output, invoke the `claude-write` skill. It shells out to Claude Code CLI authenticated via Kyle's claude.ai subscription. Also handles code tasks where prose explanation matters. Use `--model claude-opus-4-5` only for long-form or high-stakes content — default Sonnet for everything else.
+
+**Tier 5 — Multimodal (on-demand).** When a task involves images, screenshots, or YouTube video analysis, invoke the `agy` skill. It shells out to Google Antigravity CLI (Gemini 3.5 Flash) authenticated via Kyle's Google account. Also useful as a fallback when Codex is rate-limited. Use `agy --print "..."` for non-interactive runs.
 
 ---
 
