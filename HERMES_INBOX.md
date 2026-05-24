@@ -298,3 +298,8 @@ Spotted this: Sage looks like the best first application because it has UK/Irela
 ---
 [RESEARCH] 2026-05-24 | Topic: MTD Checker monetisation and product map | File: Brain `03_Resources/Theo/MTD Checker/mtd-monetisation-product-map.md` | Sources: GOV.UK/HMRC, ICO, ASA/CAP, AccountingCompare, Harkia, Mercian, Gorilla, Glow Accounts, RentalBux, ICAEW, ACCA | Date fetched: 2026-05-24 | Confidence: High for source-backed route recommendations, Medium for revenue sequencing.
 Spotted this: Best first route is a trust-first free checker with ungated results, optional email capture, transparent fit-based software affiliate cards, and a low-price MTD setup/checklist pack. Accountant lead-gen is worth deferring until Kyle can vet and disclose sponsors clearly.
+
+---
+
+[BRAIN] 2026-05-24 | MTD Checker traffic channel teardown | File: Brain/03_Resources/Theo/MTD Checker/mtd-traffic-channel-teardown.md | Sources: TinyFish, Google autocomplete, Perplexity sonar secondary synthesis, GOV.UK/HMRC, competitor checker/software/accountant pages, trend articles | Date fetched: 2026-05-24 | Confidence: High for channel/content patterns, Medium for Google Trends/search-surge figures.
+Spotted this: MTD acquisition is mostly organic SEO into utility pages: checkers/calculators, deadline calendars, audience guides, software comparisons and FAQs. Kyle's best gap is an ungated checker + deadline/software/content cluster stack, not another generic MTD guide.

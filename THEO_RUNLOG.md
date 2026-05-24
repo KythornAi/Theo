@@ -26,3 +26,5 @@
 2026-05-23 | Nightly memory consolidation | Updated memory fallback, cron/tool/research/decision/lesson vault files; logged MTD sprint progress, Daily Reset funnel, Hermes/WebUI update, vision fix, and daily priority cron move.
 [2026-05-24 09:04 BST] MTD Checker audience/keyword sprint complete: wrote Brain/03_Resources/Theo/MTD Checker/mtd-audience-keywords.md and updated MTD index/research registry.
 [2026-05-24 11:00] research: MTD Checker monetisation and product map completed; wrote Brain/03_Resources/Theo/MTD Checker/mtd-monetisation-product-map.md and appended HERMES_INBOX flag.
+
+[2026-05-24 12:08 BST] Completed MTD Checker traffic channel teardown; wrote Brain `03_Resources/Theo/MTD Checker/mtd-traffic-channel-teardown.md`, updated MTD index and research registry, appended inbox flag.
