@@ -294,3 +294,7 @@ Spotted this: Most private MTD checkers are lead funnels. The exploitable gap is
 Spotted this: Sage looks like the best first application because it has UK/Ireland targeting, public £30 CPA and 30-day cookie. Coconut is the most MTD-specific but only shows 10% and needs terms confirmed. FreeAgent is not a useful cash affiliate route from public sources, only a subscriber discount referral scheme.
 
 [BRAIN] 2026-05-24 | MTD Checker audience and keyword research | File: Brain/03_Resources/Theo/MTD Checker/mtd-audience-keywords.md | Sources: HMRC, ATT, LITRG, NRLA, Sage, MSE, Google autocomplete, secondary Trends articles | Date fetched: 2026-05-24 | Confidence: High for keyword/question clusters, Medium for trend evidence.
+
+---
+[RESEARCH] 2026-05-24 | Topic: MTD Checker monetisation and product map | File: Brain `03_Resources/Theo/MTD Checker/mtd-monetisation-product-map.md` | Sources: GOV.UK/HMRC, ICO, ASA/CAP, AccountingCompare, Harkia, Mercian, Gorilla, Glow Accounts, RentalBux, ICAEW, ACCA | Date fetched: 2026-05-24 | Confidence: High for source-backed route recommendations, Medium for revenue sequencing.
+Spotted this: Best first route is a trust-first free checker with ungated results, optional email capture, transparent fit-based software affiliate cards, and a low-price MTD setup/checklist pack. Accountant lead-gen is worth deferring until Kyle can vet and disclose sponsors clearly.
