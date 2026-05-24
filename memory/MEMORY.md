@@ -1,11 +1,11 @@
-EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first. Key files: painpoints, competitors, catalog/opportunities, positioning/status, decisions, lessons, research, crons, tools.
+EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first. Product, market, status, decisions, research, cron, and tool details live there, not in prompt memory.
 §
-Workspace: ~/theo/ (primary git repo). Brain vault: ~/Brain/ (Obsidian PARA, git). Legacy cron workdir still points at ~/hermes_files/theo/; active workspace output belongs in ~/theo/ and Brain.
+Platform: Pop OS laptop (/home/kylemoore/). Hermes at ~/.hermes/, binary ~/.local/bin/hermes. Active Theo workspace: ~/theo/. Brain vault: ~/Brain/.
 §
-Model strategy: gpt-5.5 via openai-codex (ChatGPT Plus OAuth) for chat and cron. Avoid paid Anthropic/OpenAI through OpenRouter; use existing subscriptions and free/low-cost tools where possible.
+Model/tool strategy: gpt-5.5 via openai-codex for main chat, synthesis, and critical crons. Avoid paid OpenRouter for routine monitoring. TinyFish default search; Perplexity sonar for cited synthesis; Firecrawl for crawls/failures. `agy` skill/CLI is available for Antigravity/Gemini multimodal work.
 §
-Cron state 2026-05-24: nightly-memory-consolidation daily 23:00 local; morning-briefing daily 08:00 Telegram/script; daily-priority-check-in daily 10:00; hermes-update-watch Mon/Thu 09:30 check-only; MTD Pinterest/social retry and MVP synthesis run 2026-05-25. Older PNP research crons paused.
+Theo/Claude/Kyle protocol: Theo researches/synthesizes; Kyle chooses direction; Claude builds/drafts; Claude leaves [CLAUDE→THEO] handoff with files/review scope/uncertainties; Theo reviews; Claude polishes; Kyle final-calls. Laptop and Mac Brain paths differ but sync via git.
 §
-Paper N Pixels researches ADHD productivity products plus a Discovery Lab for proven Etsy side-income models. Discovery filter: AI-operable replicability, profit, low fulfilment risk, ethical differentiation, and Kyle taste/direction oversight. Digital delivery is favoured over POD/dropshipping when shipping/fuel volatility or support risk is material.
+Hermes gateway: Discord is intentionally not configured; Discord token warnings are expected unless Kyle asks to use Discord.
 §
-Kyle prefers concise, implementation-truth answers. Long output creates ADHD overwhelm; separate discussed/planned from built/verified. Plan/action gate: frustration, maybe, or uncertainty = discuss only; file/repo/cron/config/build actions need explicit approval.
+Paper N Pixels context belongs in Brain Theo files (`project-status`, `product-catalog`, `product-opportunities`, `decisions-log`). Kyle’s product constraints and preferences belong in USER memory, not here.
