@@ -29,3 +29,4 @@
 
 [2026-05-24 12:08 BST] Completed MTD Checker traffic channel teardown; wrote Brain `03_Resources/Theo/MTD Checker/mtd-traffic-channel-teardown.md`, updated MTD index and research registry, appended inbox flag.
 [2026-05-24] MTD objections/trust/copy sprint completed: wrote Brain/03_Resources/Theo/MTD Checker/mtd-objections-trust-copy.md; appended HERMES_INBOX research flag.
+2026-05-24 | Nightly memory consolidation | Updated MTD sprint statuses, cron registry, research registry, project/product state, decisions, lessons, tool config, and lean MEMORY.md.
