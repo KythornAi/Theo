@@ -24,3 +24,4 @@
 [2026-05-23 13:07 BST] research: MTD Checker competitor checker audit written to Brain 03_Resources/Theo/MTD Checker/mtd-competitor-checkers.md; inbox flag appended.
 [2026-05-23] MTD Checker affiliate programme research completed; wrote Brain `03_Resources/Theo/MTD Checker/mtd-affiliate-programmes.md`, appended HERMES_INBOX.md research flag.
 2026-05-23 | Nightly memory consolidation | Updated memory fallback, cron/tool/research/decision/lesson vault files; logged MTD sprint progress, Daily Reset funnel, Hermes/WebUI update, vision fix, and daily priority cron move.
+[2026-05-24 09:04 BST] MTD Checker audience/keyword sprint complete: wrote Brain/03_Resources/Theo/MTD Checker/mtd-audience-keywords.md and updated MTD index/research registry.

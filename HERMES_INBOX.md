@@ -292,3 +292,5 @@ Spotted this: Most private MTD checkers are lead funnels. The exploitable gap is
 
 [RESEARCH] 2026-05-23 | Topic: MTD Checker affiliate programme research | File: Brain `03_Resources/Theo/MTD Checker/mtd-affiliate-programmes.md` | Sources fetched: FreeAgent, Xero, QuickBooks/FlexOffers, Sage/financeAds, Coconut/UpPromote, FreshBooks/Awin | Date fetched: 2026-05-23 | Confidence: High for public terms found, Medium where provider hides rate/cookie until approval
 Spotted this: Sage looks like the best first application because it has UK/Ireland targeting, public £30 CPA and 30-day cookie. Coconut is the most MTD-specific but only shows 10% and needs terms confirmed. FreeAgent is not a useful cash affiliate route from public sources, only a subscriber discount referral scheme.
+
+[BRAIN] 2026-05-24 | MTD Checker audience and keyword research | File: Brain/03_Resources/Theo/MTD Checker/mtd-audience-keywords.md | Sources: HMRC, ATT, LITRG, NRLA, Sage, MSE, Google autocomplete, secondary Trends articles | Date fetched: 2026-05-24 | Confidence: High for keyword/question clusters, Medium for trend evidence.
