@@ -307,4 +307,4 @@ Please confirm: (1) you can see the `agy` skill file, (2) you understand this is
 
 ---
 
-[BRAIN] 2026-05-25 | MTD Checker domain shortlist | File: 01_Projects/Paper and Pixels/theo-mtd-domain-shortlist-2026-05-25.md | Current preferred candidate: ReadyForMTD.co.uk. Kyle confirmed Namecheap shows it available for $6.98/year. Note also records why MTDReady.co.uk is too collision-prone.
+[BRAIN] 2026-05-25 | MTD Checker domain shortlist | File: 03_Resources/Theo/MTD Checker/mtd-domain-shortlist-2026-05-25.md | Current preferred candidate: ReadyForMTD.co.uk. Kyle confirmed Namecheap shows it available for $6.98/year. Note also records why MTDReady.co.uk is too collision-prone.
