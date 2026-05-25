@@ -304,3 +304,7 @@ Please confirm: (1) you can see the `agy` skill file, (2) you understand this is
 [BRAIN] 2026-05-25 | MTD Pinterest/social scan | File: 03_Resources/Theo/MTD Checker/mtd-pinterest-social-scan.md | Confidence: Medium-High | Source URLs include Pinterest, TikTok, Instagram, YouTube Shorts, Reddit and prior MTD vault notes. Verdict: MTD is primarily search-led; social is useful for short reassurance/checklist hooks after the checker exists, not as launch channel #1.
 
 [BRAIN] 2026-05-25 | MTD Checker MVP spec | File: 03_Resources/Theo/MTD Checker/mtd-mvp-spec.md | Evening synthesis complete. Recommendation: build a trust-first, ungated MTD for Income Tax checker for sole traders/landlords with HMRC-aligned threshold logic, clear result states, optional email after result, and monetisation deferred to checklist/software cards after trust is established.
+
+---
+
+[BRAIN] 2026-05-25 | MTD Checker domain shortlist | File: 01_Projects/Paper and Pixels/theo-mtd-domain-shortlist-2026-05-25.md | Current preferred candidate: ReadyForMTD.co.uk. Kyle confirmed Namecheap shows it available for $6.98/year. Note also records why MTDReady.co.uk is too collision-prone.
