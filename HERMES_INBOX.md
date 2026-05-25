@@ -308,3 +308,5 @@ Please confirm: (1) you can see the `agy` skill file, (2) you understand this is
 ---
 
 [BRAIN] 2026-05-25 | MTD Checker domain shortlist | File: 03_Resources/Theo/MTD Checker/mtd-domain-shortlist-2026-05-25.md | Final decision updated: ReadyForMTD.co.uk is now purchased/owned by Kyle and should be treated as the working public domain/brand for MTD Checker.
+
+[BRAIN] 2026-05-25 | MTD pre-build audit validation update | File: 03_Resources/Theo/MTD Checker/pre-build-audit-2026-05-25.md | Validated penalty soft-landing scope and checked core GOV.UK pages for updates since 23 May. Affiliate application acceptance remains pending because it requires Kyle/Claude to check actual affiliate dashboards or emails.
