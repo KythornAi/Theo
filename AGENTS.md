@@ -101,6 +101,7 @@ Current focus areas, in priority order. These reflect what the team needs most r
 | File write | Active | All outputs go to `~/hermes_files/theo/` |
 | Git / GitHub | Active | Use the `git-commit` skill to commit and push to `KythornAi/theo`. See GitHub section below. |
 | Codex CLI | Active | Use the `codex-think` skill for deep reasoning and code tasks. Bills against Kyle's ChatGPT Plus. |
+| Pre-build audit | Active | Manual trigger — when Kyle says "Run pre-build audit on [Project Name]", invoke the `pre-build-audit` skill. Uses Codex to audit completed research before a build session begins. |
 | Claude Code CLI | Active | Use the `claude-write` skill for writing, content creation, and coding. Bills against Kyle's claude.ai subscription. |
 | Antigravity CLI (`agy`) | Active | Gemini 3.5 Flash via Google Antigravity. Multimodal — use for images, screenshots, YouTube video analysis. Use the `agy` skill. Authenticated via Kyle's Google account. |
 | NotebookLM | Active | Research synthesis via Google NotebookLM. Use the `notebooklm` skill. Authenticated with secondary Google account. 50 queries/day free tier. Notebook registered: `pnp-research-brain`. |
@@ -191,10 +192,11 @@ The buyer is an ADHD adult — likely UK-leaning — struggling with **time blin
 
 ---
 
-*AGENTS.md v1.9 — updated 2026-05-19*
+*AGENTS.md v2.0 — updated 2026-05-25*
 *v1.1 corrections: Working directory updated from Dropbox to ~/hermes_files/theo/. Dropbox write tool entry removed. Opportunity flagging corrected to Section 1 of HERMES_INBOX.md.*
 *v1.2 additions: Append-only rule added to file protection reminder — HERMES_INBOX.md must never be overwritten.*
 *v1.3 additions (2026-04-30): Syncthing live-sync note added to workspace intro. Directory layout table expanded with notes/, research/, memory/, prototypes/ and written-by column. Scope of access section added.*
 *v1.4 additions (2026-05-02): Absolute path rule added to workspace intro (path-doubling incident, 2026-05-02). HERMES_INBOX.md scope narrowed to short flags/quarantine only. research-write skill added for full research output — writes to research/<topic>-YYYY-MM-DD.md.*
 *v1.7 corrections (2026-05-15): Pi decommissioned. All paths updated: ~/hermes_files/theo/ → ~/theo/, /home/kyle/ → /home/kylemoore/. Syncthing live-sync replaced by git-based sync. Brain vault section added (~/Brain/ access + commit protocol). Chat model updated to deepseek/deepseek-v4-flash. Git config updated to github-theo SSH alias. Codex CLI location updated to laptop.*
 *v1.9 additions (2026-05-19): Async messaging section rewritten to cover both directions — reading [CLAUDE→THEO] entries at session start (act before other tasks, acknowledge each one) and sending [THEO→CLAUDE] entries as before.*
+*v2.0 additions (2026-05-25): pre-build-audit skill added to tools table — manual trigger for auditing completed research sprints before a build session.*
