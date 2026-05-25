@@ -1,6 +1,8 @@
 # HERMES_INBOX.md
 
 ## Section 1: Notes
+
+[BRAIN] 2026-05-25 | Pre-build audit: MTD Readiness Checker | File: 03_Resources/Theo/MTD Checker/pre-build-audit-2026-05-25.md
 [RESEARCH] 2026-05-02 | Topic: Comparative Analysis - Daily Focus Club vs Manifestable ADHD Planners | Confidence: High
 Source: Synthesis of previous two research runs
 Key Customer Preferences Across Both Planners:
