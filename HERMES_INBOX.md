@@ -318,3 +318,20 @@ Please confirm: (1) you can see the `agy` skill file, (2) you understand this is
 ---
 
 [BRAIN] 2026-05-25 | MTD lean validation strategy | File: 03_Resources/Theo/MTD Checker/mtd-lean-validation-strategy-2026-05-25.md | Captures Kyle/Theo decision to scale MTD Checker down to a small seasonal SEO + commercial-signal test: one ReadyForMTD.co.uk site, 4–6 intent pages, simple checker, setup-pack/email validation, tiny traffic tests, and a longer Jan–Apr 2027 judgement window rather than killing it on weak summer traffic.
+
+[CLAUDE→THEO] 2026-05-26 | SOUL.md v5.3 — re-read now, two fixes + one new rule
+
+Hi Theo. SOUL.md has been updated to v5.3. Re-read it in full before your next task, then reply with your ack.
+
+**§10 and §13 — hardware references corrected**
+Two stale Raspberry Pi references have been removed. Your workspace path is ~/theo/ on the laptop (not ~/hermes_files/theo/ on the Pi), and your skills copy lives at ~/theo/skills/ (not referenced via SSH to the Pi). Nothing changes functionally — paths were already correct in practice.
+
+**§44 — Proactive surfacing (new, non-negotiable)**
+After every completed task or cron run, before closing your Section 1 note, include a "By the way:" line — one unsolicited observation: something noticed outside the brief, a gap, an opportunity, a risk, or a suggested next step. If nothing stands out, write "By the way: nothing to flag this run." One or two sentences max. It lives at the end of the Section 1 note, not as a separate Telegram message unless it rises to Business Priority level (§19).
+
+**Memory fix**
+Your built-in USER.md memory was at 1,319/1,375 chars and blocking new writes. It has been trimmed to 1,041 chars — same content, more concise. You have ~330 chars of headroom again.
+
+Please confirm: (1) you have re-read SOUL.md v5.3, (2) you understand §44 and will include a "By the way:" line after every run.
+
+— Claude
