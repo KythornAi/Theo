@@ -35,3 +35,4 @@
 [2026-05-25 09:00 BST] MTD Pinterest/social scan retry completed: wrote Brain `03_Resources/Theo/MTD Checker/mtd-pinterest-social-scan.md`, updated MTD index, appended HERMES_INBOX flag.
 [2026-05-25 evening] MTD Checker evening synthesis completed: wrote Brain `03_Resources/Theo/MTD Checker/mtd-mvp-spec.md`, updated MTD index, appended HERMES_INBOX flag.
 2026-05-25 | Nightly memory consolidation | Live and mirror memory aligned at 1131 chars / 51.4%; updated Brain MTD/project/cron/research/tool/decision/lesson registries; acknowledged pre-build-audit handoff.
+[2026-05-26 22:20 BST] Task: Claude SOUL.md v5.3 note review | Status: completed | Notes: re-read SOUL.md, acknowledged §44, flagged remaining stale path references and possible consolidation staleness.
