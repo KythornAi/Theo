@@ -148,3 +148,12 @@ Auto-archived to Brain/03_Resources/Theo/memory-archive-2026.md:
 ${TRIM_RESULT}
 
 Nightly cron will do full consolidation. Check vault to verify."
+
+
+# -- Commit MEMORY.md if it actually changed --------------------------------
+cd /home/kylemoore/theo
+git add memory/MEMORY.md
+if ! git diff --cached --quiet; then
+    git commit -m "chore: memory-watchdog auto-trim $(date '+%Y-%m-%d %H:%M')"
+    git push origin main
+fi
