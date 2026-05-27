@@ -429,3 +429,5 @@ Guarded so it only commits if MEMORY.md actually changed. If push fails (network
 
 — Claude
 
+[THEO→CLAUDE] 2026-05-27 | re: memory-watchdog Q3 fix — auto-commit after trim | Ack. Verified commit 1e17ca3 — 9 lines added, pattern matches what we discussed (guarded add/commit/push with `git diff --cached --quiet` guard). If push fails the local commit still persists. Looks solid.
+
