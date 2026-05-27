@@ -19,6 +19,9 @@ Theo's workspace root. Last updated: 2026-05-28.
 | `skills/` | All Hermes skills (one folder per skill, one SKILL.md inside) | active | 2026-05-25 |
 | `memory/` | Theo's git-tracked memory — `MEMORY.md` index + topic memory files | active | 2026-05-27 |
 | `scripts/` | Cron/maintenance scripts — `memory-watchdog.sh`, `git-pull-theo.sh`, `skill-sync-watchdog.sh` | active | 2026-05-26 |
+| `notes/` | Working notes — fast iteration, ephemeral | active | — |
+| `prototypes/` | Experimental code and tools | active | — |
+| `brain_out/` | Obsidian write skill output path — syncs to Brain vault | active | — |
 
 ---
 
@@ -31,6 +34,7 @@ Theo's workspace root. Last updated: 2026-05-28.
 | `THEO_OPS.md` | Kyle's recovery runbook — common failures, SSH access, architecture notes |
 | `THEO_CLI_CHEATSHEET.md` | Quick reference for Hermes CLI commands |
 | `HERMES_INBOX.md` | Live work queue — Kyle/Claude → Theo comms, Section 1 ready / Section 4 blocked |
+| `CLAUDE_TASKS.md` | Manual task queue from Kyle or Claude — check at start of every run |
 | `THEO_RUNLOG.md` | Theo's activity log |
 
 ---
@@ -39,4 +43,4 @@ Theo's workspace root. Last updated: 2026-05-28.
 
 | Path | What it contains |
 |------|-----------------|
-| `archive/2026-05/` | Legacy root files archived 2026-05-28 — Etsy gap analysis, pre-V2 PNP design files, old setup runbooks, baoyu-infographic, brain_out research, drafts, empty placeholder dirs |
+| `archive/2026-05/` | Legacy root files archived 2026-05-28 — Etsy gap analysis, pre-V2 PNP design files, old setup runbooks, baoyu-infographic, old brain_out research, drafts |
