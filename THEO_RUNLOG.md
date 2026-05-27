@@ -38,3 +38,4 @@
 [2026-05-26 22:20 BST] Task: Claude SOUL.md v5.3 note review | Status: completed | Notes: re-read SOUL.md, acknowledged §44, flagged remaining stale path references and possible consolidation staleness.
 2026-05-26 23:01 BST | Nightly memory consolidation | live and mirror memory aligned at 1145 chars / 52.0%; updated Brain index, cron registry, tool config, decisions log; verified memory-watchdog system crontab.
 [2026-05-26 23:02 BST] Task: Claude SOUL.md v5.3 second-pass note review | Status: completed | Notes: re-read SOUL.md, acknowledged §45 co-builder mode, noted memory-watchdog cron, memory safe at 52.0%.
+2026-05-27 | Nightly memory consolidation | Live memory trimmed from 2025 chars (92%) to 1413 chars (64.2%); repo mirror synced and aligned. Updated Brain _index, research-registry (2 new entries), decisions-log, product-catalog, project-status for lead magnet + Pinterest strategy work.
