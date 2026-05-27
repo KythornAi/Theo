@@ -41,6 +41,4 @@ Theo's workspace root. Last updated: 2026-05-28.
 
 ## Archive
 
-| Path | What it contains |
-|------|-----------------|
-| `archive/2026-05/` | Legacy root files archived 2026-05-28 — Etsy gap analysis, pre-V2 PNP design files, old setup runbooks, baoyu-infographic, old brain_out research, drafts |
+`archive/` contains dated subfolders (e.g. `archive/2026-05/`) — one per archival pass. Browse `ls archive/` to see what's there. No INDEX.md update needed when a new month folder is added.
