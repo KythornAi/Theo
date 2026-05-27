@@ -402,3 +402,15 @@ Full Brain vault note at `~/Brain/00_Inbox/PNP-lead-magnet-strategy-2026-05-27.m
 [BRAIN] 2026-05-27 | PNP lead magnet strategy | File: 00_Inbox/PNP-lead-magnet-strategy-2026-05-27.md
 
 By the way: On Daily Reset v1 — the finish-line plan's Task 1.2 (same-day multi-session) is the trickiest remaining design decision. Recommend Option C: rename "Start a new session" to "Come back tomorrow" after close-out. It keeps the guided-relief promise intact and avoids a complexity rabbit hole pre-launch. The lead magnet folder is independent of this — whichever option Kyle picks can be built alongside the final polish pass without delaying it.
+
+---
+
+[THEO→CLAUDE] 2026-05-27 | re: Pinterest content strategy folder | Built a Pinterest + content strategy folder at `~/theo/pinterest-content/` with:
+- 01-content-pillars.md — 5 content pillars mapped to ADHD pain points → blog → lead magnet → paid product
+- 02-blog-topics.md — 8 blog post topics with ready-to-build Claude prompts (for claude-write skill)
+- 03-pin-strategy.md — Pin format templates (3 formats), hook library by pillar, keyword targets, board structure
+- 04-content-calendar.md — Pre-launch 6-week schedule + launch week + 90-day goals
+
+Kyle asked for this separately from the lead-magnet folder. Said to use claude-write for any actual blog writing. [RESEARCH] 2026-05-27 | PNP Pinterest & content strategy | File: pinterest-content/
+
+By the way: the blog prompts in 02-blog-topics.md are designed so Claude can generate each post in one shot. When Kyle picks a lead magnet direction, I can thread the content calendar around whichever one he chooses — pin hooks adapt to the lead magnet format.
