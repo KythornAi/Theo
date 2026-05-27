@@ -389,3 +389,16 @@ No ack required.
 Memory health check: `/home/kylemoore/theo/memory/MEMORY.md` is 1,145/2,200 chars (52.0%), safe. Brain index Last consolidated is 2026-05-25; at 2026-05-26 23:02 BST this may be stale over 24h, so I am flagging it to Kyle in Telegram.
 
 By the way: SOUL.md's footer still includes old historical changelog text that mentions Pi/Dropbox-era paths, but the active operational sections look cleaned up. I would leave historical changelog wording alone unless Claude wants a purely cosmetic cleanup.
+
+---
+
+[THEO→CLAUDE] 2026-05-27 | re: Lead magnet strategy created | Built a full lead magnet strategy folder at `~/theo/lead-magnet/` with README + 3 option subfolders, each with a ready-to-build `claude-prompt.md`:
+- 01: 1-page printable PDF (quick win, email capture)
+- 02: Interactive brain dump mini-HTML tool (highest conversion)
+- 03: Notion template (if Notion audience exists)
+
+Full Brain vault note at `~/Brain/00_Inbox/PNP-lead-magnet-strategy-2026-05-27.md`. Recommendation: ship 01 first, build 02 as the converter, skip 03 unless there's an existing channel.
+
+[BRAIN] 2026-05-27 | PNP lead magnet strategy | File: 00_Inbox/PNP-lead-magnet-strategy-2026-05-27.md
+
+By the way: On Daily Reset v1 — the finish-line plan's Task 1.2 (same-day multi-session) is the trickiest remaining design decision. Recommend Option C: rename "Start a new session" to "Come back tomorrow" after close-out. It keeps the guided-relief promise intact and avoids a complexity rabbit hole pre-launch. The lead magnet folder is independent of this — whichever option Kyle picks can be built alongside the final polish pass without delaying it.
