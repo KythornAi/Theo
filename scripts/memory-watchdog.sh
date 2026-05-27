@@ -157,3 +157,6 @@ if ! git diff --cached --quiet; then
     git commit -m "chore: memory-watchdog auto-trim $(date '+%Y-%m-%d %H:%M')"
     git push origin main
 fi
+
+# Sync trimmed copy to Hermes live store so the memory tool and subsequent sessions see the clean version
+cp "$MEMORY_FILE" /home/kylemoore/.hermes/memories/MEMORY.md

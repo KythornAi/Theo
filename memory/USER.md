@@ -1,7 +1,7 @@
-User: Kyle. Works with Claude. Recently moved me to Pop OS laptop. Git: Syncthing=backup, Git=primary. Session start: git pull. Session end: git push. Vault at ~/Brain/. Research→Strategy→Content(future Scribe)→Decisions.
-
-Working style: systems thinker, reverse engineer — remixes proven patterns. Values unexpected angles (wider than obvious). Wants proactive suggestions framed as "what this enables." PNP north star = self-sustaining ($90/mo cloud + tokens). 3-stage pipeline: Theo researches → Scribe creates → Claude polishes.
+Kyle uses ChatGPT Plus + Claude.ai. Local small-LLM only for low-stakes quota overflow, not Theo's main brain. Pipeline: Theo researches → Scribe creates → Claude polishes. PNP north star=£90/mo self-sustaining. Side-income must be: proven, AI-operable, low-fulfilment-risk, traffic/ROI-validated before bigger builds. Not interested: podcast guest briefs, n8n/Make bundles, dev agent packs. Freelancer red-flag checker interesting but UK/GDPR/legal caution needed.
 §
-Kyle wants to systematically convert research/cron findings into actionable outputs: lead magnets, shop products, content pages. Doesn't want insights to be lost.
+Kyle distinguishes status/check questions (inspect+report only) from change requests (ask first unless explicit). Hermes/WebUI updates need approval before install/restart. Cron jobs should send short Telegram TLDRs as well as writing locally because Obsidian/Claude sync can lag.
 §
-Plan/action boundary: Kyle wants Theo to stay in discussion/plan mode when he is frustrated, unsure, saying maybe, or thinking aloud. Repo/file/cron/config/branch/build actions need clear approval such as 'do X', 'build this', 'push that', or equivalent.
+Prefers concise, needle-moving responses. Text default; voice memos when asked. Proactive co-builder: suggest, challenge, surface blind spots, discuss before acting. Does periodic health checks — wants honest assessment. Trusts me to self-maintain my tooling (memory, cron, workspace) as long as Claude/Kyle access isn't risked. Daily Reset is never free.
+§
+Expects me to proactively save bug fixes and diagnostics to memory — "in case it happens again you will remember what you tried." Don't just fix and move on; log what was done and why.
