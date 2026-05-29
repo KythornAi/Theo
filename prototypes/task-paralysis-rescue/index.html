@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Task Paralysis Rescue Button</title>
+  <style>
+    :root {
+      --ink: #24302f;
+      --muted: #65706d;
+      --paper: #fffaf0;
+      --panel: #ffffff;
+      --mint: #dff4ec;
+      --mint-strong: #80c7aa;
+      --peach: #ffd9c7;
+      --yellow: #ffe89a;
+      --line: #e7ded1;
+      --shadow: 0 18px 45px rgba(36, 48, 47, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 217, 199, 0.9), transparent 35rem),
+        radial-gradient(circle at bottom right, rgba(223, 244, 236, 0.95), transparent 32rem),
+        var(--paper);
+      color: var(--ink);
+    }
+
+    main {
+      width: min(940px, 100%);
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 18px;
+      margin: 12px 0 24px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(2.15rem, 7vw, 4.6rem);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+    }
+
+    .subtitle {
+      max-width: 680px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1.04rem, 2vw, 1.25rem);
+      line-height: 1.55;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+      backdrop-filter: blur(12px);
+    }
+
+    .step-label {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(1.55rem, 3vw, 2.15rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+      margin: 16px 0 22px;
+    }
+
+    button, textarea, input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .option {
+      width: 100%;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      color: var(--ink);
+      text-align: left;
+      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+
+    .option:hover, .option.selected {
+      transform: translateY(-1px);
+      border-color: var(--mint-strong);
+      background: var(--mint);
+    }
+
+    .option strong { display: block; margin-bottom: 3px; }
+    .option span { color: var(--muted); font-size: 0.95rem; }
+
+    textarea {
+      width: 100%;
+      min-height: 128px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      color: var(--ink);
+      background: #fff;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .primary, .secondary {
+      min-height: 48px;
+      border-radius: 999px;
+      padding: 0 18px;
+      font-weight: 800;
+    }
+
+    .primary {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .secondary {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      background: var(--mint);
+      border: 1px solid rgba(128, 199, 170, 0.65);
+    }
+
+    .result.visible { display: block; }
+
+    .result-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .rescue-item {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .rescue-item b { display: block; margin-bottom: 4px; }
+    .rescue-item p { margin: 0; color: var(--muted); line-height: 1.45; }
+
+    .side-card {
+      display: grid;
+      gap: 14px;
+    }
+
+    .wins {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .wins li {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .support-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--yellow);
+      color: #594b00;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .app { grid-template-columns: 1fr; }
+      main { padding-top: 18px; }
+      .card { border-radius: 22px; }
+      .actions { display: grid; }
+      .primary, .secondary { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <div class="eyebrow">Paper N Pixels experiment · no shame, no full reset required</div>
+      <h1 id="title">Task Paralysis Rescue Button</h1>
+      <p class="subtitle">For the moment where the task is obvious but starting feels weirdly impossible. Pick your energy, dump the stuck thing, and get one reachable action to begin.</p>
+    </section>
+
+    <section class="app">
+      <div class="card">
+        <p class="step-label">Step 1 · choose the current battery</p>
+        <h2>How much capacity do you have right now?</h2>
+        <div class="options" id="energyOptions">
+          <button class="option" data-energy="empty">
+            <strong>Empty battery</strong>
+            <span>I need the gentlest possible starting point.</span>
+          </button>
+          <button class="option" data-energy="low">
+            <strong>Low battery</strong>
+            <span>I can do something, but only if it is clear and short.</span>
+          </button>
+          <button class="option" data-energy="spark">
+            <strong>Tiny spark</strong>
+            <span>I have a little momentum. Help me point it somewhere useful.</span>
+          </button>
+        </div>
+
+        <p class="step-label">Step 2 · brain dump one stuck thing</p>
+        <h2>What are you avoiding, circling, or carrying?</h2>
+        <textarea id="stuckText" placeholder="Example: I need to reply to the email but I keep opening it, panicking, and closing it again."></textarea>
+
+        <div class="actions">
+          <button class="primary" id="rescueBtn">Give me a first move</button>
+          <button class="secondary" id="randomBtn">I cannot choose, decide for me</button>
+          <button class="secondary" id="resetBtn">Reset this</button>
+        </div>
+
+        <div class="result" id="result" aria-live="polite">
+          <p class="step-label">Your rescue plan</p>
+          <h2 id="resultTitle">Start here</h2>
+          <div class="result-grid">
+            <div class="rescue-item">
+              <b>First move</b>
+              <p id="firstMove"></p>
+            </div>
+            <div class="rescue-item">
+              <b>Two-minute version</b>
+              <p id="twoMinute"></p>
+            </div>
+            <div class="rescue-item">
+              <b>If that still feels too much</b>
+              <p id="fallback"></p>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="saveWinBtn">Save this first win</button>
+            <button class="secondary" id="copyBtn">Copy rescue plan</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="card side-card" aria-label="Tiny wins and guidance">
+        <div>
+          <p class="step-label">Why this works</p>
+          <h2>Start friction, not motivation.</h2>
+          <p class="support-note">This prototype assumes the problem is not laziness. It treats task initiation as a friction problem, then lowers the first action until it becomes reachable.</p>
+          <div class="pill-row">
+            <span class="pill">No full planner</span>
+            <span class="pill">No guilt</span>
+            <span class="pill">One next action</span>
+          </div>
+        </div>
+
+        <div>
+          <p class="step-label">Saved first wins</p>
+          <ul class="wins" id="winsList"></ul>
+          <p class="support-note" id="emptyWins">Nothing saved yet. One attempt counts.</p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const energyOptions = document.querySelectorAll('[data-energy]');
+    const stuckText = document.querySelector('#stuckText');
+    const rescueBtn = document.querySelector('#rescueBtn');
+    const randomBtn = document.querySelector('#randomBtn');
+    const resetBtn = document.querySelector('#resetBtn');
+    const result = document.querySelector('#result');
+    const resultTitle = document.querySelector('#resultTitle');
+    const firstMove = document.querySelector('#firstMove');
+    const twoMinute = document.querySelector('#twoMinute');
+    const fallback = document.querySelector('#fallback');
+    const saveWinBtn = document.querySelector('#saveWinBtn');
+    const copyBtn = document.querySelector('#copyBtn');
+    const winsList = document.querySelector('#winsList');
+    const emptyWins = document.querySelector('#emptyWins');
+
+    const plans = {
+      empty: {
+        title: 'No heroics. We are making contact with the task.',
+        first: 'Open the place where the task lives. Do not do the task yet. Just make it visible for ten seconds.',
+        two: 'Write one messy sentence that starts with: “The next obvious thing is…” Stop there if needed.',
+        fallback: 'Put a hand on your chest, breathe out once, and rename the task to “look at this again”. Looking counts.'
+      },
+      low: {
+        title: 'Make the first move more reachable than the resistance.',
+        first: 'Set a two-minute timer and do only the first visible action. Not the whole task. The first visible action.',
+        two: 'Prepare the task environment: open the tab, find the file, clear the desk, or write the first line.',
+        fallback: 'Create a “later container”: write what remains on a note so your brain does not have to keep holding it.'
+      },
+      spark: {
+        title: 'Use the spark before it evaporates.',
+        first: 'Pick the part that creates the most relief when finished, then do a rough first pass without polishing.',
+        two: 'Work until there is one visible artefact: a sent draft, a named file, a checkbox ticked, or a next-step note.',
+        fallback: 'If momentum dips, stop cleanly by writing: “When I return, I start with…”'
+      }
+    };
+
+    let selectedEnergy = 'low';
+
+    function selectEnergy(value) {
+      selectedEnergy = value;
+      energyOptions.forEach((button) => {
+        button.classList.toggle('selected', button.dataset.energy === value);
+      });
+    }
+
+    function taskSummary() {
+      const text = stuckText.value.trim();
+      return text || 'the thing I am stuck on';
+    }
+
+    function renderPlan() {
+      const plan = plans[selectedEnergy];
+      const task = taskSummary();
+      resultTitle.textContent = plan.title;
+      firstMove.textContent = `${plan.first} Apply it to: ${task}.`;
+      twoMinute.textContent = plan.two;
+      fallback.textContent = plan.fallback;
+      result.classList.add('visible');
+      result.scrollIntoView({ behaviour: 'smooth', block: 'nearest' });
+    }
+
+    function randomise() {
+      const values = Object.keys(plans);
+      const next = values[Math.floor(Math.random() * values.length)];
+      selectEnergy(next);
+      renderPlan();
+    }
+
+    function getWins() {
+      try {
+        return JSON.parse(localStorage.getItem('pnp-task-rescue-wins') || '[]');
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function setWins(wins) {
+      localStorage.setItem('pnp-task-rescue-wins', JSON.stringify(wins.slice(0, 6)));
+      renderWins();
+    }
+
+    function renderWins() {
+      const wins = getWins();
+      winsList.innerHTML = '';
+      emptyWins.style.display = wins.length ? 'none' : 'block';
+      wins.forEach((win) => {
+        const li = document.createElement('li');
+        li.textContent = win;
+        winsList.appendChild(li);
+      });
+    }
+
+    function saveWin() {
+      const stamp = new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
+      const win = `${stamp}: made a first move on “${taskSummary().slice(0, 70)}”`;
+      setWins([win, ...getWins()]);
+      saveWinBtn.textContent = 'Saved';
+      setTimeout(() => { saveWinBtn.textContent = 'Save this first win'; }, 1300);
+    }
+
+    async function copyPlan() {
+      const text = [
+        'Task Paralysis Rescue Plan',
+        `Stuck thing: ${taskSummary()}`,
+        `First move: ${firstMove.textContent}`,
+        `Two-minute version: ${twoMinute.textContent}`,
+        `Fallback: ${fallback.textContent}`
+      ].join('\n');
+
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = 'Copied';
+      } catch (error) {
+        copyBtn.textContent = 'Copy failed';
+      }
+      setTimeout(() => { copyBtn.textContent = 'Copy rescue plan'; }, 1300);
+    }
+
+    function resetAll() {
+      stuckText.value = '';
+      selectEnergy('low');
+      result.classList.remove('visible');
+      stuckText.focus();
+    }
+
+    energyOptions.forEach((button) => {
+      button.addEventListener('click', () => selectEnergy(button.dataset.energy));
+    });
+
+    rescueBtn.addEventListener('click', renderPlan);
+    randomBtn.addEventListener('click', randomise);
+    resetBtn.addEventListener('click', resetAll);
+    saveWinBtn.addEventListener('click', saveWin);
+    copyBtn.addEventListener('click', copyPlan);
+
+    selectEnergy('low');
+    renderWins();
+  </script>
+</body>
+</html>
