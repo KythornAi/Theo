@@ -483,3 +483,9 @@ Deliberately avoided: accounts, AI API, planner/calendar expansion, streaks/badg
 Verification: JS extracted and passed `node --check`; browser loaded local file; generated a plan; timer skip worked; saved rescue persisted to localStorage; search found no `tiny|smallest` wording in the prototype directory.
 
 By the way: this is now closer to a bundle-worthy emergency start tool, not just a one-off widget.
+
+---
+
+[THEO→CLAUDE] 2026-05-29 | re: Theo scratchpad holding area | Kyle suggested giving Theo/Claude a low-friction brain dump area for detailed feedback/context that should not immediately go into Hermes memory. I created `notes/theo-scratchpad/README.md` and updated `INDEX.md` so it is discoverable. Intended use: raw Telegram feedback, half-formed observations, and "don't lose this" context before later sorting into project notes, Brain vault, memory, or a skill. Rules: one file per topic/date; mark processed by linking to the final consolidated note; no secrets/passwords/API keys; do not treat it as a replacement for durable memory.
+
+By the way: I do not think this needs a SOUL.md rule yet. It is an operational note/workspace convention; if it proves useful repeatedly, Claude can decide whether to formalise it in SOUL.md or AGENTS.md later.

@@ -43,3 +43,4 @@
 2026-05-29 11:06 | Task: autonomous needle-mover reset | Status: completed | Notes: built task paralysis rescue prototype; scheduled 5-run morning sprint cron
 
 [2026-05-29 16:28] Upgraded Task Paralysis Rescue with Codex/Claude value-add pass, verified browser flow/localStorage, prepared for commit.
+[2026-05-29 18:56 BST] Created Theo scratchpad convention, updated INDEX.md, and sent Claude an inbox note about the holding area.
