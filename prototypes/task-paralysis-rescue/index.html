@@ -13,8 +13,11 @@
       --mint: #dff4ec;
       --mint-strong: #80c7aa;
       --peach: #ffd9c7;
+      --peach-strong: #f2a784;
       --yellow: #ffe89a;
+      --blue: #e6efff;
       --line: #e7ded1;
+      --danger: #a94d45;
       --shadow: 0 18px 45px rgba(36, 48, 47, 0.12);
     }
 
@@ -32,7 +35,7 @@
     }
 
     main {
-      width: min(940px, 100%);
+      width: min(1060px, 100%);
       margin: 0 auto;
       padding: 28px 16px 56px;
     }
@@ -57,15 +60,15 @@
     }
 
     h1 {
-      max-width: 760px;
+      max-width: 790px;
       margin: 0;
-      font-size: clamp(2.15rem, 7vw, 4.6rem);
+      font-size: clamp(2.2rem, 7vw, 4.8rem);
       line-height: 0.96;
       letter-spacing: -0.055em;
     }
 
     .subtitle {
-      max-width: 680px;
+      max-width: 720px;
       margin: 0;
       color: var(--muted);
       font-size: clamp(1.04rem, 2vw, 1.25rem);
@@ -74,7 +77,7 @@
 
     .app {
       display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
       gap: 18px;
       align-items: start;
     }
@@ -82,32 +85,33 @@
     .card {
       border: 1px solid var(--line);
       border-radius: 28px;
-      background: rgba(255, 255, 255, 0.86);
+      background: rgba(255, 255, 255, 0.88);
       box-shadow: var(--shadow);
       padding: clamp(18px, 4vw, 30px);
       backdrop-filter: blur(12px);
     }
 
+    .stack { display: grid; gap: 22px; }
+
     .step-label {
       margin: 0 0 10px;
       color: var(--muted);
-      font-weight: 700;
-      font-size: 0.82rem;
+      font-weight: 800;
+      font-size: 0.8rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     h2 {
       margin: 0 0 14px;
-      font-size: clamp(1.55rem, 3vw, 2.15rem);
+      font-size: clamp(1.45rem, 3vw, 2.1rem);
       line-height: 1.05;
       letter-spacing: -0.035em;
     }
 
-    .options {
-      display: grid;
-      gap: 10px;
-      margin: 16px 0 22px;
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
     }
 
     button, textarea, input {
@@ -119,29 +123,9 @@
       cursor: pointer;
     }
 
-    .option {
-      width: 100%;
-      padding: 16px 18px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
-      color: var(--ink);
-      text-align: left;
-      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
-    }
-
-    .option:hover, .option.selected {
-      transform: translateY(-1px);
-      border-color: var(--mint-strong);
-      background: var(--mint);
-    }
-
-    .option strong { display: block; margin-bottom: 3px; }
-    .option span { color: var(--muted); font-size: 0.95rem; }
-
     textarea {
       width: 100%;
-      min-height: 128px;
+      min-height: 118px;
       resize: vertical;
       border: 1px solid var(--line);
       border-radius: 20px;
@@ -151,6 +135,36 @@
       line-height: 1.5;
     }
 
+    .options, .mode-grid, .reason-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .mode-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .option, .mode, .reason, .library-item {
+      width: 100%;
+      padding: 15px 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      color: var(--ink);
+      text-align: left;
+      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+
+    .option:hover, .option.selected,
+    .mode:hover, .mode.selected,
+    .reason:hover, .reason.selected {
+      transform: translateY(-1px);
+      border-color: var(--mint-strong);
+      background: var(--mint);
+    }
+
+    .option strong, .mode strong, .reason strong { display: block; margin-bottom: 3px; }
+    .option span, .mode span, .reason span { color: var(--muted); font-size: 0.93rem; line-height: 1.35; }
+
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -158,11 +172,11 @@
       margin-top: 16px;
     }
 
-    .primary, .secondary {
-      min-height: 48px;
+    .primary, .secondary, .text-link {
+      min-height: 46px;
       border-radius: 999px;
-      padding: 0 18px;
-      font-weight: 800;
+      padding: 0 17px;
+      font-weight: 850;
     }
 
     .primary {
@@ -176,16 +190,23 @@
       color: var(--ink);
     }
 
-    .result {
-      display: none;
-      margin-top: 20px;
-      padding: 18px;
-      border-radius: 22px;
-      background: var(--mint);
-      border: 1px solid rgba(128, 199, 170, 0.65);
+    .text-link {
+      background: transparent;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      padding-inline: 4px;
     }
 
-    .result.visible { display: block; }
+    .result, .timer-panel, .reach-panel, .exit-panel {
+      display: none;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(128, 199, 170, 0.65);
+      background: var(--mint);
+    }
+
+    .result.visible, .timer-panel.visible, .reach-panel.visible, .exit-panel.visible { display: block; }
 
     .result-grid {
       display: grid;
@@ -196,38 +217,47 @@
     .rescue-item {
       padding: 14px;
       border-radius: 18px;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.72);
     }
 
     .rescue-item b { display: block; margin-bottom: 4px; }
     .rescue-item p { margin: 0; color: var(--muted); line-height: 1.45; }
 
+    .timer-circle {
+      display: grid;
+      place-items: center;
+      width: 168px;
+      height: 168px;
+      margin: 12px auto;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff 54%, var(--peach) 55%);
+      border: 1px solid var(--line);
+      box-shadow: inset 0 0 0 12px rgba(255, 255, 255, 0.45);
+    }
+
+    .timer-time {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+    }
+
+    .timer-caption {
+      text-align: center;
+      color: var(--muted);
+      margin: 0 auto;
+      max-width: 32rem;
+      line-height: 1.45;
+    }
+
     .side-card {
       display: grid;
-      gap: 14px;
-    }
-
-    .wins {
-      display: grid;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .wins li {
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: #fff;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.95rem;
+      gap: 16px;
     }
 
     .support-note {
       margin: 0;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.94rem;
       line-height: 1.45;
     }
 
@@ -243,49 +273,102 @@
       padding: 7px 10px;
       background: var(--yellow);
       color: #594b00;
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-size: 0.84rem;
+      font-weight: 800;
     }
 
-    @media (max-width: 760px) {
+    .library-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .library-item {
+      display: grid;
+      gap: 9px;
+    }
+
+    .library-item p { margin: 0; color: var(--muted); line-height: 1.35; }
+
+    .item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .item-actions button {
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--blue);
+      color: var(--ink);
+      font-size: 0.83rem;
+      font-weight: 800;
+    }
+
+    .item-actions button.delete { background: #fff0ed; color: var(--danger); }
+
+    .notice {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: var(--blue);
+      color: #2d3d5c;
+      line-height: 1.42;
+      font-size: 0.94rem;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 820px) {
       .app { grid-template-columns: 1fr; }
+      .mode-grid { grid-template-columns: 1fr; }
       main { padding-top: 18px; }
       .card { border-radius: 22px; }
       .actions { display: grid; }
-      .primary, .secondary { width: 100%; }
+      .primary, .secondary, .text-link { width: 100%; }
+      .timer-circle { width: 144px; height: 144px; }
     }
   </style>
 </head>
 <body>
   <main>
     <section class="hero" aria-labelledby="title">
-      <div class="eyebrow">Paper N Pixels experiment · no shame, no full reset required</div>
+      <div class="eyebrow">Paper N Pixels experiment · the ADHD start ritual medication does not give you</div>
       <h1 id="title">Task Paralysis Rescue Button</h1>
-      <p class="subtitle">For the moment where the task is obvious but starting feels weirdly impossible. Pick your energy, dump the stuck thing, and get one reachable action to begin.</p>
+      <p class="subtitle">For when you know what to do but cannot make yourself begin. Name the stuck task, choose a way in, and start with a two-minute bridge back into motion.</p>
     </section>
 
     <section class="app">
-      <div class="card">
-        <p class="step-label">Step 1 · choose the current battery</p>
-        <h2>How much capacity do you have right now?</h2>
-        <div class="options" id="energyOptions">
-          <button class="option" data-energy="empty">
-            <strong>Empty battery</strong>
-            <span>I need the gentlest possible starting point.</span>
-          </button>
-          <button class="option" data-energy="low">
-            <strong>Low battery</strong>
-            <span>I can do something, but only if it is clear and short.</span>
-          </button>
-          <button class="option" data-energy="spark">
-            <strong>Tiny spark</strong>
-            <span>I have a little momentum. Help me point it somewhere useful.</span>
-          </button>
-        </div>
+      <div class="card stack">
+        <section>
+          <p class="step-label">Step 1 · choose the current battery</p>
+          <h2>How much capacity do you have right now?</h2>
+          <div class="options" id="energyOptions">
+            <button class="option" data-energy="empty">
+              <strong>Empty battery</strong>
+              <span>I need the gentlest possible starting point.</span>
+            </button>
+            <button class="option" data-energy="low">
+              <strong>Low battery</strong>
+              <span>I can do something if the next move is clear.</span>
+            </button>
+            <button class="option" data-energy="spark">
+              <strong>Some spark</strong>
+              <span>I have a little momentum. Help me point it somewhere useful.</span>
+            </button>
+          </div>
+        </section>
 
-        <p class="step-label">Step 2 · brain dump one stuck thing</p>
-        <h2>What are you avoiding, circling, or carrying?</h2>
-        <textarea id="stuckText" placeholder="Example: I need to reply to the email but I keep opening it, panicking, and closing it again."></textarea>
+        <section>
+          <p class="step-label">Step 2 · name the stuck thing</p>
+          <h2>What are you avoiding, circling, or carrying?</h2>
+          <textarea id="stuckText" placeholder="Example: I need to reply to the email but I keep opening it, panicking, and closing it again."></textarea>
+        </section>
+
+        <section>
+          <p class="step-label">Step 3 · choose a way in</p>
+          <h2>What kind of stuck are you?</h2>
+          <div class="mode-grid" id="modeOptions"></div>
+        </section>
 
         <div class="actions">
           <button class="primary" id="rescueBtn">Give me a first move</button>
@@ -293,7 +376,7 @@
           <button class="secondary" id="resetBtn">Reset this</button>
         </div>
 
-        <div class="result" id="result" aria-live="polite">
+        <section class="result" id="result" aria-live="polite">
           <p class="step-label">Your rescue plan</p>
           <h2 id="resultTitle">Start here</h2>
           <div class="result-grid">
@@ -311,29 +394,63 @@
             </div>
           </div>
           <div class="actions">
-            <button class="primary" id="saveWinBtn">Save this first win</button>
-            <button class="secondary" id="copyBtn">Copy rescue plan</button>
+            <button class="primary" id="startTimerBtn">Ready? Let’s do 2 minutes.</button>
+            <button class="secondary" id="makeReachableBtn">That’s too much. Make it more reachable.</button>
+            <button class="secondary" id="saveRescueBtn">Save this rescue</button>
+            <button class="secondary" id="copyBtn">Copy plan</button>
           </div>
-        </div>
+        </section>
+
+        <section class="reach-panel" id="reachPanel" aria-live="polite">
+          <p class="step-label">Different way in</p>
+          <h2>What is making this feel blocked?</h2>
+          <div class="reason-grid" id="reasonOptions"></div>
+          <div class="notice hidden" id="reachResult"></div>
+        </section>
+
+        <section class="timer-panel" id="timerPanel" aria-live="polite">
+          <p class="step-label">Start with me</p>
+          <h2 id="timerTitle">Give yourself 30 seconds. Just breathe.</h2>
+          <div class="timer-circle">
+            <div class="timer-time" id="timerTime">0:30</div>
+          </div>
+          <p class="timer-caption" id="timerCaption">No proving anything. We are just lowering the activation wall.</p>
+          <div class="actions">
+            <button class="primary" id="timerPrimaryBtn">Skip to the 2-minute start</button>
+            <button class="secondary" id="timerStopBtn">Pause this</button>
+          </div>
+        </section>
+
+        <section class="exit-panel" id="exitPanel">
+          <p class="step-label">Before you go</p>
+          <h2>Anything worth remembering for next time?</h2>
+          <textarea id="exitNote" placeholder="Example: easier once I opened the document, or music helped, or email still felt too loaded."></textarea>
+          <div class="actions">
+            <button class="primary" id="saveExitNoteBtn">Save and close</button>
+            <button class="secondary" id="skipExitNoteBtn">Skip</button>
+          </div>
+        </section>
       </div>
 
-      <aside class="card side-card" aria-label="Tiny wins and guidance">
+      <aside class="card side-card" aria-label="Rescue library and guidance">
         <div>
           <p class="step-label">Why this works</p>
-          <h2>Start friction, not motivation.</h2>
-          <p class="support-note">This prototype assumes the problem is not laziness. It treats task initiation as a friction problem, then lowers the first action until it becomes reachable.</p>
+          <h2>The bridge is the product.</h2>
+          <p class="support-note">This is not another planner. It is for the moment the planner, list, app, calendar, or good intention is already there, but your body will not cross the starting line.</p>
           <div class="pill-row">
             <span class="pill">No full planner</span>
             <span class="pill">No guilt</span>
-            <span class="pill">One next action</span>
+            <span class="pill">One way in</span>
           </div>
         </div>
 
         <div>
-          <p class="step-label">Saved first wins</p>
-          <ul class="wins" id="winsList"></ul>
-          <p class="support-note" id="emptyWins">Nothing saved yet. One attempt counts.</p>
+          <p class="step-label">Things that helped before</p>
+          <p class="support-note" id="emptyLibrary">No saved rescues yet. When something helps, save it here so you can reuse the bridge later.</p>
+          <div class="library-list" id="libraryList"></div>
         </div>
+
+        <div class="notice hidden" id="patternNotice"></div>
       </aside>
     </section>
   </main>
@@ -341,6 +458,7 @@
   <script>
     const energyOptions = document.querySelectorAll('[data-energy]');
     const stuckText = document.querySelector('#stuckText');
+    const modeOptions = document.querySelector('#modeOptions');
     const rescueBtn = document.querySelector('#rescueBtn');
     const randomBtn = document.querySelector('#randomBtn');
     const resetBtn = document.querySelector('#resetBtn');
@@ -349,33 +467,114 @@
     const firstMove = document.querySelector('#firstMove');
     const twoMinute = document.querySelector('#twoMinute');
     const fallback = document.querySelector('#fallback');
-    const saveWinBtn = document.querySelector('#saveWinBtn');
+    const startTimerBtn = document.querySelector('#startTimerBtn');
+    const makeReachableBtn = document.querySelector('#makeReachableBtn');
+    const saveRescueBtn = document.querySelector('#saveRescueBtn');
     const copyBtn = document.querySelector('#copyBtn');
-    const winsList = document.querySelector('#winsList');
-    const emptyWins = document.querySelector('#emptyWins');
+    const reachPanel = document.querySelector('#reachPanel');
+    const reasonOptions = document.querySelector('#reasonOptions');
+    const reachResult = document.querySelector('#reachResult');
+    const timerPanel = document.querySelector('#timerPanel');
+    const timerTitle = document.querySelector('#timerTitle');
+    const timerTime = document.querySelector('#timerTime');
+    const timerCaption = document.querySelector('#timerCaption');
+    const timerPrimaryBtn = document.querySelector('#timerPrimaryBtn');
+    const timerStopBtn = document.querySelector('#timerStopBtn');
+    const exitPanel = document.querySelector('#exitPanel');
+    const exitNote = document.querySelector('#exitNote');
+    const saveExitNoteBtn = document.querySelector('#saveExitNoteBtn');
+    const skipExitNoteBtn = document.querySelector('#skipExitNoteBtn');
+    const libraryList = document.querySelector('#libraryList');
+    const emptyLibrary = document.querySelector('#emptyLibrary');
+    const patternNotice = document.querySelector('#patternNotice');
 
-    const plans = {
-      empty: {
-        title: 'No heroics. We are making contact with the task.',
-        first: 'Open the place where the task lives. Do not do the task yet. Just make it visible for ten seconds.',
-        two: 'Write one messy sentence that starts with: “The next obvious thing is…” Stop there if needed.',
-        fallback: 'Put a hand on your chest, breathe out once, and rename the task to “look at this again”. Looking counts.'
+    const STORAGE_KEY = 'pnp-task-rescue-library-v2';
+
+    const modes = {
+      badly: {
+        label: 'Do it badly on purpose',
+        hint: 'For perfectionism, dread, or “this has to be good”.',
+        title: 'Permission granted: make an ugly first pass.',
+        first: 'Create the scruffy version first. The job is not quality. The job is making something exist.',
+        two: 'Set a timer and write, type, gather, or start without fixing anything. Leave the errors in place.',
+        fallback: 'Name the file, open the message, or write the first deliberately rough sentence.'
       },
-      low: {
-        title: 'Make the first move more reachable than the resistance.',
-        first: 'Set a two-minute timer and do only the first visible action. Not the whole task. The first visible action.',
-        two: 'Prepare the task environment: open the tab, find the file, clear the desk, or write the first line.',
-        fallback: 'Create a “later container”: write what remains on a note so your brain does not have to keep holding it.'
+      minutes: {
+        label: 'Just two minutes, then stop',
+        hint: 'For tasks that feel endless or trapping.',
+        title: 'The escape hatch is built in.',
+        first: 'You are not agreeing to finish. You are agreeing to touch the task for two minutes only.',
+        two: 'Start the timer. When it ends, you may stop cleanly or keep going if momentum appears.',
+        fallback: 'Prepare the starting point, then stop. Opening the door counts.'
       },
-      spark: {
-        title: 'Use the spark before it evaporates.',
-        first: 'Pick the part that creates the most relief when finished, then do a rough first pass without polishing.',
-        two: 'Work until there is one visible artefact: a sent draft, a named file, a checkbox ticked, or a next-step note.',
-        fallback: 'If momentum dips, stop cleanly by writing: “When I return, I start with…”'
+      exact: {
+        label: 'Tell me exactly what to do',
+        hint: 'For decision fog or too many possible starts.',
+        title: 'Decision removed. Follow the instruction.',
+        first: 'Do the first visible physical action connected to the task. Open, place, write, send, sort, or stand near it.',
+        two: 'Do not optimise. Do not choose a better route. Follow the obvious route for two minutes.',
+        fallback: 'If there are still choices, choose the one nearest your hand.'
+      },
+      double: {
+        label: 'Pretend someone is watching',
+        hint: 'For tasks that unlock with body-doubling energy.',
+        title: 'Borrow the feeling of being accompanied.',
+        first: 'Say out loud what you are about to do, as if someone kind is sitting nearby.',
+        two: 'Narrate the first two minutes quietly: “I am opening the file. I am writing the line.”',
+        fallback: 'Put the task somewhere visible and imagine showing the first step, not the result.'
+      },
+      room: {
+        label: 'Reset the room first',
+        hint: 'For sensory overload, scattered tabs, or noisy surroundings.',
+        title: 'Clear enough space for one action.',
+        first: 'Change one thing in the environment: water, light, chair, tab, sound, or object placement.',
+        two: 'Spend two minutes making the starting area less hostile. Then do one task touch.',
+        fallback: 'Move the task into view and remove one distraction from reach.'
+      },
+      bare: {
+        label: 'Just the bare minimum',
+        hint: 'For empty-battery days where completion is not realistic.',
+        title: 'We are choosing the version that still counts.',
+        first: 'Find the version that preserves the day without demanding the whole task.',
+        two: 'Do the maintenance version: send a holding reply, collect the materials, write the label, or park the next step.',
+        fallback: 'Write: “Future me starts here…” and one clear next action.'
+      }
+    };
+
+    const reachReasons = {
+      begin: {
+        label: 'I do not know where to start',
+        response: 'Start with location, not effort: open the app, find the object, or put the task in front of you. No task work yet.'
+      },
+      big: {
+        label: 'It feels too big',
+        response: 'Cut the commitment, not the task. Do the version that takes one breath, one click, one sentence, one object, or one minute.'
+      },
+      good: {
+        label: 'I am scared it will not be good enough',
+        response: 'Make a private draft that nobody will see. The only success condition is “there is now something to improve”.'
+      },
+      headspace: {
+        label: 'I am not in the right headspace',
+        response: 'Do a body-first start: drink water, stand up, change the sound, then touch the task for ten seconds.'
+      },
+      missing: {
+        label: 'I do not have everything I need',
+        response: 'Make the missing thing the task. Write exactly what you need, where to get it, and the next retrieval step.'
       }
     };
 
     let selectedEnergy = 'low';
+    let selectedMode = 'badly';
+    let currentPlan = null;
+    let timer = null;
+    let timerPhase = 'settle';
+    let secondsLeft = 30;
+
+    function taskSummary() {
+      const text = stuckText.value.trim().replace(/[.!?]+$/g, '');
+      return text || 'the thing I am stuck on';
+    }
 
     function selectEnergy(value) {
       selectedEnergy = value;
@@ -384,68 +583,253 @@
       });
     }
 
-    function taskSummary() {
-      const text = stuckText.value.trim();
-      return text || 'the thing I am stuck on';
+    function selectMode(value) {
+      selectedMode = value;
+      document.querySelectorAll('[data-mode]').forEach((button) => {
+        button.classList.toggle('selected', button.dataset.mode === value);
+      });
+    }
+
+    function renderModes() {
+      modeOptions.innerHTML = '';
+      Object.entries(modes).forEach(([key, mode]) => {
+        const button = document.createElement('button');
+        button.className = 'mode';
+        button.dataset.mode = key;
+        button.innerHTML = `<strong>${mode.label}</strong><span>${mode.hint}</span>`;
+        button.addEventListener('click', () => selectMode(key));
+        modeOptions.appendChild(button);
+      });
+      selectMode(selectedMode);
+    }
+
+    function renderReasons() {
+      reasonOptions.innerHTML = '';
+      Object.entries(reachReasons).forEach(([key, reason]) => {
+        const button = document.createElement('button');
+        button.className = 'reason';
+        button.dataset.reason = key;
+        button.innerHTML = `<strong>${reason.label}</strong><span>Try a different way in.</span>`;
+        button.addEventListener('click', () => showReachableMove(key));
+        reasonOptions.appendChild(button);
+      });
     }
 
     function renderPlan() {
-      const plan = plans[selectedEnergy];
+      const mode = modes[selectedMode];
       const task = taskSummary();
-      resultTitle.textContent = plan.title;
-      firstMove.textContent = `${plan.first} Apply it to: ${task}.`;
-      twoMinute.textContent = plan.two;
-      fallback.textContent = plan.fallback;
+      currentPlan = {
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        task,
+        energy: selectedEnergy,
+        mode: selectedMode,
+        modeLabel: mode.label,
+        title: mode.title,
+        firstMove: `${mode.first} Apply it to: ${task}.`,
+        twoMinute: mode.two,
+        fallback: mode.fallback,
+        helped: null,
+        note: '',
+        createdAt: new Date().toISOString()
+      };
+      resultTitle.textContent = currentPlan.title;
+      firstMove.textContent = currentPlan.firstMove;
+      twoMinute.textContent = currentPlan.twoMinute;
+      fallback.textContent = currentPlan.fallback;
       result.classList.add('visible');
-      result.scrollIntoView({ behaviour: 'smooth', block: 'nearest' });
+      reachPanel.classList.remove('visible');
+      timerPanel.classList.remove('visible');
+      exitPanel.classList.remove('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function randomise() {
-      const values = Object.keys(plans);
-      const next = values[Math.floor(Math.random() * values.length)];
-      selectEnergy(next);
+      const energyValues = ['empty', 'low', 'spark'];
+      const modeValues = Object.keys(modes);
+      selectEnergy(energyValues[Math.floor(Math.random() * energyValues.length)]);
+      selectMode(modeValues[Math.floor(Math.random() * modeValues.length)]);
       renderPlan();
     }
 
-    function getWins() {
+    function getLibrary() {
       try {
-        return JSON.parse(localStorage.getItem('pnp-task-rescue-wins') || '[]');
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
       } catch (error) {
         return [];
       }
     }
 
-    function setWins(wins) {
-      localStorage.setItem('pnp-task-rescue-wins', JSON.stringify(wins.slice(0, 6)));
-      renderWins();
+    function setLibrary(items) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, 12)));
+      renderLibrary();
     }
 
-    function renderWins() {
-      const wins = getWins();
-      winsList.innerHTML = '';
-      emptyWins.style.display = wins.length ? 'none' : 'block';
-      wins.forEach((win) => {
-        const li = document.createElement('li');
-        li.textContent = win;
-        winsList.appendChild(li);
+    function saveCurrentRescue() {
+      if (!currentPlan) renderPlan();
+      const existing = getLibrary();
+      const saved = { ...currentPlan, createdAt: new Date().toISOString() };
+      setLibrary([saved, ...existing]);
+      saveRescueBtn.textContent = 'Saved';
+      setTimeout(() => { saveRescueBtn.textContent = 'Save this rescue'; }, 1300);
+    }
+
+    function renderLibrary() {
+      const items = getLibrary();
+      libraryList.innerHTML = '';
+      emptyLibrary.style.display = items.length ? 'none' : 'block';
+
+      items.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = 'library-item';
+        const date = new Date(item.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        const helpedText = item.helped === true ? 'This helped' : item.helped === false ? 'Nah, not today' : 'Not marked yet';
+        div.innerHTML = `
+          <h3>${item.modeLabel || 'Saved rescue'} · ${date}</h3>
+          <p>${item.task}</p>
+          ${item.note ? `<p><strong>Note:</strong> ${item.note}</p>` : ''}
+          <p>${helpedText}</p>
+          <div class="item-actions">
+            <button data-action="use" data-id="${item.id}">Use again</button>
+            <button data-action="helped" data-id="${item.id}">This helped</button>
+            <button data-action="not" data-id="${item.id}">Nah, not today</button>
+            <button class="delete" data-action="delete" data-id="${item.id}">Delete</button>
+          </div>
+        `;
+        libraryList.appendChild(div);
       });
+
+      renderPatternNotice(items);
     }
 
-    function saveWin() {
-      const stamp = new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
-      const win = `${stamp}: made a first move on “${taskSummary().slice(0, 70)}”`;
-      setWins([win, ...getWins()]);
-      saveWinBtn.textContent = 'Saved';
-      setTimeout(() => { saveWinBtn.textContent = 'Save this first win'; }, 1300);
+    function renderPatternNotice(items) {
+      const helpedItems = items.filter((item) => item.helped === true);
+      if (helpedItems.length < 3) {
+        patternNotice.classList.add('hidden');
+        patternNotice.textContent = '';
+        return;
+      }
+      const counts = helpedItems.reduce((acc, item) => {
+        acc[item.modeLabel] = (acc[item.modeLabel] || 0) + 1;
+        return acc;
+      }, {});
+      const topMode = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+      patternNotice.textContent = `Something I noticed: “${topMode}” has helped more than once. That might be a good first route next time.`;
+      patternNotice.classList.remove('hidden');
+    }
+
+    function handleLibraryClick(event) {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      const id = button.dataset.id;
+      const action = button.dataset.action;
+      const items = getLibrary();
+      const item = items.find((entry) => entry.id === id);
+      if (!item) return;
+
+      if (action === 'use') {
+        stuckText.value = item.task;
+        selectEnergy(item.energy || 'low');
+        selectMode(item.mode || 'badly');
+        renderPlan();
+      }
+
+      if (action === 'helped' || action === 'not') {
+        setLibrary(items.map((entry) => entry.id === id ? { ...entry, helped: action === 'helped' } : entry));
+      }
+
+      if (action === 'delete') {
+        setLibrary(items.filter((entry) => entry.id !== id));
+      }
+    }
+
+    function showReachablePanel() {
+      if (!currentPlan) renderPlan();
+      reachResult.classList.add('hidden');
+      reachResult.textContent = '';
+      reachPanel.classList.add('visible');
+      reachPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function showReachableMove(reasonKey) {
+      const reason = reachReasons[reasonKey];
+      reachResult.textContent = `That is fine. Let’s try this way in: ${reason.response}`;
+      reachResult.classList.remove('hidden');
+      if (currentPlan) {
+        currentPlan.fallback = reason.response;
+        fallback.textContent = reason.response;
+      }
+    }
+
+    function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = String(totalSeconds % 60).padStart(2, '0');
+      return `${minutes}:${seconds}`;
+    }
+
+    function stopTimer() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    function startPhase(phase) {
+      stopTimer();
+      timerPhase = phase;
+      secondsLeft = phase === 'settle' ? 30 : 120;
+      timerTitle.textContent = phase === 'settle' ? 'Give yourself 30 seconds. Just breathe.' : 'Right. Two minutes. That’s all.';
+      timerCaption.textContent = phase === 'settle'
+        ? 'No proving anything. We are just lowering the activation wall.'
+        : 'Do the first move only. You are allowed to stop when the timer ends.';
+      timerPrimaryBtn.textContent = phase === 'settle' ? 'Skip to the 2-minute start' : 'I’m going';
+      timerTime.textContent = formatTime(secondsLeft);
+      timer = setInterval(() => {
+        secondsLeft -= 1;
+        timerTime.textContent = formatTime(secondsLeft);
+        if (secondsLeft <= 0) {
+          stopTimer();
+          if (timerPhase === 'settle') {
+            startPhase('start');
+          } else {
+            timerTitle.textContent = 'You touched the task. That counts.';
+            timerCaption.textContent = 'Keep going if momentum appeared, or save what helped and close cleanly.';
+            timerPrimaryBtn.textContent = 'Save what helped';
+            exitPanel.classList.add('visible');
+          }
+        }
+      }, 1000);
+    }
+
+    function openTimer() {
+      if (!currentPlan) renderPlan();
+      timerPanel.classList.add('visible');
+      exitPanel.classList.remove('visible');
+      timerPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      startPhase('settle');
+    }
+
+    function timerPrimaryAction() {
+      if (timerPhase === 'settle') {
+        startPhase('start');
+        return;
+      }
+      if (timer) {
+        stopTimer();
+        timerTitle.textContent = 'You started. Keep going if it is working.';
+        timerCaption.textContent = 'If you are still blocked, that is fine. Try a different way in.';
+        exitPanel.classList.add('visible');
+      } else {
+        exitPanel.classList.add('visible');
+      }
     }
 
     async function copyPlan() {
+      if (!currentPlan) renderPlan();
       const text = [
         'Task Paralysis Rescue Plan',
-        `Stuck thing: ${taskSummary()}`,
-        `First move: ${firstMove.textContent}`,
-        `Two-minute version: ${twoMinute.textContent}`,
-        `Fallback: ${fallback.textContent}`
+        `Stuck thing: ${currentPlan.task}`,
+        `Way in: ${currentPlan.modeLabel}`,
+        `First move: ${currentPlan.firstMove}`,
+        `Two-minute version: ${currentPlan.twoMinute}`,
+        `Fallback: ${currentPlan.fallback}`
       ].join('\n');
 
       try {
@@ -454,13 +838,27 @@
       } catch (error) {
         copyBtn.textContent = 'Copy failed';
       }
-      setTimeout(() => { copyBtn.textContent = 'Copy rescue plan'; }, 1300);
+      setTimeout(() => { copyBtn.textContent = 'Copy plan'; }, 1300);
+    }
+
+    function saveExitNote() {
+      if (!currentPlan) return;
+      currentPlan.note = exitNote.value.trim();
+      saveCurrentRescue();
+      exitNote.value = '';
+      exitPanel.classList.remove('visible');
     }
 
     function resetAll() {
+      stopTimer();
       stuckText.value = '';
       selectEnergy('low');
+      selectMode('badly');
+      currentPlan = null;
       result.classList.remove('visible');
+      reachPanel.classList.remove('visible');
+      timerPanel.classList.remove('visible');
+      exitPanel.classList.remove('visible');
       stuckText.focus();
     }
 
@@ -471,11 +869,20 @@
     rescueBtn.addEventListener('click', renderPlan);
     randomBtn.addEventListener('click', randomise);
     resetBtn.addEventListener('click', resetAll);
-    saveWinBtn.addEventListener('click', saveWin);
+    startTimerBtn.addEventListener('click', openTimer);
+    makeReachableBtn.addEventListener('click', showReachablePanel);
+    saveRescueBtn.addEventListener('click', saveCurrentRescue);
     copyBtn.addEventListener('click', copyPlan);
+    timerPrimaryBtn.addEventListener('click', timerPrimaryAction);
+    timerStopBtn.addEventListener('click', stopTimer);
+    saveExitNoteBtn.addEventListener('click', saveExitNote);
+    skipExitNoteBtn.addEventListener('click', () => exitPanel.classList.remove('visible'));
+    libraryList.addEventListener('click', handleLibraryClick);
 
+    renderModes();
+    renderReasons();
     selectEnergy('low');
-    renderWins();
+    renderLibrary();
   </script>
 </body>
 </html>

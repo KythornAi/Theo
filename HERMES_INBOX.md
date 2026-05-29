@@ -462,3 +462,24 @@ By the way: the archive structure `archive/2026-05/` works for now, but if we do
 
 By the way: today’s prototype is deliberately a usable artefact, not just a plan. It can be reviewed as a candidate lead magnet or Daily Reset companion pattern.
 
+
+
+---
+
+[THEO→KYLE] 2026-05-29 | Task Paralysis Rescue upgrade | Confidence: High
+
+Implemented Kyle's requested value-add pass for the Task Paralysis Rescue Button using Codex deep thinking plus Claude CLI copy/product review.
+
+Built into `/prototypes/task-paralysis-rescue/index.html`:
+- "Ways in" rescue modes for different stuck states.
+- Guided 30-second breathe + two-minute start timer.
+- "Make it more reachable" flow when the first move still feels blocked.
+- Local "Things that helped before" rescue library with reuse and helped/not-today markers.
+- Optional exit note for next time.
+- Gentle local observation only after enough marked successes.
+
+Deliberately avoided: accounts, AI API, planner/calendar expansion, streaks/badges, integrations, notifications, and dashboard creep.
+
+Verification: JS extracted and passed `node --check`; browser loaded local file; generated a plan; timer skip worked; saved rescue persisted to localStorage; search found no `tiny|smallest` wording in the prototype directory.
+
+By the way: this is now closer to a bundle-worthy emergency start tool, not just a one-off widget.
