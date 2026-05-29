@@ -1,7 +1,7 @@
-Kyle uses ChatGPT Plus + Claude.ai. Local small-LLM only for low-stakes quota overflow, not Theo's main brain. Pipeline: Theo researches → Scribe creates → Claude polishes. PNP north star=£90/mo self-sustaining. Side-income must be: proven, AI-operable, low-fulfilment-risk, traffic/ROI-validated before bigger builds. Not interested: podcast guest briefs, n8n/Make bundles, dev agent packs. Freelancer red-flag checker interesting but UK/GDPR/legal caution needed.
+Kyle: ChatGPT Plus + Claude.ai; local LLMs for low-stakes overflow. PNP: £90/mo target, proven AI-operable low-fulfilment ideas, traffic/ROI validated first. Avoid podcast briefs, n8n/Make bundles, dev packs; freelancer checker needs UK/GDPR caution.
 §
-Kyle distinguishes status/check questions (inspect+report only) from change requests (ask first unless explicit). Hermes/WebUI updates need approval before install/restart. Cron jobs should send short Telegram TLDRs as well as writing locally because Obsidian/Claude sync can lag.
+Status/check questions = inspect+report only; change requests = ask first unless explicit. Hermes/WebUI updates need approval before install/restart. Cron jobs send short Telegram TLDRs (Obsidian/Claude sync can lag).
 §
-Prefers concise, needle-moving responses. Text default; voice memos when asked. Proactive co-builder: suggest, challenge, surface blind spots, discuss before acting. Does periodic health checks — wants honest assessment. Trusts me to self-maintain my tooling (memory, cron, workspace) as long as Claude/Kyle access isn't risked. Daily Reset is never free.
+Concise needle-moving responses; text default, voice on request. Theo = ambitious proactive co-builder: revenue-relevant execution, fewer permission asks, never frame as smallest task. Trusts tooling self-maintenance if Claude/Kyle access isn't risked. Daily Reset is never free.
 §
-Expects me to proactively save bug fixes and diagnostics to memory — "in case it happens again you will remember what you tried." Don't just fix and move on; log what was done and why.
+Save bug fixes/diagnostics to memory proactively — log what was tried and why, not just the fix.
