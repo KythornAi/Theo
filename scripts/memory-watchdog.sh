@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 # memory-watchdog.sh — runs every 6 hours, checks Theo's working memory.
-# Warns at 70%, auto-archives stale entries at 85%.
+# MEMORY.md: warns at 70%, auto-archives stale entries at 80%.
+# USER.md:   warns at 70%, alerts at 80% (Theo must compact — no mechanical archive).
 # Pattern: --no-agent bash. Telegram via Python to handle encoding safely.
 
 MEMORY_FILE="/home/kylemoore/theo/memory/MEMORY.md"
+USER_FILE_GIT="/home/kylemoore/theo/memory/USER.md"
+USER_FILE_LIVE="/home/kylemoore/.hermes/memories/USER.md"
 ARCHIVE_FILE="/home/kylemoore/Brain/03_Resources/Theo/memory-archive-2026.md"
 ENV_FILE="/home/kylemoore/.hermes/.env"
-LIMIT=2200
-WARN_THRESHOLD=1540    # 70%
-AUTO_THRESHOLD=1870    # 85%
+MEMORY_LIMIT=2200
+USER_LIMIT=1375
+WARN_PCT=70
+AUTO_PCT=80
 
 DATE=$(date '+%Y-%m-%d %H:%M %Z')
 
@@ -27,7 +31,7 @@ if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ]; then
 fi
 
 send_telegram() {
-    python3 - "$BOT_TOKEN" "$CHAT_ID" "$1" <<'PYEOF'
+    python3 - "$BOT_TOKEN" "$CHAT_ID" "$1" <<'PYEOF2'
 import sys, urllib.request, urllib.parse, json
 token, chat_id, text = sys.argv[1], sys.argv[2], sys.argv[3]
 payload = json.dumps({"chat_id": chat_id, "text": text}).encode()
@@ -40,31 +44,49 @@ try:
     urllib.request.urlopen(req, timeout=10)
 except Exception as e:
     print(f"Telegram send failed: {e}", file=sys.stderr)
-PYEOF
+PYEOF2
 }
 
-# ── Check memory file ───────────────────────────────────────────────────────
+# ── Check USER.md ───────────────────────────────────────────────────────────
+if [ ! -f "$USER_FILE_LIVE" ]; then
+    send_telegram "memory-watchdog: USER.md not found at $USER_FILE_LIVE"
+else
+    USER_CHARS=$(wc -c < "$USER_FILE_LIVE" | tr -d ' ')
+    USER_WARN_THRESH=$(python3 -c "print(int($USER_LIMIT * $WARN_PCT / 100))")
+    USER_AUTO_THRESH=$(python3 -c "print(int($USER_LIMIT * $AUTO_PCT / 100))")
+    USER_PCT=$(python3 -c "print(round($USER_CHARS * 100 / $USER_LIMIT))")
+
+    if [ "$USER_CHARS" -ge "$USER_AUTO_THRESH" ]; then
+        send_telegram "Theo memory watchdog [$(date '+%H:%M')]: USER.md is ${USER_PCT}% full (${USER_CHARS}/${USER_LIMIT} chars). ACTION NEEDED — compact your USER.md entries before your next run. Each entry should be one tight sentence. Claude can help if needed."
+    elif [ "$USER_CHARS" -ge "$USER_WARN_THRESH" ]; then
+        send_telegram "Theo memory watchdog [$(date '+%H:%M')]: USER.md is ${USER_PCT}% full (${USER_CHARS}/${USER_LIMIT} chars). Approaching limit — plan a compact pass soon."
+    fi
+fi
+
+# ── Check MEMORY.md ─────────────────────────────────────────────────────────
 if [ ! -f "$MEMORY_FILE" ]; then
     send_telegram "memory-watchdog: MEMORY.md not found at $MEMORY_FILE"
     exit 1
 fi
 
 CHARS=$(wc -c < "$MEMORY_FILE" | tr -d ' ')
-PCT=$(python3 -c "print(round($CHARS * 100 / $LIMIT))")
+WARN_THRESHOLD=$(python3 -c "print(int($MEMORY_LIMIT * $WARN_PCT / 100))")
+AUTO_THRESHOLD=$(python3 -c "print(int($MEMORY_LIMIT * $AUTO_PCT / 100))")
+PCT=$(python3 -c "print(round($CHARS * 100 / $MEMORY_LIMIT))")
 
 # Silent below 70%
 if [ "$CHARS" -lt "$WARN_THRESHOLD" ]; then
     exit 0
 fi
 
-# Warning only between 70-85%
+# Warning only between 70-80%
 if [ "$CHARS" -lt "$AUTO_THRESHOLD" ]; then
-    send_telegram "Theo memory watchdog [$(date '+%H:%M')]: ${PCT}% full (${CHARS}/${LIMIT} chars). Approaching limit. No action taken — nightly cron should clear this."
+    send_telegram "Theo memory watchdog [$(date '+%H:%M')]: MEMORY.md ${PCT}% full (${CHARS}/${MEMORY_LIMIT} chars). Approaching limit. No action taken — nightly cron should clear this."
     exit 0
 fi
 
-# ── Above 85%: attempt guarded mechanical trim ─────────────────────────────
-TRIM_RESULT=$(python3 - "$MEMORY_FILE" "$ARCHIVE_FILE" "$DATE" <<'PYEOF'
+# ── Above 80%: attempt guarded mechanical trim ──────────────────────────────
+TRIM_RESULT=$(python3 - "$MEMORY_FILE" "$ARCHIVE_FILE" "$DATE" <<'PYEOF3'
 import sys, os
 
 memory_file, archive_file, date_str = sys.argv[1], sys.argv[2], sys.argv[3]
@@ -111,11 +133,11 @@ if not safe_to_archive:
 header_needed = not os.path.exists(archive_file)
 with open(archive_file, 'a') as f:
     if header_needed:
-        f.write("# Theo Memory Archive — 2026\n\nEntries auto-archived by memory-watchdog when MEMORY.md exceeds 85% capacity.\n")
+        f.write("# Theo Memory Archive — 2026\n\nEntries auto-archived by memory-watchdog when MEMORY.md exceeds 80% capacity.\n")
     f.write(f"\n\n---\n\n## Archived {date_str}\n\n")
     for entry in safe_to_archive:
         f.write(f"**Date archived:** {date_str}\n")
-        f.write(f"**Reason:** stale/status entry (auto-archived at >85% capacity)\n")
+        f.write(f"**Reason:** stale/status entry (auto-archived at >80% capacity)\n")
         f.write(f"**Source:** ~/theo/memory/MEMORY.md\n")
         f.write(f"**Content:**\n{entry}\n\n")
 
@@ -131,26 +153,25 @@ print(f"ARCHIVED:{len(safe_to_archive)}")
 for e in safe_to_archive:
     first_line = e.split('\n')[0][:80]
     print(f"  - {first_line}")
-PYEOF
+PYEOF3
 )
 
 if [ "$TRIM_RESULT" = "NO_SAFE_CANDIDATES" ]; then
-    send_telegram "Theo memory watchdog [$(date '+%H:%M')]: ${PCT}% full (${CHARS}/${LIMIT} chars). No safe stale entries found. Manual consolidation needed — ask Claude or wait for nightly cron."
+    send_telegram "Theo memory watchdog [$(date '+%H:%M')]: MEMORY.md ${PCT}% full (${CHARS}/${MEMORY_LIMIT} chars). No safe stale entries found. Manual consolidation needed — ask Claude or wait for nightly cron."
     exit 0
 fi
 
 NEW_CHARS=$(wc -c < "$MEMORY_FILE" | tr -d ' ')
-NEW_PCT=$(python3 -c "print(round($NEW_CHARS * 100 / $LIMIT))")
+NEW_PCT=$(python3 -c "print(round($NEW_CHARS * 100 / $MEMORY_LIMIT))")
 
-send_telegram "Theo memory watchdog [$(date '+%H:%M')]: was ${PCT}% (${CHARS} chars), now ${NEW_PCT}% (${NEW_CHARS} chars).
+send_telegram "Theo memory watchdog [$(date '+%H:%M')]: MEMORY.md was ${PCT}% (${CHARS} chars), now ${NEW_PCT}% (${NEW_CHARS} chars).
 
 Auto-archived to Brain/03_Resources/Theo/memory-archive-2026.md:
 ${TRIM_RESULT}
 
 Nightly cron will do full consolidation. Check vault to verify."
 
-
-# -- Commit MEMORY.md if it actually changed --------------------------------
+# ── Commit MEMORY.md if it actually changed ─────────────────────────────────
 cd /home/kylemoore/theo
 git add memory/MEMORY.md
 if ! git diff --cached --quiet; then
@@ -158,5 +179,5 @@ if ! git diff --cached --quiet; then
     git push origin main
 fi
 
-# Sync trimmed copy to Hermes live store so the memory tool and subsequent sessions see the clean version
+# Sync trimmed copy to Hermes live store
 cp "$MEMORY_FILE" /home/kylemoore/.hermes/memories/MEMORY.md
