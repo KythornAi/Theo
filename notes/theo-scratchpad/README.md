@@ -19,3 +19,7 @@ Suggested filename format:
 
 Current source-of-truth example:
 - Evening close-out feedback is already consolidated in `../evening-closeout-kyle-feedback-2026-05-29.md`.
+
+Automation safety net:
+- Cron job `Theo scratchpad sorter` (`8fee686c8e2e`) runs every 2 hours with local-only delivery. It reviews unprocessed scratchpad markdown files, consolidates them where appropriate, marks them processed, and commits/pushes changes.
+- Cron job `Theo scratchpad backlog alert` (`c7726ebff7da`) runs every 2 hours and only sends Telegram if unprocessed scratchpad files exceed 3 items or the oldest is 6+ hours old. Empty output means silent/no alert.
