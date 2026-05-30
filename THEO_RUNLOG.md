@@ -50,3 +50,4 @@
 [2026-05-30 08:41 BST] git push: prototype: evening close-out board 2026-05-30 (660e412)
 
 2026-05-30 | Saved Grounded Humanity/Gumroad cron and sequencing checkpoint to Brain scratchpad; flagged HERMES_INBOX before nightly consolidation.
+[2026-05-30] Grounded Humanity Gumroad calibration scan completed: wrote research/gumroad-grounded-humanity-calibration-2026-05-30.md; appended Claude ack and research-complete flag.
