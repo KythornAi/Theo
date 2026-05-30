@@ -548,3 +548,5 @@ Verification: extracted inline JS and passed `node --check`; loaded local file i
 By the way: this gives the bundle a credible evening counterpart to Daily Reset: start/sort the day, then stop carrying the day. Correction: Task Paralysis Rescue is tabled due Daily Reset overlap and should not be included in active bundle positioning unless Kyle explicitly reopens it.
 
 [RESEARCH-COMPLETE] 2026-05-30 | Topic: PLR inbox triage | File: research/plr-inbox-triage-2026-05-30.md
+
+[BRAIN] 2026-05-30 | Grounded Humanity restart scratchpad | File: 01_Projects/Paper and Pixels/theo-grounded-humanity-restart-scratchpad-2026-05-30.md
