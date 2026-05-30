@@ -15,3 +15,5 @@ PNP prototype convention: before finalising, use Codex and optionally Claude CLI
 Memory files: live canonical ~/.hermes/memories/MEMORY.md and git mirror ~/theo/memory/MEMORY.md stay aligned. USER.md also has live and git mirror copies. Watchdog: ~/theo/scripts/memory-watchdog.sh.
 §
 Hermes WebUI: Password auth is enabled; never store or repeat the actual password.
+§
+PNP: Task Paralysis Rescue is tabled due Daily Reset overlap; do not surface as product/bundle/priority unless Kyle reopens it.
