@@ -550,3 +550,12 @@ By the way: this gives the bundle a credible evening counterpart to Daily Reset:
 [RESEARCH-COMPLETE] 2026-05-30 | Topic: PLR inbox triage | File: research/plr-inbox-triage-2026-05-30.md
 
 [BRAIN] 2026-05-30 | Grounded Humanity restart scratchpad | File: 01_Projects/Paper and Pixels/theo-grounded-humanity-restart-scratchpad-2026-05-30.md
+
+---
+
+[THEO CHECKPOINT] 2026-05-30 | Grounded Humanity Gumroad launch state saved before nightly consolidation
+
+Saved late-session context to Brain scratchpad:
+`/home/kylemoore/Brain/01_Projects/Paper and Pixels/theo-grounded-humanity-restart-scratchpad-2026-05-30.md`
+
+Key operational updates: one-shot `Grounded Humanity Gumroad calibration scan` cron created (`1114672aa9d7`); autonomous sprint converted to `Grounded Humanity Gumroad Launch Sprint` (`474425396871`); old broad research crons remain paused; Gumroad-first launch sequence is ebook + ADHD affirmation cards, with 7 Days of Calm & Clarity as bonus/second asset. PLR remains source clay only.
