@@ -482,7 +482,7 @@ Deliberately avoided: accounts, AI API, planner/calendar expansion, streaks/badg
 
 Verification: JS extracted and passed `node --check`; browser loaded local file; generated a plan; timer skip worked; saved rescue persisted to localStorage; search found no `tiny|smallest` wording in the prototype directory.
 
-By the way: this is now closer to a bundle-worthy emergency start tool, not just a one-off widget.
+By the way: this remains an archived experiment, not a current bundle/product lane unless Kyle explicitly reopens it.
 
 ---
 
