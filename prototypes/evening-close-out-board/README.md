@@ -35,11 +35,12 @@ Saved notes stay on the same browser/device. Clearing browser data removes them.
 
 ## Product rationale
 
-This fills a different bundle role from Daily Reset and Task Paralysis Rescue:
+This fills a different active product role from Daily Reset:
 
 - Daily Reset helps start and sort the day.
-- Task Paralysis Rescue helps begin a stuck task.
 - Evening Close-Out helps stop carrying the day into the night.
+
+Note: Task Paralysis Rescue exists only as an archived experiment. It should not be used in bundle positioning unless Kyle explicitly reopens it.
 
 The value is not a bigger planner. It is a soft transition ritual that reduces next-day friction without asking the user to perform productivity theatre.
 

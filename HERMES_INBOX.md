@@ -535,4 +535,4 @@ What it includes:
 
 Verification: extracted inline JS and passed `node --check`; loaded local file in browser; completed the flow; confirmed localStorage saved draft/history entries with all expected fields; checked browser console had no runtime errors; searched for undesired wording/framing (`loose ends`, `wins`, `crush`, `hustle`, stale rejected prompts) and found none in the app file.
 
-By the way: this now gives the bundle a credible evening counterpart to Daily Reset and Task Paralysis Rescue: start the day, start the stuck task, and stop carrying the day.
+By the way: this gives the bundle a credible evening counterpart to Daily Reset: start/sort the day, then stop carrying the day. Correction: Task Paralysis Rescue is tabled due Daily Reset overlap and should not be included in active bundle positioning unless Kyle explicitly reopens it.
