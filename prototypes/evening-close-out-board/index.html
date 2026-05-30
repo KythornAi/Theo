@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evening Close-Out Board</title>
+  <style>
+    :root {
+      --ink: #252f32;
+      --muted: #657073;
+      --paper: #fff8ed;
+      --panel: rgba(255, 255, 255, 0.9);
+      --line: #e6d9c9;
+      --lavender: #eee7ff;
+      --lavender-strong: #a795d6;
+      --blue: #e6f0ff;
+      --mint: #dff4ec;
+      --peach: #ffdccc;
+      --yellow: #fff0a8;
+      --danger: #9a514b;
+      --shadow: 0 22px 55px rgba(37, 47, 50, 0.13);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(238, 231, 255, 0.95), transparent 33rem),
+        radial-gradient(circle at bottom right, rgba(255, 220, 204, 0.95), transparent 30rem),
+        linear-gradient(180deg, #fffdf8 0%, var(--paper) 100%);
+      color: var(--ink);
+    }
+
+    main {
+      width: min(1080px, 100%);
+      margin: 0 auto;
+      padding: 26px 16px 54px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      margin: 12px 0 24px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    h1 {
+      max-width: 840px;
+      margin: 0;
+      font-size: clamp(2.25rem, 8vw, 5rem);
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+    }
+
+    .subtitle {
+      max-width: 730px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1.04rem, 2vw, 1.25rem);
+      line-height: 1.55;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(295px, 0.9fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+      backdrop-filter: blur(14px);
+    }
+
+    .flow-card { min-height: 560px; }
+    .stack { display: grid; gap: 18px; }
+
+    .progress-wrap {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 22px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 750;
+    }
+
+    .progress-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #f3eadf;
+      border: 1px solid var(--line);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--lavender-strong), #efad92);
+      transition: width 180ms ease;
+    }
+
+    .step-label {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.55rem, 4vw, 2.35rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.06rem;
+    }
+
+    p {
+      line-height: 1.5;
+    }
+
+    .body-copy {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 1.02rem;
+      max-width: 42rem;
+    }
+
+    button, textarea, input { font: inherit; }
+    button { border: 0; cursor: pointer; }
+
+    textarea {
+      width: 100%;
+      min-height: 168px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 16px;
+      color: var(--ink);
+      background: #fff;
+      line-height: 1.5;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    }
+
+    textarea:focus {
+      outline: 3px solid rgba(167, 149, 214, 0.24);
+      border-color: var(--lavender-strong);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 12px 0 14px;
+    }
+
+    .chip {
+      min-height: 42px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 780;
+      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+    }
+
+    .chip:hover, .chip.selected {
+      transform: translateY(-1px);
+      background: var(--lavender);
+      border-color: var(--lavender-strong);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .primary, .secondary, .quiet {
+      min-height: 46px;
+      border-radius: 999px;
+      padding: 0 18px;
+      font-weight: 850;
+    }
+
+    .primary { background: var(--ink); color: #fff; }
+    .secondary { border: 1px solid var(--line); background: #fff; color: var(--ink); }
+    .quiet { background: transparent; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; padding-inline: 4px; }
+
+    .primary:disabled, .secondary:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .aside-card { display: grid; gap: 16px; }
+
+    .notice {
+      padding: 13px 15px;
+      border-radius: 18px;
+      background: var(--blue);
+      color: #30435d;
+      line-height: 1.42;
+      font-size: 0.95rem;
+    }
+
+    .notice.mint { background: var(--mint); color: #315247; }
+    .notice.peach { background: var(--peach); color: #674033; }
+
+    .tiny-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tiny-pill {
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--yellow);
+      color: #554a00;
+      font-size: 0.84rem;
+      font-weight: 820;
+    }
+
+    .summary-grid, .history-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .summary-item, .history-item {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.74);
+    }
+
+    .summary-item b, .history-item b {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .summary-item p, .history-item p {
+      margin: 0;
+      color: var(--muted);
+      white-space: pre-wrap;
+    }
+
+    .close-message {
+      display: grid;
+      place-items: center;
+      min-height: 160px;
+      margin: 18px 0;
+      padding: 20px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, var(--lavender), #fff, var(--peach));
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .close-message strong {
+      display: block;
+      font-size: clamp(1.35rem, 4vw, 2rem);
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      margin-bottom: 8px;
+    }
+
+    .save-state {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 830px) {
+      main { padding-top: 18px; }
+      .app { grid-template-columns: 1fr; }
+      .card { border-radius: 23px; }
+      .flow-card { min-height: 0; }
+      .actions { display: grid; }
+      .primary, .secondary, .quiet { width: 100%; }
+      textarea { min-height: 150px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <div class="eyebrow">Paper N Pixels experiment · an evening landing ritual for ADHD brains</div>
+      <h1 id="title">Evening Close-Out Board</h1>
+      <p class="subtitle">A calm five-step close for the point where the day is technically over, but your head has not got the message yet.</p>
+    </section>
+
+    <section class="app">
+      <section class="card flow-card" aria-live="polite">
+        <div class="progress-wrap">
+          <div class="progress-label"><span id="progressText">Step 1 of 5</span><span id="saveText">Saved on this device</span></div>
+          <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+
+        <div id="screen"></div>
+      </section>
+
+      <aside class="card aside-card" aria-label="Saved close-outs and guidance">
+        <div>
+          <p class="step-label">Why this exists</p>
+          <h2>Not a diary. Not a productivity review.</h2>
+          <p class="body-copy">This is a soft landing strip: offload the mental tabs, notice the day without judging it, spot tomorrow's tripwire, then leave yourself one kind direction.</p>
+          <div class="tiny-row">
+            <span class="tiny-pill">No streaks</span>
+            <span class="tiny-pill">No score</span>
+            <span class="tiny-pill">No performance review</span>
+          </div>
+        </div>
+
+        <div class="notice mint" id="returnNotice">Tonight's close-out will autosave here. It only uses this browser's local storage.</div>
+
+        <div>
+          <p class="step-label">Recent evenings</p>
+          <div class="history-list" id="historyList"></div>
+        </div>
+
+        <div class="notice peach">Storage note: saved close-outs stay in this browser only. Clearing browser data will remove them. This is intentional for the prototype.</div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'pnp-evening-closeout-v1';
+    const DRAFT_KEY = 'pnp-evening-closeout-draft-v1';
+
+    const screen = document.querySelector('#screen');
+    const progressText = document.querySelector('#progressText');
+    const progressFill = document.querySelector('#progressFill');
+    const saveText = document.querySelector('#saveText');
+    const historyList = document.querySelector('#historyList');
+    const returnNotice = document.querySelector('#returnNotice');
+
+    const todayKey = new Date().toISOString().slice(0, 10);
+    const closeMessages = [
+      'You do not have to keep carrying the whole day.',
+      'That is enough for tonight.',
+      'You made a place to land. That counts.',
+      'Tomorrow can start from here, not from scratch.',
+      'You are allowed to be done now.'
+    ];
+
+    const steps = [
+      {
+        id: 'dump',
+        label: 'Offload',
+        eyebrow: 'Step 1 · let it out',
+        title: "Let go of what's on your mind",
+        copy: 'No sorting yet. No fixing. Put the tabs, worries, reminders, half-thoughts, and background noise somewhere outside your head.',
+        placeholder: 'Example: The email I did not answer, the washing still in the machine, the thing I said in the meeting, tomorrow feeling messy already...',
+        button: 'That is out of my head for now'
+      },
+      {
+        id: 'stoodOut',
+        label: 'Notice',
+        eyebrow: 'Step 2 · notice the day',
+        title: 'What stood out about today?',
+        copy: 'Big things, ordinary things. If you got through it, it counts.',
+        placeholder: 'Example: I rested when I needed to. The meeting was harder than expected. I actually went outside. I kept going even when I was foggy.',
+        chips: ['I showed up', 'I rested', 'I kept going', 'I asked for help'],
+        button: 'Keep going gently'
+      },
+      {
+        id: 'obstacles',
+        label: 'Obstacles',
+        eyebrow: 'Step 3 · look at tomorrow kindly',
+        title: 'What could get in your way tomorrow?',
+        copy: 'Not a to-do list. Just name anything from today that might make tomorrow harder, so it is not waiting in the dark.',
+        placeholder: 'Example: I might avoid the same email again. I am low on sleep. The house is noisy in the morning. I do not know where to start.',
+        helperTitle: 'One 10% easier move',
+        helperCopy: 'If one obstacle is obvious, write the smallest thing that would make it a little less heavy tomorrow.',
+        helperPlaceholder: 'Example: Open the email before breakfast, but do not reply yet. Put water by the bed. Write the first task on a sticky note.',
+        button: 'I can see the obstacle now'
+      },
+      {
+        id: 'intention',
+        label: 'Intention',
+        eyebrow: 'Step 4 · leave tomorrow a thread',
+        title: 'How would you like tomorrow to look?',
+        copy: 'This is not a promise to be perfect. Give tomorrow a small shape, a feeling, or a direction you would like to remember.',
+        placeholder: 'Example: Slower start. One clear first thing. Less spiralling before I open the laptop. I want to be kinder to myself in the morning.',
+        button: 'Close the day'
+      },
+      {
+        id: 'close',
+        label: 'Close',
+        eyebrow: 'Step 5 · done',
+        title: "Deep breath in & out. You're done for today.",
+        copy: 'Here is the shape of what you wrote. You can save it, copy it, or reset the board for tomorrow night.'
+      }
+    ];
+
+    let state = {
+      date: todayKey,
+      step: 0,
+      dump: '',
+      stoodOut: '',
+      chips: [],
+      obstacles: '',
+      easierMove: '',
+      intention: '',
+      closedAt: null
+    };
+
+    function loadJson(key, fallback) {
+      try {
+        return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function loadDraft() {
+      const draft = loadJson(DRAFT_KEY, null);
+      if (draft && draft.date === todayKey) {
+        state = { ...state, ...draft };
+        if (draft.closedAt) {
+          returnNotice.textContent = 'You already closed out today. You can review it, edit it, or reset for another pass.';
+        } else {
+          returnNotice.textContent = 'A draft from today is waiting. The board picked up where you left off.';
+        }
+      }
+    }
+
+    function getEntries() {
+      return loadJson(STORAGE_KEY, []);
+    }
+
+    function setEntries(entries) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries.slice(0, 14)));
+      renderHistory();
+    }
+
+    function saveDraft() {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(state));
+      saveText.textContent = 'Saved just now';
+      setTimeout(() => { saveText.textContent = 'Saved on this device'; }, 1100);
+    }
+
+    function entryFromState() {
+      return {
+        id: state.id || `${state.date}-${Date.now()}`,
+        date: state.date,
+        dump: state.dump.trim(),
+        stoodOut: state.stoodOut.trim(),
+        chips: [...state.chips],
+        obstacles: state.obstacles.trim(),
+        easierMove: state.easierMove.trim(),
+        intention: state.intention.trim(),
+        closedAt: state.closedAt || new Date().toISOString()
+      };
+    }
+
+    function saveEntry() {
+      state.closedAt = new Date().toISOString();
+      const entry = entryFromState();
+      state.id = entry.id;
+      const entries = getEntries().filter((item) => item.id !== entry.id && item.date !== entry.date);
+      setEntries([entry, ...entries]);
+      saveDraft();
+      return entry;
+    }
+
+    function escapeText(value) {
+      const div = document.createElement('div');
+      div.textContent = value || 'Nothing written.';
+      return div.innerHTML;
+    }
+
+    function escapeValue(value) {
+      const div = document.createElement('div');
+      div.textContent = value || '';
+      return div.innerHTML;
+    }
+
+    function progressPercent() {
+      return Math.round(((state.step + 1) / steps.length) * 100);
+    }
+
+    function render() {
+      const current = steps[state.step];
+      progressText.textContent = `Step ${state.step + 1} of ${steps.length} · ${current.label}`;
+      progressFill.style.width = `${progressPercent()}%`;
+
+      if (current.id === 'close') {
+        renderClose();
+        return;
+      }
+
+      const value = state[current.id] || '';
+      const helper = current.helperTitle ? `
+        <div class="notice mint">
+          <b>${current.helperTitle}</b>
+          <p style="margin: 6px 0 10px;">${current.helperCopy}</p>
+          <textarea id="helperInput" placeholder="${current.helperPlaceholder}">${escapeValue(state.easierMove)}</textarea>
+        </div>
+      ` : '';
+      const chips = current.chips ? `
+        <div class="chips" aria-label="Optional prompts">
+          ${current.chips.map((chip) => `<button class="chip ${state.chips.includes(chip) ? 'selected' : ''}" data-chip="${chip}">${chip}</button>`).join('')}
+        </div>
+      ` : '';
+
+      screen.innerHTML = `
+        <p class="step-label">${current.eyebrow}</p>
+        <h2>${current.title}</h2>
+        <p class="body-copy">${current.copy}</p>
+        ${chips}
+        <textarea id="mainInput" placeholder="${current.placeholder}">${escapeValue(value)}</textarea>
+        ${helper}
+        <div class="actions">
+          <button class="primary" id="nextBtn">${current.button}</button>
+          ${state.step > 0 ? '<button class="secondary" id="backBtn">Back</button>' : ''}
+          <button class="quiet" id="resetBtn">Reset tonight</button>
+        </div>
+      `;
+
+      document.querySelector('#mainInput').addEventListener('input', (event) => {
+        state[current.id] = event.target.value;
+        saveDraft();
+      });
+
+      const helperInput = document.querySelector('#helperInput');
+      if (helperInput) {
+        helperInput.addEventListener('input', (event) => {
+          state.easierMove = event.target.value;
+          saveDraft();
+        });
+      }
+
+      document.querySelectorAll('[data-chip]').forEach((button) => {
+        button.addEventListener('click', () => toggleChip(button.dataset.chip));
+      });
+
+      document.querySelector('#nextBtn').addEventListener('click', nextStep);
+      const backBtn = document.querySelector('#backBtn');
+      if (backBtn) backBtn.addEventListener('click', previousStep);
+      document.querySelector('#resetBtn').addEventListener('click', resetTonight);
+    }
+
+    function renderClose() {
+      const entry = saveEntry();
+      const message = closeMessages[Math.abs(hashCode(entry.id)) % closeMessages.length];
+      screen.innerHTML = `
+        <p class="step-label">${steps[4].eyebrow}</p>
+        <h2>${steps[4].title}</h2>
+        <p class="body-copy">${steps[4].copy}</p>
+        <div class="close-message">
+          <div><strong>${message}</strong><span>The board is saved for ${new Date(entry.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}.</span></div>
+        </div>
+        <div class="summary-grid">
+          ${summaryBlock('Mind sweep', entry.dump)}
+          ${summaryBlock('What stood out', [entry.stoodOut, entry.chips.length ? `Noted: ${entry.chips.join(', ')}` : ''].filter(Boolean).join('\n'))}
+          ${summaryBlock('Could get in the way', entry.obstacles)}
+          ${summaryBlock('10% easier move', entry.easierMove)}
+          ${summaryBlock('Tomorrow intention', entry.intention)}
+        </div>
+        <div class="actions">
+          <button class="primary" id="copyBtn">Copy close-out</button>
+          <button class="secondary" id="editBtn">Edit this</button>
+          <button class="secondary" id="freshBtn">Reset for next time</button>
+        </div>
+      `;
+
+      document.querySelector('#copyBtn').addEventListener('click', copyCloseOut);
+      document.querySelector('#editBtn').addEventListener('click', () => { state.step = 0; render(); });
+      document.querySelector('#freshBtn').addEventListener('click', resetTonight);
+    }
+
+    function summaryBlock(label, value) {
+      return `<div class="summary-item"><b>${label}</b><p>${escapeText(value)}</p></div>`;
+    }
+
+    function toggleChip(chip) {
+      persistVisibleInputs();
+      if (state.chips.includes(chip)) {
+        state.chips = state.chips.filter((item) => item !== chip);
+      } else {
+        state.chips = [...state.chips, chip];
+      }
+      saveDraft();
+      render();
+    }
+
+    function persistVisibleInputs() {
+      const current = steps[state.step];
+      const mainInput = document.querySelector('#mainInput');
+      const helperInput = document.querySelector('#helperInput');
+      if (mainInput && current && current.id !== 'close') {
+        state[current.id] = mainInput.value;
+      }
+      if (helperInput) {
+        state.easierMove = helperInput.value;
+      }
+    }
+
+    function nextStep() {
+      if (state.step < steps.length - 1) {
+        persistVisibleInputs();
+        state.step += 1;
+        saveDraft();
+        render();
+      }
+    }
+
+    function previousStep() {
+      if (state.step > 0) {
+        persistVisibleInputs();
+        state.step -= 1;
+        saveDraft();
+        render();
+      }
+    }
+
+    function resetTonight() {
+      const ok = window.confirm('Reset tonight\'s close-out on this device? Saved previous evenings will stay in the side panel.');
+      if (!ok) return;
+      state = {
+        date: todayKey,
+        step: 0,
+        dump: '',
+        stoodOut: '',
+        chips: [],
+        obstacles: '',
+        easierMove: '',
+        intention: '',
+        closedAt: null
+      };
+      localStorage.removeItem(DRAFT_KEY);
+      render();
+    }
+
+    function formatEntry(entry) {
+      return [
+        `Evening Close-Out · ${entry.date}`,
+        '',
+        `Mind sweep:\n${entry.dump || 'Nothing written.'}`,
+        '',
+        `What stood out:\n${entry.stoodOut || 'Nothing written.'}${entry.chips.length ? `\nNoted: ${entry.chips.join(', ')}` : ''}`,
+        '',
+        `Could get in the way tomorrow:\n${entry.obstacles || 'Nothing written.'}`,
+        '',
+        `10% easier move:\n${entry.easierMove || 'Nothing written.'}`,
+        '',
+        `Tomorrow intention:\n${entry.intention || 'Nothing written.'}`
+      ].join('\n');
+    }
+
+    async function copyCloseOut() {
+      const text = formatEntry(entryFromState());
+      try {
+        await navigator.clipboard.writeText(text);
+        document.querySelector('#copyBtn').textContent = 'Copied';
+      } catch (error) {
+        window.prompt('Copy your close-out:', text);
+      }
+    }
+
+    function renderHistory() {
+      const entries = getEntries();
+      historyList.innerHTML = '';
+      if (!entries.length) {
+        historyList.innerHTML = '<div class="history-item"><b>No saved evenings yet</b><p>Finish the close-out once and your recent notes will appear here.</p></div>';
+        return;
+      }
+
+      entries.slice(0, 5).forEach((entry) => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        const date = new Date(entry.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        div.innerHTML = `
+          <b>${date}</b>
+          <p>${escapeText(entry.intention || entry.stoodOut || 'Saved close-out')}</p>
+          <div class="actions" style="margin-top: 10px;">
+            <button class="secondary" data-view="${entry.id}">View</button>
+            <button class="quiet" data-delete="${entry.id}">Delete</button>
+          </div>
+        `;
+        historyList.appendChild(div);
+      });
+
+      historyList.querySelectorAll('[data-view]').forEach((button) => {
+        button.addEventListener('click', () => loadEntry(button.dataset.view));
+      });
+      historyList.querySelectorAll('[data-delete]').forEach((button) => {
+        button.addEventListener('click', () => deleteEntry(button.dataset.delete));
+      });
+    }
+
+    function loadEntry(id) {
+      const entry = getEntries().find((item) => item.id === id);
+      if (!entry) return;
+      state = {
+        ...state,
+        ...entry,
+        step: 4,
+        chips: entry.chips || []
+      };
+      saveDraft();
+      render();
+    }
+
+    function deleteEntry(id) {
+      const ok = window.confirm('Delete this saved evening from this browser?');
+      if (!ok) return;
+      setEntries(getEntries().filter((entry) => entry.id !== id));
+    }
+
+    function hashCode(value) {
+      return String(value).split('').reduce((hash, char) => ((hash << 5) - hash) + char.charCodeAt(0), 0);
+    }
+
+    loadDraft();
+    renderHistory();
+    render();
+  </script>
+</body>
+</html>

@@ -518,3 +518,21 @@ No action needed now — USER.md is currently at 851/1,375 chars (62%) and MEMOR
 Verification: live USER.md is 851/1,375 chars (61.9%); live MEMORY.md and repo mirror are both 1,527/2,200 chars (69.4%). Brain Theo index Last consolidated is 2026-05-29, so current.
 
 By the way: this pairs well with the new scratchpad sorter. USER.md now handles always-relevant Kyle facts, MEMORY.md handles lean operational facts, and scratchpad catches bulky raw context before it bloats either store.
+
+---
+
+[THEO→KYLE] 2026-05-30 | Evening Close-Out Board prototype | Confidence: High
+
+Built a working single-file prototype at `prototypes/evening-close-out-board/` for the Paper N Pixels Evening Close-Out product lane.
+
+What it includes:
+- Five-screen gentle evening flow: offload, notice, tomorrow obstacles, tomorrow intention, close.
+- Sparse "what stood out" chips only: I showed up, I rested, I kept going, I asked for help.
+- A "10% easier move" field so tomorrow blockers become one small support action, not a to-do list.
+- Autosaved same-day draft, completed close-out history, copy/export action, edit/reset escape hatches.
+- LocalStorage-only persistence with an explicit browser-data caveat.
+- README with bundle rationale and deliberate non-build cuts.
+
+Verification: extracted inline JS and passed `node --check`; loaded local file in browser; completed the flow; confirmed localStorage saved draft/history entries with all expected fields; checked browser console had no runtime errors; searched for undesired wording/framing (`loose ends`, `wins`, `crush`, `hustle`, stale rejected prompts) and found none in the app file.
+
+By the way: this now gives the bundle a credible evening counterpart to Daily Reset and Task Paralysis Rescue: start the day, start the stuck task, and stop carrying the day.
