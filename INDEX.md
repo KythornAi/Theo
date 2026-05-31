@@ -20,6 +20,7 @@ Theo's workspace root. Last updated: 2026-05-29.
 | `skills/` | All Hermes skills (one folder per skill, one SKILL.md inside) | active | 2026-05-25 |
 | `memory/` | Theo's git-tracked memory — `MEMORY.md` index + topic memory files | active | 2026-05-27 |
 | `scripts/` | Cron/maintenance scripts — `memory-watchdog.sh`, `git-pull-theo.sh`, `skill-sync-watchdog.sh` | active | 2026-05-26 |
+| `assets/` | Project asset files — `plr-inbox/` (original PLR + ebook files), `mnm-project/` (NotebookLM mind maps, infographics, Canva zips, GH site photos) | active | 2026-05-31 |
 | `notes/` | Working notes — fast iteration, ephemeral. Includes `theo-scratchpad/` for raw feedback/context before consolidation | active | 2026-05-29 |
 | `prototypes/` | Experimental code and tools | active | — |
 | `brain_out/` | Obsidian write skill output path — syncs to Brain vault | active | — |
