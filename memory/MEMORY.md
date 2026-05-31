@@ -13,3 +13,5 @@ Memory files: live canonical ~/.hermes/memories/MEMORY.md and git mirror ~/theo/
 PNP guardrails: Daily Reset is flagship and never free; Task Paralysis Rescue is tabled. Avoid hidden AI-like promises, arbitrary-input advice without real AI, medical/therapy claims, and unclear save/button logic.
 §
 Grounded Humanity restart: Carlton Embers pen name; Grounded Humanity content brand; Paper N Pixels shop; Gumroad first. First offer is Mindful, Not Mythical ebook + 60 ADHD affirmation cards mini-bundle. PLR journals are structural raw material only.
+§
+Grounded Humanity copy preference: avoid leading with “crystals” or “toxic positivity”; position mindfulness as accessible where you are, not reserved for retreats, Bali, expensive clubs, perfect routines, or people with more money/time.

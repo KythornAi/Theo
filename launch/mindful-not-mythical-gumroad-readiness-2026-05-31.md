@@ -1,4 +1,4 @@
-# Mindful, Not Mythical — Gumroad Launch Readiness Pass
+# Mindful, Not Mythical - Gumroad Launch Readiness Pass
 
 Date: 2026-05-31  
 Workstream: Fresh-eyes ebook review + Gumroad bundle upload-readiness  
@@ -25,7 +25,7 @@ Recommended launch sequence: **cleanup manuscript → export final ebook PDF →
 
 - The manuscript holds a consistent adult, practical, evidence-aware tone.
 - The recurring examples — professional, student, caregiver, parent — create continuity without making the book feel over-systematised.
-- The strongest brand promise is clear: mindfulness without mysticism, retreat culture, or toxic positivity.
+- The strongest brand promise is clear: practical mindfulness that feels accessible from ordinary life, not reserved for retreats, perfect routines, or people with more money and time.
 - The adverse-effects / grief cautions are a strength, not a weakness. They make the book feel responsible and grounded.
 - The exercises are short enough to support the Gumroad bundle promise: ordinary-life practices rather than a giant workbook.
 
@@ -97,15 +97,15 @@ These should be checked in the DOCX/PDF, not just the text conversion, before up
    The plain-text conversion only showed the title under `Table of Contents`; this may be an export artifact.  
    **Action:** confirm the final PDF has a complete clickable TOC or intentional Reedsy-generated contents.
 
-## Gumroad listing draft — upload-ready first pass
+## Gumroad listing draft - upload-ready first pass
 
 ### Recommended title
 
-**Mindful, Not Mythical: Practical Mindfulness for Real Life + 60 ADHD Daily Affirmation Cards**
+**Mindful, Not Mythical**
 
 ### Subtitle
 
-*A grounded ebook and printable card deck for gentle reflection, overwhelm support, and everyday reset moments. No crystals, retreats, or toxic positivity required.*
+*A practical guide to gratitude, calm, and clarity for people navigating the pressures of modern life, with 60 ADHD-aware affirmation cards for gentle everyday reset moments.*
 
 ### Short hook
 
@@ -113,11 +113,11 @@ Mindfulness does not need to become a lifestyle performance. This mini-bundle gi
 
 ### Product description
 
-If you have ever bounced off mindfulness because it felt too mystical, too perfect, or too detached from real life, **Mindful, Not Mythical** was made for you.
+If you have ever felt mindfulness was meant for someone else, someone with more time, more money, a quieter life, or the freedom to disappear to a far-off retreat, **Mindful, Not Mythical** was made for you.
 
 This bundle brings together Carlton Embers’ grounded ebook on practical mindfulness with a printable 60-card ADHD affirmation deck. The ebook offers short, everyday practices for gratitude, calm, self-compassion, attention, and emotional steadiness. The cards give you simple visible reminders for the moments when your brain needs a kinder cue.
 
-No retreats. No crystal language. No “just be positive.” Just practical reflections and reset prompts you can use at your own pace.
+It is built around a simple idea: calm, gratitude, and clarity do not have to wait for perfect conditions. They can begin right where you are, in the middle of ordinary life.
 
 Use it as a quiet evening read, a desk-side reminder system, a bedside reset ritual, or a low-pressure way to try mindfulness without turning it into another impossible routine.
 
@@ -125,7 +125,7 @@ Use it as a quiet evening read, a desk-side reminder system, a bedside reset rit
 
 - Adults who want mindfulness without mystical or spiritual framing.
 - ADHD adults who respond better to visible, kind prompts than rigid routines.
-- People who feel mentally noisy, scattered, or overloaded and want a gentle pause.
+- People who feel overwhelmed and want to calm the mental noise and create a gentle pause.
 - Readers who like evidence-aware writing but do not want a textbook.
 - Anyone building a small reflection routine that can survive imperfect days.
 
@@ -140,10 +140,9 @@ Use it as a quiet evening read, a desk-side reminder system, a bedside reset rit
 
 Minimum Gumroad upload package:
 
-1. **Mindful, Not Mythical ebook** by Carlton Embers — PDF.
-2. **60 ADHD Daily Affirmation Cards** — printable PDF.
-3. **Start Here: How to Use the Ebook + Cards Together** — one-page PDF.
-4. Personal-use licence / terms note.
+1. **Mindful, Not Mythical ebook** by Carlton Embers - PDF.
+2. **60 ADHD Daily Affirmation Cards** - printable PDF.
+3. **Start Here: How to Use the Ebook + Cards Together** - one-page PDF.
 
 Optional if already exportable without delaying launch:
 
@@ -165,9 +164,9 @@ Rationale: cheap printable card decks compete on volume and price; this bundle s
 
 > This is a self-guided reflection resource for personal use. It is not medical advice, therapy, diagnosis, or treatment. If you are struggling with your mental health or feel unsafe, please seek support from a qualified professional or local crisis service.
 
-### Digital product / licence wording
+### Digital download note
 
-> This is a digital download. No physical item will be shipped. Files are for personal use only and may not be resold, redistributed, shared, or claimed as your own. Colours may vary slightly depending on screen and printer settings. Because this is a digital product, refunds are limited and handled according to Gumroad policy and customer support discretion.
+> This is a digital download. No physical item will be shipped. Colours may vary slightly depending on screen and printer settings. Because this is a digital product, refunds are limited and handled according to Gumroad policy and customer support discretion.
 
 ## FAQ draft
 
@@ -191,16 +190,16 @@ The ebook PDF should work on most PDF readers. Only mention GoodNotes/Notability
 
 ## Free lead magnet recommendation
 
-Use **Chapter 3 — Gratitude, Perspective & Mood**, especially sections 3.1–3.4 plus the Gratitude Expansion exercise.
+Use **Chapter 3 - Gratitude, Perspective & Mood**, especially sections 3.1-3.4 plus the Gratitude Expansion exercise.
 
 Recommended lead magnet title:
 
-**The Everyday Gratitude Reset: Mindfulness Without Toxic Positivity**
+**The Everyday Gratitude Reset: A Gentle Pause for Calm and Clarity**
 
 Why this section:
 
 - It stands alone without requiring earlier chapters.
-- It directly counters the “just be positive” objection.
+- It frames gratitude as a grounded everyday practice, not forced cheerfulness or pressure to ignore real life.
 - It has low claim-risk compared with pain, grief, or depression sections.
 - It gives the reader a small practice they can try tonight.
 - It naturally leads into the affirmation-card bundle.
@@ -218,7 +217,7 @@ Use 5–7 visuals:
 3. 2–3 clean interior ebook page previews.
 4. Card deck preview showing 6–9 cards, not all 60.
 5. Example use image: desk, mirror, bedside table, journal, or calm corner.
-6. No-woo positioning graphic: practical mindfulness / no crystals / no retreats / no toxic positivity.
+6. Accessibility positioning graphic: gratitude, calm, and clarity for ordinary life / no expensive retreat needed / start right where you are.
 7. Optional: 7 Days of Calm & Clarity preview if used as launch bonus.
 
 ## Strongest next action
