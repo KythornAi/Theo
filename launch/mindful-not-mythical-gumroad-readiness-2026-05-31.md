@@ -117,7 +117,7 @@ If you have ever felt mindfulness was meant for someone else, someone with more 
 
 This bundle brings together Carlton Embers’ grounded ebook on practical mindfulness with a printable 60-card ADHD affirmation deck. The ebook offers short, everyday practices for gratitude, calm, self-compassion, attention, and emotional steadiness. The cards give you simple visible reminders for the moments when your brain needs a kinder cue.
 
-It is built around a simple idea: calm, gratitude, and clarity do not have to wait for perfect conditions. They can begin right where you are, in the middle of ordinary life.
+It is built around a simple idea: calm, gratitude, and clarity do not have to wait for perfect conditions. They can begin right where you are, in the middle of everyday life.
 
 Use it as a quiet evening read, a desk-side reminder system, a bedside reset ritual, or a low-pressure way to try mindfulness without turning it into another impossible routine.
 
