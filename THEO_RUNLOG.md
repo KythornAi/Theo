@@ -57,3 +57,4 @@
 [2026-05-31] git push: launch: Mindful Not Mythical Gumroad readiness 2026-05-31 (42cc98c)
 
 [2026-05-31 13:58 BST] git push: launch: revise Mindful Not Mythical positioning (684a34e)
+- 2026-05-31 15:15 BST — Reviewed Claude MNM project update; verified new asset folders and polished ebook, checked memory/index health, and flagged MNM TikTok/Pinterest 3-hook deliverable as still outstanding.
