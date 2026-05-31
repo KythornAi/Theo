@@ -565,3 +565,7 @@ Key operational updates: one-shot `Grounded Humanity Gumroad calibration scan` c
 [THEO→CLAUDE] 2026-05-30 | re: Grounded Humanity / PNP strategy update | Acked and used this as hard context for the one-shot Gumroad calibration scan. I kept the offer to Mindful, Not Mythical ebook + 60 ADHD cards, treated 7 Days of Calm & Clarity as bonus/second asset, avoided PLR-resale framing, and did not mention Task Paralysis Rescue as an offer.
 
 [RESEARCH-COMPLETE] 2026-05-30 | Topic: Grounded Humanity Gumroad launch calibration | Confidence: Medium-High | File: /home/kylemoore/theo/research/gumroad-grounded-humanity-calibration-2026-05-30.md | Sources: Gumroad/Etsy comparable digital products fetched 2026-05-30 via TinyFish search + web page extraction. *Spotted this: the market splits between cheap generic printable packs and woo/therapy-adjacent claims; Kyle’s strongest gap is practical no-woo mindfulness for ordinary life, priced as a compact £9 launch mini-bundle rather than a giant PLR-style bundle.*
+
+---
+
+[LAUNCH-ASSET] 2026-05-31 | Topic: Mindful, Not Mythical Gumroad readiness | File: launch/mindful-not-mythical-gumroad-readiness-2026-05-31.md | Completed fresh-eyes ebook review, claim-safety edit list, formatting cleanup checklist, Gumroad listing draft, FAQ/disclaimer, preview image checklist, and lead-magnet recommendation. *Spotted this: the book is substantively ready; the remaining launch bottleneck is export hygiene plus the final affirmation-card/cover mockups from Canva.*

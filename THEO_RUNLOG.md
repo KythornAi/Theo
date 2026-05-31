@@ -53,3 +53,4 @@
 [2026-05-30] Grounded Humanity Gumroad calibration scan completed: wrote research/gumroad-grounded-humanity-calibration-2026-05-30.md; appended Claude ack and research-complete flag.
 [2026-05-30] git push: research: Grounded Humanity Gumroad calibration 2026-05-30 (15b531b)
 2026-05-30 | Nightly memory consolidation | Live and mirror memory aligned at 1517 chars / 69.0%; updated Brain _index, project-status, product-catalog, cron-registry, research-registry, decisions-log, and tool-config for Grounded Humanity launch pivot, Gumroad calibration, Evening Close-Out prototype, and cron state.
+2026-05-31 | Grounded Humanity Gumroad launch sprint | Completed fresh-eyes ebook review and Gumroad readiness pack at launch/mindful-not-mythical-gumroad-readiness-2026-05-31.md; flagged HERMES_INBOX and updated INDEX for launch/.

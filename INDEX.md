@@ -12,6 +12,7 @@ Theo's workspace root. Last updated: 2026-05-29.
 
 | Folder | What it is | Status | Last touched |
 |--------|-----------|--------|--------------|
+| `launch/` | Gumroad/KDP launch-readiness docs, listing drafts, upload checklists, and packaging briefs | active | 2026-05-31 |
 | `lead-magnet/` | PNP lead magnet strategy — 3 options (printable PDF, mini HTML tool, Notion template) with Claude build prompts | active | 2026-05-27 |
 | `pinterest-content/` | PNP Pinterest + content strategy — 5 pillars, 8 blog topics, pin strategy, calendar | active | 2026-05-27 |
 | `research/` | Theo's research outputs — `discovery-lab/` (niche scans, market analysis), MTD research | active | 2026-05-22 |
