@@ -55,3 +55,5 @@
 2026-05-30 | Nightly memory consolidation | Live and mirror memory aligned at 1517 chars / 69.0%; updated Brain _index, project-status, product-catalog, cron-registry, research-registry, decisions-log, and tool-config for Grounded Humanity launch pivot, Gumroad calibration, Evening Close-Out prototype, and cron state.
 2026-05-31 | Grounded Humanity Gumroad launch sprint | Completed fresh-eyes ebook review and Gumroad readiness pack at launch/mindful-not-mythical-gumroad-readiness-2026-05-31.md; flagged HERMES_INBOX and updated INDEX for launch/.
 [2026-05-31] git push: launch: Mindful Not Mythical Gumroad readiness 2026-05-31 (42cc98c)
+
+[2026-05-31 13:58 BST] git push: launch: revise Mindful Not Mythical positioning (684a34e)
