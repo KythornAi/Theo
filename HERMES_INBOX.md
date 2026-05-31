@@ -569,3 +569,36 @@ Key operational updates: one-shot `Grounded Humanity Gumroad calibration scan` c
 ---
 
 [LAUNCH-ASSET] 2026-05-31 | Topic: Mindful, Not Mythical Gumroad readiness | File: launch/mindful-not-mythical-gumroad-readiness-2026-05-31.md | Completed fresh-eyes ebook review, claim-safety edit list, formatting cleanup checklist, Gumroad listing draft, FAQ/disclaimer, preview image checklist, and lead-magnet recommendation. *Spotted this: the book is substantively ready; the remaining launch bottleneck is export hygiene plus the final affirmation-card/cover mockups from Canva.*
+
+[CLAUDE->THEO] 2026-05-31 | MNM project update — new assets on laptop + ebook polished
+
+Hi Theo. Several updates to the Mindful Not Mythical project since your last run.
+
+**New assets on the laptop**
+
+Kyle added new project files. They are all in ~/theo/assets/mnm-project/:
+
+- notebooklm-mindmaps/ — 5 screenshots of a NotebookLM mind map session on the ebook content. Use agy --print to view them — they are image files. Note any useful structural ideas but these are exploratory, not final.
+- notebooklm-infographics/ — 4 infographic PNGs generated from the ebook self-compassion content. Visually strong and on-brand. One flag: Three_Pillars_of_Self-Compassion.png explicitly names Kristin Neff's framework — if Kyle ever uses these publicly they will need proper attribution or reframing. The other three are safer.
+- canva-zips/ — Canva ADHD affirmations.zip (60-card deck) and _7 Days of Calm and Clarity Journal.zip (partial journal, Canva source). These are the existing product assets Kyle built a year ago.
+- gh-site-photos/ — Grounded Humanity brand photos including hero images, banner, and PhotoGrid upscales.
+
+**Ebook polished**
+
+The ebook has been through an editorial pass. ebook_polished.docx is now in ~/theo/assets/plr-inbox/ alongside the original ebook_working.docx. Keep both — the original is the pre-edit reference.
+
+Changes made:
+- 7 claim-safety rewrites — softened phrases like "can lower stress" to "are associated in some studies with steadier stress responses", removed "reduced pain intensity" in favour of "associated with lower reported pain scores", softened the prolonged grief / treatable condition line, and framed the relapse finding as clinical research context
+- 2 layout notes removed from body text (were intended as design instructions, not reader-facing copy)
+- Formatting fixes: broken bold in Ch5 exercise, trailing asterisks in Quick Reference Toolkit, editorial note removed from endnotes
+- One grammar fix in Chapter 1.1
+
+**What is still outstanding**
+
+Kyle is setting up a Gumroad account (needs business bank account and PayPal connected). Your Gumroad listing draft from ~/theo/launch/mindful-not-mythical-gumroad-readiness-2026-05-31.md is the copy to use when that is ready — no further work needed on it unless Kyle asks.
+
+The TikTok/Pinterest content hook angles (3 hooks, no production process references) — check whether you have produced these already. If not, that is still on the list.
+
+By the way: the polished ebook is now the version to reference for any product-facing copy work. Use ebook_polished.docx, not ebook_working.docx, going forward.
+
+— Claude
