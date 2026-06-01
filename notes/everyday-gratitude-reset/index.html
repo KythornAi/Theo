@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Everyday Gratitude Reset — Paper N Pixels Test Draft</title>
+  <style>
+    :root {
+      --ink: #24302f;
+      --muted: #65706d;
+      --paper: #fffaf0;
+      --panel: #ffffff;
+      --mint: #dff4ec;
+      --mint-strong: #80c7aa;
+      --peach: #ffd9c7;
+      --yellow: #ffe89a;
+      --blue: #e6efff;
+      --line: #e7ded1;
+      --shadow: 0 18px 45px rgba(36, 48, 47, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, rgba(255, 217, 199, 0.9), transparent 35rem),
+                  radial-gradient(circle at bottom right, rgba(223, 244, 236, 0.95), transparent 32rem),
+                  var(--paper);
+      color: var(--ink);
+    }
+
+    main {
+      width: min(860px, 100%);
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+
+    .hero {
+      max-width: 760px;
+      margin: 12px 0 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 6vw, 3.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.55;
+      max-width: 680px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+      padding: clamp(20px, 4vw, 30px);
+      backdrop-filter: blur(12px);
+    }
+
+    .stack { display: grid; gap: 22px; }
+
+    .day-header {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px 16px;
+      align-items: start;
+    }
+
+    .day-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--mint);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      font-weight: 850;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .day-title {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      line-height: 1.25;
+    }
+
+    .prompts {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    .prompts li {
+      margin: 8px 0;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    .prompts li::marker {
+      color: var(--mint-strong);
+    }
+
+    .pause-box {
+      background: var(--mint);
+      border: 1px solid rgba(128, 199, 170, 0.55);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .pause-box h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .pause-step {
+      margin: 10px 0;
+      padding-left: 8px;
+      line-height: 1.55;
+    }
+
+    .exit-section {
+      background: var(--blue);
+      border: 1px solid rgba(108, 140, 200, 0.35);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .exit-section h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+      line-height: 1.5;
+      margin: 10px 0;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button, textarea, input { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .primary, .secondary, .text-link {
+      min-height: 44px;
+      border-radius: 999px;
+      padding: 0 16px;
+      font-weight: 850;
+    }
+
+    .primary {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .secondary {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .text-link {
+      background: transparent;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      padding-inline: 4px;
+    }
+
+    .notice {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--blue);
+      color: #2d3d5c;
+      line-height: 1.5;
+      font-size: 0.95rem;
+      margin-top: 14px;
+    }
+
+    .disclaimer {
+      margin-top: 28px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px dashed var(--line);
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 640px) {
+      .day-header { grid-template-columns: 36px 1fr; }
+      .day-number { width: 36px; height: 36px; font-size: 0.9rem; }
+      .actions { display: grid; }
+      .primary, .secondary, .text-link { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <div class="eyebrow">Grounded Humanity / Mindful, Not Mythical · papernpixels.co</div>
+      <h1 id="title">The Everyday Gratitude Reset</h1>
+      <p class="subtitle">A gentle 7-day pause for calm and clarity. No retreats, no perfect routines, no pressure to be positive. Just small, honest reflections for ordinary life.</p>
+    </section>
+
+    <div class="card stack" id="app">
+      <section>
+        <p style="margin:0 0 6px;color:var(--muted);font-weight:800;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;">Positioning</p>
+        <p style="margin:0;line-height:1.6;">
+          Gratitude does not need to be a performance. This reset is built for days when your brain feels full, your list is long, and the idea of "being present" feels like another chore. Each day offers a short prompt and a single pause practice. Nothing to master. Nothing to finish. Just a gentle shift back toward what is already here.
+        </p>
+      </section>
+
+      <section>
+        <p style="margin:0 0 14px;color:var(--muted);font-weight:800;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;">The 7-day reset flow</p>
+
+        <div class="stack" id="days"></div>
+      </section>
+
+      <section class="pause-box">
+        <h2>The daily pause practice</h2>
+        <p class="pause-step"><strong>1.</strong> Set a timer for 60 seconds. You do not have to close your eyes if that feels strange.</p>
+        <p class="pause-step"><strong>2.</strong> Name three things you can feel right now: the chair, the light, the air, your feet on the floor.</p>
+        <p class="pause-step"><strong>3.</strong> Name one small thing from today you do not want to forget. It can be ordinary. Toast. A text. A quiet ten minutes.</p>
+        <p class="pause-step"><strong>4.</strong> When the timer ends, carry that one thing with you. That is all.</p>
+      </section>
+
+      <section class="exit-section">
+        <h2>Capture and exit</h2>
+        <p style="margin:0 0 10px;line-height:1.55;">Use this space to note anything worth keeping before you move on.</p>
+        <textarea id="exitNote" placeholder="Example: Day 3 felt easier when I wrote the notes on my phone instead of waiting for my journal. The pause practice worked best before coffee."></textarea>
+        <div class="actions">
+          <button class="primary" id="saveExitNoteBtn">Save note</button>
+          <button class="secondary" id="copyAllBtn">Copy all seven days</button>
+          <button class="secondary" id="resetBtn">Start again</button>
+        </div>
+      </section>
+
+      <div class="notice hidden" id="copyNotice">Notes copied to your clipboard.</div>
+
+      <div class="disclaimer">
+        <strong>This is a test draft for Step 3.7 Flash evaluation.</strong><br>
+        It is not final customer-facing copy, not a finished product, and not approved for Gumroad, KDP, Etsy, customer download, or public distribution. Treat this as a prototype to review voice, structure, length, and ADHD-usability before final polish.
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const days = [
+      {
+        title: 'Day 1 — What was already here',
+        prompts: [
+          'Name one thing that went right today, even if the day was messy.',
+          'Who made something slightly easier, even without knowing it?',
+          'What is one small comfort you had today? A seat, a drink, a notification that made you smile.'
+        ]
+      },
+      {
+        title: 'Day 2 — The small stuff',
+        prompts: [
+          'What is one ordinary skill you used today that is easy to forget? Listening, typing, noticing, deciding.',
+          'Name one ordinary object that made your day smoother.',
+          'What is one thing you did not have to deal with today?'
+        ]
+      },
+      {
+        title: 'Day 3 — People and texture',
+        prompts: [
+          'Who said or did something small that landed well today?',
+          'When did you feel most like yourself today?',
+          'What is one thing someone else did today that you are glad you did not have to do?'
+        ]
+      },
+      {
+        title: 'Day 4 — Capacity',
+        prompts: [
+          'What is one thing you carried today that you are ready to put down?',
+          'What is one small boundary you held, even quietly?',
+          'What is one task you completed that would not have happened without you?'
+        ]
+      },
+      {
+        title: 'Day 5 — Contrast',
+        prompts: [
+          'What is harder now than it was a year ago? What does that say about how you have grown?',
+          'What is easier now than it used to be?',
+          'What is one decision you made recently that turned out better than expected?'
+        ]
+      },
+      {
+        title: 'Day 6 — Ordinary abundance',
+        prompts: [
+          'What is one routine thing you usually overlook that actually makes life better?',
+          'When did you notice something small and choose to keep looking?',
+          'What is one piece of technology or tool that saved you effort today?'
+        ]
+      },
+      {
+        title: 'Day 7 — Carrying it forward',
+        prompts: [
+          'What is one feeling from this week you would like to keep?',
+          'What is one practice from this reset that felt reachable?',
+          'What would you tell tomorrow-you if they started the day feeling flat?'
+        ]
+      }
+    ];
+
+    const daysContainer = document.getElementById('days');
+    const exitNote = document.getElementById('exitNote');
+    const saveExitNoteBtn = document.getElementById('saveExitNoteBtn');
+    const copyAllBtn = document.getElementById('copyAllBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const copyNotice = document.getElementById('copyNotice');
+
+    days.forEach((day, index) => {
+      const card = document.createElement('div');
+      card.className = 'day-header';
+      card.innerHTML = `
+        <div class="day-number">${index + 1}</div>
+        <div>
+          <h2 class="day-title">${day.title}</h2>
+          <ul class="prompts">
+            ${day.prompts.map(p => `<li>${p}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+      daysContainer.appendChild(card);
+    });
+
+    saveExitNoteBtn.addEventListener('click', () => {
+      if (!exitNote.value.trim()) return;
+      const existing = localStorage.getItem('pnp-gratitude-exit-notes-v1') || '';
+      const dated = `\n\n---\n${new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}\n${exitNote.value.trim()}`;
+      localStorage.setItem('pnp-gratitude-exit-notes-v1', existing + dated);
+      exitNote.value = '';
+      copyNotice.textContent = 'Note saved locally.';
+      copyNotice.classList.remove('hidden');
+      setTimeout(() => copyNotice.classList.add('hidden'), 2500);
+    });
+
+    copyAllBtn.addEventListener('click', async () => {
+      const text = days.map((day, i) => `${day.title}\n${day.prompts.map((p, j) => `${j + 1}. ${p}`).join('\n')}`).join('\n\n');
+      try {
+        await navigator.clipboard.writeText(text);
+        copyNotice.textContent = 'All seven days copied to your clipboard.';
+      } catch (error) {
+        copyNotice.textContent = 'Copy failed — select and copy manually.';
+      }
+      copyNotice.classList.remove('hidden');
+      setTimeout(() => copyNotice.classList.add('hidden'), 3000);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if (confirm('Clear your exit notes and start again?')) {
+        localStorage.removeItem('pnp-gratitude-exit-notes-v1');
+        exitNote.value = '';
+        copyNotice.textContent = 'Reset complete.';
+        copyNotice.classList.remove('hidden');
+        setTimeout(() => copyNotice.classList.add('hidden'), 2000);
+      }
+    });
+  </script>
+</body>
+</html>
