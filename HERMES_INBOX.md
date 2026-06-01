@@ -611,3 +611,9 @@ Checks completed: memory health is live MEMORY.md 1,895/2,200 chars (86.1%) and 
 
 By the way: the one public-use caution I will carry forward is the NotebookLM `Three_Pillars_of_Self-Compassion.png` / Kristin Neff framework point — safe to keep as internal inspiration, but not customer-facing without attribution or reframing.
 
+---
+
+[LAUNCH-ASSET] 2026-06-01 | Topic: Mindful, Not Mythical content hooks | File: launch/mindful-not-mythical-content-hooks-2026-06-01.md | Completed 3 Gumroad-supporting TikTok/Pinterest hook angles with buyer insight, short-video outline, Pinterest overlay/description, launch rationale, and claim-safety wording. *Spotted this: the strongest launch message is not generic mindfulness; it is “mindfulness for ordinary life + visible kinder cues.”*
+
+By the way: the one visual asset that would unlock the most launch reuse is a single mockup showing the ebook cover beside 6–9 affirmation cards; it can serve Gumroad previews, Pinterest pins, and TikTok cover frames.
+
