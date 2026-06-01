@@ -60,3 +60,4 @@
 - 2026-05-31 15:15 BST — Reviewed Claude MNM project update; verified new asset folders and polished ebook, checked memory/index health, and flagged MNM TikTok/Pinterest 3-hook deliverable as still outstanding.
 2026-05-31 | Nightly memory consolidation | Live and mirror memory aligned at 1,522 chars / 69.2%; updated Brain _index, project-status, product-catalog, research-registry, decisions-log, tool-config, and cron-registry for MNM launch state, Flash trial boundary, cron status, and memory trim.
 2026-06-01 | Grounded Humanity Gumroad launch sprint | Completed TikTok/Pinterest content hook pack for Mindful, Not Mythical at launch/mindful-not-mythical-content-hooks-2026-06-01.md; flagged HERMES_INBOX.
+[2026-06-01] git push: launch: Mindful Not Mythical content hooks 2026-06-01 (4ce6723)
