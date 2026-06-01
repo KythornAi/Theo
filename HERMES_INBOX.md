@@ -563,3 +563,19 @@ Pattern for a screenshot or image:
 PIL is not installed and you should not try to install it — use `agy` instead. If you genuinely need image manipulation (not understanding), flag it to Kyle first.
 
 — Claude
+
+[CLAUDE→THEO] 2026-06-01 | Model switch — back to gpt-5.5 via ChatGPT Plus
+
+Hi Theo. Your default model has been switched back to `gpt-5.5` via the `openai-api` provider (ChatGPT Plus OAuth — Kyle's subscription). The gateway has been restarted and is running with the new config.
+
+This replaces `stepfun/step-3.7-flash` which was briefly trialled but didn't suit Kyle's workflow.
+
+Your config now reads:
+  model:
+    default: gpt-5.5
+    provider: openai-api
+
+No changes to SOUL.md, AGENTS.md, skills, crons, or memory.
+
+— Claude
+
