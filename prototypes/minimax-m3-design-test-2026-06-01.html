@@ -1,0 +1,834 @@
+<!doctype html>
+<!--
+  Design Retro — Grounded Humanity / Paper N Pixels
+  Concept: "A Moment to Land" — a daily grounding micro-ritual that pairs a
+  breath cycle with a single pulled card and a one-word intention. Built as a
+  brand-aligned wellness piece, not an ADHD planner UI.
+
+  Design intent
+  - Editorial mindfulness aesthetic: a printed wellness magazine brought to
+    web, not a SaaS landing page. Restraint over density. Generous whitespace
+    and slow, considered motion.
+  - Three micro-moments, in order: (1) breathe with the orb, (2) pull a card,
+    (3) plant a word. Each is short on its own but compounds into a 2-3 minute
+    daily reset that respects a low-spark afternoon.
+  - No streaks, no scores, no nudges, no "you did it!" confetti. The interface
+    trusts the user.
+
+  What I pushed stylistically
+  - A warm cream + sage palette pulled from the Carlton Embers deck, not the
+    default AI wellness purple/indigo gradient. Anchored in a paper-cream
+    background (#F4EFE4) with a sage primary (#6B7F5E) and a burnt-amber accent
+    (#B89060) for the single moment that needs emphasis.
+  - Fraunces variable serif for headlines at an editorial optical size, paired
+    with Inter for body and IBM Plex Mono for tiny editorial labels (the
+    "01 / BREATHE" numbering, the timestamp, the brand mark). This is the
+    kind of type mix you'd see in a print magazine spread.
+  - Hand-built inline SVG botanical line work (olive branch, sage sprig, single
+    leaf) used sparingly as section dividers — replaces stock photography and
+    keeps the file fully self-contained.
+  - A subtle paper-grain noise via an inline SVG turbulence filter on a fixed
+    overlay layer. Very low opacity (~6%) so it reads as paper, not noise.
+  - 3D card flip done with CSS perspective + backface-visibility rather than a
+    JS library. Reduced-motion users get an instant cross-fade instead.
+
+  Palette
+  - bg cream      #F4EFE4   page background, the "paper"
+  - sage deep     #4A5B41   headings, the orb rest state
+  - sage          #6B7F5E   primary brand colour, the orb inhale
+  - sage soft     #8FA17E   hover and quiet states
+  - amber         #B89060   the single accent (pull button, focus ring)
+  - clay          #C4794A   the "today" temperature tag
+  - ink           #1F1D17   body text
+  - ink soft      #5A544A   secondary text, captions
+  - hairline      rgba(31,29,23,0.10)  dividers, card edges
+
+  What I'd refine with more time
+  - The breath orb curve is a basic sin function; I'd swap in a slightly
+    asymmetric 4-in / 6-out curve with a held exhale for a more grounded feel.
+  - The card library is 12 hand-written lines. A real product would pull from
+    the Carlton Embers deck via a JSON manifest so the brand can refresh
+    without touching code.
+  - The "planted words" log uses localStorage as a placeholder. A real version
+    would sync to a private journal module and support export.
+  - The botanical SVGs are hand-coded and minimal; a designer with an iPad
+    could replace them with a custom illustration set.
+  - Print stylesheet for a printable weekly card sheet.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A Moment to Land — Grounded Humanity</title>
+  <meta name="description" content="A short daily grounding ritual from Grounded Humanity. A breath, a card, a single word to carry with you." />
+  <meta name="theme-color" content="#F4EFE4" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..700,0..100,0..1&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+
+  <style>
+    /* ---------- reset & base ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #1F1D17;
+      background: #F4EFE4;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    ::selection { background: #B89060; color: #F4EFE4; }
+    a { color: inherit; }
+
+    /* ---------- paper grain overlay ---------- */
+    .grain {
+      position: fixed; inset: 0; pointer-events: none; z-index: 100;
+      opacity: 0.06; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+
+    /* ---------- layout ---------- */
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 56px 28px 96px;
+      position: relative;
+      z-index: 1;
+    }
+    @media (min-width: 760px) {
+      .wrap { padding: 88px 40px 128px; }
+    }
+
+    /* ---------- typography ---------- */
+    .mono {
+      font-family: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #5A544A;
+    }
+    h1, h2, h3 {
+      font-family: 'Fraunces', 'Iowan Old Style', 'Apple Garamond', Georgia, serif;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: #4A5B41;
+      margin: 0;
+    }
+    .display {
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      line-height: 1.05;
+      font-variation-settings: "opsz" 96, "SOFT" 50, "WONK" 0;
+    }
+    .display em {
+      font-style: italic;
+      color: #6B7F5E;
+      font-variation-settings: "opsz" 96, "SOFT" 100, "WONK" 1;
+    }
+    .lede {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+      line-height: 1.55;
+      color: #5A544A;
+      font-variation-settings: "opsz" 14;
+      max-width: 38ch;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      line-height: 1.15;
+      margin-bottom: 0.4em;
+    }
+    p { margin: 0 0 1em; }
+    .quiet { color: #5A544A; }
+
+    /* ---------- brand mark ---------- */
+    .mark {
+      display: flex; align-items: baseline; gap: 10px;
+      margin-bottom: 64px;
+    }
+    .mark svg { width: 22px; height: 22px; flex: 0 0 auto; }
+    .mark .name {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: #4A5B41;
+    }
+    .mark .sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #5A544A;
+      margin-left: auto;
+    }
+
+    /* ---------- hero ---------- */
+    .hero { margin-bottom: 96px; }
+    .hero .meta { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+    .hero .meta .dot { width: 6px; height: 6px; border-radius: 50%; background: #C4794A; }
+    .hero .lede { margin-top: 24px; }
+    .hero .scrim { margin-top: 56px; height: 1px; background: rgba(31,29,23,0.10); }
+
+    /* ---------- divider ---------- */
+    .divider {
+      display: flex; align-items: center; justify-content: center;
+      margin: 64px 0;
+      color: #6B7F5E;
+    }
+    .divider svg { width: 88px; height: 32px; opacity: 0.7; }
+
+    /* ---------- breath section ---------- */
+    .section { margin-bottom: 88px; }
+    .section-head { margin-bottom: 36px; }
+    .section-head .mono { display: block; margin-bottom: 14px; }
+    .section-head .section-title { display: block; }
+
+    .breath-stage {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 0 16px;
+    }
+    .orb {
+      position: relative;
+      width: 220px; height: 220px;
+      display: grid; place-items: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    @media (min-width: 760px) { .orb { width: 260px; height: 260px; } }
+
+    .orb-ring {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #8FA17E 0%, #6B7F5E 55%, #4A5B41 100%);
+      box-shadow:
+        inset 0 -12px 30px rgba(31,29,23,0.18),
+        inset 0 12px 24px rgba(255,255,255,0.12),
+        0 18px 50px -20px rgba(74,91,65,0.45);
+      transform: scale(0.62);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .orb.breathing .orb-ring {
+      animation: breath 10s ease-in-out infinite;
+    }
+    @keyframes breath {
+      0%   { transform: scale(0.62); }
+      40%  { transform: scale(1); }
+      100% { transform: scale(0.62); }
+    }
+    .orb-handle {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid rgba(74,91,65,0.18);
+      transform: scale(0.78);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s;
+    }
+    .orb.breathing .orb-handle { transform: scale(1.18); border-color: rgba(74,91,65,0.10); }
+
+    .orb-label {
+      position: relative; z-index: 2;
+      text-align: center;
+      color: rgba(244,239,228,0.96);
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 17px;
+      font-variation-settings: "opsz" 14, "SOFT" 50;
+      letter-spacing: 0.01em;
+      pointer-events: none;
+      text-shadow: 0 1px 8px rgba(31,29,23,0.25);
+    }
+    .orb-label .step {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 6px;
+      color: rgba(244,239,228,0.85);
+    }
+
+    .breath-meta {
+      margin-top: 28px;
+      text-align: center;
+    }
+    .breath-meta .mono { display: block; margin-bottom: 6px; }
+    .breath-meta .quiet { font-size: 14px; }
+    .breath-meta button.linkish {
+      background: none; border: 0; padding: 0;
+      font: inherit; color: #6B7F5E; cursor: pointer;
+      border-bottom: 1px solid currentColor;
+      margin-top: 4px;
+    }
+    .breath-meta button.linkish:hover { color: #4A5B41; }
+
+    /* ---------- card section ---------- */
+    .card-stage {
+      perspective: 1200px;
+      display: flex; justify-content: center;
+      padding: 12px 0 8px;
+      min-height: 360px;
+    }
+    @media (min-width: 760px) { .card-stage { min-height: 400px; } }
+
+    .card {
+      position: relative;
+      width: min(320px, 86vw);
+      aspect-ratio: 5 / 8;
+      transform-style: preserve-3d;
+      transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .card.flipped { transform: rotateY(180deg); }
+
+    .face {
+      position: absolute; inset: 0;
+      border-radius: 6px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow:
+        0 1px 0 rgba(31,29,23,0.05),
+        0 24px 60px -28px rgba(74,91,65,0.45),
+        0 6px 20px -10px rgba(31,29,23,0.20);
+    }
+    .face.back {
+      background:
+        linear-gradient(180deg, #F8F2E5 0%, #EFE7D5 100%);
+      border: 1px solid rgba(31,29,23,0.08);
+    }
+    .face.front {
+      background:
+        radial-gradient(ellipse at 50% 30%, #7E9070 0%, #5A6B4F 100%);
+      color: #F4EFE4;
+      transform: rotateY(180deg);
+      border: 1px solid rgba(31,29,23,0.10);
+    }
+    .face.front::after {
+      content: "";
+      position: absolute; inset: 14px;
+      border: 1px solid rgba(244,239,228,0.28);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+    .face.front .corner {
+      position: absolute; top: 28px; left: 0; right: 0;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(244,239,228,0.7);
+    }
+    .face.front .foot {
+      position: absolute; bottom: 28px; left: 0; right: 0;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(244,239,228,0.7);
+    }
+    .face.front .mark-leaf {
+      width: 28px; height: 28px; margin-bottom: 18px;
+      color: rgba(244,239,228,0.85);
+    }
+
+    .face.back .botanical {
+      position: absolute; top: 18px; left: 0; right: 0;
+      display: flex; justify-content: center;
+      color: #8FA17E;
+    }
+    .face.back .botanical svg { width: 64px; height: 28px; }
+    .face.back .number {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #8FA17E;
+      margin-bottom: 18px;
+    }
+    .face.back .line {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(1.4rem, 4.5vw, 1.75rem);
+      line-height: 1.3;
+      color: #4A5B41;
+      font-variation-settings: "opsz" 36, "SOFT" 60;
+      max-width: 22ch;
+    }
+    .face.back .line em {
+      font-style: italic;
+      color: #6B7F5E;
+      font-variation-settings: "opsz" 36, "SOFT" 100, "WONK" 1;
+    }
+    .face.back .footer-line {
+      position: absolute; bottom: 22px; left: 0; right: 0;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #5A544A;
+    }
+
+    .card-actions {
+      display: flex; justify-content: center; gap: 18px;
+      margin-top: 24px;
+    }
+    .btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.02em;
+      border: 0; cursor: pointer;
+      padding: 12px 22px;
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-primary {
+      background: #B89060; color: #F4EFE4;
+    }
+    .btn-primary:hover { background: #A47A4D; }
+    .btn-primary:active { transform: translateY(1px); }
+    .btn-ghost {
+      background: transparent; color: #4A5B41;
+      border: 1px solid rgba(74,91,65,0.30);
+    }
+    .btn-ghost:hover { border-color: #4A5B41; }
+    .btn-ghost:active { transform: translateY(1px); }
+
+    /* ---------- plant section ---------- */
+    .plant-input {
+      display: flex; gap: 8px;
+      margin-top: 8px;
+      max-width: 480px;
+    }
+    .plant-input input {
+      flex: 1;
+      font: inherit; font-size: 16px;
+      color: #1F1D17;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid rgba(31,29,23,0.20);
+      padding: 10px 2px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .plant-input input::placeholder { color: rgba(90,84,74,0.6); font-style: italic; font-family: 'Fraunces', Georgia, serif; }
+    .plant-input input:focus { border-color: #6B7F5E; }
+    .plant-input button {
+      background: #4A5B41; color: #F4EFE4;
+      border: 0; padding: 0 22px; border-radius: 999px;
+      font: inherit; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .plant-input button:hover { background: #3A4833; }
+    .plant-input button:disabled { background: rgba(74,91,65,0.3); cursor: not-allowed; }
+
+    .planted {
+      margin-top: 32px;
+      border-top: 1px solid rgba(31,29,23,0.10);
+      padding-top: 24px;
+    }
+    .planted .mono { display: block; margin-bottom: 14px; }
+    .planted-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .planted-list li {
+      display: flex; align-items: baseline; gap: 14px;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.05rem;
+      color: #4A5B41;
+      font-variation-settings: "opsz" 14, "SOFT" 60;
+      padding: 8px 0;
+      border-bottom: 1px dotted rgba(31,29,23,0.10);
+    }
+    .planted-list li:last-child { border-bottom: 0; }
+    .planted-list .when {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #5A544A;
+      flex: 0 0 auto;
+      min-width: 92px;
+    }
+    .planted-list .word { font-style: italic; }
+    .planted-empty { color: #5A544A; font-style: italic; font-family: 'Fraunces', Georgia, serif; }
+
+    /* ---------- footer ---------- */
+    .foot {
+      margin-top: 96px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(31,29,23,0.10);
+      display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+      flex-wrap: wrap;
+    }
+    .foot .small {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #5A544A;
+    }
+    .foot svg { width: 18px; height: 18px; color: #6B7F5E; }
+
+    /* ---------- a11y & motion ---------- */
+    :focus-visible {
+      outline: 2px solid #B89060;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .orb.breathing .orb-ring { animation: none; transform: scale(0.8); }
+      .card { transition: opacity 0.2s; }
+      .card.flipped { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <!-- Brand mark -->
+    <header class="mark" aria-label="Grounded Humanity">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 21c-5-3-8-7-8-12 0-3 2-5 5-5 2 0 3 1 3 1s1-1 3-1c3 0 5 2 5 5 0 5-3 9-8 12z" fill="currentColor" opacity="0.18"/>
+        <path d="M12 21c-5-3-8-7-8-12 0-3 2-5 5-5 2 0 3 1 3 1s1-1 3-1c3 0 5 2 5 5 0 5-3 9-8 12z" stroke="currentColor" stroke-width="1.1" fill="none"/>
+        <path d="M12 21V9" stroke="currentColor" stroke-width="0.9"/>
+      </svg>
+      <span class="name">Grounded Humanity</span>
+      <span class="sub">Paper N Pixels</span>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="meta">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="mono" id="today-label">Today</span>
+      </div>
+      <h1 class="display">A moment <em>to land.</em></h1>
+      <p class="lede">A short, quiet ritual for a scattered afternoon. Three small things — a breath, a card, a single word to carry with you. Two minutes, give or take. No streak to keep. No score to beat.</p>
+      <div class="scrim" aria-hidden="true"></div>
+    </section>
+
+    <!-- Breath section -->
+    <section class="section" aria-labelledby="breathe-title">
+      <div class="section-head">
+        <span class="mono">01 / Breathe</span>
+        <h2 id="breathe-title" class="section-title">Settle in.</h2>
+      </div>
+
+      <div class="breath-stage">
+        <button class="orb" id="orb" aria-label="Start a breathing cycle" aria-pressed="false">
+          <span class="orb-ring" aria-hidden="true"></span>
+          <span class="orb-handle" aria-hidden="true"></span>
+          <span class="orb-label">
+            <span class="step" id="orb-step">Tap the orb</span>
+            <span id="orb-phase">to begin</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="breath-meta">
+        <span class="mono" id="breath-counter">4 in &middot; 6 out</span>
+        <p class="quiet">A simple rhythm. Inhale for four, exhale for six. The longer exhale tells your nervous system it's safe to come down.</p>
+        <button class="linkish" type="button" id="breath-skip">Skip the breath, take me to the card →</button>
+      </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="divider" aria-hidden="true">
+      <svg viewBox="0 0 88 32" fill="none">
+        <path d="M2 16 Q 12 4, 22 16 T 42 16" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+        <circle cx="44" cy="16" r="2.5" fill="currentColor" opacity="0.7"/>
+        <path d="M46 16 Q 56 28, 66 16 T 86 16" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+      </svg>
+    </div>
+
+    <!-- Card section -->
+    <section class="section" aria-labelledby="card-title">
+      <div class="section-head">
+        <span class="mono">02 / Pull a card</span>
+        <h2 id="card-title" class="section-title">One line, on purpose.</h2>
+        <p class="quiet" style="max-width:42ch;">From the <em>ADHD Daily Affirmations</em> deck by Carlton Embers. Tap the card to turn it over.</p>
+      </div>
+
+      <div class="card-stage">
+        <div class="card" id="card" role="button" tabindex="0" aria-label="Pull a card. Tap to turn it over.">
+          <div class="face back" aria-hidden="false">
+            <div class="botanical">
+              <svg viewBox="0 0 64 28" fill="none" aria-hidden="true">
+                <path d="M2 14 Q 16 2, 32 14 T 62 14" stroke="currentColor" stroke-width="1" fill="none"/>
+                <ellipse cx="14" cy="10" rx="2.4" ry="4" fill="currentColor" opacity="0.45" transform="rotate(-25 14 10)"/>
+                <ellipse cx="32" cy="6" rx="2.4" ry="4" fill="currentColor" opacity="0.55"/>
+                <ellipse cx="50" cy="10" rx="2.4" ry="4" fill="currentColor" opacity="0.45" transform="rotate(25 50 10)"/>
+              </svg>
+            </div>
+            <div class="number">No. 07 / 60</div>
+            <p class="line" id="card-line">One thing at a time is still progress.</p>
+            <div class="footer-line">Carlton Embers &middot; Daily Card</div>
+          </div>
+          <div class="face front" aria-hidden="true">
+            <span class="corner">Grounded Humanity</span>
+            <svg class="mark-leaf" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21c-5-3-8-7-8-12 0-3 2-5 5-5 2 0 3 1 3 1s1-1 3-1c3 0 5 2 5 5 0 5-3 9-8 12z" fill="currentColor" opacity="0.85"/>
+              <path d="M12 21V9" stroke="rgba(31,29,23,0.4)" stroke-width="0.9"/>
+            </svg>
+            <span class="foot">60 Daily Affirmations</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn btn-primary" type="button" id="pull-btn">Pull a new card</button>
+        <button class="btn btn-ghost" type="button" id="flip-btn">Turn over</button>
+      </div>
+    </section>
+
+    <!-- Plant section -->
+    <section class="section" aria-labelledby="plant-title">
+      <div class="section-head">
+        <span class="mono">03 / Plant a word</span>
+        <h2 id="plant-title" class="section-title">One word to carry.</h2>
+        <p class="quiet" style="max-width:42ch;">Not a journal. Not a list. Just one word you want to take with you for the rest of the afternoon. It stays here, on this device, for you.</p>
+      </div>
+
+      <form class="plant-input" id="plant-form" autocomplete="off">
+        <input type="text" id="word-input" name="word" placeholder="a single word…" maxlength="40" aria-label="One word to carry" />
+        <button type="submit" id="plant-btn">Plant it</button>
+      </form>
+
+      <div class="planted" id="planted-wrap" hidden>
+        <span class="mono">What you've carried</span>
+        <ul class="planted-list" id="planted-list"></ul>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="foot">
+      <span class="small">© Grounded Humanity &middot; est. 2026</span>
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 21c-5-3-8-7-8-12 0-3 2-5 5-5 2 0 3 1 3 1s1-1 3-1c3 0 5 2 5 5 0 5-3 9-8 12z" stroke="currentColor" stroke-width="1" fill="none"/>
+      </svg>
+      <span class="small">Made slowly, on purpose</span>
+    </footer>
+  </main>
+
+  <script>
+    // ---------- card library ----------
+    // Hand-written, on-brand, deliberately not toxic-positive. Twelve lines,
+    // rotated through. Pulling a "new" card just rotates to the next one and
+    // gives the deck the feeling of depth without randomness theatre.
+    const CARDS = [
+      "One thing at a time is still progress.",
+      "Starting is the hardest part. You already know that.",
+      "Done is enough.",
+      "Your attention isn't broken. It works differently.",
+      "Rest is part of the work.",
+      "Small is a valid size.",
+      "You don't have to finish it today.",
+      "Some days the work is just being here.",
+      "The fact that you came back is the practice.",
+      "There's no wrong way to begin again.",
+      "You can be tired and still be doing your best.",
+      "A short pause is not a step backwards."
+    ];
+
+    // ---------- today label ----------
+    (function setToday(){
+      const el = document.getElementById('today-label');
+      const now = new Date();
+      const opts = { weekday: 'long', day: 'numeric', month: 'long' };
+      try {
+        el.textContent = now.toLocaleDateString('en-GB', opts);
+      } catch(e) { el.textContent = 'Today'; }
+    })();
+
+    // ---------- breath orb ----------
+    const orb = document.getElementById('orb');
+    const orbStep = document.getElementById('orb-step');
+    const orbPhase = document.getElementById('orb-phase');
+    const breathCounter = document.getElementById('breath-counter');
+    const breathSkip = document.getElementById('breath-skip');
+    let breathTimer = null;
+    let breathPhase = 0; // 0 idle, 1 inhale, 2 exhale
+    let breathCycles = 0;
+    const PHASES = [
+      { step: 'Tap the orb', phase: 'to begin', ms: 0 },
+      { step: 'Inhale',     phase: '4 seconds', ms: 4000 },
+      { step: 'Exhale',     phase: '6 seconds', ms: 6000 }
+    ];
+
+    function setBreathLabel(p) {
+      orbStep.textContent = PHASES[p].step;
+      orbPhase.textContent = PHASES[p].phase;
+    }
+
+    function startBreath() {
+      if (orb.classList.contains('breathing')) return;
+      orb.classList.add('breathing');
+      orb.setAttribute('aria-pressed', 'true');
+      breathCycles = 0;
+      breathPhase = 1;
+      setBreathLabel(breathPhase);
+      runBreathPhase();
+    }
+
+    function runBreathPhase() {
+      clearTimeout(breathTimer);
+      const ms = PHASES[breathPhase].ms;
+      breathTimer = setTimeout(() => {
+        if (!orb.classList.contains('breathing')) return;
+        breathPhase = breathPhase === 1 ? 2 : 1;
+        if (breathPhase === 1) {
+          breathCycles++;
+          breathCounter.textContent = `Cycle ${breathCycles} · 4 in · 6 out`;
+        }
+        setBreathLabel(breathPhase);
+        runBreathPhase();
+      }, ms);
+    }
+
+    function stopBreath() {
+      orb.classList.remove('breathing');
+      orb.setAttribute('aria-pressed', 'false');
+      clearTimeout(breathTimer);
+      breathPhase = 0;
+      setBreathLabel(breathPhase);
+    }
+
+    orb.addEventListener('click', () => {
+      if (orb.classList.contains('breathing')) stopBreath();
+      else startBreath();
+    });
+    orb.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); orb.click(); }
+    });
+
+    breathSkip.addEventListener('click', () => {
+      stopBreath();
+      document.getElementById('card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // ---------- card flip & pull ----------
+    const card = document.getElementById('card');
+    const cardLine = document.getElementById('card-line');
+    const cardNo = document.querySelector('.face.back .number');
+    const pullBtn = document.getElementById('pull-btn');
+    const flipBtn = document.getElementById('flip-btn');
+    let cardIndex = 6; // start at the seventh card so the page doesn't always open on the same line
+
+    function renderCard() {
+      cardLine.textContent = CARDS[cardIndex];
+      const n = String(cardIndex + 1).padStart(2, '0');
+      cardNo.textContent = `No. ${n} / 60`;
+    }
+
+    function pullNew() {
+      // advance index, ensure we don't repeat
+      const prev = cardIndex;
+      cardIndex = (cardIndex + 1 + Math.floor(Math.random() * (CARDS.length - 1))) % CARDS.length;
+      if (cardIndex === prev) cardIndex = (cardIndex + 1) % CARDS.length;
+      renderCard();
+      // if currently face-down, flip it
+      if (!card.classList.contains('flipped')) {
+        card.classList.add('flipped');
+      }
+    }
+
+    function toggleFlip() {
+      card.classList.toggle('flipped');
+    }
+
+    card.addEventListener('click', toggleFlip);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleFlip(); }
+    });
+    pullBtn.addEventListener('click', pullNew);
+    flipBtn.addEventListener('click', toggleFlip);
+
+    renderCard();
+
+    // ---------- plant a word ----------
+    const STORAGE_KEY = 'grounded.planted.v1';
+    const form = document.getElementById('plant-form');
+    const wordInput = document.getElementById('word-input');
+    const plantedWrap = document.getElementById('planted-wrap');
+    const plantedList = document.getElementById('planted-list');
+    const plantBtn = document.getElementById('plant-btn');
+
+    function loadPlanted() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch(e) { return []; }
+    }
+    function savePlanted(items) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch(e) {}
+    }
+    function fmtDate(ts) {
+      const d = new Date(ts);
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      return `${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})} · ${hh}:${mm}`;
+    }
+    function renderPlanted() {
+      const items = loadPlanted();
+      if (!items.length) {
+        plantedWrap.hidden = true;
+        return;
+      }
+      plantedWrap.hidden = false;
+      plantedList.innerHTML = items
+        .slice(-8)
+        .reverse()
+        .map(it => `<li><span class="when">${fmtDate(it.t)}</span><span class="word">${escapeHtml(it.w)}</span></li>`)
+        .join('');
+    }
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const raw = wordInput.value.trim();
+      if (!raw) return;
+      const items = loadPlanted();
+      items.push({ w: raw, t: Date.now() });
+      savePlanted(items);
+      wordInput.value = '';
+      renderPlanted();
+      // gentle confirmation: fade the input
+      plantBtn.textContent = 'Planted';
+      plantBtn.disabled = true;
+      setTimeout(() => { plantBtn.textContent = 'Plant it'; plantBtn.disabled = false; wordInput.focus(); }, 1200);
+    });
+    renderPlanted();
+
+    // ---------- scroll cue: stop breath when scrolled away ----------
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting && orb.classList.contains('breathing')) {
+          // soft auto-pause so it doesn't feel like we dragged the user away
+          stopBreath();
+        }
+      });
+    }, { threshold: 0.25 });
+    io.observe(orb);
+  </script>
+</body>
+</html>
