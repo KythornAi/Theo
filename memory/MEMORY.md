@@ -1,19 +1,17 @@
-EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ - read _index.md first. Detailed product, market, status, decision, research, cron, and tool facts live in vault files.
+EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ - read _index.md first. Product, market, status, decision, research, cron, and tool facts live in vault files.
 §
-Platform: Pop OS laptop (/home/kylemoore/). Hermes at ~/.hermes/, binary ~/.local/bin/hermes. Workspace: ~/theo/ with INDEX.md. Brain vault: ~/Brain/.
+Platform: Pop OS laptop (/home/kylemoore/). Hermes at ~/.hermes/. Workspace: ~/theo/ with INDEX.md. Brain vault: ~/Brain/.
 §
-Tool strategy: Codex/gpt-5.5 for critical crons/synthesis; TinyFish first; Perplexity for cited synthesis; Firecrawl for crawls/failures; agy for multimodal.
+Tool strategy: gpt-5.5 via ChatGPT Plus/OpenAI API for critical crons and synthesis; TinyFish first; Perplexity for cited synthesis; Firecrawl for complex crawls; agy for screenshot/image/video understanding.
 §
-Protocol: Theo researches, Kyle chooses, Claude builds/drafts, Theo reviews, Kyle final-calls.
+Protocol: Theo researches, Kyle chooses, Claude builds/drafts, Theo reviews, Kyle final-calls. HERMES_INBOX carries async Theo↔Claude handoffs.
 §
 Brain vault: PNP hub ~/Brain/01_Projects/Paper and Pixels/; Theo memory ~/Brain/03_Resources/Theo/; sync via git.
 §
-Memory files: live canonical ~/.hermes/memories/MEMORY.md and git mirror ~/theo/memory/MEMORY.md stay aligned. USER.md mirrored too; watchdog at ~/theo/scripts/memory-watchdog.sh.
+Memory files: live canonical ~/.hermes/memories/MEMORY.md and git mirror ~/theo/memory/MEMORY.md stay aligned. USER.md is mirrored too; watchdog at ~/theo/scripts/memory-watchdog.sh.
 §
-PNP guardrails: Daily Reset is flagship and never free; Task Paralysis Rescue is tabled. Avoid hidden AI promises, arbitrary-input advice without real AI, medical/therapy claims, and unclear save/button logic.
+PNP guardrails: Daily Reset is flagship and never free; Task Paralysis Rescue is tabled. Avoid hidden AI promises, medical/therapy claims, and unclear save/button logic.
 §
-Grounded Humanity: Carlton Embers pen name; GH brand, PNP shop, Gumroad first. First offer is Mindful, Not Mythical ebook + 60 ADHD cards; use practical no-woo mindfulness framing and avoid medical claims.
+Grounded Humanity: Carlton Embers pen name; GH brand, PNP shop, Gumroad first. First offer is Mindful, Not Mythical ebook + 60 ADHD cards; practical no-woo mindfulness framing; avoid medical/therapy/cure claims.
 §
-GH pending: Starling/PayPal/Gumroad setup, card/journal zip review, and NotebookLM asset review.
-§
-Step 3.7 Flash trial started 2026-05-31 for chat/creative/sandbox; critical crons stay on Codex/gpt-5.5 until 2026-06-03 review.
+GH launch bottlenecks: Gumroad setup, affirmation deck copy/export pass, one ebook+cards mockup, Canva/journal ZIP polish, and asset artifact review.

@@ -1,7 +1,9 @@
-Kyle: ChatGPT Plus + Claude.ai; local LLMs for low-stakes overflow. PNP: £90/mo target, proven AI-operable low-fulfilment ideas, traffic/ROI validated first. Avoid podcast briefs, n8n/Make bundles, dev packs; freelancer checker needs UK/GDPR caution.
+Kyle: ChatGPT Plus + Claude.ai; local LLMs for low-stakes overflow. PNP target: £90/mo through proven AI-operable, low-fulfilment ideas with traffic/ROI validation first. Avoid podcast briefs, n8n/Make bundles, dev packs; freelancer checker needs UK/GDPR caution.
 §
-Status/check questions = inspect+report only; change requests = ask first unless explicit. Hermes/WebUI updates need approval before install/restart. Cron jobs send short Telegram TLDRs (Obsidian/Claude sync can lag).
+Status/check means inspect+report; change requests need approval unless explicit. Hermes/WebUI updates need approval before install/restart. Cron jobs send concise Telegram TLDRs; Obsidian/Claude sync can lag.
 §
-Kyle prefers Telegram daily-driver UI; terminal/TUI for maintenance/log detail. Concise, needle-moving text by default; voice on request. Theo = ambitious proactive co-builder: revenue-relevant execution, fewer permission asks, no micro-task framing. Trusts tooling self-maintenance if Claude/Kyle access is safe. Daily Reset is never free.
+Kyle prefers Telegram for daily use; concise, needle-moving replies; voice on request. Theo should be an ambitious proactive co-builder: produce revenue-relevant artefacts, avoid micro-task framing, use multi-agent help where useful, and sandbox model/tool trials.
 §
 Save bug fixes/diagnostics to memory proactively — log what was tried and why, not just the fix.
+§
+Kyle strongly prefers ChatGPT Plus via Codex/OpenAI OAuth for model access, not OpenRouter billing or Step 3.7 Flash.
