@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 90-Second Wave Rider - Mindful, Not Mythical</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF8F5;
+            color: #2E2A25;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Fluid CSS waves animations */
+        @keyframes waveFloat {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animated-wave {
+            animation: waveFloat 8s ease-in-out infinite;
+        }
+
+        /* Smooth page fades */
+        .page-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hide scrollbars but preserve functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-100">
+
+    <!-- HEADER -->
+    <header class="border-b border-stone-200/80 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-[#112D24] flex items-center justify-center text-white font-bold text-sm shadow-md">W</div>
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-[#112D24] font-bold block">Somatic Reset Companion</span>
+                    <span class="font-bold text-stone-800 text-sm tracking-tight">Mindful, Not Mythical</span>
+                </div>
+            </div>
+            
+            <!-- Streak Indicator Badge -->
+            <div class="flex items-center space-x-2 bg-[#E8F0EC] px-3 py-1.5 rounded-full text-xs font-semibold text-[#112D24] border border-[#D1E7DD]">
+                <svg class="w-4 h-4 text-emerald-700" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                </svg>
+                <span id="streak-text">Streak: 0 Days</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE WORKSPACE -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8 md:py-12 flex flex-col justify-center">
+
+        <!-- STEP 1: NAME THE WAVE -->
+        <div id="step-pane-1" class="space-y-8 page-fade-in">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="text-xs font-bold text-[#112D24] uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Step 1: Affect Labeling</span>
+                <h1 class="serif text-3xl md:text-4xl font-semibold tracking-tight text-stone-900">Name the Emotional Wave</h1>
+                <p class="text-stone-600 text-sm md:text-base">
+                    Based on Chapter 2, emotional granularity helps transition the brain from alarms to rational footholds. Choose the label that matches your current state closest:
+                </p>
+            </div>
+
+            <!-- Emotion Grid selection -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-2xl mx-auto" id="emotion-grid">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <div class="flex justify-center pt-4">
+                <button onclick="advanceToStep(2)" id="btn-next-1" disabled class="px-8 py-3.5 bg-stone-300 text-stone-500 rounded-xl text-sm font-bold shadow-sm transition-all cursor-not-allowed flex items-center gap-2">
+                    <span>Continue to Body Map</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- STEP 2: LOCATE THE SENSATION -->
+        <div id="step-pane-2" class="space-y-8 page-fade-in hidden">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="text-xs font-bold text-emerald-800 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Step 2: Somatic Anchor</span>
+                <h1 class="serif text-3xl md:text-4xl font-semibold tracking-tight text-stone-900">Where does it land?</h1>
+                <p class="text-stone-600 text-sm md:text-base">
+                    Based on Chapter 5, stress manifests in physical patterns. Select the primary hotspot in your body where you feel this sensation most intensely.
+                </p>
+            </div>
+
+            <!-- Interactivity Area with body map side-by-side -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 max-w-2xl mx-auto bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                
+                <!-- Interactive SVG Outline of Human Body -->
+                <div class="w-48 h-80 flex-shrink-0 relative">
+                    <svg viewBox="0 0 100 220" class="w-full h-full text-stone-300 stroke-stone-400 stroke-1" fill="none" id="somatic-body-svg">
+                        <!-- Head / Forehead -->
+                        <path id="body-part-forehead" onclick="selectBodyPart('forehead')" class="cursor-pointer hover:fill-emerald-100 hover:stroke-emerald-600 transition-colors" d="M42,20 C42,10 58,10 58,20 C58,24 55,28 50,28 C45,28 42,24 42,20 Z" />
+                        <!-- Jaw / Neck -->
+                        <path id="body-part-jaw" onclick="selectBodyPart('jaw')" class="cursor-pointer hover:fill-emerald-100 hover:stroke-emerald-600 transition-colors" d="M46,28 L54,28 L53,35 L47,35 Z" />
+                        <!-- Shoulders -->
+                        <path id="body-part-shoulders" onclick="selectBodyPart('shoulders')" class="cursor-pointer hover:fill-emerald-100 hover:stroke-emerald-600 transition-colors" d="M30,42 L70,42 L65,52 L35,52 Z" />
+                        <!-- Chest -->
+                        <path id="body-part-chest" onclick="selectBodyPart('chest')" class="cursor-pointer hover:fill-emerald-100 hover:stroke-emerald-600 transition-colors" d="M35,52 L65,52 L60,85 L40,85 Z" />
+                        <!-- Stomach -->
+                        <path id="body-part-stomach" onclick="selectBodyPart('stomach')" class="cursor-pointer hover:fill-emerald-100 hover:stroke-emerald-600 transition-colors" d="M40,85 L60,85 L58,120 L42,120 Z" />
+                        <!-- General Body line for visual context -->
+                        <path class="pointer-events-none" d="M30,42 L24,100 M70,42 L76,100 M42,120 L35,210 M58,120 L65,210" stroke-linecap="round"/>
+                    </svg>
+
+                    <!-- Overlay markers on map -->
+                    <div id="marker-forehead" class="absolute top-[8%] left-[46%] w-2.5 h-2.5 bg-rose-500 rounded-full border border-white hidden animate-ping"></div>
+                    <div id="marker-jaw" class="absolute top-[14%] left-[46%] w-2.5 h-2.5 bg-rose-500 rounded-full border border-white hidden animate-ping"></div>
+                    <div id="marker-shoulders" class="absolute top-[21%] left-[46%] w-2.5 h-2.5 bg-rose-500 rounded-full border border-white hidden animate-ping"></div>
+                    <div id="marker-chest" class="absolute top-[31%] left-[46%] w-2.5 h-2.5 bg-rose-500 rounded-full border border-white hidden animate-ping"></div>
+                    <div id="marker-stomach" class="absolute top-[46%] left-[46%] w-2.5 h-2.5 bg-rose-500 rounded-full border border-white hidden animate-ping"></div>
+                </div>
+
+                <!-- Descriptive Sensation Panels -->
+                <div class="flex-grow space-y-4 text-center md:text-left">
+                    <h3 class="font-bold text-stone-800 text-sm uppercase tracking-wider">Select Location</h3>
+                    <div class="grid grid-cols-2 gap-2" id="body-part-selectors">
+                        <button onclick="selectBodyPart('forehead')" id="btn-part-forehead" class="px-3 py-2 text-xs font-semibold bg-stone-50 border border-stone-200 rounded-xl hover:bg-stone-100 transition-colors">Forehead/Brow Tension</button>
+                        <button onclick="selectBodyPart('jaw')" id="btn-part-jaw" class="px-3 py-2 text-xs font-semibold bg-stone-50 border border-stone-200 rounded-xl hover:bg-stone-100 transition-colors">Jaw Clenching</button>
+                        <button onclick="selectBodyPart('shoulders')" id="btn-part-shoulders" class="px-3 py-2 text-xs font-semibold bg-stone-50 border border-stone-200 rounded-xl hover:bg-stone-100 transition-colors">Shoulders creeping up</button>
+                        <button onclick="selectBodyPart('chest')" id="btn-part-chest" class="px-3 py-2 text-xs font-semibold bg-stone-50 border border-stone-200 rounded-xl hover:bg-stone-100 transition-colors">Chest Tightness</button>
+                        <button onclick="selectBodyPart('stomach')" id="btn-part-stomach" class="px-3 py-2 text-xs font-semibold bg-stone-50 border border-stone-200 rounded-xl hover:bg-stone-100 transition-colors">Stomach Butterfly/Knot</button>
+                    </div>
+                    <p id="somatic-instruction" class="text-xs text-stone-500 italic mt-2">
+                        Tap the model or click a layout option to select your focus zone.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Navigation Actions -->
+            <div class="flex justify-center items-center gap-4">
+                <button onclick="backToStep(1)" class="px-5 py-3.5 border border-stone-200 text-stone-600 rounded-xl text-sm font-semibold hover:bg-stone-100 transition-colors">
+                    Back
+                </button>
+                <button onclick="advanceToStep(3)" id="btn-next-2" disabled class="px-8 py-3.5 bg-stone-300 text-stone-500 rounded-xl text-sm font-bold shadow-sm transition-all cursor-not-allowed flex items-center gap-2">
+                    <span>Ride the 90s Wave</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- STEP 3: RIDE THE WAVE (BREATHING ENGINE) -->
+        <div id="step-pane-3" class="space-y-8 page-fade-in hidden">
+            
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <span class="text-xs font-bold text-emerald-800 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Step 3: Vagal Modulation</span>
+                <h1 class="serif text-3xl md:text-4xl font-semibold tracking-tight text-stone-900">Let it Rise, Let it Fall</h1>
+                <p id="breathing-session-focus" class="text-stone-500 text-xs md:text-sm">
+                    Breathing to target anxiety felt in Chest
+                </p>
+            </div>
+
+            <!-- Breathing Visualization Box -->
+            <div class="bg-white border border-stone-200 p-8 rounded-3xl shadow-sm text-center relative overflow-hidden max-w-md mx-auto">
+                
+                <!-- Animated Waves Box -->
+                <div class="my-6 flex flex-col justify-center items-center h-52 relative">
+                    
+                    <!-- Sound Toggle Widget -->
+                    <div class="absolute top-0 right-0 z-10">
+                        <button onclick="toggleAudio()" id="btn-sound" class="flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 rounded-full border border-stone-200 text-[10px] font-bold text-stone-500 transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="sound-icon-svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                            </svg>
+                            <span id="sound-label">Bells: Off</span>
+                        </button>
+                    </div>
+
+                    <!-- Ambient Ripple Circle -->
+                    <div id="vagal-breather-bubble" class="w-32 h-32 rounded-full border-4 border-emerald-800/10 bg-emerald-800/5 flex flex-col justify-center items-center transition-all duration-[1000ms] ease-in-out relative">
+                        <span id="breather-phase-text" class="text-emerald-900 text-xs font-bold uppercase tracking-widest">Inhale</span>
+                        <span id="breather-timer" class="text-3xl font-extrabold text-emerald-950">4s</span>
+                        
+                        <!-- Internal decorative flowing wave (Simulated with simple SVG) -->
+                        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] h-6 rounded-b-full">
+                            <svg class="relative block w-[200%] h-full text-emerald-800/10 animated-wave" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                                <path d="M91,80 C310,18 450,113 700,17 C900,-50 1005,91 1200,80 L1200,120 L0,120 Z" fill="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Clock Progress Bar -->
+                <div class="space-y-2 max-w-sm mx-auto">
+                    <div class="flex justify-between text-xs text-stone-400 font-medium">
+                        <span id="remaining-clock-lbl">Remaining: 90s</span>
+                        <span id="percentage-clock-lbl">0%</span>
+                    </div>
+                    <div class="h-1.5 bg-stone-100 rounded-full overflow-hidden">
+                        <div id="breathing-progress-bar" class="h-full bg-[#112D24] transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Dynamic Breather Controls -->
+            <div class="flex flex-col items-center gap-4">
+                <div class="flex items-center justify-center space-x-3">
+                    <button onclick="toggleBreathingPause()" id="btn-breather-pause" class="w-36 py-3 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-sm font-bold shadow-md transition-all flex items-center justify-center gap-2">
+                        <svg id="breather-pause-svg" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span id="breather-pause-label">Pause</span>
+                    </button>
+                    <button onclick="abortBreathingSession()" class="px-5 py-3 border border-stone-200 bg-white hover:bg-stone-100 text-stone-600 rounded-xl text-sm font-semibold transition-all">
+                        Reset
+                    </button>
+                </div>
+                <button onclick="restartWorkflow()" class="text-xs text-stone-500 hover:text-stone-800 transition-colors font-bold tracking-wide uppercase flex items-center gap-1 bg-stone-100/80 hover:bg-stone-200/50 px-4 py-2 rounded-lg border border-stone-200/40">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    <span>Stop & Exit to Menu</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- STEP 4: WAVE RIDER COMPLETION -->
+        <div id="step-pane-4" class="space-y-8 page-fade-in hidden text-center max-w-xl mx-auto">
+            
+            <div class="space-y-4">
+                <div class="w-20 h-20 bg-[#112D24] text-white flex items-center justify-center rounded-full mx-auto shadow-xl shadow-emerald-900/10">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                
+                <h1 class="serif text-3xl md:text-4xl font-semibold text-stone-900">You Rode the Wave</h1>
+                <p class="text-stone-600 text-sm md:text-base leading-relaxed">
+                    You chose to sit with discomfort rather than suppress it. The nervous system requires roughly 90 seconds to process emotional chemistry when not fed by rumination.
+                </p>
+            </div>
+
+            <!-- The Chapter Affirmation Card -->
+            <div class="bg-white border border-stone-200/80 p-6 rounded-2xl shadow-sm text-left space-y-4">
+                
+                <div class="flex justify-between items-center">
+                    <span class="text-[9px] font-bold text-amber-800 uppercase tracking-widest bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100 inline-block">Chapter 8 Wise step Invitation</span>
+                    <span id="completion-summary-details" class="text-xs text-stone-400 font-semibold">Anxiety • Chest Tension</span>
+                </div>
+
+                <p id="completion-affirmation-text" class="serif text-lg text-[#112D24] italic font-medium">
+                    "Drink a glass of water entirely away from screens, then choose the single next kind action."
+                </p>
+
+                <div class="h-px bg-stone-100 w-full"></div>
+                <p class="text-[11px] text-stone-400 font-medium">
+                    Your daily mindfulness streak has been updated! Consistency shapes new habit loops over time.
+                </p>
+            </div>
+
+            <!-- Return Actions Row -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button onclick="restartWorkflow()" class="px-6 py-3.5 bg-emerald-800 hover:bg-emerald-900 text-white text-sm font-bold rounded-xl shadow-md transition-all">
+                    Return to Main Menu
+                </button>
+                <button onclick="copyAffirmation()" class="px-6 py-3.5 border border-stone-200 bg-white text-stone-600 text-sm font-semibold rounded-xl hover:bg-stone-50 transition-all flex items-center justify-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10v6m0 0l-3-3m3 3l3-3"/></svg>
+                    Copy Action Plan
+                </button>
+            </div>
+
+            <!-- Pop up toast banner -->
+            <div id="copy-toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-stone-900 text-stone-100 text-xs px-4 py-2 rounded-full font-medium transition-all opacity-0 pointer-events-none scale-95 shadow-lg">
+                Action step copied to clipboard!
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-100 border-t border-stone-200/60 py-8 text-center mt-12">
+        <div class="max-w-4xl mx-auto px-4 space-y-3">
+            <p class="text-xs text-stone-500 font-medium">
+                © 2026 Grounded Humanity Press. Companion software for "Mindful, Not Mythical: Everyday Practices for Gratitude, Calm, and Clarity."
+            </p>
+            <div class="flex justify-center space-x-6 text-xs text-stone-400">
+                <a href="#" class="hover:text-[#112D24] transition-colors">Etsy Shop Companion</a>
+                <span>•</span>
+                <a href="#" class="hover:text-[#112D24] transition-colors">Privacy Shield (All inputs remain local)</a>
+                <span>•</span>
+                <a href="#" class="hover:text-[#112D24] transition-colors">Support & Books</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- APP LOGIC -->
+    <script>
+        // System Data & Preset Collections
+        const GRANULAR_EMOTIONS = [
+            { name: "Scattered / Jittery", code: "scattered", category: "Anxiety", desc: "Attention pulling in ten directions at once." },
+            { name: "Depleted / Flat", code: "depleted", category: "Burnout", desc: "Running on empty, lack of physical reserves." },
+            { name: "Boundary Crossed", code: "boundary-crossed", category: "Anger", desc: "Feeling resentful, unheard, or overly compromised." },
+            { name: "Ruminating / Looped", code: "ruminating", category: "Anxiety", desc: "Mind repeating scenarios like an endless tape." },
+            { name: "Overwhelmed / Frozen", code: "overwhelmed", category: "Freeze", desc: "Shutting down, sitting in cognitive static." },
+            { name: "Isolated / Heavy", code: "isolated", category: "Sadness", desc: "Carrying a difficult load entirely by yourself." }
+        ];
+
+        const WISE_STEPS = [
+            "Drink a full glass of cold water entirely away from your screens.",
+            "Put your phone in a drawer or another room for the next ten minutes.",
+            "Take three double-inhales and slow extended exhales (physiological sighs).",
+            "Stand up and push against a wall with your arms for 10 seconds, then roll your shoulders.",
+            "Write a simple, two-sentence thank you text to someone you appreciate.",
+            "Gaze out the window at the farthest visible object for exactly 30 seconds.",
+            "Step outdoors and feel the outside air temperature on your bare face.",
+            "Drop your shoulders by 10% and let your tongue rest away from the roof of your mouth.",
+            "Check your schedule and identify one 'Yes' you can turn into a kind 'No'."
+        ];
+
+        // Active Application State properties
+        let appState = {
+            streak: 0,
+            lastCompleted: null,
+            audioEnabled: false,
+            
+            // Current selection records
+            selectedEmotion: null,
+            selectedBodyPart: null,
+            
+            // Breather timing mechanics
+            secondsRemaining: 90,
+            breathTimer: 4, // start with 4s inhale
+            breathPhase: 'inhale', // inhale (4s), exhale (6s)
+            isPaused: false,
+            timerIntervalId: null
+        };
+
+        // Synthesizer Web Audio API
+        let audioCtx = null;
+
+        // Run on startup
+        window.addEventListener('load', () => {
+            initializeLocalDatabase();
+            renderEmotionGrid();
+            updateStreakBadge();
+        });
+
+        // Offline storage loaders
+        function initializeLocalDatabase() {
+            const storedStreak = localStorage.getItem('mnm_wave_streak');
+            const storedLastComp = localStorage.getItem('mnm_wave_last_completed');
+
+            if (storedStreak) {
+                appState.streak = parseInt(storedStreak);
+            }
+            if (storedLastComp) {
+                appState.lastCompleted = storedLastComp;
+                
+                // Reset streak if last completion was over 48 hours ago
+                const lastDate = new Date(storedLastComp);
+                const today = new Date();
+                const diffTime = Math.abs(today - lastDate);
+                const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                
+                if (diffDays > 2) {
+                    appState.streak = 0;
+                    localStorage.setItem('mnm_wave_streak', 0);
+                }
+            }
+        }
+
+        function renderEmotionGrid() {
+            const grid = document.getElementById('emotion-grid');
+            grid.innerHTML = '';
+
+            GRANULAR_EMOTIONS.forEach(emo => {
+                const button = document.createElement('button');
+                button.id = `btn-emotion-${emo.code}`;
+                button.onclick = () => selectEmotion(emo);
+                button.className = "text-left p-4 bg-white border border-stone-200 rounded-xl hover:border-emerald-800 transition-all shadow-sm hover:shadow-md flex flex-col justify-between h-32 relative overflow-hidden group";
+                
+                button.innerHTML = `
+                    <div class="space-y-1">
+                        <span class="text-[9px] font-bold text-stone-400 uppercase tracking-wider block">${emo.category}</span>
+                        <h3 class="font-bold text-sm text-stone-800 group-hover:text-emerald-900 transition-colors">${emo.name}</h3>
+                        <p class="text-[10px] text-stone-500 leading-snug">${emo.desc}</p>
+                    </div>
+                `;
+                grid.appendChild(button);
+            });
+        }
+
+        function updateStreakBadge() {
+            const streakEl = document.getElementById('streak-text');
+            streakEl.textContent = `Streak: ${appState.streak} Day${appState.streak !== 1 ? 's' : ''}`;
+        }
+
+        // Handle step selection highlighting
+        function selectEmotion(emo) {
+            appState.selectedEmotion = emo;
+
+            // Highlight chosen card
+            GRANULAR_EMOTIONS.forEach(e => {
+                const el = document.getElementById(`btn-emotion-${e.code}`);
+                if (e.code === emo.code) {
+                    el.className = "text-left p-4 bg-emerald-50 border-2 border-[#112D24] rounded-xl transition-all shadow-sm flex flex-col justify-between h-32 relative overflow-hidden group";
+                } else {
+                    el.className = "text-left p-4 bg-white border border-stone-200 rounded-xl hover:border-emerald-800 transition-all shadow-sm hover:shadow-md flex flex-col justify-between h-32 relative overflow-hidden group";
+                }
+            });
+
+            // Activate continue button
+            const nextBtn = document.getElementById('btn-next-1');
+            nextBtn.disabled = false;
+            nextBtn.className = "px-8 py-3.5 bg-[#112D24] hover:bg-[#1a3d31] text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer";
+        }
+
+        function selectBodyPart(part) {
+            appState.selectedBodyPart = part;
+
+            // Highlight button layout selectors
+            const parts = ['forehead', 'jaw', 'shoulders', 'chest', 'stomach'];
+            parts.forEach(p => {
+                const btn = document.getElementById(`btn-part-${p}`);
+                const svgPart = document.getElementById(`body-part-${p}`);
+                const marker = document.getElementById(`marker-${p}`);
+
+                if (p === part) {
+                    btn.className = "px-3 py-2 text-xs font-semibold bg-[#112D24] border border-[#112D24] text-white rounded-xl transition-colors";
+                    svgPart.style.fill = "rgba(16, 185, 129, 0.3)";
+                    svgPart.style.stroke = "#10b981";
+                    marker.classList.remove('hidden');
+                } else {
+                    btn.className = "px-3 py-2 text-xs font-semibold bg-stone-50 border border-stone-200 rounded-xl hover:bg-stone-100 transition-colors text-stone-700";
+                    svgPart.style.fill = "none";
+                    svgPart.style.stroke = "currentColor";
+                    marker.classList.add('hidden');
+                }
+            });
+
+            // Activate step 2 continue button
+            const nextBtn = document.getElementById('btn-next-2');
+            nextBtn.disabled = false;
+            nextBtn.className = "px-8 py-3.5 bg-[#112D24] hover:bg-[#1a3d31] text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer";
+        }
+
+        // Navigation Stepper transitions
+        function advanceToStep(stepNum) {
+            // Hide all steps
+            document.getElementById('step-pane-1').classList.add('hidden');
+            document.getElementById('step-pane-2').classList.add('hidden');
+            document.getElementById('step-pane-3').classList.add('hidden');
+            document.getElementById('step-pane-4').classList.add('hidden');
+
+            // Show active step
+            document.getElementById(`step-pane-${stepNum}`).classList.remove('hidden');
+
+            if (stepNum === 3) {
+                // Focus context text setup
+                const detailsStr = `Breathing to target ${appState.selectedEmotion.name} felt in the ${appState.selectedBodyPart.charAt(0).toUpperCase() + appState.selectedBodyPart.slice(1)}`;
+                document.getElementById('breathing-session-focus').textContent = detailsStr;
+                startBreathingTimer();
+            }
+        }
+
+        function backToStep(stepNum) {
+            document.getElementById('step-pane-1').classList.add('hidden');
+            document.getElementById('step-pane-2').classList.add('hidden');
+            document.getElementById('step-pane-3').classList.add('hidden');
+            document.getElementById('step-pane-4').classList.add('hidden');
+
+            document.getElementById(`step-pane-${stepNum}`).classList.remove('hidden');
+        }
+
+        // Soft tibetan bowl chime builder (Client Side synthesis)
+        function triggerBowlChime() {
+            if (!appState.audioEnabled) return;
+
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const now = audioCtx.currentTime;
+                
+                // Deep singing bowl frequency structure
+                const fundamental = 164.81; // E3 frequency (Grounding tone)
+                const harmonic1 = 329.63;   // E4 harmonic
+                const harmonic2 = 415.30;   // G#4 harmonic (Major warmth interval)
+
+                // Osc 1
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = "sine";
+                osc1.frequency.setValueAtTime(fundamental, now);
+                gain1.gain.setValueAtTime(0.2, now);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 4);
+
+                // Osc 2
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = "sine";
+                osc2.frequency.setValueAtTime(harmonic1, now);
+                gain2.gain.setValueAtTime(0.1, now);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 3);
+
+                // Filter to keep sound warm & round
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = "lowpass";
+                filter.frequency.setValueAtTime(600, now);
+
+                // Connections
+                osc1.connect(gain1);
+                osc2.connect(gain2);
+                gain1.connect(filter);
+                gain2.connect(filter);
+                filter.connect(audioCtx.destination);
+
+                // Play
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + 4);
+                osc2.stop(now + 4);
+
+            } catch (err) {
+                console.warn("Audio Context blocked or unsupported:", err);
+            }
+        }
+
+        function toggleAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            appState.audioEnabled = !appState.audioEnabled;
+
+            const btn = document.getElementById('btn-sound');
+            const label = document.getElementById('sound-label');
+            const svgIcon = document.getElementById('sound-icon-svg');
+
+            if (appState.audioEnabled) {
+                label.textContent = "Bells: On";
+                btn.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+                btn.classList.remove('bg-stone-50', 'text-stone-500');
+                
+                // Warm active feedback wave chime
+                triggerBowlChime();
+            } else {
+                label.textContent = "Bells: Off";
+                btn.classList.remove('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+                btn.classList.add('bg-stone-50', 'text-stone-500');
+            }
+        }
+
+        function startBreathingTimer() {
+            appState.secondsRemaining = 90;
+            appState.breathTimer = 4;
+            appState.breathPhase = 'inhale';
+            appState.isPaused = false;
+
+            updateBreathingUI();
+            triggerBowlChime();
+
+            if (appState.timerIntervalId) clearInterval(appState.timerIntervalId);
+            appState.timerIntervalId = setInterval(tickBreathingSession, 1000);
+        }
+
+        function updateBreathingUI() {
+            const bubble = document.getElementById('vagal-breather-bubble');
+            const phaseLabel = document.getElementById('breather-phase-text');
+            const timerLabel = document.getElementById('breather-timer');
+
+            // Set numeric duration
+            timerLabel.textContent = `${appState.breathTimer}s`;
+
+            // Adjust scale transitions cleanly on inhalation/exhalation phases
+            if (appState.breathPhase === 'inhale') {
+                phaseLabel.textContent = "Inhale";
+                bubble.style.transform = `scale(${1.2 - (appState.breathTimer * 0.04)})`;
+                bubble.style.borderColor = "rgba(16, 185, 129, 0.4)";
+                bubble.style.backgroundColor = "rgba(16, 185, 129, 0.05)";
+            } else {
+                phaseLabel.textContent = "Exhale";
+                bubble.style.transform = `scale(${0.85 + (appState.breathTimer * 0.05)})`;
+                bubble.style.borderColor = "rgba(110, 231, 183, 0.2)";
+                bubble.style.backgroundColor = "rgba(242, 245, 243, 0.6)";
+            }
+        }
+
+        function tickBreathingSession() {
+            if (appState.isPaused) return;
+
+            // Tick total remaining time limit
+            appState.secondsRemaining--;
+            
+            // Sync progress bar
+            const pct = Math.round(((90 - appState.secondsRemaining) / 90) * 100);
+            document.getElementById('remaining-clock-lbl').textContent = `Remaining: ${appState.secondsRemaining}s`;
+            document.getElementById('percentage-clock-lbl').textContent = `${pct}%`;
+            document.getElementById('breathing-progress-bar').style.width = `${pct}%`;
+
+            // Tick phase timer
+            appState.breathTimer--;
+
+            if (appState.breathTimer <= 0) {
+                // Swap breathing phases (Inhale 4s -> Exhale 6s)
+                if (appState.breathPhase === 'inhale') {
+                    appState.breathPhase = 'exhale';
+                    appState.breathTimer = 6;
+                } else {
+                    appState.breathPhase = 'inhale';
+                    appState.breathTimer = 4;
+                }
+                
+                // Sound chime at inflection points
+                triggerBowlChime();
+            }
+
+            updateBreathingUI();
+
+            if (appState.secondsRemaining <= 0) {
+                // Complete successfully!
+                clearInterval(appState.timerIntervalId);
+                triggerBreathingCompletion();
+            }
+        }
+
+        // Pause / Resume controllers
+        function toggleBreathingPause() {
+            appState.isPaused = !appState.isPaused;
+
+            const label = document.getElementById('breather-pause-label');
+            const svg = document.getElementById('breather-pause-svg');
+
+            if (appState.isPaused) {
+                label.textContent = "Resume";
+                svg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`;
+            } else {
+                label.textContent = "Pause";
+                svg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>`;
+                updateBreathingUI();
+            }
+        }
+
+        function abortBreathingSession() {
+            clearInterval(appState.timerIntervalId);
+            startBreathingTimer();
+        }
+
+        function triggerBreathingCompletion() {
+            // Update daily streak tracking locally
+            const todayStr = new Date().toDateString();
+
+            if (appState.lastCompleted !== todayStr) {
+                appState.streak++;
+                appState.lastCompleted = todayStr;
+                
+                localStorage.setItem('mnm_wave_streak', appState.streak);
+                localStorage.setItem('mnm_wave_last_completed', todayStr);
+                
+                updateStreakBadge();
+            }
+
+            // Sync visual text details inside Completion panel
+            const bodyStrClean = appState.selectedBodyPart.charAt(0).toUpperCase() + appState.selectedBodyPart.slice(1);
+            document.getElementById('completion-summary-details').textContent = `${appState.selectedEmotion.name} • ${bodyStrClean} Tension`;
+
+            // Draw a randomized wise action reminder from the Chapter Toolkit
+            const randomWise = WISE_STEPS[Math.floor(Math.random() * WISE_STEPS.length)];
+            document.getElementById('completion-affirmation-text').textContent = `"${randomWise}"`;
+
+            // Complete with a warm celebratory chime
+            triggerBowlChime();
+
+            // Transition UI views
+            advanceToStep(4);
+        }
+
+        function restartWorkflow() {
+            // Clear active timers to prevent background execution when exiting
+            if (appState.timerIntervalId) {
+                clearInterval(appState.timerIntervalId);
+                appState.timerIntervalId = null;
+            }
+
+            // Reset state parameters
+            appState.selectedEmotion = null;
+            appState.selectedBodyPart = null;
+
+            // Reset step layout triggers
+            const nextBtn1 = document.getElementById('btn-next-1');
+            nextBtn1.disabled = true;
+            nextBtn1.className = "px-8 py-3.5 bg-stone-300 text-stone-500 rounded-xl text-sm font-bold shadow-sm transition-all cursor-not-allowed flex items-center gap-2";
+
+            const nextBtn2 = document.getElementById('btn-next-2');
+            nextBtn2.disabled = true;
+            nextBtn2.className = "px-8 py-3.5 bg-stone-300 text-stone-500 rounded-xl text-sm font-bold shadow-sm transition-all cursor-not-allowed flex items-center gap-2";
+
+            // Clean SVG elements highlighting
+            const parts = ['forehead', 'jaw', 'shoulders', 'chest', 'stomach'];
+            parts.forEach(p => {
+                document.getElementById(`btn-part-${p}`).className = "px-3 py-2 text-xs font-semibold bg-stone-50 border border-stone-200 rounded-xl hover:bg-stone-100 transition-colors";
+                document.getElementById(`body-part-${p}`).style.fill = "none";
+                document.getElementById(`body-part-${p}`).style.stroke = "currentColor";
+                document.getElementById(`marker-${p}`).classList.add('hidden');
+            });
+
+            renderEmotionGrid();
+            advanceToStep(1);
+        }
+
+        function copyAffirmation() {
+            const bodyStrClean = appState.selectedBodyPart.charAt(0).toUpperCase() + appState.selectedBodyPart.slice(1);
+            const summaryText = `Mindful, Not Mythical: I processed my ${appState.selectedEmotion.name} physical focus (${bodyStrClean} tension) using the 90-Second Wave Reset.\n\nMy next wise step is: ${document.getElementById('completion-affirmation-text').textContent}`;
+
+            // Standalone safe text copy execution due to iFrame restrictions
+            const inputDummy = document.createElement("textarea");
+            document.body.appendChild(inputDummy);
+            inputDummy.value = summaryText;
+            inputDummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(inputDummy);
+
+            // Notify user of action completion
+            const toast = document.getElementById('copy-toast');
+            toast.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'scale-100');
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                toast.classList.remove('opacity-100', 'scale-100');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

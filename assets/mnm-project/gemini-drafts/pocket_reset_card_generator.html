@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pocket Reset Card Generator - Mindful, Not Mythical</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fcfbfa;
+            color: #2e2c2a;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom scrollbar styling for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f3f4f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-stone-200">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="border-b border-stone-200 bg-white/80 backdrop-blur-md sticky top-0 z-50 transition-all">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-emerald-800 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-emerald-800/20">M</div>
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-emerald-800 font-bold block">Companion App</span>
+                    <span class="font-bold text-stone-800 text-sm tracking-tight">Mindful, Not Mythical</span>
+                </div>
+            </div>
+            <div class="text-xs text-stone-500 font-medium hidden sm:block">
+                Based on Chapter 2 (Balance Audit) & Chapter 10 (Habit Stacking)
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8 md:py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT PANEL: CONFIGURATOR / STEPPER (7 COLS ON LARGE DESKTOP) -->
+            <div class="lg:col-span-7 bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                
+                <!-- Progress Indicator -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center text-xs text-stone-500 uppercase tracking-wider font-semibold mb-2">
+                        <span id="step-title">Step 1 of 3: The Balance Audit</span>
+                        <span id="step-percentage">33% Complete</span>
+                    </div>
+                    <div class="h-1.5 w-full bg-stone-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-emerald-800 transition-all duration-500" style="width: 33%"></div>
+                    </div>
+                </div>
+
+                <!-- STEP 1: BALANCE AUDIT FORM -->
+                <div id="step-pane-1" class="space-y-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-stone-900 tracking-tight mb-2">Identify Your Core Variables</h1>
+                        <p class="text-stone-600 text-sm">
+                            According to emotional granularity studies, being highly specific about what derails you helps diffuse its power. Let's record the subtle warnings your body gives you, and your micro-anchors.
+                        </p>
+                    </div>
+
+                    <!-- Triggers Inputs -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-xs font-bold text-amber-800 uppercase tracking-widest flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                3 Triggers (Off-Balance Warnings)
+                            </h2>
+                            <button onclick="applyPresetTriggers()" class="text-xs text-emerald-800 hover:text-emerald-900 hover:underline font-medium transition-colors">Use Examples</button>
+                        </div>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-2.5 text-xs font-bold text-stone-400">1</span>
+                                <input type="text" id="trigger-1" placeholder="e.g., Clenched jaw when reading emails" class="w-full pl-8 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-2.5 text-xs font-bold text-stone-400">2</span>
+                                <input type="text" id="trigger-2" placeholder="e.g., Doomscrolling for over 15 minutes" class="w-full pl-8 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-2.5 text-xs font-bold text-stone-400">3</span>
+                                <input type="text" id="trigger-3" placeholder="e.g., Sighing repeatedly at desk" class="w-full pl-8 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Anchors Inputs -->
+                    <div class="space-y-4 pt-4 border-t border-stone-100">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-xs font-bold text-emerald-800 uppercase tracking-widest flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                3 Anchors (Micro-Steadiers)
+                            </h2>
+                            <button onclick="applyPresetAnchors()" class="text-xs text-emerald-800 hover:text-emerald-900 hover:underline font-medium transition-colors">Use Examples</button>
+                        </div>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-2.5 text-xs font-bold text-stone-400">1</span>
+                                <input type="text" id="anchor-1" placeholder="e.g., Drinking 3 slow sips of cold water" class="w-full pl-8 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-2.5 text-xs font-bold text-stone-400">2</span>
+                                <input type="text" id="anchor-2" placeholder="e.g., Exhaling twice as long as inhaling" class="w-full pl-8 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-2.5 text-xs font-bold text-stone-400">3</span>
+                                <input type="text" id="anchor-3" placeholder="e.g., Placing hand on heart for 30 seconds" class="w-full pl-8 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: HABIT STACKS -->
+                <div id="step-pane-2" class="space-y-6 hidden">
+                    <div>
+                        <h1 class="text-2xl font-bold text-stone-900 tracking-tight mb-2">Build Your Habit Stacks</h1>
+                        <p class="text-stone-600 text-sm">
+                            Implementation Intentions (<span class="italic text-stone-500">Gollwitzer & Sheeran, 2006</span>) decrease cognitive burden. By creating a pre-planned loop, your brain reacts automatically when triggered.
+                        </p>
+                    </div>
+
+                    <!-- Habit Stack #1 -->
+                    <div class="p-5 bg-stone-50 rounded-xl border border-stone-200/60 space-y-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-stone-200 text-stone-700 text-xs flex items-center justify-center font-bold">A</span>
+                            <h3 class="font-bold text-stone-800 text-xs uppercase tracking-wider">Routine Anchor Stack</h3>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">When I...</label>
+                                <select id="stack-trigger-1" onchange="checkCustomTrigger(1)" class="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                                    <option value="finish pouring my morning coffee">finish pouring my morning coffee</option>
+                                    <option value="shut my laptop at the end of the day">shut my laptop at the end of the day</option>
+                                    <option value="step inside my car or home">step inside my car or home</option>
+                                    <option value="custom">-- Write my own routine trigger --</option>
+                                </select>
+                                <input type="text" id="stack-trigger-custom-1" placeholder="Type custom trigger... (e.g. step out of bed)" class="w-full mt-2 px-3 py-2 border border-stone-200 rounded-lg text-sm hidden focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">I will...</label>
+                                <select id="stack-action-1" onchange="checkCustomAction(1)" class="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                                    <option value="take three physiological sighs (double inhale, long exhale)">take three physiological sighs (double inhale, long exhale)</option>
+                                    <option value="drop my shoulders and un-clench my tongue">drop my shoulders and un-clench my tongue</option>
+                                    <option value="gaze out the window at the farthest visible object">gaze out the window at the farthest visible object</option>
+                                    <option value="custom">-- Write my own micro-action --</option>
+                                </select>
+                                <input type="text" id="stack-action-custom-1" placeholder="Type custom action..." class="w-full mt-2 px-3 py-2 border border-stone-200 rounded-lg text-sm hidden focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Habit Stack #2 -->
+                    <div class="p-5 bg-stone-50 rounded-xl border border-stone-200/60 space-y-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-stone-200 text-stone-700 text-xs flex items-center justify-center font-bold">B</span>
+                            <h3 class="font-bold text-stone-800 text-xs uppercase tracking-wider">Stress Response Stack</h3>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">If I notice...</label>
+                                <select id="stack-trigger-2" onchange="checkCustomTrigger(2)" class="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                                    <option value="my breath becoming shallow or held">my breath becoming shallow or held</option>
+                                    <option value="my jaw clenching or shoulders creeping up">my jaw clenching or shoulders creeping up</option>
+                                    <option value="an urge to open tab after tab of social media">an urge to open tab after tab of social media</option>
+                                    <option value="custom">-- Write my own custom reaction trigger --</option>
+                                </select>
+                                <input type="text" id="stack-trigger-custom-2" placeholder="Type custom trigger... (e.g. chest tightening)" class="w-full mt-2 px-3 py-2 border border-stone-200 rounded-lg text-sm hidden focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">I will immediately...</label>
+                                <select id="stack-action-2" onchange="checkCustomAction(2)" class="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                                    <option value="exhale entirely, then loosen my hands by 10%">exhale entirely, then loosen my hands by 10%</option>
+                                    <option value="stand up and feel my feet flat on the floor">stand up and feel my feet flat on the floor</option>
+                                    <option value="step away from the screen for exactly 1 minute">step away from the screen for exactly 1 minute</option>
+                                    <option value="custom">-- Write my own custom step --</option>
+                                </select>
+                                <input type="text" id="stack-action-custom-2" placeholder="Type custom action..." class="w-full mt-2 px-3 py-2 border border-stone-200 rounded-lg text-sm hidden focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: PERSONALIZE DESIGN -->
+                <div id="step-pane-3" class="space-y-6 hidden">
+                    <div>
+                        <h1 class="text-2xl font-bold text-stone-900 tracking-tight mb-2">Style Your Reset Card</h1>
+                        <p class="text-stone-600 text-sm">
+                            Make this card an expression of your individual grounding space. Pick a theme, layout, and prepare to export.
+                        </p>
+                    </div>
+
+                    <!-- Color Palettes -->
+                    <div class="space-y-3">
+                        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider">1. Select Visual Aesthetic</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <button onclick="setTheme('forest')" id="theme-btn-forest" class="flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 border-emerald-800 bg-stone-50 hover:bg-white transition-all">
+                                <span class="w-6 h-6 rounded-full bg-emerald-800 flex items-center justify-center text-[10px] text-stone-200"></span>
+                                <span class="text-xs font-semibold">Forest</span>
+                            </button>
+                            <button onclick="setTheme('clay')" id="theme-btn-clay" class="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-stone-200 hover:bg-white transition-all">
+                                <span class="w-6 h-6 rounded-full bg-[#B2533E] flex items-center justify-center text-[10px] text-white"></span>
+                                <span class="text-xs font-semibold">Clay</span>
+                            </button>
+                            <button onclick="setTheme('nordic')" id="theme-btn-nordic" class="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-stone-200 hover:bg-white transition-all">
+                                <span class="w-6 h-6 rounded-full bg-[#2A363B] flex items-center justify-center text-[10px] text-white"></span>
+                                <span class="text-xs font-semibold">Nordic</span>
+                            </button>
+                            <button onclick="setTheme('dusk')" id="theme-btn-dusk" class="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-stone-200 hover:bg-white transition-all">
+                                <span class="w-6 h-6 rounded-full bg-[#3F3351] flex items-center justify-center text-[10px] text-white"></span>
+                                <span class="text-xs font-semibold">Dusk</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Layout Dimensions Toggle -->
+                    <div class="space-y-3 pt-4 border-t border-stone-100">
+                        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider">2. Choose Card Layout Size</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="setLayout('lockscreen')" id="layout-btn-lockscreen" class="p-4 rounded-xl border-2 border-emerald-800 flex flex-col items-center text-center gap-1 hover:bg-stone-50/50 transition-all">
+                                <span class="text-sm font-bold">Lock Screen (9:16)</span>
+                                <span class="text-[11px] text-stone-500">Perfect for phone wallpaper, zero-stress checking.</span>
+                            </button>
+                            <button onclick="setLayout('wallet')" id="layout-btn-wallet" class="p-4 rounded-xl border border-stone-200 flex flex-col items-center text-center gap-1 hover:bg-stone-50/50 transition-all">
+                                <span class="text-sm font-bold">Pocket Wallet Card</span>
+                                <span class="text-[11px] text-stone-500">Great for printing, desk index cards, laminating.</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Footer Affirmation Choice -->
+                    <div class="space-y-3 pt-4 border-t border-stone-100">
+                        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider">3. Select Bottom Grounding Mantra</label>
+                        <select id="card-mantra" onchange="updateMantra()" class="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 transition-all">
+                            <option value="Mindful, Not Mythical. Grounded, Not Perfect.">"Mindful, Not Mythical. Grounded, Not Perfect."</option>
+                            <option value="Feel the trigger. Allow the sensation. Apply the anchor.">"Feel the trigger. Allow the sensation. Apply the anchor."</option>
+                            <option value="Grounded humanity is an active choice, not an destination.">"Grounded humanity is an active choice, not an destination."</option>
+                            <option value="One breath at a time, entirely in the present moment.">"One breath at a time, entirely in the present moment."</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- BUTTON CONTROLS -->
+                <div class="flex items-center justify-between pt-8 mt-6 border-t border-stone-200">
+                    <button id="btn-prev" onclick="navigateStep(-1)" class="px-5 py-2.5 rounded-lg text-sm font-bold text-stone-600 hover:bg-stone-100 transition-colors invisible">
+                        Back
+                    </button>
+                    <button id="btn-next" onclick="navigateStep(1)" class="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-lg text-sm font-bold shadow-md shadow-emerald-800/10 hover:shadow-lg transition-all flex items-center gap-1.5">
+                        <span>Continue to Next Step</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </button>
+                    <button id="btn-export" onclick="triggerDownload()" class="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-lg text-sm font-bold shadow-md shadow-emerald-800/10 hover:shadow-lg transition-all hidden flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span>Download High-Res PNG</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL: PREVIEW WINDOW (5 COLS ON LARGE DESKTOP) -->
+            <div class="lg:col-span-5 sticky top-24 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-bold text-stone-500 uppercase tracking-widest flex items-center gap-1">
+                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                        Live Interactive Card Preview
+                    </h3>
+                    <span class="text-[11px] text-stone-400 font-medium">Auto-saves edits</span>
+                </div>
+
+                <!-- CARD OUTER BOX -->
+                <div id="card-preview-container" class="w-full flex justify-center items-center py-4 bg-stone-100 rounded-2xl border border-stone-200 min-h-[500px] transition-all overflow-hidden relative">
+                    
+                    <!-- DYNAMIC CSS EMBEDDED PREVIEW -->
+                    <div id="css-preview-card" class="bg-[#112D24] text-[#F3EFE0] transition-all duration-300 relative shadow-2xl rounded-2xl p-6 flex flex-col justify-between tracking-wide" style="width: 320px; height: 568px;">
+                        
+                        <!-- Top Header Logo design -->
+                        <div class="border-b border-stone-200/10 pb-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="text-[10px] tracking-[0.2em] font-bold text-stone-200/80 uppercase">POCKET RESET</h4>
+                                    <h5 class="serif text-lg italic text-white leading-tight font-medium" id="preview-user-title">My Grounding Blueprint</h5>
+                                </div>
+                                <div class="w-6 h-6 flex items-center justify-center">
+                                    <!-- Geometric Balance icon (two intersecting circles) -->
+                                    <svg viewBox="0 0 100 100" class="w-full h-full text-[#F3EFE0]/50" fill="currentColor">
+                                        <circle cx="40" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="4"/>
+                                        <circle cx="60" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="4"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Body Fields -->
+                        <div class="flex-grow py-5 space-y-6 overflow-y-auto no-scrollbar" style="max-height: 400px;">
+                            
+                            <!-- Triggers Section -->
+                            <div class="space-y-2">
+                                <h6 class="text-[9px] uppercase tracking-widest font-extrabold text-[#E07A5F] flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[#E07A5F]"></span>
+                                    Off-Balance Triggers
+                                </h6>
+                                <ul class="space-y-1.5 text-xs text-stone-200/90 pl-1" id="preview-list-triggers">
+                                    <!-- Injected by script -->
+                                </ul>
+                            </div>
+
+                            <!-- Anchors Section -->
+                            <div class="space-y-2">
+                                <h6 class="text-[9px] uppercase tracking-widest font-extrabold text-[#81B29A] flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[#81B29A]"></span>
+                                    Micro-Anchors (Steady)
+                                </h6>
+                                <ul class="space-y-1.5 text-xs text-stone-200/90 pl-1" id="preview-list-anchors">
+                                    <!-- Injected by script -->
+                                </ul>
+                            </div>
+
+                            <!-- Stacks Section -->
+                            <div class="space-y-3 pt-3 border-t border-stone-200/10">
+                                <h6 class="text-[9px] uppercase tracking-widest font-extrabold text-stone-300/80">Daily Habit Loops</h6>
+                                
+                                <div class="bg-white/5 p-2.5 rounded-lg border border-white/5 space-y-2.5 text-[11px] leading-relaxed text-stone-100">
+                                    <div>
+                                        <span class="font-bold text-[#E29578] uppercase text-[9px] block">A. Routine Reset:</span>
+                                        <span id="preview-stack-1">When I finish my morning coffee, I will take three deep physiological sighs.</span>
+                                    </div>
+                                    <div class="pt-2 border-t border-white/5">
+                                        <span class="font-bold text-[#E29578] uppercase text-[9px] block">B. Reaction Loop:</span>
+                                        <span id="preview-stack-2">If I feel my chest tighten, I will stand up and feel my feet on the floor.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="border-t border-stone-200/10 pt-4 flex justify-between items-end text-[8px] tracking-wider uppercase text-stone-300/60 font-medium">
+                            <div class="leading-relaxed">
+                                <span class="block text-[7px]">Mindful Not Mythical</span>
+                                <span class="block italic text-stone-400 normal-case" id="preview-mantra">"Mindful, Not Mythical. Grounded, Not Perfect."</span>
+                            </div>
+                            <div class="font-bold flex items-center gap-1">
+                                <span>No. 01</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <p class="text-[11px] text-stone-500 text-center leading-relaxed">
+                    Designed for readability in dark, low-stress environments.<br>
+                    To save this image manually at any time, tap "Download" or take a screenshot.
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- HIDDEN CANVAS FOR EXPORTING HIGHER RESOLUTION PICTURES -->
+    <canvas id="export-canvas" class="hidden"></canvas>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-100 border-t border-stone-200/80 py-8 text-center mt-12">
+        <div class="max-w-4xl mx-auto px-4 space-y-3">
+            <p class="text-xs text-stone-500 font-medium">
+                © 2026 Grounded Humanity Press. Companion software for "Mindful, Not Mythical: Everyday Practices for Gratitude, Calm, and Clarity."
+            </p>
+            <div class="flex justify-center space-x-6 text-xs text-stone-400">
+                <a href="#" class="hover:text-emerald-800 transition-colors">Etsy Shop Companion</a>
+                <span>•</span>
+                <a href="#" class="hover:text-emerald-800 transition-colors">Privacy Statement (Processed Offline)</a>
+                <span>•</span>
+                <a href="#" class="hover:text-emerald-800 transition-colors">Support & Books</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC SYSTEM (VANILLA JAVASCRIPT) -->
+    <script>
+        // Global variables state storage
+        let state = {
+            currentStep: 1,
+            totalSteps: 3,
+            triggers: [
+                "Clenched jaw when checking notifications",
+                "Scrolling social media feed without purpose",
+                "Taking rapid, short breaths when overwhelmed"
+            ],
+            anchors: [
+                "3 slow, measured sips of warm tea or water",
+                "Release my tongue from the roof of my mouth",
+                "Drop shoulders 5% lower every next exhale"
+            ],
+            stacks: [
+                {
+                    trigger: "finish pouring my morning coffee",
+                    action: "take three physiological sighs (double inhale, long exhale)"
+                },
+                {
+                    trigger: "my jaw clenching or shoulders creeping up",
+                    action: "exhale entirely, then loosen my hands by 10%"
+                }
+            ],
+            theme: 'forest', // forest, clay, nordic, dusk
+            layout: 'lockscreen', // lockscreen, wallet
+            mantra: 'Mindful, Not Mythical. Grounded, Not Perfect.'
+        };
+
+        // Preloaded configurations for templates
+        const PRESET_TRIGGERS = [
+            "Heavy feeling in my eyes/brow",
+            "Urge to check screens every 2 minutes",
+            "Sighing loudly during screen tasks",
+            "Clenching fists when listening to calls",
+            "Rushing through simple daily movements"
+        ];
+
+        const PRESET_ANCHORS = [
+            "Focus gaze on something far away for 10s",
+            "Double-inhale and hold for 2 seconds",
+            "Feel all points of contact with my chair",
+            "Roll wrists outwards three slow times",
+            "Step outdoors for one deep fresh breath"
+        ];
+
+        // Color palettes definitions for screen & canvas drawing
+        const THEMES = {
+            forest: {
+                bg: '#112D24',
+                text: '#F3EFE0',
+                accent1: '#E07A5F', // Triggers label
+                accent2: '#81B29A', // Anchors label
+                cardTitle: '#FFFFFF',
+                footerText: '#b3cfc2',
+                cardHighlight: 'rgba(243, 239, 224, 0.05)'
+            },
+            clay: {
+                bg: '#B2533E',
+                text: '#FFF5E0',
+                accent1: '#3E54AC',
+                accent2: '#F8B400',
+                cardTitle: '#FFFFFF',
+                footerText: '#FFD3B6',
+                cardHighlight: 'rgba(255, 245, 224, 0.05)'
+            },
+            nordic: {
+                bg: '#2A363B',
+                text: '#EAEAEA',
+                accent1: '#E84A5F',
+                accent2: '#99B898',
+                cardTitle: '#FFFFFF',
+                footerText: '#CCCCCC',
+                cardHighlight: 'rgba(234, 234, 234, 0.05)'
+            },
+            dusk: {
+                bg: '#3F3351',
+                text: '#FDF6EC',
+                accent1: '#F48484',
+                accent2: '#86A3B8',
+                cardTitle: '#FFFFFF',
+                footerText: '#D9C7E2',
+                cardHighlight: 'rgba(253, 246, 236, 0.05)'
+            }
+        };
+
+        // Run when window loads
+        window.addEventListener('load', () => {
+            // Fill initial forms with default state values
+            for(let i = 1; i <= 3; i++) {
+                document.getElementById(`trigger-${i}`).value = state.triggers[i-1] || '';
+                document.getElementById(`anchor-${i}`).value = state.anchors[i-1] || '';
+            }
+
+            // Bind Event Listeners on change to auto-update
+            for(let i = 1; i <= 3; i++) {
+                document.getElementById(`trigger-${i}`).addEventListener('input', updateValues);
+                document.getElementById(`anchor-${i}`).addEventListener('input', updateValues);
+            }
+
+            updateHTMLPreview();
+        });
+
+        function updateValues() {
+            // Sync triggers
+            state.triggers = [
+                document.getElementById('trigger-1').value.trim(),
+                document.getElementById('trigger-2').value.trim(),
+                document.getElementById('trigger-3').value.trim()
+            ].filter(val => val !== ''); // only store filled ones for card preview
+
+            // Sync anchors
+            state.anchors = [
+                document.getElementById('anchor-1').value.trim(),
+                document.getElementById('anchor-2').value.trim(),
+                document.getElementById('anchor-3').value.trim()
+            ].filter(val => val !== '');
+
+            updateHTMLPreview();
+        }
+
+        // Apply prefilled examples to accelerate onboarding
+        function applyPresetTriggers() {
+            let shuffled = PRESET_TRIGGERS.sort(() => 0.5 - Math.random());
+            for(let i = 1; i <= 3; i++) {
+                document.getElementById(`trigger-${i}`).value = shuffled[i-1];
+            }
+            updateValues();
+        }
+
+        function applyPresetAnchors() {
+            let shuffled = PRESET_ANCHORS.sort(() => 0.5 - Math.random());
+            for(let i = 1; i <= 3; i++) {
+                document.getElementById(`anchor-${i}`).value = shuffled[i-1];
+            }
+            updateValues();
+        }
+
+        // Habit Stacks Custom/Select Handler
+        function checkCustomTrigger(num) {
+            const select = document.getElementById(`stack-trigger-${num}`);
+            const customInput = document.getElementById(`stack-trigger-custom-${num}`);
+            if (select.value === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+            }
+            updateHabitStacks();
+        }
+
+        function checkCustomAction(num) {
+            const select = document.getElementById(`stack-action-${num}`);
+            const customInput = document.getElementById(`stack-action-custom-${num}`);
+            if (select.value === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+            }
+            updateHabitStacks();
+        }
+
+        function updateHabitStacks() {
+            // Loop for Stack A & B
+            for (let num = 1; num <= 2; num++) {
+                const selectTrig = document.getElementById(`stack-trigger-${num}`).value;
+                const customTrig = document.getElementById(`stack-trigger-custom-${num}`).value;
+                const selectAct = document.getElementById(`stack-action-${num}`).value;
+                const customAct = document.getElementById(`stack-action-custom-${num}`).value;
+
+                state.stacks[num-1].trigger = (selectTrig === 'custom') ? customTrig : selectTrig;
+                state.stacks[num-1].action = (selectAct === 'custom') ? customAct : selectAct;
+            }
+            updateHTMLPreview();
+        }
+
+        // Listen for typing inside custom text fields to update stacks
+        document.getElementById('stack-trigger-custom-1').addEventListener('input', updateHabitStacks);
+        document.getElementById('stack-action-custom-1').addEventListener('input', updateHabitStacks);
+        document.getElementById('stack-trigger-custom-2').addEventListener('input', updateHabitStacks);
+        document.getElementById('stack-action-custom-2').addEventListener('input', updateHabitStacks);
+
+        // Styling Controls
+        function setTheme(themeName) {
+            state.theme = themeName;
+            
+            // Highlight Selected Theme Button
+            const themes = ['forest', 'clay', 'nordic', 'dusk'];
+            themes.forEach(t => {
+                const btn = document.getElementById(`theme-btn-${t}`);
+                if (t === themeName) {
+                    btn.classList.add('border-emerald-800', 'border-2');
+                    btn.classList.remove('border-stone-200');
+                } else {
+                    btn.classList.remove('border-emerald-800', 'border-2');
+                    btn.classList.add('border-stone-200');
+                }
+            });
+
+            updateHTMLPreview();
+        }
+
+        function setLayout(layoutType) {
+            state.layout = layoutType;
+
+            // Highlight Selected Layout Button
+            const btnLock = document.getElementById('layout-btn-lockscreen');
+            const btnWallet = document.getElementById('layout-btn-wallet');
+
+            if (layoutType === 'lockscreen') {
+                btnLock.classList.add('border-emerald-800', 'border-2');
+                btnLock.classList.remove('border-stone-200');
+                btnWallet.classList.remove('border-emerald-800', 'border-2');
+                btnWallet.classList.add('border-stone-200');
+            } else {
+                btnWallet.classList.add('border-emerald-800', 'border-2');
+                btnWallet.classList.remove('border-stone-200');
+                btnLock.classList.remove('border-emerald-800', 'border-2');
+                btnLock.classList.add('border-stone-200');
+            }
+
+            updateHTMLPreview();
+        }
+
+        function updateMantra() {
+            state.mantra = document.getElementById('card-mantra').value;
+            updateHTMLPreview();
+        }
+
+        // Re-renders the interactive CSS card container
+        function updateHTMLPreview() {
+            const card = document.getElementById('css-preview-card');
+            const colors = THEMES[state.theme];
+
+            // Render Layout Ratio Sizes on screen preview
+            if (state.layout === 'lockscreen') {
+                card.style.width = '320px';
+                card.style.height = '568px';
+            } else {
+                // Wallet cards typically have horizontal card aspect ratio
+                card.style.width = '380px';
+                card.style.height = '240px';
+            }
+
+            // Apply palette dynamically
+            card.style.backgroundColor = colors.bg;
+            card.style.color = colors.text;
+
+            // Render Triggers list
+            const triggerList = document.getElementById('preview-list-triggers');
+            triggerList.innerHTML = '';
+            
+            // Fallback inside list
+            const shownTriggers = state.triggers.length > 0 ? state.triggers : ["Enter a trigger to begin..."];
+            shownTriggers.forEach(t => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="font-bold mr-1">•</span> ${escapeHTML(t)}`;
+                triggerList.appendChild(li);
+            });
+
+            // Render Anchors list
+            const anchorsList = document.getElementById('preview-list-anchors');
+            anchorsList.innerHTML = '';
+            const shownAnchors = state.anchors.length > 0 ? state.anchors : ["Enter an anchor to begin..."];
+            shownAnchors.forEach(a => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="font-bold mr-1">•</span> ${escapeHTML(a)}`;
+                anchorsList.appendChild(li);
+            });
+
+            // Render habit stacks text string
+            document.getElementById('preview-stack-1').textContent = `When I ${state.stacks[0].trigger || '...'}, I will ${state.stacks[0].action || '...'}.`;
+            document.getElementById('preview-stack-2').textContent = `If I notice ${state.stacks[1].trigger || '...'}, I will immediately ${state.stacks[1].action || '...'}.`;
+
+            // Render footer mantra text
+            document.getElementById('preview-mantra').textContent = `"${state.mantra}"`;
+            
+            // Adjust layouts for shorter landscape card
+            if (state.layout === 'wallet') {
+                card.classList.add('p-4');
+                card.classList.remove('p-6');
+                // Hide some visual structures on micro-wallet cards to fit text cleanly
+                document.getElementById('preview-list-triggers').classList.add('hidden');
+                document.getElementById('preview-list-anchors').classList.add('hidden');
+            } else {
+                card.classList.add('p-6');
+                card.classList.remove('p-4');
+                document.getElementById('preview-list-triggers').classList.remove('hidden');
+                document.getElementById('preview-list-anchors').classList.remove('hidden');
+            }
+        }
+
+        // Stepper Navigation Handlers
+        function navigateStep(direction) {
+            const nextStep = state.currentStep + direction;
+            if (nextStep < 1 || nextStep > state.totalSteps) return;
+
+            // Hide old steps, show next step
+            document.getElementById(`step-pane-${state.currentStep}`).classList.add('hidden');
+            document.getElementById(`step-pane-${nextStep}`).classList.remove('hidden');
+
+            state.currentStep = nextStep;
+
+            // Update Steps Titles
+            const titles = [
+                "Step 1 of 3: The Balance Audit",
+                "Step 2 of 3: Habit Loop Stacker",
+                "Step 3 of 3: Personalize & Download"
+            ];
+            document.getElementById('step-title').textContent = titles[state.currentStep - 1];
+            
+            // Progress percentage bar updates
+            const p = Math.round((state.currentStep / state.totalSteps) * 100);
+            document.getElementById('step-percentage').textContent = `${p}% Complete`;
+            document.getElementById('progress-bar').style.width = `${p}%`;
+
+            // Button controls visibility
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const btnExport = document.getElementById('btn-export');
+
+            if (state.currentStep === 1) {
+                btnPrev.classList.add('invisible');
+            } else {
+                btnPrev.classList.remove('invisible');
+            }
+
+            if (state.currentStep === state.totalSteps) {
+                btnNext.classList.add('hidden');
+                btnExport.classList.remove('hidden');
+            } else {
+                btnNext.classList.remove('hidden');
+                btnExport.classList.add('hidden');
+            }
+        }
+
+        // High Resolution Image Drawing via HTML5 Canvas
+        function drawCardToCanvas() {
+            const canvas = document.getElementById('export-canvas');
+            const ctx = canvas.getContext('2d');
+            const colors = THEMES[state.theme];
+
+            // Resolve design scale sizing based on layout option
+            const scale = 2; // Generate 2x crispness for retina screens/printing
+            let width, height;
+
+            if (state.layout === 'lockscreen') {
+                width = 1080;  // Standard Full HD lockscreen aspect ratio
+                height = 1920; 
+            } else {
+                width = 1200;  // High quality wallet proportion
+                height = 700;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            // Background Fill
+            ctx.fillStyle = colors.bg;
+            ctx.fillRect(0, 0, width, height);
+
+            // Subtle Grid Line Accent for tactile texture
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+            ctx.lineWidth = 2;
+            const gridSpacing = 40;
+            for (let x = 0; x < width; x += gridSpacing) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+            }
+            for (let y = 0; y < height; y += gridSpacing) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+            }
+
+            // Margin & Padding
+            const padX = width * 0.08;
+            const padY = height * 0.08;
+            
+            // 1. Draw Title Area
+            ctx.fillStyle = colors.cardTitle;
+            ctx.font = `bold ${Math.round(width * 0.026)}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillText("POCKET RESET CARD", padX, padY + 40);
+
+            ctx.fillStyle = colors.footerText;
+            ctx.font = `italic ${Math.round(width * 0.04)}px "Playfair Display", serif`;
+            ctx.fillText("My Grounding Blueprint", padX, padY + 95);
+
+            // Overlapping balance circles icon
+            const r = width * 0.04;
+            const cx = width - padX - r;
+            const cy = padY + 60;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.arc(cx - r*0.35, cy, r, 0, Math.PI*2); ctx.stroke();
+            ctx.beginPath(); ctx.arc(cx + r*0.35, cy, r, 0, Math.PI*2); ctx.stroke();
+
+            // Render separation line
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padX, padY + 140);
+            ctx.lineTo(width - padX, padY + 140);
+            ctx.stroke();
+
+            let cursorY = padY + 180;
+
+            if (state.layout === 'lockscreen') {
+                // Section: Triggers
+                ctx.fillStyle = colors.accent1;
+                ctx.font = `bold ${Math.round(width * 0.022)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText("OFF-BALANCE TRIGGERS", padX, cursorY);
+                cursorY += 40;
+
+                ctx.fillStyle = colors.text;
+                ctx.font = `400 ${Math.round(width * 0.024)}px "Plus Jakarta Sans", sans-serif`;
+                
+                const displayedTriggers = state.triggers.length > 0 ? state.triggers : ["No triggers entered."];
+                displayedTriggers.forEach((text, i) => {
+                    wrapText(ctx, `• ${text}`, padX, cursorY, width - (padX * 2), 35);
+                    cursorY += 75;
+                });
+
+                cursorY += 40;
+
+                // Section: Anchors
+                ctx.fillStyle = colors.accent2;
+                ctx.font = `bold ${Math.round(width * 0.022)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText("MICRO-ANCHORS (STEADY)", padX, cursorY);
+                cursorY += 40;
+
+                ctx.fillStyle = colors.text;
+                ctx.font = `400 ${Math.round(width * 0.024)}px "Plus Jakarta Sans", sans-serif`;
+                
+                const displayedAnchors = state.anchors.length > 0 ? state.anchors : ["No anchors entered."];
+                displayedAnchors.forEach((text, i) => {
+                    wrapText(ctx, `• ${text}`, padX, cursorY, width - (padX * 2), 35);
+                    cursorY += 75;
+                });
+
+                cursorY += 60;
+
+                // Section: Habit Loops
+                ctx.fillStyle = colors.cardTitle;
+                ctx.font = `bold ${Math.round(width * 0.022)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText("DAILY HABIT LOOPS", padX, cursorY);
+                cursorY += 35;
+
+                // Container Draw
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+                const containerHeight = 350;
+                ctx.fillRect(padX, cursorY, width - (padX * 2), containerHeight);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+                ctx.strokeRect(padX, cursorY, width - (padX * 2), containerHeight);
+
+                let textY = cursorY + 50;
+                ctx.fillStyle = '#E29578';
+                ctx.font = `bold ${Math.round(width * 0.018)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText("A. ROUTINE ANCHOR LOOP:", padX + 30, textY);
+                textY += 30;
+
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = `400 ${Math.round(width * 0.02)}px "Plus Jakarta Sans", sans-serif`;
+                const textA = `When I ${state.stacks[0].trigger || '...'}, I will ${state.stacks[0].action || '...'}.`;
+                wrapText(ctx, textA, padX + 30, textY, width - (padX * 2) - 60, 30);
+                
+                textY += 90;
+
+                ctx.fillStyle = '#E29578';
+                ctx.font = `bold ${Math.round(width * 0.018)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText("B. STRESS RESPONSE LOOP:", padX + 30, textY);
+                textY += 30;
+
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = `400 ${Math.round(width * 0.02)}px "Plus Jakarta Sans", sans-serif`;
+                const textB = `If I notice ${state.stacks[1].trigger || '...'}, I will immediately ${state.stacks[1].action || '...'}.`;
+                wrapText(ctx, textB, padX + 30, textY, width - (padX * 2) - 60, 30);
+
+            } else {
+                // WALLET CARD SIDE-BY-SIDE GRID
+                const colWidth = (width - (padX * 2) - 60) / 2;
+                
+                // Left Column: Stacks
+                ctx.fillStyle = colors.accent2;
+                ctx.font = `bold ${Math.round(width * 0.02)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText("DAILY GROUNDING HABIT LOOPS", padX, cursorY);
+                cursorY += 40;
+
+                // Box Area A
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+                ctx.fillRect(padX, cursorY, colWidth, 160);
+                ctx.strokeRect(padX, cursorY, colWidth, 160);
+
+                ctx.fillStyle = '#E29578';
+                ctx.font = `bold ${Math.round(width * 0.015)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText("A. ROUTINE LOOPS:", padX + 20, cursorY + 40);
+                
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = `400 ${Math.round(width * 0.018)}px "Plus Jakarta Sans", sans-serif`;
+                const textA = `When I ${state.stacks[0].trigger || '...'}, I will ${state.stacks[0].action || '...'}.`;
+                wrapText(ctx, textA, padX + 20, cursorY + 75, colWidth - 40, 26);
+
+                cursorY += 190;
+
+                // Box Area B
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+                ctx.fillRect(padX, cursorY, colWidth, 160);
+                ctx.strokeRect(padX, cursorY, colWidth, 160);
+
+                ctx.fillStyle = '#E29578';
+                ctx.font = `bold ${Math.round(width * 0.015)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText("B. REACTION LOOPS:", padX + 20, cursorY + 40);
+                
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = `400 ${Math.round(width * 0.018)}px "Plus Jakarta Sans", sans-serif`;
+                const textB = `If I notice ${state.stacks[1].trigger || '...'}, I will immediately ${state.stacks[1].action || '...'}.`;
+                wrapText(ctx, textB, padX + 20, cursorY + 75, colWidth - 40, 26);
+
+                // Right Column: Presets Summary / Micro instructions
+                let rightColX = padX + colWidth + 60;
+                let rightY = padY + 180;
+
+                ctx.fillStyle = colors.accent1;
+                ctx.font = `bold ${Math.round(width * 0.02)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText("THE SYSTEM RULES", rightColX, rightY);
+                rightY += 40;
+
+                ctx.fillStyle = colors.text;
+                ctx.font = `400 ${Math.round(width * 0.018)}px "Plus Jakarta Sans", sans-serif`;
+                
+                const instructions = [
+                    "1. Name the sensation with granularity.",
+                    "2. Do not judge or suppress the tightness.",
+                    "3. Engage the physical, visceral anchor.",
+                    "4. Repeat and allow the vagus nerve to rest."
+                ];
+                instructions.forEach((ins) => {
+                    ctx.fillText(ins, rightColX, rightY);
+                    rightY += 45;
+                });
+            }
+
+            // Draw Bottom Footer Area
+            const footY = height - padY;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padX, footY - 40);
+            ctx.lineTo(width - padX, footY - 40);
+            ctx.stroke();
+
+            ctx.fillStyle = colors.footerText;
+            ctx.font = `bold ${Math.round(width * 0.014)}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillText("MINDFUL NOT MYTHICAL", padX, footY);
+
+            ctx.font = `italic 400 ${Math.round(width * 0.016)}px "Playfair Display", serif`;
+            ctx.fillText(`"${state.mantra}"`, padX, footY + 40);
+
+            ctx.font = `bold ${Math.round(width * 0.014)}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillText("EDITION NO. 01", width - padX - 140, footY);
+        }
+
+        // Helper: Canvas Text Wrapper algorithm
+        function wrapText(context, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(' ');
+            let line = '';
+
+            for (let n = 0; n < words.length; n++) {
+                let testLine = line + words[n] + ' ';
+                let metrics = context.measureText(testLine);
+                let testWidth = metrics.width;
+                if (testWidth > maxWidth && n > 0) {
+                    context.fillText(line, x, y);
+                    line = words[n] + ' ';
+                    y += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            context.fillText(line, x, y);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Download Image Trigger
+        function triggerDownload() {
+            // First render the state variables onto the canvas object
+            drawCardToCanvas();
+
+            const canvas = document.getElementById('export-canvas');
+            const link = document.createElement('a');
+            
+            // Format filename safely based on selection
+            const filename = `pocket_reset_${state.layout}_${state.theme}.png`;
+            
+            // Output as maximum quality image binary
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+        }
+    </script>
+</body>
+</html>

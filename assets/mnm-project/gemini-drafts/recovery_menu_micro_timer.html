@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Recovery Menu - Mindful, Not Mythical</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Plus Jakarta Sans & Playfair Display fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF8F5;
+            color: #2E2A25;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E6E1DA;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #CBD5E1;
+        }
+
+        /* Dynamic fluid animations */
+        @keyframes subtlePulse {
+            0%, 100% { transform: scale(1); opacity: 0.15; }
+            50% { transform: scale(1.08); opacity: 0.25; }
+        }
+        .breathing-pulse-bg {
+            animation: subtlePulse 10s infinite ease-in-out;
+        }
+
+        @keyframes inhaleExhale {
+            0%, 100% { transform: scale(0.85); background-color: #D1E7DD; } /* Rest/turnaround */
+            40% { transform: scale(1.15); background-color: #A3CFBB; } /* Peak Inhale (4s) */
+            50% { transform: scale(1.15); background-color: #A3CFBB; } /* Hold (1s) */
+            90% { transform: scale(0.85); background-color: #D1E7DD; } /* Peak Exhale (4s) */
+        }
+        .breathing-bubble {
+            animation: inhaleExhale 10s infinite ease-in-out;
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-stone-200">
+
+    <!-- HEADER -->
+    <header class="border-b border-stone-200/80 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-[#112D24] flex items-center justify-center text-white font-bold text-sm shadow-md">M</div>
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-[#112D24] font-bold block">Interactive Reset Companion</span>
+                    <span class="font-bold text-stone-800 text-sm tracking-tight">Mindful, Not Mythical</span>
+                </div>
+            </div>
+            
+            <!-- Streak Indicator Badge -->
+            <div class="flex items-center space-x-2 bg-[#E8F0EC] px-3 py-1.5 rounded-full text-xs font-semibold text-[#112D24] border border-[#D1E7DD]">
+                <svg class="w-4 h-4 text-emerald-700" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                </svg>
+                <span id="streak-text">Streak: 0 Days</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT WINDOW -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8 md:py-12 flex flex-col justify-center">
+        
+        <!-- SELECTION VIEW (SCREEN 1) -->
+        <div id="selection-view" class="space-y-8 animate-fadeIn">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="text-xs font-bold text-[#112D24] uppercase tracking-widest bg-stone-100 px-3 py-1 rounded-full">Chapter 6 & 5 Companion</span>
+                <h1 class="serif text-4xl md:text-5xl font-medium tracking-tight text-stone-900">Your Recovery Menu</h1>
+                <p class="text-stone-600 text-base md:text-lg">
+                    “Sometimes the most important thing in a whole day is the rest we take between two deep breaths.” — Etty Hillesum
+                </p>
+                <p class="text-stone-500 text-sm italic">How much space do you have right now?</p>
+            </div>
+
+            <!-- Time Options Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+                <!-- 1 MINUTE CARD -->
+                <button onclick="startSession(1)" class="group text-left p-6 bg-white border border-stone-200 hover:border-emerald-800 rounded-2xl transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 flex flex-col justify-between h-48 relative overflow-hidden">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-stone-400 uppercase tracking-widest">Chapter 7.4</span>
+                            <span class="text-2xl font-bold text-stone-300 group-hover:text-emerald-800 transition-colors">1 Min</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-stone-800 group-hover:text-[#112D24]">One-Point Focus</h3>
+                        <p class="text-xs text-stone-500 leading-relaxed">
+                            Observe a single neutral point on your screen. Ideal for immediately anchoring a racing, hyper-distracted mind.
+                        </p>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-800 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        Begin Pause
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </span>
+                    <div class="absolute right-0 bottom-0 w-24 h-24 bg-emerald-50 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </button>
+
+                <!-- 3 MINUTE CARD -->
+                <button onclick="startSession(3)" class="group text-left p-6 bg-white border border-stone-200 hover:border-emerald-800 rounded-2xl transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 flex flex-col justify-between h-48 relative overflow-hidden">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-stone-400 uppercase tracking-widest">Chapter 3 / Reference Toolkit</span>
+                            <span class="text-2xl font-bold text-stone-300 group-hover:text-emerald-800 transition-colors">3 Min</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-stone-800 group-hover:text-[#112D24]">Paced Breathing Rhythm</h3>
+                        <p class="text-xs text-stone-500 leading-relaxed">
+                            Follow a visual breathing loop: 4-second inhale, 1-second hold, 5-second exhale to engage the vagal brake.
+                        </p>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-800 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        Begin Pause
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </span>
+                    <div class="absolute right-0 bottom-0 w-24 h-24 bg-emerald-50 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </button>
+
+                <!-- 10 MINUTE CARD -->
+                <button onclick="startSession(10)" class="group text-left p-6 bg-white border border-stone-200 hover:border-emerald-800 rounded-2xl transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 flex flex-col justify-between h-48 relative overflow-hidden">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-stone-400 uppercase tracking-widest">Chapter 4.5</span>
+                            <span class="text-2xl font-bold text-stone-300 group-hover:text-emerald-800 transition-colors">10 Min</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-stone-800 group-hover:text-[#112D24]">Self-Compassion Reset</h3>
+                        <p class="text-xs text-stone-500 leading-relaxed">
+                            A multi-phase sequence: Note the Inner Critic, land in the physical body, and reframe inner language.
+                        </p>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-800 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        Begin Pause
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </span>
+                    <div class="absolute right-0 bottom-0 w-24 h-24 bg-emerald-50 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </button>
+
+                <!-- 15 MINUTE CARD -->
+                <button onclick="startSession(15)" class="group text-left p-6 bg-white border border-stone-200 hover:border-emerald-800 rounded-2xl transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 flex flex-col justify-between h-48 relative overflow-hidden">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-stone-400 uppercase tracking-widest">Chapter 5 Exercise</span>
+                            <span class="text-2xl font-bold text-stone-300 group-hover:text-emerald-800 transition-colors">15 Min</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-stone-800 group-hover:text-[#112D24]">15-Min Embodied Reset</h3>
+                        <p class="text-xs text-stone-500 leading-relaxed">
+                            Our ultimate comprehensive body recovery: Settle, Mindful Scan, Micro-mobility, and final Choice step.
+                        </p>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-800 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        Begin Pause
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </span>
+                    <div class="absolute right-0 bottom-0 w-24 h-24 bg-emerald-50 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- TIMER PANEL VIEW (SCREEN 2) -->
+        <div id="timer-view" class="hidden animate-fadeIn space-y-8 max-w-2xl mx-auto w-full">
+            
+            <!-- Left Corner / Return Menu -->
+            <button onclick="quitSession()" class="flex items-center gap-2 text-stone-500 hover:text-stone-800 transition-colors text-xs font-bold uppercase tracking-wider">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Exit Recovery Menu
+            </button>
+
+            <!-- Active Phase Headers Card -->
+            <div class="bg-white border border-stone-200 p-6 md:p-8 rounded-3xl shadow-sm text-center relative overflow-hidden">
+                
+                <div class="space-y-1">
+                    <span id="current-reset-name" class="text-xs font-bold text-emerald-800 uppercase tracking-widest block">3 MINUTE PACED BREATH</span>
+                    <h2 id="phase-title" class="serif text-2xl md:text-3xl font-medium text-stone-900 transition-all">Settle and Align</h2>
+                    <p id="phase-subtitle" class="text-sm text-stone-500 max-w-md mx-auto min-h-[40px] mt-2 transition-all">Find a relaxed sitting posture, and feel the natural contact points of your body against the chair.</p>
+                </div>
+
+                <!-- DYNAMIC GRAPHIC ZONE (Breathing guidance or One-point target) -->
+                <div class="my-8 flex justify-center items-center h-52 relative">
+                    
+                    <!-- 1 MINUTE: ONE-POINT FOCUS TARGET -->
+                    <div id="one-point-target" class="hidden relative flex justify-center items-center">
+                        <div class="w-16 h-16 bg-emerald-800 rounded-full opacity-20 breathing-pulse-bg absolute"></div>
+                        <div class="w-6 h-6 bg-emerald-800 rounded-full flex items-center justify-center relative">
+                            <span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+                        </div>
+                    </div>
+
+                    <!-- 3 MINUTE / MULTI-STEP BREATHING BUBBLE -->
+                    <div id="breathing-bubble-container" class="hidden relative flex justify-center items-center">
+                        <div class="w-44 h-44 bg-emerald-800/5 rounded-full absolute breathing-pulse-bg"></div>
+                        <div id="pulse-element" class="w-28 h-28 rounded-full flex flex-col justify-center items-center text-emerald-900 font-bold text-xs select-none transition-transform duration-1000">
+                            <span id="breath-text" class="uppercase tracking-widest text-[10px] text-emerald-800 font-extrabold mb-1">Inhale</span>
+                            <span id="breath-count" class="text-xl font-bold">4s</span>
+                        </div>
+                    </div>
+
+                    <!-- Ambient sound toggle badge inside dynamic window -->
+                    <div class="absolute bottom-0 right-2">
+                        <button onclick="toggleSound()" class="flex items-center gap-1 px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-[10px] font-bold tracking-wider text-stone-500 hover:text-stone-800 rounded-full transition-colors" id="sound-btn">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="sound-icon-muted">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                            </svg>
+                            <span id="sound-label">Audio Bells: Off</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- STEP SUB-PHASES BAR (For 10 and 15 mins resets) -->
+                <div id="timer-sub-steps" class="hidden max-w-md mx-auto flex items-center justify-between mb-8 gap-1.5">
+                    <!-- Injected dynamically by code -->
+                </div>
+
+                <!-- PROGRESS METER -->
+                <div class="space-y-2 max-w-sm mx-auto">
+                    <div class="flex justify-between text-xs text-stone-400 font-medium">
+                        <span id="time-remaining">Time Remaining: 03:00</span>
+                        <span id="time-percentage">0% Done</span>
+                    </div>
+                    <div class="h-1.5 bg-stone-100 rounded-full overflow-hidden">
+                        <div id="timer-progress-bar" class="h-full bg-emerald-800 transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CONTROLLER BUTTONS ROW -->
+            <div class="flex items-center justify-center space-x-4">
+                <button id="btn-pause" onclick="togglePause()" class="w-36 py-3.5 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                    <svg id="pause-svg" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span id="pause-label">Pause</span>
+                </button>
+                <button onclick="resetTimer()" class="px-5 py-3.5 border border-stone-200 bg-white hover:bg-stone-100 text-stone-600 rounded-xl text-sm font-bold transition-all">
+                    Restart Step
+                </button>
+            </div>
+        </div>
+
+        <!-- COMPLETION SUMMARY VIEW (SCREEN 3) -->
+        <div id="completion-view" class="hidden animate-fadeIn text-center space-y-8 max-w-xl mx-auto">
+            <div class="space-y-4">
+                <div class="w-20 h-20 bg-emerald-800 text-white flex items-center justify-center rounded-full mx-auto shadow-xl shadow-emerald-800/10">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                
+                <h1 class="serif text-3xl md:text-4xl font-semibold text-stone-900">Recovery Complete</h1>
+                <p class="text-stone-600 text-sm md:text-base max-w-md mx-auto leading-relaxed">
+                    You have successfully prioritized a recovery pause in your day. This isn't about escaping life; it's about checking back into it with clarity.
+                </p>
+            </div>
+
+            <!-- The Chapter Book Affirmation Box -->
+            <div class="bg-white border border-stone-200/80 p-6 rounded-2xl shadow-sm text-left space-y-3">
+                <span class="text-[9px] font-bold text-amber-800 uppercase tracking-widest bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100 inline-block">Chapter 8 Wise Step Invitation</span>
+                <p id="completion-affirmation" class="serif text-lg text-[#112D24] italic font-medium">"Drink a glass of water entirely away from screens, then choose the single next kind action."</p>
+                <div class="h-px bg-stone-100 w-full my-3"></div>
+                <p class="text-[11px] text-stone-400 font-medium">Streak updated dynamically! Keep logging pauses to compound your grounding practice.</p>
+            </div>
+
+            <!-- Done Action Return buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button onclick="quitToHome()" class="px-6 py-3.5 bg-emerald-800 hover:bg-emerald-900 text-white text-sm font-bold rounded-xl shadow-md transition-all">
+                    Return to Recovery Menu
+                </button>
+                <button onclick="copyAffirmationToClipboard()" class="px-6 py-3.5 border border-stone-200 bg-white text-stone-600 text-sm font-semibold rounded-xl hover:bg-stone-50 transition-all flex items-center justify-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10v6m0 0l-3-3m3 3l3-3"/></svg>
+                    Copy Wise Step Idea
+                </button>
+            </div>
+            
+            <!-- Floating message block for clipboard action status -->
+            <div id="toast-msg" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-stone-900 text-stone-100 text-xs px-4 py-2 rounded-full font-medium transition-all opacity-0 pointer-events-none scale-95 shadow-lg">
+                Affirmation copied to clipboard!
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-100 border-t border-stone-200/60 py-8 text-center mt-12">
+        <div class="max-w-4xl mx-auto px-4 space-y-3">
+            <p class="text-xs text-stone-500 font-medium">
+                © 2026 Grounded Humanity Press. Companion software for "Mindful, Not Mythical: Everyday Practices for Gratitude, Calm, and Clarity."
+            </p>
+            <div class="flex justify-center space-x-6 text-xs text-stone-400">
+                <a href="#" class="hover:text-[#112D24] transition-colors">Etsy Shop Companion</a>
+                <span>•</span>
+                <a href="#" class="hover:text-[#112D24] transition-colors">Privacy Statement (No data leaves your browser)</a>
+                <span>•</span>
+                <a href="#" class="hover:text-[#112D24] transition-colors">Support & Books</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT SYSTEM -->
+    <script>
+        
+        // App State Properties
+        let appState = {
+            streak: 0,
+            lastCompleted: null,
+            audioEnabled: false,
+            activeSession: null, // { time: X, steps: [...] }
+            currentStepIndex: 0,
+            currentTimeLeft: 0, // seconds
+            timerIntervalId: null,
+            isPaused: false,
+            // Sub-timers loop indices
+            breathPhase: 'inhale', // inhale, hold, exhale, pause
+            breathTimer: 0
+        };
+
+        // Synthesizer variables
+        let audioCtx = null;
+
+        // Custom list of Wise Steps from "Mindful, Not Mythical" (Ch. 1-10)
+        const WISE_STEPS = [
+            "Drink a full glass of cold water entirely away from your screens.",
+            "Put your phone in a drawer or another room for the next ten minutes.",
+            "Take three double-inhales and slow extended exhales (physiological sighs).",
+            "Stand up and push against a wall with your arms for 10 seconds, then roll your shoulders.",
+            "Write a simple, two-sentence thank you text to someone you appreciate.",
+            "Gaze out the window at the farthest visible object for exactly 30 seconds.",
+            "Step outdoors and feel the outside air temperature on your bare face.",
+            "Look in the mirror and offer yourself the same gentle smile you'd give a good friend.",
+            "Loosen your jaw, drop your shoulders by 10%, and let your tongue rest away from the roof of your mouth.",
+            "Check your schedule for today and identify one 'Yes' you can turn into a kind 'No'."
+        ];
+
+        // Specific sequence of steps & instructional prompts for each recovery menu choice
+        const SESSIONS = {
+            1: {
+                name: "1 Min - One-Point Focus",
+                slug: "1-min",
+                steps: [
+                    {
+                        title: "One-Point Visual Hold",
+                        subtitle: "Lock your eyes onto the glowing green center target. Do not try to breathe in any special pattern. Let your vision remain soft but locked. The mind starts to settle.",
+                        duration: 60,
+                        visualMode: "one-point"
+                    }
+                ]
+            },
+            3: {
+                name: "3 Min - Paced Breathing",
+                slug: "3-min",
+                steps: [
+                    {
+                        title: "Deep Paced Respiration",
+                        subtitle: "Sync your breathing cycle directly with the expanding dynamic bubble. Breathe slowly through your nose.",
+                        duration: 180,
+                        visualMode: "breathing"
+                    }
+                ]
+            },
+            10: {
+                name: "10 Min - Self-Compassion Reset",
+                slug: "10-min",
+                steps: [
+                    {
+                        title: "Notice & Name the Inner Critic",
+                        subtitle: "Notice any current narrative of insufficiency or stress. Silently label it: 'This is overwhelm,' or 'this is self-doubt.' Don't judge it; label and watch.",
+                        duration: 120,
+                        visualMode: "one-point"
+                    },
+                    {
+                        title: "Anchor in Physical Breath",
+                        subtitle: "Place your hand flat on your chest. Take slow 4-count inhalations and 6-count exhalations. Feel the warmth of your touch directly against the body.",
+                        duration: 240,
+                        visualMode: "breathing"
+                    },
+                    {
+                        title: "Switch to Shared Common Humanity",
+                        subtitle: "Whisper silently: 'Others are carrying difficult loads today too. I am not failing. I am simply human.' Speak kindness to yourself like a loving friend.",
+                        duration: 240,
+                        visualMode: "one-point"
+                    }
+                ]
+            },
+            15: {
+                name: "15 Min - Full Embodied Reset",
+                slug: "15-min",
+                steps: [
+                    {
+                        title: "Settle and Quiet (Phase 1)",
+                        subtitle: "Take three slow deep breaths. Rest your hands in your lap and let the heavy weight of the day settle down completely.",
+                        duration: 180, // 3 mins
+                        visualMode: "breathing"
+                    },
+                    {
+                        title: "Mindful Sensory Scan (Phase 2)",
+                        subtitle: "Locate and name 3 physical sounds, 3 visual details around you, and 3 physical touch points. Move into the immediate present.",
+                        duration: 300, // 5 mins
+                        visualMode: "one-point"
+                    },
+                    {
+                        title: "Gentle Micro-mobility (Phase 3)",
+                        subtitle: "Engage slow movements: slow neck rotations, shoulder shrugs, and wrist rotations. Let each deep exhale release physical tension.",
+                        duration: 240, // 4 mins
+                        visualMode: "one-point"
+                    },
+                    {
+                        title: "Whole-Body Scan (Phase 4)",
+                        subtitle: "Scan your muscles from head to toe. Forehead, jaw, chest, hips. Label what you find: tight, loose, warm, or cold. Accept all physical state feedback.",
+                        duration: 120, // 2 mins
+                        visualMode: "one-point"
+                    },
+                    {
+                        title: "One Wise Action Choice (Phase 5)",
+                        subtitle: "Sit in silent reflection. Consider the single smallest kind action you can complete next.",
+                        duration: 60, // 1 min
+                        visualMode: "one-point"
+                    }
+                ]
+            }
+        };
+
+        // Window load: fetch local analytics and draw selector
+        window.addEventListener('load', () => {
+            initializeStorage();
+            updateStreakBadge();
+        });
+
+        // Local Storage Utilities
+        function initializeStorage() {
+            const storedStreak = localStorage.getItem('mnm_recovery_streak');
+            const storedLastComp = localStorage.getItem('mnm_recovery_last_completed');
+
+            if (storedStreak) {
+                appState.streak = parseInt(storedStreak);
+            }
+            if (storedLastComp) {
+                appState.lastCompleted = storedLastComp;
+                
+                // Check if streak is still active (less than 48 hours old)
+                const lastDate = new Date(storedLastComp);
+                const today = new Date();
+                const differenceInMs = today - lastDate;
+                const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
+
+                // If user didn't complete a session yesterday, reset streak
+                if (differenceInDays > 2) {
+                    appState.streak = 0;
+                    localStorage.setItem('mnm_recovery_streak', 0);
+                }
+            }
+        }
+
+        function updateStreakBadge() {
+            const streakEl = document.getElementById('streak-text');
+            streakEl.textContent = `Streak: ${appState.streak} Day${appState.streak !== 1 ? 's' : ''}`;
+        }
+
+
+        // Synthesizes a beautiful resonant crystal bowl bell
+        function playChime() {
+            if (!appState.audioEnabled) return;
+
+            // Lazy load audio context on first user click/trigger to prevent CORS warnings
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const fundamentalFreq = 440; // Warm A4
+                const thirdHarmonic = 554.37; // Major C#5 interval for calmness
+
+                // Create oscillators
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                const gain2 = audioCtx.createGain();
+                const masterGain = audioCtx.createGain();
+
+                // Lowpass filter to keep sound warm & round
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = "lowpass";
+                filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+
+                osc1.type = "sine";
+                osc1.frequency.setValueAtTime(fundamentalFreq, audioCtx.currentTime);
+
+                osc2.type = "sine";
+                osc2.frequency.setValueAtTime(thirdHarmonic, audioCtx.currentTime);
+
+                // Smooth decay amplitude envelope (representing the bell decay)
+                const now = audioCtx.currentTime;
+                gain1.gain.setValueAtTime(0.12, now);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 3);
+
+                gain2.gain.setValueAtTime(0.06, now);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 2);
+
+                masterGain.gain.setValueAtTime(1.0, now);
+
+                // Wiring nodes
+                osc1.connect(gain1);
+                osc2.connect(gain2);
+                gain1.connect(filter);
+                gain2.connect(filter);
+                filter.connect(masterGain);
+                masterGain.connect(audioCtx.destination);
+
+                // Play
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + 3);
+                osc2.stop(now + 3);
+
+            } catch (err) {
+                console.warn("Web Audio Context blocked or unavailable:", err);
+            }
+        }
+
+        function toggleSound() {
+            // Un-mute Audio context
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            appState.audioEnabled = !appState.audioEnabled;
+
+            const btn = document.getElementById('sound-btn');
+            const label = document.getElementById('sound-label');
+
+            if (appState.audioEnabled) {
+                label.textContent = "Audio Bells: On";
+                btn.classList.add('bg-emerald-100', 'text-emerald-800');
+                btn.classList.remove('bg-stone-100', 'text-stone-500');
+                
+                // Play a brief test chime immediately to confirm activation
+                playChime();
+            } else {
+                label.textContent = "Audio Bells: Off";
+                btn.classList.remove('bg-emerald-100', 'text-emerald-800');
+                btn.classList.add('bg-stone-100', 'text-stone-500');
+            }
+        }
+
+
+        // Start active Timer Session
+        function startSession(minutes) {
+            // Lazy load audioCtx if needed
+            if (appState.audioEnabled && !audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            appState.activeSession = SESSIONS[minutes];
+            appState.currentStepIndex = 0;
+            appState.isPaused = false;
+
+            // Render details
+            document.getElementById('current-reset-name').textContent = appState.activeSession.name.toUpperCase();
+            
+            // Build sub-step markers visually on screen
+            buildSubStepUi();
+
+            // Load first step
+            loadStep(0);
+
+            // Toggle screens views
+            document.getElementById('selection-view').classList.add('hidden');
+            document.getElementById('timer-view').classList.remove('hidden');
+
+            // Play starting bell
+            playChime();
+        }
+
+        function buildSubStepUi() {
+            const container = document.getElementById('timer-sub-steps');
+            container.innerHTML = '';
+            
+            const stepsCount = appState.activeSession.steps.length;
+            if (stepsCount <= 1) {
+                container.classList.add('hidden');
+                return;
+            }
+            container.classList.remove('hidden');
+
+            // Inject segmented sub-bar steps indicators
+            for (let i = 0; i < stepsCount; i++) {
+                const stepBar = document.createElement('div');
+                stepBar.id = `sub-step-bar-${i}`;
+                stepBar.className = `h-1.5 flex-grow rounded-full bg-stone-100 border border-stone-200/50 transition-all duration-300`;
+                container.appendChild(stepBar);
+            }
+        }
+
+        function loadStep(stepIndex) {
+            appState.currentStepIndex = stepIndex;
+            const step = appState.activeSession.steps[stepIndex];
+
+            // Render text
+            document.getElementById('phase-title').textContent = step.title;
+            document.getElementById('phase-subtitle').textContent = step.subtitle;
+
+            // Select display graphics
+            if (step.visualMode === 'one-point') {
+                document.getElementById('one-point-target').classList.remove('hidden');
+                document.getElementById('breathing-bubble-container').classList.add('hidden');
+            } else {
+                document.getElementById('one-point-target').classList.add('hidden');
+                document.getElementById('breathing-bubble-container').classList.remove('hidden');
+                startBreathingSequence();
+            }
+
+            // Sync indicators highlight
+            const stepsCount = appState.activeSession.steps.length;
+            for (let i = 0; i < stepsCount; i++) {
+                const bar = document.getElementById(`sub-step-bar-${i}`);
+                if (bar) {
+                    if (i < stepIndex) {
+                        bar.className = "h-1.5 flex-grow rounded-full bg-emerald-800";
+                    } else if (i === stepIndex) {
+                        bar.className = "h-1.5 flex-grow rounded-full bg-emerald-600 animate-pulse";
+                    } else {
+                        bar.className = "h-1.5 flex-grow rounded-full bg-stone-100 border border-stone-200/50";
+                    }
+                }
+            }
+
+            // Initialize counter
+            appState.currentTimeLeft = step.duration;
+            updateTimerDisplay();
+
+            // Launch ticking engine loop
+            if (appState.timerIntervalId) clearInterval(appState.timerIntervalId);
+            appState.timerIntervalId = setInterval(tick, 1000);
+        }
+
+
+        // Breath Visual Synchronizer State Engine
+        function startBreathingSequence() {
+            appState.breathPhase = 'inhale';
+            appState.breathTimer = 4; // 4s inhale starting
+            updateBreathingUI();
+        }
+
+        function updateBreathingUI() {
+            const bubble = document.getElementById('pulse-element');
+            const text = document.getElementById('breath-text');
+            const count = document.getElementById('breath-count');
+
+            if (appState.isPaused) {
+                bubble.style.transition = "none";
+                return;
+            }
+
+            bubble.style.transition = "all 1s linear";
+
+            if (appState.breathPhase === 'inhale') {
+                text.textContent = "Inhale";
+                count.textContent = `${appState.breathTimer}s`;
+                // Expand sphere size
+                bubble.style.transform = `scale(${1.15 - (appState.breathTimer * 0.05)})`;
+                bubble.style.backgroundColor = "rgba(163, 207, 187, 0.4)";
+            } else if (appState.breathPhase === 'hold') {
+                text.textContent = "Hold";
+                count.textContent = `${appState.breathTimer}s`;
+                bubble.style.transform = "scale(1.15)";
+                bubble.style.backgroundColor = "rgba(163, 207, 187, 0.6)";
+            } else if (appState.breathPhase === 'exhale') {
+                text.textContent = "Exhale";
+                count.textContent = `${appState.breathTimer}s`;
+                // Shrink sphere size
+                bubble.style.transform = `scale(${0.85 + (appState.breathTimer * 0.05)})`;
+                bubble.style.backgroundColor = "rgba(209, 231, 221, 0.4)";
+            }
+        }
+
+        function runBreathingTick() {
+            appState.breathTimer--;
+
+            if (appState.breathTimer <= 0) {
+                // Advance cycle sequence: Inhale (4s) -> Hold (1s) -> Exhale (5s) -> Repeat
+                if (appState.breathPhase === 'inhale') {
+                    appState.breathPhase = 'hold';
+                    appState.breathTimer = 1; // 1s brief pause/hold
+                } else if (appState.breathPhase === 'hold') {
+                    appState.breathPhase = 'exhale';
+                    appState.breathTimer = 5; // 5s slow relaxing exhalation
+                } else if (appState.breathPhase === 'exhale') {
+                    appState.breathPhase = 'inhale';
+                    appState.breathTimer = 4; // Start again
+                }
+            }
+            updateBreathingUI();
+        }
+
+        // Running Clock Engine
+        function tick() {
+            if (appState.isPaused) return;
+
+            appState.currentTimeLeft--;
+
+            // Tick dynamic breath graphic if displaying
+            if (appState.activeSession.steps[appState.currentStepIndex].visualMode === 'breathing') {
+                runBreathingTick();
+            }
+
+            updateTimerDisplay();
+
+            if (appState.currentTimeLeft <= 0) {
+                // Play notification bell chime
+                playChime();
+                advanceStep();
+            }
+        }
+
+        function updateTimerDisplay() {
+            // Minutes & Seconds converter helper
+            const totalDuration = appState.activeSession.steps[appState.currentStepIndex].duration;
+            const elapsed = totalDuration - appState.currentTimeLeft;
+            const percentage = Math.round((elapsed / totalDuration) * 100);
+
+            const m = Math.floor(appState.currentTimeLeft / 60);
+            const s = appState.currentTimeLeft % 60;
+            const displayTime = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+            document.getElementById('time-remaining').textContent = `Time Remaining: ${displayTime}`;
+            document.getElementById('time-percentage').textContent = `${percentage}% Done`;
+            document.getElementById('timer-progress-bar').style.width = `${percentage}%`;
+        }
+
+        // Stepper advance router
+        function advanceStep() {
+            const nextIndex = appState.currentStepIndex + 1;
+            const stepsCount = appState.activeSession.steps.length;
+
+            if (nextIndex < stepsCount) {
+                loadStep(nextIndex);
+            } else {
+                // Completed entire sequence successfully
+                clearInterval(appState.timerIntervalId);
+                triggerCompletion();
+            }
+        }
+
+        // Pause/Resume Session Toggle
+        function togglePause() {
+            appState.isPaused = !appState.isPaused;
+
+            const label = document.getElementById('pause-label');
+            const pauseSvg = document.getElementById('pause-svg');
+
+            if (appState.isPaused) {
+                label.textContent = "Resume";
+                // Switch icon to play shape
+                pauseSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`;
+            } else {
+                label.textContent = "Pause";
+                // Switch icon to pause shape
+                pauseSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>`;
+                
+                // Keep breathing transition smooth immediately
+                if (appState.activeSession.steps[appState.currentStepIndex].visualMode === 'breathing') {
+                    updateBreathingUI();
+                }
+            }
+        }
+
+        // Reset current active phase
+        function resetTimer() {
+            clearInterval(appState.timerIntervalId);
+            loadStep(appState.currentStepIndex);
+            
+            // Un-pause if paused
+            if (appState.isPaused) {
+                togglePause();
+            }
+        }
+
+        // Quiet exit button
+        function quitSession() {
+            clearInterval(appState.timerIntervalId);
+            document.getElementById('timer-view').classList.add('hidden');
+            document.getElementById('selection-view').classList.remove('hidden');
+        }
+
+        // Final celebratory triggers sequence
+        function triggerCompletion() {
+            // Update streak records logic
+            const todayStr = new Date().toDateString();
+            
+            if (appState.lastCompleted !== todayStr) {
+                appState.streak++;
+                appState.lastCompleted = todayStr;
+                
+                localStorage.setItem('mnm_recovery_streak', appState.streak);
+                localStorage.setItem('mnm_recovery_last_completed', todayStr);
+                
+                updateStreakBadge();
+            }
+
+            // Draw a randomized wise action prompt from Chapter Book arrays
+            const randomWise = WISE_STEPS[Math.floor(Math.random() * WISE_STEPS.length)];
+            document.getElementById('completion-affirmation').textContent = `"${randomWise}"`;
+
+            // Transition UI displays
+            document.getElementById('timer-view').classList.add('hidden');
+            document.getElementById('completion-view').classList.remove('hidden');
+        }
+
+        function quitToHome() {
+            document.getElementById('completion-view').classList.add('hidden');
+            document.getElementById('selection-view').classList.remove('hidden');
+        }
+
+        // Copy wise action content easily for desktop notes
+        function copyAffirmationToClipboard() {
+            const text = document.getElementById('completion-affirmation').textContent;
+            
+            // Standard fallback due to iframe constraints
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            // Notify User visually
+            const toast = document.getElementById('toast-msg');
+            toast.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'scale-100');
+
+            // Fade toast out
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                toast.classList.remove('opacity-100', 'scale-100');
+            }, 2500);
+        }
+
+        function quitToHome() {
+            document.getElementById('completion-view').classList.add('hidden');
+            document.getElementById('selection-view').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
