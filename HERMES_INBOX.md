@@ -589,3 +589,4 @@ No changes to SOUL.md, AGENTS.md, skills, crons, or memory.
 ---
 
 [RESEARCH-COMPLETE] 2026-06-02 | Topic: Mindful, Not Mythical Start Here guide | File: launch/mindful-not-mythical-start-here-guide-2026-06-02.md
+[MINIMAX-M3-TEST] 2026-06-02 | File: prototypes/minimax-m3-gratitude-reset-2026-06-02.html | Theme: Gratitude Reset Card (3-step reflection tool)

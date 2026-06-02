@@ -1,0 +1,1017 @@
+<!doctype html>
+<!--
+  Design Retro — Grounded Humanity / Paper N Pixels
+  Concept: "Gratitude Reset Card" — a three-step reflection that names one
+  small helpful thing, what it made easier, and what to carry forward.
+  Stitched at the end into a keepsake "Today I noticed…" card the user can
+  copy or screenshot. Brand: Grounded Humanity (umbrella), Paper N Pixels
+  (shop). First product family: Mindful, Not Mythical (Carlton Embers).
+
+  Design intent
+  - Editorial mindfulness aesthetic. Printed quarterly journal brought to web,
+    not an app onboarding flow. Restraint, slowness, and a single composition
+    per "page."
+  - Three prompts, then a reflection. Each prompt takes one short, focused
+    answer — sized for a thumb-typed paragraph, not a journal entry. The whole
+    thing is two minutes on a phone, designed for an ADHD mind that will close
+    the tab if it costs more attention than that.
+  - No streaks, no confetti, no "great job!", no gentle nudges. The interface
+    trusts the user. Empty fields render as em-dashes, not blocking errors.
+  - The reflection card is the artifact — visually distinct from the prompts
+    so the user recognises "this is the thing I'm taking with me."
+
+  What I pushed stylistically
+  - Cormorant Garamond over Fraunces this time. Cormorant is a quieter, more
+    classical display serif with strong italics — closer to the feel of a
+    literary journal (n+1, Granta, The Believer) than a magazine cover. The
+    italic in particular carries the prompt hints and the stitched reflection
+    prose, which gives the whole piece a manuscript quality.
+  - Inter for body, micro-copy, and the "01 / 03" step labels. No monospace
+    this round — the numbered labels are small-caps Inter instead, which
+    reads more like a book chapter mark than a UI counter.
+  - A single hand-built inline SVG olive sprig sits in the upper-right of the
+    page as a quiet, persistent mark — not a wreath, not a pattern, not a
+    hero illustration. One line, six leaves, low contrast. The point of it
+    is restraint: a botanical detail that disappears if you stop looking.
+  - Paper grain via an inline SVG turbulence filter on a fixed full-viewport
+    layer at ~7% opacity. Same approach as the previous test, recalibrated
+    warmer so the sage text still feels grounded on the cream.
+  - The reflection card uses a thin sage rule and a small drop-cap "T" on
+    "Today" to feel like a printed broadside. Italic Cormorant for the
+    stitched connecting prose, upright Cormorant for the user's answers —
+    so the structure reads as a sentence, not a Q&A.
+
+  Palette (locked to brand guardrails)
+  - cream         #F4EFE4   page background, the "paper"
+  - sage          #6B7F5E   primary brand colour, step indicator, button bg
+  - sage deep     #4A5B41   headings and body text
+  - sage soft     #8FA17E   hint text, soft borders
+  - amber         #B89060   the "you're here" accent, the Continue button
+                              on reflection, focus rings
+  - clay          #C4794A   used very sparingly — only the thin top rule of
+                              the reflection card. A nudge, not a shout.
+  - ink soft      #5A5249   secondary body, slightly warm so it doesn't
+                              fight the cream
+
+  Typography scale (mobile-first, scales up at min-width 640px)
+  - brand mark        Inter 11px / 0.18em tracking, uppercase
+  - step label        Inter 11px / 0.22em tracking, uppercase ("01 / 03")
+  - prompt            Cormorant 28px / 1.18 leading
+  - prompt hint       Cormorant italic 16px
+  - reflection title  Cormorant 36px
+  - reflection body   Cormorant 19px / 1.55 leading (user answers in upright
+                       weight 500, connecting prose in italic 400)
+  - button            Inter medium 14px / 0.06em tracking, uppercase
+
+  What I'd refine with more time
+  - The Continue button is full-bleed sage on the prompt screens and amber on
+    the reflection screen. I'd test whether a single amber CTA throughout
+    (with sage as the resting state of the orb-style progress dots) reads
+    more cohesively. Two colour-ways for buttons is one decision too many.
+  - I'd add a `prefers-reduced-motion` check on the step transitions and the
+    copy-confirmation pulse. Currently the transition is just opacity +
+    translateY, which is already mild, but a 150ms crossfade with no motion
+    would be safer for vestibular-sensitive users.
+  - The stitched reflection formats answers into three short lines. With more
+    copy I'd let a long answer wrap to two lines instead of clipping the
+    textarea at 280 chars. I added a soft character cue ("about a sentence")
+    under each prompt to set expectations without enforcing a limit.
+  - The olive sprig is currently a static SVG. A second variant rotated 180°
+    in the bottom-left would balance the composition on taller phones, but I
+    held off — one ornament per page is the rule until the design earns two.
+  - The copy-to-clipboard uses the modern Clipboard API with no fallback
+    (Safari < 13.1 will fail silently). I'd add a `document.execCommand` path
+    for older WebViews and surface a manual-select fallback as a last resort.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light only" />
+<meta name="theme-color" content="#F4EFE4" />
+<title>Gratitude Reset — Paper N Pixels</title>
+<style>
+  /* ---------- Imports ---------- */
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap');
+
+  /* ---------- Tokens ---------- */
+  :root {
+    --cream:        #F4EFE4;
+    --cream-deep:   #ECE4D2;
+    --sage:         #6B7F5E;
+    --sage-deep:    #4A5B41;
+    --sage-soft:    #8FA17E;
+    --sage-mist:    #C8D2BC;
+    --amber:        #B89060;
+    --amber-soft:   #D2B58A;
+    --clay:         #C4794A;
+    --ink-soft:     #5A5249;
+    --ink-faint:    #8A8276;
+
+    --serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+    --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --r-sm: 4px;
+    --r-md: 8px;
+    --r-lg: 14px;
+
+    --shadow-card: 0 1px 0 rgba(74, 91, 65, 0.04),
+                   0 12px 32px -18px rgba(74, 91, 65, 0.18);
+  }
+
+  /* ---------- Reset ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100dvh;
+    background: var(--cream);
+    color: var(--sage-deep);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  textarea { font: inherit; color: inherit; }
+
+  /* ---------- Paper grain (fixed overlay) ---------- */
+  .grain {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.07;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.29  0 0 0 0 0.36  0 0 0 0 0.25  0 0 0 0.7 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* ---------- Persistent botanical (top-right) ---------- */
+  .botanical {
+    position: fixed;
+    top: 28px;
+    right: 22px;
+    width: 56px;
+    height: 84px;
+    color: var(--sage-soft);
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .botanical svg { width: 100%; height: 100%; display: block; }
+
+  /* ---------- Layout shell ---------- */
+  .page {
+    position: relative;
+    z-index: 2;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 22px 36px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Brand mark ---------- */
+  .brand {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+    opacity: 0.78;
+  }
+  .brand .mark { font-weight: 600; }
+  .brand .sep { color: var(--sage-soft); margin: 0 6px; }
+  .brand .sub { color: var(--ink-faint); font-weight: 400; }
+
+  /* ---------- Card stage ---------- */
+  .stage {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 22px;
+    min-height: 0;
+  }
+
+  .card {
+    background: var(--cream);
+    border: 1px solid rgba(143, 161, 126, 0.22);
+    border-radius: var(--r-lg);
+    padding: 36px 28px 32px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+  }
+
+  /* Subtle inner "paper" tint on cards */
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(143, 161, 126, 0.12);
+    border-radius: calc(var(--r-lg) - 4px);
+    pointer-events: none;
+  }
+
+  /* Step visibility */
+  .step { display: none; }
+  .step.is-active {
+    display: block;
+    animation: stepIn 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- Step header (label + indicator) ---------- */
+  .step-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .step-label {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sage);
+  }
+  .step-dots {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+  }
+  .step-dots span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--sage-mist);
+    transition: background 240ms ease, transform 240ms ease;
+  }
+  .step-dots span.is-done   { background: var(--sage-soft); }
+  .step-dots span.is-here   { background: var(--amber); transform: scale(1.4); }
+
+  /* ---------- Prompt typography ---------- */
+  .prompt {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.18;
+    color: var(--sage-deep);
+    margin: 0 0 8px;
+    letter-spacing: -0.005em;
+  }
+  .prompt-hint {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--sage);
+    margin: 0 0 22px;
+    opacity: 0.82;
+  }
+
+  /* ---------- Textarea (journal-line input) ---------- */
+  .field {
+    position: relative;
+    margin-bottom: 24px;
+  }
+  .field textarea {
+    width: 100%;
+    min-height: 110px;
+    resize: none;
+    border: 0;
+    background: transparent;
+    border-bottom: 1px solid var(--sage-mist);
+    padding: 10px 2px 12px;
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--sage-deep);
+    outline: none;
+    transition: border-color 220ms ease;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+  .field textarea::placeholder {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--sage-soft);
+    opacity: 0.7;
+  }
+  .field textarea:focus { border-bottom-color: var(--amber); }
+  .field-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 52px;
+    padding: 0 22px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: var(--r-md);
+    transition: background-color 220ms ease, color 220ms ease, transform 80ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+  }
+
+  .btn-primary {
+    background: var(--sage);
+    color: var(--cream);
+  }
+  .btn-primary:hover { background: var(--sage-deep); }
+  .btn-primary:disabled {
+    background: var(--sage-mist);
+    color: var(--cream);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .btn-accent {
+    background: var(--amber);
+    color: var(--cream);
+  }
+  .btn-accent:hover { background: #A37E50; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--sage);
+    border: 1px solid var(--sage-mist);
+  }
+  .btn-ghost:hover { border-color: var(--sage); color: var(--sage-deep); }
+
+  .btn-row { display: flex; flex-direction: column; gap: 10px; }
+  .btn-row .btn { width: 100%; }
+
+  /* ---------- Intro card ---------- */
+  .intro-eyebrow {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin: 0 0 18px;
+  }
+  .intro-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 42px;
+    line-height: 1.05;
+    color: var(--sage-deep);
+    margin: 0 0 14px;
+    letter-spacing: -0.012em;
+  }
+  .intro-title em {
+    font-style: italic;
+    color: var(--sage);
+    font-weight: 500;
+  }
+  .intro-lede {
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+  .intro-meta {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-family: var(--sans);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 28px;
+  }
+  .intro-meta span::before {
+    content: "·";
+    color: var(--sage-soft);
+    margin-right: 8px;
+  }
+  .intro-meta span:first-child::before { content: ""; margin: 0; }
+
+  /* ---------- Reflection card ---------- */
+  .reflection-card {
+    position: relative;
+    background: linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+    padding: 32px 26px 28px;
+    margin-bottom: 22px;
+    border-radius: var(--r-md);
+    border: 1px solid rgba(143, 161, 126, 0.3);
+  }
+  .reflection-card::before {
+    content: "";
+    position: absolute;
+    top: 12px; left: 12px; right: 12px; bottom: 12px;
+    border: 1px solid rgba(143, 161, 126, 0.18);
+    border-radius: 4px;
+    pointer-events: none;
+  }
+  .reflection-rule {
+    width: 36px; height: 2px;
+    background: var(--clay);
+    margin: 0 0 18px;
+  }
+  .reflection-eyebrow {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin: 0 0 8px;
+  }
+  .reflection-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 1.05;
+    color: var(--sage-deep);
+    margin: 0 0 22px;
+    letter-spacing: -0.01em;
+  }
+  .reflection-title::first-letter {
+    color: var(--clay);
+    font-size: 1.1em;
+  }
+  .reflection-body {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--sage-deep);
+  }
+  .reflection-body p {
+    margin: 0 0 14px;
+  }
+  .reflection-body p:last-child { margin-bottom: 0; }
+  .reflection-body .prose {
+    font-style: italic;
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+  .reflection-body .answer {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--sage-deep);
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 4px;
+    padding-left: 2px;
+  }
+  .reflection-body .empty {
+    color: var(--sage-soft);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .reflection-body .divider {
+    width: 24px; height: 1px;
+    background: var(--sage-mist);
+    margin: 14px 0;
+  }
+  .reflection-sign {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-faint);
+    margin: 22px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid rgba(143, 161, 126, 0.25);
+  }
+
+  /* ---------- Action row (reflection) ---------- */
+  .actions { display: flex; flex-direction: column; gap: 10px; }
+
+  /* ---------- Toast (copy confirmation) ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--sage-deep);
+    color: var(--cream);
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease, transform 200ms ease;
+    z-index: 50;
+    box-shadow: 0 8px 24px -10px rgba(74, 91, 65, 0.5);
+  }
+  .toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ---------- Footer ---------- */
+  .foot {
+    margin-top: 26px;
+    text-align: center;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .foot .dot { color: var(--sage-soft); margin: 0 8px; }
+
+  /* ---------- Larger phones / small tablets ---------- */
+  @media (min-width: 640px) {
+    .page { padding: 44px 36px 52px; }
+    .card { padding: 48px 44px 40px; }
+    .intro-title { font-size: 54px; }
+    .prompt { font-size: 32px; }
+    .reflection-title { font-size: 44px; }
+    .reflection-body { font-size: 21px; }
+    .field textarea { min-height: 130px; }
+    .botanical { width: 72px; height: 108px; top: 36px; right: 36px; }
+    .btn-row { flex-direction: row; }
+    .btn-row .btn { flex: 1; }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .step.is-active { animation: none; }
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+  <!-- Paper grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Persistent botanical mark (top right) -->
+  <div class="botanical" aria-hidden="true">
+    <svg viewBox="0 0 56 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- A single olive sprig: thin curved stem with six small leaves -->
+      <path d="M28 4 C 26 22, 30 44, 27 80" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+      <g stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none">
+        <!-- paired leaves, alternating up the stem -->
+        <path d="M28 16 C 22 14, 18 12, 14 14 C 18 18, 23 19, 28 17 Z"/>
+        <path d="M28 16 C 34 14, 38 12, 42 14 C 38 18, 33 19, 28 17 Z"/>
+        <path d="M28 32 C 22 30, 17 28, 13 30 C 17 34, 23 35, 28 33 Z"/>
+        <path d="M28 32 C 34 30, 39 28, 43 30 C 39 34, 33 35, 28 33 Z"/>
+        <path d="M28 50 C 23 48, 19 47, 15 49 C 19 52, 24 53, 28 51 Z"/>
+        <path d="M28 50 C 33 48, 37 47, 41 49 C 37 52, 32 53, 28 51 Z"/>
+        <path d="M28 66 C 25 65, 22 64, 19 66 C 22 68, 25 69, 28 68 Z"/>
+        <path d="M28 66 C 31 65, 34 64, 37 66 C 34 68, 31 69, 28 68 Z"/>
+      </g>
+    </svg>
+  </div>
+
+  <main class="page">
+    <!-- Brand mark -->
+    <header class="brand" role="banner">
+      <div>
+        <span class="mark">Paper N Pixels</span>
+        <span class="sep">·</span>
+        <span class="sub">Grounded Humanity</span>
+      </div>
+      <div class="sub" aria-hidden="true">No. 003</div>
+    </header>
+
+    <!-- Step stage -->
+    <section class="stage" aria-live="polite">
+
+      <!-- INTRO -->
+      <article class="card step is-active" data-step="intro" aria-labelledby="intro-title">
+        <p class="intro-eyebrow">A Two-Minute Reset</p>
+        <h1 id="intro-title" class="intro-title">Gratitude, <em>quietly</em>.</h1>
+        <p class="intro-lede">
+          Three small prompts. A couple of sentences each. Stitched at the end
+          into a reflection you can keep.
+        </p>
+        <p class="intro-meta" aria-hidden="true">
+          <span>3 prompts</span>
+          <span>~2 minutes</span>
+          <span>Nothing to save</span>
+        </p>
+        <button class="btn btn-primary" data-action="start" type="button">
+          Begin
+        </button>
+      </article>
+
+      <!-- STEP 1 -->
+      <article class="card step" data-step="1" aria-labelledby="prompt-1">
+        <div class="step-head">
+          <span class="step-label">Prompt one</span>
+          <div class="step-dots" aria-hidden="true">
+            <span class="is-here"></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <h2 id="prompt-1" class="prompt">Name one small thing that helped today.</h2>
+        <p class="prompt-hint">A song, a sentence, a finished task, a window of quiet — anything counts.</p>
+        <div class="field">
+          <label for="answer-1" class="sr-only">Your answer to prompt one</label>
+          <textarea
+            id="answer-1"
+            data-field="1"
+            rows="3"
+            maxlength="280"
+            placeholder="This morning, a small thing that helped was…"
+            autocomplete="off"
+            autocorrect="on"
+            spellcheck="true"></textarea>
+          <div class="field-meta">
+            <span>About a sentence</span>
+            <span data-counter-for="1"><span data-count>0</span> / 280</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" data-action="next" data-from="1" type="button">
+          Continue
+        </button>
+      </article>
+
+      <!-- STEP 2 -->
+      <article class="card step" data-step="2" aria-labelledby="prompt-2">
+        <div class="step-head">
+          <span class="step-label">Prompt two</span>
+          <div class="step-dots" aria-hidden="true">
+            <span class="is-done"></span>
+            <span class="is-here"></span>
+            <span></span>
+          </div>
+        </div>
+        <h2 id="prompt-2" class="prompt">What did it make easier?</h2>
+        <p class="prompt-hint">A task, a feeling, a conversation, getting through the morning.</p>
+        <div class="field">
+          <label for="answer-2" class="sr-only">Your answer to prompt two</label>
+          <textarea
+            id="answer-2"
+            data-field="2"
+            rows="3"
+            maxlength="280"
+            placeholder="It made…"
+            autocomplete="off"
+            autocorrect="on"
+            spellcheck="true"></textarea>
+          <div class="field-meta">
+            <span>About a sentence</span>
+            <span data-counter-for="2"><span data-count>0</span> / 280</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" data-action="next" data-from="2" type="button">
+          Continue
+        </button>
+      </article>
+
+      <!-- STEP 3 -->
+      <article class="card step" data-step="3" aria-labelledby="prompt-3">
+        <div class="step-head">
+          <span class="step-label">Prompt three</span>
+          <div class="step-dots" aria-hidden="true">
+            <span class="is-done"></span>
+            <span class="is-done"></span>
+            <span class="is-here"></span>
+          </div>
+        </div>
+        <h2 id="prompt-3" class="prompt">What do you want to carry forward?</h2>
+        <p class="prompt-hint">An intention, a habit, a small reminder to future-you. Optional but useful.</p>
+        <div class="field">
+          <label for="answer-3" class="sr-only">Your answer to prompt three</label>
+          <textarea
+            id="answer-3"
+            data-field="3"
+            rows="3"
+            maxlength="280"
+            placeholder="Tomorrow, I want to remember…"
+            autocomplete="off"
+            autocorrect="on"
+            spellcheck="true"></textarea>
+          <div class="field-meta">
+            <span>About a sentence</span>
+            <span data-counter-for="3"><span data-count>0</span> / 280</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" data-action="next" data-from="3" type="button">
+          See your reflection
+        </button>
+      </article>
+
+      <!-- REFLECTION -->
+      <article class="card step" data-step="reflection" aria-labelledby="reflection-title">
+        <div class="step-head">
+          <span class="step-label">Your reflection</span>
+          <div class="step-dots" aria-hidden="true">
+            <span class="is-done"></span>
+            <span class="is-done"></span>
+            <span class="is-done"></span>
+          </div>
+        </div>
+
+        <div class="reflection-card" id="reflection-output">
+          <div class="reflection-rule" aria-hidden="true"></div>
+          <p class="reflection-eyebrow">A quiet record</p>
+          <h2 id="reflection-title" class="reflection-title">Today I noticed</h2>
+          <div class="reflection-body" id="reflection-body">
+            <!-- Filled in by JS -->
+          </div>
+          <p class="reflection-sign">— from <em>Mindful, Not Mythical</em> · Carlton Embers</p>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-accent" data-action="copy" type="button">
+            <span data-copy-label>Copy as text</span>
+          </button>
+          <div class="btn-row">
+            <button class="btn btn-ghost" data-action="screenshot-hint" type="button">
+              Or screenshot this card
+            </button>
+            <button class="btn btn-ghost" data-action="restart" type="button">
+              Start over
+            </button>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="foot" role="contentinfo">
+      Paper N Pixels<span class="dot">·</span>Grounded Humanity
+    </footer>
+  </main>
+
+  <!-- Copy toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied to clipboard</div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ---------- State ----------
+    const state = {
+      current: 'intro',
+      answers: { 1: '', 2: '', 3: '' }
+    };
+
+    // ---------- DOM ----------
+    const cards = Array.from(document.querySelectorAll('.step'));
+    const cardByStep = Object.fromEntries(cards.map(c => [c.dataset.step, c]));
+    const toast = document.getElementById('toast');
+
+    // ---------- Helpers ----------
+    function show(step) {
+      const next = cardByStep[step];
+      if (!next || next === cardByStep[state.current]) return;
+      // Clear any in-flight animation so the new step animates fresh
+      cards.forEach(c => c.classList.remove('is-active'));
+      // Force reflow so the next class triggers the keyframe reliably
+      void next.offsetWidth;
+      next.classList.add('is-active');
+      state.current = step;
+      // Move keyboard focus to the new step's heading for screen readers
+      const heading = next.querySelector('h1, h2');
+      if (heading) {
+        heading.setAttribute('tabindex', '-1');
+        heading.focus({ preventScroll: true });
+      }
+      // Scroll to top of the card on transition (small phones)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function getAnswer(n) {
+      return (state.answers[n] || '').trim();
+    }
+
+    function escape(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function buildReflection() {
+      const a1 = getAnswer(1);
+      const a2 = getAnswer(2);
+      const a3 = getAnswer(3);
+
+      const renderAnswer = (txt, fallback) => {
+        if (txt) return `<span class="answer">${escape(txt)}</span>`;
+        return `<span class="answer empty">— ${escape(fallback)}</span>`;
+      };
+
+      const today = new Date();
+      const dateStr = today.toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      });
+
+      const html = [
+        `<p><span class="prose">Today, I noticed</span>${renderAnswer(a1, 'I noticed the day pass')}</p>`,
+        `<p>${renderAnswer('', '')}<span class="prose">It made</span>${renderAnswer(a2, 'something a little easier')}<span class="prose">a bit easier.</span></p>`,
+        `<div class="divider" aria-hidden="true"></div>`,
+        `<p><span class="prose">What I'm carrying forward:</span>${renderAnswer(a3, 'A small intention')}</p>`
+      ].join('');
+
+      return { html, plain: buildPlain(a1, a2, a3, dateStr), dateStr };
+    }
+
+    function buildPlain(a1, a2, a3, dateStr) {
+      const blank = '—';
+      return [
+        `Today I noticed`,
+        a1 || blank,
+        ``,
+        `It made ${a2 || 'something'} ${a2 ? 'a little easier.' : 'a little easier.'}`,
+        ``,
+        `What I'm carrying forward:`,
+        a3 || blank,
+        ``,
+        `— ${dateStr} · Mindful, Not Mythical, Carlton Embers`
+      ].join('\n');
+    }
+
+    function updateCounters() {
+      [1, 2, 3].forEach(n => {
+        const ta = document.getElementById('answer-' + n);
+        const counter = document.querySelector(`[data-counter-for="${n}"] [data-count]`);
+        if (ta && counter) counter.textContent = String(ta.value.length);
+      });
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => {
+        toast.classList.remove('is-visible');
+      }, 2200);
+    }
+
+    // ---------- Event wiring ----------
+    // Textarea input: store answer, update counter
+    [1, 2, 3].forEach(n => {
+      const ta = document.getElementById('answer-' + n);
+      if (!ta) return;
+      ta.addEventListener('input', (e) => {
+        state.answers[n] = e.target.value;
+        updateCounters();
+      });
+      // Auto-grow a touch, but cap at a comfortable max
+      ta.addEventListener('input', () => {
+        ta.style.height = 'auto';
+        ta.style.height = Math.min(ta.scrollHeight, 220) + 'px';
+      });
+    });
+
+    // Click delegation
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+      const action = target.dataset.action;
+
+      if (action === 'start') {
+        show('1');
+        // Focus the first textarea
+        setTimeout(() => {
+          const ta = document.getElementById('answer-1');
+          if (ta) ta.focus();
+        }, 350);
+        return;
+      }
+
+      if (action === 'next') {
+        const from = Number(target.dataset.from);
+        if (from === 1) show('2');
+        else if (from === 2) show('3');
+        else if (from === 3) {
+          renderReflection();
+          show('reflection');
+        }
+        // Auto-focus the next textarea
+        setTimeout(() => {
+          const nextStep = from + 1;
+          if (nextStep <= 3) {
+            const ta = document.getElementById('answer-' + nextStep);
+            if (ta) ta.focus();
+          }
+        }, 350);
+        return;
+      }
+
+      if (action === 'copy') {
+        const data = buildReflection();
+        copyToClipboard(data.plain).then((ok) => {
+          const label = target.querySelector('[data-copy-label]');
+          if (ok) {
+            showToast('Copied — paste anywhere');
+            if (label) {
+              const original = label.textContent;
+              label.textContent = 'Copied';
+              setTimeout(() => { label.textContent = original; }, 1800);
+            }
+          } else {
+            showToast("Couldn't copy — try selecting the card text");
+          }
+        });
+        return;
+      }
+
+      if (action === 'screenshot-hint') {
+        showToast('On iPhone: Side + Volume Up · On Android: Power + Volume Down');
+        return;
+      }
+
+      if (action === 'restart') {
+        // Clear all answers and state
+        state.answers = { 1: '', 2: '', 3: '' };
+        [1, 2, 3].forEach(n => {
+          const ta = document.getElementById('answer-' + n);
+          if (ta) { ta.value = ''; ta.style.height = 'auto'; }
+        });
+        updateCounters();
+        show('intro');
+        return;
+      }
+    });
+
+    // Keyboard: Cmd/Ctrl+Enter from a textarea advances
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        const ta = e.target.closest('textarea');
+        if (!ta) return;
+        e.preventDefault();
+        const n = Number(ta.dataset.field);
+        if (n >= 1 && n <= 3) {
+          const btn = document.querySelector(`[data-action="next"][data-from="${n}"]`);
+          if (btn) btn.click();
+        }
+      }
+    });
+
+    // ---------- Reflection rendering ----------
+    function renderReflection() {
+      const data = buildReflection();
+      const body = document.getElementById('reflection-body');
+      if (body) body.innerHTML = data.html;
+    }
+
+    // ---------- Clipboard ----------
+    function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text).then(() => true).catch(() => fallbackCopy(text));
+      }
+      return Promise.resolve(fallbackCopy(text));
+    }
+
+    function fallbackCopy(text) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-1000px';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // ---------- Init ----------
+    updateCounters();
+  })();
+  </script>
+</body>
+</html>
