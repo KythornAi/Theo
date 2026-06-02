@@ -1,0 +1,1241 @@
+<!doctype html>
+<!--
+  Design Retro — Grounded Humanity / Paper N Pixels
+  Concept: "The 90-Second Hinge" — a four-step stress interruption tool for
+  moments when someone feels overwhelmed. The metaphor is a pause acting as
+  a hinge that turns a heavy door: a thin wedge of choice inserted into a
+  difficult day. Affect labelling, paced breathing, common humanity, a tiny
+  step. Stitched at the end into a reflection summary the user can screenshot.
+  Brand: Grounded Humanity (umbrella), Paper N Pixels (shop). First product
+  family: Mindful, Not Mythical (Carlton Embers).
+
+  Design intent
+  - Editorial mindfulness aesthetic. A printed quarterly journal brought to
+    web, not an app onboarding flow. Restraint, slowness, and a single
+    composition per "page" — one frame fills the viewport at each step.
+  - Four steps, one screen at a time. The user never sees two at once; the
+    transitions are gentle fades so the back/forward motion feels like
+    turning a card, not loading a screen.
+  - The breathing orb is the centerpiece of step 2 and the only piece of
+    real "animation" in the file. It grows on a 4-count inhale, holds the
+    peak briefly, and contracts on a 6-count exhale. A thin amber ring
+    flashes once at the exhale-hold moment — the natural pause between
+    breaths — to mark the completed cycle without words like "Great job!".
+  - No streaks, no confetti, no celebratory copy, no gentle nudges. The
+    interface trusts the user. Empty fields render as em-dashes, not
+    blocking errors. "Continue" is always available where it makes sense.
+  - The reflection card on the end screen is the artifact — visually
+    distinct from the steps, sized to read in a screenshot, framed with a
+    thin sage rule and a small drop-cap "T" on "Today" to feel like a
+    printed broadside.
+
+  What I pushed stylistically
+  - Cormorant Garamond over Fraunces this time. Cormorant's italic is the
+    quiet hero of the piece — used on the prompt hints, the humanity card,
+    and the reflection's connecting prose — giving the whole thing a
+    manuscript quality. Inter for UI micro-copy and step labels.
+  - The breathing orb is hand-built CSS, not a library. A 10s linear-ish
+    keyframe scales the inner disc from 0.55 to 1.0 on a 4s inhale and back
+    down on a 6s exhale. A separate ::before element runs the same 10s
+    cycle but with its opacity keyframed to spike briefly at the
+    exhale-hold moment in amber. Two animations, one timing source.
+  - Phase text ("Inhale" / "Exhale") and the breath counter are driven by
+    a single rAF loop reading `getComputedStyle(orb).transform` and
+    interpolating against the 10s cycle — so the text always matches the
+    visible scale, even if the cycle is later slowed or sped up.
+  - The humanity card library is inline JS (no fetch, no JSON file) so the
+    tool works as a single file drop. Cards are picked with `crypto.
+    getRandomValues` for a fair shuffle, but with a "draw another" button
+    always available — a hard rule against the "one shot per session"
+    gamification pattern.
+  - The tiny-step cards are a CSS grid of tap targets, large enough for
+    thumbs (min 56px tall) but tight enough to read as a curated list
+    rather than a checklist. Selection state is a sage fill + cream
+    text, not a checkmark — chosen, not completed.
+  - The same hand-built inline SVG olive sprig sits in the upper-right as
+    in the previous prototype. Restraint: one ornament per page is the
+    rule until the design earns two.
+  - Paper grain via an inline SVG turbulence filter on a fixed full-
+    viewport layer at ~7% opacity. Same approach as the Gratitude Reset
+    prototype, recalibrated for the orb's larger negative space.
+
+  Palette (locked to brand guardrails)
+  - cream         #F4EFE4   page background, the "paper"
+  - cream deep    #ECE4D2   orb at full exhale, card surfaces
+  - sage          #6B7F5E   primary brand colour, step indicator, button bg
+  - sage deep     #4A5B41   headings and body text
+  - sage soft     #8FA17E   hint text, soft borders
+  - amber         #B89060   the "you're here" accent, exhale-hold flash,
+                              the "Begin" button on step 1
+  - clay          #C4794A   used very sparingly — only the thin top rule
+                              of the reflection card. A nudge, not a shout.
+  - ink soft      #5A5249   secondary body, slightly warm so it doesn't
+                              fight the cream
+
+  Typography scale (mobile-first, scales up at min-width 640px)
+  - brand mark        Inter 11px / 0.18em tracking, uppercase
+  - step label        Inter 11px / 0.22em tracking, uppercase ("01 / 04")
+  - prompt            Cormorant 28px / 1.18 leading
+  - prompt hint       Cormorant italic 16px
+  - phase text        Cormorant italic 22px (step 2)
+  - humanity card     Cormorant 22px / 1.4 leading
+  - tiny step label   Inter medium 14px
+  - reflection title  Cormorant 36px
+  - reflection body   Cormorant 19px / 1.55 leading (user answers in
+                       upright weight 500, connecting prose in italic 400)
+  - button            Inter medium 13px / 0.08em tracking, uppercase
+
+  What I'd refine with more time
+  - The Continue button is sage on the prompt screens (steps 1, 3, 4) and
+    amber on step 1's "Begin" CTA. Two colour-ways is one decision too
+    many — I'd test a single amber CTA throughout, with sage as the
+    resting state of the progress dots at the top.
+  - I'd add a `prefers-reduced-motion` check on the breathing animation
+    and the step transitions. A static orb with a "Breathe in / out"
+    text toggle would be the safer fallback for vestibular-sensitive
+    users. Currently the transition is a 220ms crossfade which is mild
+    but not nothing.
+  - The humanity card library is 10 phrases. With more copy I'd let the
+    user favourite a phrase to keep it sticky across sessions, but that
+    needs a backend (or localStorage) — out of scope for a single file.
+  - The breathing orb runs at a fixed 10s cycle (4 in / 6 out). Research
+    suggests box breathing (4-4-4-4) is a reasonable alternative; I'd
+    add a small "4-4-4-4" toggle under the orb for users who prefer it.
+  - The end screen is built for a screenshot (centered, padded, no nav).
+    I'd add an explicit "Save as image" button using html2canvas, but
+    html2canvas is a 40KB dependency and the screenshot-the-screen
+    gesture is universal enough that I'd rather stay single-file.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light only" />
+<meta name="theme-color" content="#F4EFE4" />
+<title>The 90-Second Hinge — Grounded Humanity</title>
+<style>
+  /* ---------- Imports ---------- */
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap');
+
+  /* ---------- Tokens ---------- */
+  :root {
+    --cream:        #F4EFE4;
+    --cream-deep:   #ECE4D2;
+    --sage:         #6B7F5E;
+    --sage-deep:    #4A5B41;
+    --sage-soft:    #8FA17E;
+    --amber:        #B89060;
+    --clay:         #C4794A;
+    --ink:          #1F1D17;
+    --ink-soft:     #5A5249;
+
+    --shadow-soft:  0 1px 2px rgba(31,29,23,0.04), 0 6px 24px rgba(31,29,23,0.06);
+    --shadow-card:  0 1px 2px rgba(31,29,23,0.05), 0 12px 40px rgba(31,29,23,0.08);
+
+    --ease-soft:    cubic-bezier(0.22, 0.61, 0.36, 1);
+    --t-step:       220ms;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ---------- Paper grain layer ---------- */
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.07;
+    mix-blend-mode: multiply;
+  }
+
+  /* ---------- Olive sprig ornament ---------- */
+  .sprig {
+    position: fixed;
+    top: 22px;
+    right: 18px;
+    width: 64px;
+    height: 22px;
+    color: var(--sage-soft);
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* ---------- Brand mark (top-left) ---------- */
+  .brand {
+    position: fixed;
+    top: 22px;
+    left: 22px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    pointer-events: none;
+  }
+  .brand-mark {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+  }
+  .brand-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-soft);
+    opacity: 0.7;
+  }
+
+  /* ---------- Step indicator (top) ---------- */
+  .progress {
+    position: fixed;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .progress-dot {
+    width: 28px;
+    height: 2px;
+    background: var(--sage-soft);
+    opacity: 0.3;
+    border-radius: 1px;
+    transition: opacity var(--t-step) var(--ease-soft), background var(--t-step) var(--ease-soft);
+  }
+  .progress-dot.is-active {
+    background: var(--sage);
+    opacity: 1;
+  }
+  .progress-dot.is-done {
+    background: var(--sage);
+    opacity: 0.6;
+  }
+
+  /* ---------- Stage ---------- */
+  .stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px 100px;
+    z-index: 1;
+  }
+
+  .step {
+    position: absolute;
+    inset: 80px 24px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity var(--t-step) var(--ease-soft), transform var(--t-step) var(--ease-soft);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .step.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .step-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+    margin-bottom: 18px;
+    opacity: 0.7;
+  }
+
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.18;
+    color: var(--sage-deep);
+    margin: 0 0 14px;
+    max-width: 22ch;
+  }
+
+  .step-prompt {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+    max-width: 28ch;
+  }
+
+  .step-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    opacity: 0.75;
+    margin: 0 0 28px;
+    max-width: 30ch;
+  }
+
+  /* ---------- Step 1: Affect labelling ---------- */
+  .name-field {
+    width: 100%;
+    max-width: 320px;
+    border: none;
+    border-bottom: 1px solid var(--sage-soft);
+    background: transparent;
+    padding: 14px 4px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    text-align: center;
+    color: var(--ink);
+    outline: none;
+    transition: border-color var(--t-step) var(--ease-soft);
+  }
+  .name-field::placeholder {
+    color: var(--ink-soft);
+    opacity: 0.35;
+    font-style: italic;
+  }
+  .name-field:focus {
+    border-bottom-color: var(--sage);
+  }
+
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin: 22px 0 0;
+    max-width: 340px;
+  }
+  .suggestion {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--sage-deep);
+    background: transparent;
+    border: 1px solid var(--sage-soft);
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background var(--t-step) var(--ease-soft), color var(--t-step) var(--ease-soft);
+  }
+  .suggestion:hover,
+  .suggestion:focus-visible {
+    background: var(--sage);
+    color: var(--cream);
+    outline: none;
+  }
+
+  /* ---------- Step 2: Breathing orb ---------- */
+  .breath-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .orb-wrap {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0 4px;
+  }
+
+  /* outer amber ring that flashes at exhale-hold */
+  .orb-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid var(--amber);
+    opacity: 0;
+    pointer-events: none;
+    animation: ringFlash 10s linear infinite;
+  }
+
+  @keyframes ringFlash {
+    0%, 90%   { opacity: 0; transform: scale(0.95); }
+    93%       { opacity: 0.85; transform: scale(1.02); }
+    96%       { opacity: 0.45; transform: scale(1.06); }
+    99%, 100% { opacity: 0; transform: scale(1.08); }
+  }
+
+  .orb {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 35%,
+      rgba(255,255,255,0.35) 0%,
+      rgba(255,255,255,0.05) 18%,
+      rgba(74,91,65,0) 35%,
+      var(--sage) 60%,
+      var(--sage-deep) 100%);
+    box-shadow:
+      0 0 0 1px rgba(74,91,65,0.08),
+      0 8px 30px rgba(74,91,65,0.18),
+      inset 0 -8px 24px rgba(74,91,65,0.18);
+    transform: scale(0.55);
+    animation: orbBreathe 10s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  @keyframes orbBreathe {
+    0%   { transform: scale(0.55); }
+    40%  { transform: scale(1.00); }   /* peak inhale at 4s */
+    50%  { transform: scale(1.00); }   /* brief hold */
+    100% { transform: scale(0.55); }   /* exhale complete at 10s */
+  }
+
+  .phase {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--sage-deep);
+    min-height: 30px;
+    transition: opacity 200ms var(--ease-soft);
+  }
+  .phase .count {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--amber);
+    margin-left: 4px;
+  }
+
+  .breath-counter {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+  .breath-counter .n {
+    color: var(--sage-deep);
+    font-weight: 600;
+  }
+
+  .breath-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+    opacity: 0.7;
+    margin: 8px 0 0;
+    max-width: 30ch;
+  }
+
+  /* ---------- Step 3: Humanity card ---------- */
+  .card-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    background: var(--cream-deep);
+    border-radius: 2px;
+    padding: 38px 30px 32px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(143,161,126,0.18);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 480ms var(--ease-soft), transform 480ms var(--ease-soft);
+  }
+  .card.is-shown {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card-mark {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--sage);
+    opacity: 0.6;
+  }
+
+  .card-rule {
+    width: 36px;
+    height: 1px;
+    background: var(--clay);
+    margin: 0 auto 22px;
+    opacity: 0.6;
+  }
+
+  .card-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--sage-deep);
+    margin: 0;
+    font-weight: 500;
+  }
+  .card-text::first-letter {
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--sage);
+  }
+
+  .draw-again {
+    background: transparent;
+    border: 1px solid var(--sage-soft);
+    color: var(--sage-deep);
+    padding: 9px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background var(--t-step) var(--ease-soft), color var(--t-step) var(--ease-soft);
+  }
+  .draw-again:hover,
+  .draw-again:focus-visible {
+    background: var(--sage);
+    color: var(--cream);
+    outline: none;
+  }
+
+  /* ---------- Step 4: Tiny steps ---------- */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    width: 100%;
+    max-width: 380px;
+    margin: 4px 0 0;
+  }
+  .step-card {
+    text-align: left;
+    background: transparent;
+    border: 1px solid var(--sage-soft);
+    border-radius: 2px;
+    padding: 16px 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: var(--sage-deep);
+    cursor: pointer;
+    transition: background var(--t-step) var(--ease-soft), color var(--t-step) var(--ease-soft), border-color var(--t-step) var(--ease-soft);
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+  }
+  .step-card:hover {
+    border-color: var(--sage);
+  }
+  .step-card.is-selected {
+    background: var(--sage);
+    color: var(--cream);
+    border-color: var(--sage);
+  }
+
+  /* ---------- Bottom nav ---------- */
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 18px 24px calc(18px + env(safe-area-inset-bottom));
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 20;
+    background: linear-gradient(180deg, rgba(244,239,228,0) 0%, var(--cream) 40%);
+  }
+  .nav-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 14px 18px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: color var(--t-step) var(--ease-soft), background var(--t-step) var(--ease-soft), opacity var(--t-step) var(--ease-soft);
+    min-height: 48px;
+    min-width: 80px;
+  }
+  .nav-btn:hover,
+  .nav-btn:focus-visible {
+    color: var(--sage-deep);
+    outline: none;
+  }
+  .nav-btn.primary {
+    background: var(--sage);
+    color: var(--cream);
+    flex: 1;
+    max-width: 240px;
+  }
+  .nav-btn.primary.amber {
+    background: var(--amber);
+  }
+  .nav-btn.primary:hover,
+  .nav-btn.primary:focus-visible {
+    background: var(--sage-deep);
+  }
+  .nav-btn.primary.amber:hover,
+  .nav-btn.primary.amber:focus-visible {
+    background: #9c7a4d;
+  }
+  .nav-btn:disabled,
+  .nav-btn[aria-disabled="true"] {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  /* ---------- End screen ---------- */
+  .end {
+    width: 100%;
+    max-width: 440px;
+    text-align: left;
+    background: var(--cream-deep);
+    padding: 26px 26px 22px;
+    border-radius: 2px;
+    border: 1px solid rgba(143,161,126,0.2);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    margin: 0 auto;
+  }
+  .end::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 26px;
+    right: 26px;
+    height: 2px;
+    background: var(--clay);
+    opacity: 0.7;
+  }
+  .end-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin: 0 0 6px;
+    text-align: center;
+  }
+  .end-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    line-height: 1.15;
+    color: var(--sage-deep);
+    margin: 0 0 16px;
+    text-align: center;
+    font-weight: 500;
+  }
+  .end-title::first-letter {
+    font-size: 38px;
+    font-weight: 600;
+    color: var(--sage);
+  }
+  .end-prose {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    margin: 0 0 2px;
+  }
+  .end-prose.italic {
+    font-style: italic;
+    color: var(--sage-deep);
+    font-weight: 500;
+  }
+  .end-answer {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    line-height: 1.35;
+    color: var(--ink);
+    font-weight: 500;
+    margin: 0 0 12px;
+  }
+  .end-divider {
+    width: 24px;
+    height: 1px;
+    background: var(--sage-soft);
+    margin: 4px auto;
+    opacity: 0.5;
+  }
+  .end-footer {
+    margin-top: 14px;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+    opacity: 0.7;
+  }
+  .end-footer .mark {
+    font-style: normal;
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 3px;
+    color: var(--sage);
+  }
+
+  .end-actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(143,161,126,0.18);
+  }
+  .end-action {
+    background: transparent;
+    border: 1px solid var(--sage-soft);
+    color: var(--sage-deep);
+    padding: 7px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background var(--t-step) var(--ease-soft), color var(--t-step) var(--ease-soft);
+    min-height: 36px;
+  }
+  .end-action:hover,
+  .end-action:focus-visible {
+    background: var(--sage);
+    color: var(--cream);
+    outline: none;
+  }
+
+  /* ---------- Responsive bumps ---------- */
+  @media (min-width: 640px) {
+    .step { padding-top: 20px; }
+    .step-title { font-size: 36px; }
+    .step-prompt { font-size: 26px; }
+    .name-field { font-size: 26px; }
+    .orb-wrap { width: 320px; height: 320px; }
+    .card-text { font-size: 24px; }
+    .end { padding: 44px 40px 36px; }
+    .end-title { font-size: 40px; }
+    .end-prose { font-size: 19px; }
+    .sprig { width: 80px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orb,
+    .orb-ring { animation: none; }
+    .orb { transform: scale(0.85); }
+    .step,
+    .card { transition-duration: 120ms; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Paper grain via SVG turbulence filter -->
+<svg class="grain" aria-hidden="true">
+  <filter id="grain-filter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" />
+    <feColorMatrix type="saturate" values="0" />
+    <feComponentTransfer>
+      <feFuncA type="linear" slope="0.55" />
+    </feComponentTransfer>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain-filter)" />
+</svg>
+
+<!-- Olive sprig ornament (top-right) -->
+<svg class="sprig" viewBox="0 0 80 24" fill="none" aria-hidden="true">
+  <path d="M2 12 Q 20 6, 40 12 T 78 12" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" />
+  <ellipse cx="18" cy="9"  rx="3.2" ry="1.4" transform="rotate(-22 18 9)"  fill="currentColor" opacity="0.7" />
+  <ellipse cx="32" cy="15" rx="3.2" ry="1.4" transform="rotate(22 32 15)"  fill="currentColor" opacity="0.7" />
+  <ellipse cx="46" cy="9"  rx="3.2" ry="1.4" transform="rotate(-22 46 9)"  fill="currentColor" opacity="0.7" />
+  <ellipse cx="60" cy="15" rx="3.2" ry="1.4" transform="rotate(22 60 15)"  fill="currentColor" opacity="0.7" />
+</svg>
+
+<!-- Brand mark (top-left) -->
+<div class="brand" aria-hidden="true">
+  <span class="brand-mark">Grounded Humanity</span>
+  <span class="brand-sub">a hinge, in a heavy moment</span>
+</div>
+
+<!-- Step indicator -->
+<div class="progress" role="presentation" aria-hidden="true">
+  <span class="progress-dot is-active" data-step="1"></span>
+  <span class="progress-dot" data-step="2"></span>
+  <span class="progress-dot" data-step="3"></span>
+  <span class="progress-dot" data-step="4"></span>
+</div>
+
+<!-- Stage -->
+<main class="stage" id="stage">
+
+  <!-- Step 1: Affect labelling -->
+  <section class="step is-visible" data-step="1" aria-labelledby="s1-title">
+    <p class="step-label">01 &nbsp;/&nbsp; 04 &nbsp;·&nbsp; A pause, before anything else</p>
+    <h1 class="step-title" id="s1-title">The 90-Second Hinge</h1>
+    <p class="step-prompt">A wedge of choice, in the middle of a difficult day.</p>
+    <p class="step-hint">For moments when everything feels like too much. A short, four-step pause. No rush, no streak, no score.</p>
+
+    <label for="name-input" style="position:absolute; left:-9999px;">Name what you are feeling</label>
+    <input
+      id="name-input"
+      class="name-field"
+      type="text"
+      inputmode="text"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      maxlength="60"
+      placeholder="One word is enough"
+      aria-describedby="s1-hint"
+    />
+    <p class="step-hint" id="s1-hint" style="margin-top:14px;">Some words people reach for:</p>
+    <div class="suggestions" role="list">
+      <button type="button" class="suggestion" data-word="Tense">Tense</button>
+      <button type="button" class="suggestion" data-word="Heavy">Heavy</button>
+      <button type="button" class="suggestion" data-word="Frayed">Frayed</button>
+      <button type="button" class="suggestion" data-word="Stuck">Stuck</button>
+      <button type="button" class="suggestion" data-word="Restless">Restless</button>
+    </div>
+  </section>
+
+  <!-- Step 2: Paced breathing -->
+  <section class="step" data-step="2" aria-labelledby="s2-title">
+    <p class="step-label">02 &nbsp;/&nbsp; 04 &nbsp;·&nbsp; Four in, six out</p>
+    <h2 class="step-title" id="s2-title">Breathe with the orb</h2>
+    <p class="step-hint">Let it set the pace. Stay as long as you like — the door is not going anywhere.</p>
+
+    <div class="breath-stage" aria-live="polite">
+      <div class="orb-wrap" aria-hidden="true">
+        <div class="orb-ring"></div>
+        <div class="orb" id="orb"></div>
+      </div>
+      <p class="phase" id="phase">Breathe in <span class="count">· 4</span></p>
+      <p class="breath-counter">Breath <span class="n" id="breath-n">0</span> complete</p>
+      <p class="breath-hint">Inhale for four. Exhale for six. The longer exhale is the hinge.</p>
+    </div>
+  </section>
+
+  <!-- Step 3: Common humanity -->
+  <section class="step" data-step="3" aria-labelledby="s3-title">
+    <p class="step-label">03 &nbsp;/&nbsp; 04 &nbsp;·&nbsp; You are not the only one</p>
+    <h2 class="step-title" id="s3-title">A reminder, in passing</h2>
+    <p class="step-hint">Pull a card. Sit with it. Draw another if it doesn't land.</p>
+
+    <div class="card-stage">
+      <div class="card" id="card" aria-live="polite">
+        <p class="card-mark">a reminder</p>
+        <div class="card-rule"></div>
+        <p class="card-text" id="card-text">—</p>
+      </div>
+      <button type="button" class="draw-again" id="draw-again">Draw another</button>
+    </div>
+  </section>
+
+  <!-- Step 4: Tiny step -->
+  <section class="step" data-step="4" aria-labelledby="s4-title">
+    <p class="step-label">04 &nbsp;/&nbsp; 04 &nbsp;·&nbsp; One small, real thing</p>
+    <h2 class="step-title" id="s4-title">Your steadying step</h2>
+    <p class="step-hint">Pick the one that feels most possible right now. Under ten minutes. No streak, no score.</p>
+
+    <div class="steps-grid" role="radiogroup" aria-labelledby="s4-title">
+      <button type="button" class="step-card" role="radio" data-step-name="Drink a glass of water">Drink a glass of water</button>
+      <button type="button" class="step-card" role="radio" data-step-name="Step outside for air">Step outside for air</button>
+      <button type="button" class="step-card" role="radio" data-step-name="Stretch your shoulders">Stretch your shoulders</button>
+      <button type="button" class="step-card" role="radio" data-step-name="Write one sentence in a notes app">Write one sentence in a notes app</button>
+      <button type="button" class="step-card" role="radio" data-step-name="Listen to one song without multitasking">Listen to one song, no multitasking</button>
+      <button type="button" class="step-card" role="radio" data-step-name="Make tea and watch the steam">Make tea and watch the steam</button>
+      <button type="button" class="step-card" role="radio" data-step-name="Rest your eyes for 2 minutes">Rest your eyes for 2 minutes</button>
+      <button type="button" class="step-card" role="radio" data-step-name="Text someone 'thinking of you'">Text someone “thinking of you”</button>
+    </div>
+  </section>
+
+  <!-- End / reflection -->
+  <section class="step" data-step="end" aria-labelledby="end-title">
+    <article class="end" id="end-card">
+      <p class="end-eyebrow">A hinge, kept</p>
+      <h2 class="end-title" id="end-title">Today, you paused.</h2>
+
+      <p class="end-prose italic" id="end-line-1">You named it</p>
+      <p class="end-answer" id="end-word">—</p>
+
+      <div class="end-divider"></div>
+
+      <p class="end-prose italic" id="end-line-2">A reminder, in passing</p>
+      <p class="end-answer" id="end-card-text">—</p>
+
+      <div class="end-divider"></div>
+
+      <p class="end-prose italic" id="end-line-3">Your steadying step, in under ten minutes</p>
+      <p class="end-answer" id="end-step">—</p>
+
+      <p class="end-footer">
+        from <span class="mark">Grounded Humanity</span>
+      </p>
+
+      <div class="end-actions">
+        <button type="button" class="end-action" id="copy-btn">Copy as text</button>
+        <button type="button" class="end-action" id="restart-btn">Start again</button>
+      </div>
+    </article>
+  </section>
+</main>
+
+<!-- Bottom nav -->
+<nav class="nav" aria-label="Step navigation">
+  <button type="button" class="nav-btn" id="back-btn" aria-label="Go back" disabled>&larr; Back</button>
+  <button type="button" class="nav-btn primary amber" id="next-btn">Begin</button>
+</nav>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- State ----------
+  var state = {
+    step: 1,
+    maxStep: 4,
+    word: '',
+    breathCount: 0,
+    cardIndex: null,
+    chosenStep: null,
+    breathing: false,
+    breathAnimFrame: null,
+    breathStart: 0,
+  };
+
+  // ---------- Humanity card library ----------
+  var CARDS = [
+    'Every professional doubts themselves at times.',
+    'All parents have frayed days.',
+    'You are not falling behind — you are living through it.',
+    'Feeling this way does not mean you are handling it wrong.',
+    'Everyone\u2019s capacity changes day to day.',
+    'Tiredness makes small things feel enormous.',
+    'Most people are doing their best with what they have today.',
+    'Being overwhelmed is information, not failure.',
+    'Hard moments pass — even when they do not feel like they will.',
+    'You do not have to fix this moment to get through it.'
+  ];
+
+  // ---------- DOM ----------
+  var $ = function (sel) { return document.querySelector(sel); };
+  var stepEls = document.querySelectorAll('.step');
+  var progressDots = document.querySelectorAll('.progress-dot');
+  var backBtn = $('#back-btn');
+  var nextBtn = $('#next-btn');
+  var nameInput = $('#name-input');
+  var suggestionBtns = document.querySelectorAll('.suggestion');
+  var orb = $('#orb');
+  var phaseEl = $('#phase');
+  var breathN = $('#breath-n');
+  var cardEl = $('#card');
+  var cardText = $('#card-text');
+  var drawAgainBtn = $('#draw-again');
+  var stepCards = document.querySelectorAll('.step-card');
+  var endWord = $('#end-word');
+  var endCardText = $('#end-card-text');
+  var endStep = $('#end-step');
+  var copyBtn = $('#copy-btn');
+  var restartBtn = $('#restart-btn');
+
+  // ---------- Step navigation ----------
+  function showStep(n) {
+    state.step = n;
+    var nIsNumber = typeof n === 'number';
+    stepEls.forEach(function (el) {
+      var raw = el.getAttribute('data-step');
+      var elIsNumber = /^\d+$/.test(raw);
+      var isMatch = nIsNumber ? (elIsNumber && parseInt(raw, 10) === n) : (raw === n);
+      el.classList.toggle('is-visible', isMatch);
+    });
+    progressDots.forEach(function (dot) {
+      var d = parseInt(dot.getAttribute('data-step'), 10);
+      if (nIsNumber) {
+        dot.classList.toggle('is-active', d === n);
+        dot.classList.toggle('is-done', d < n);
+      } else {
+        // on the end screen, all four dots are "done"
+        dot.classList.remove('is-active');
+        dot.classList.add('is-done');
+      }
+    });
+    updateNav();
+    if (n === 2) startBreathing();
+    if (n !== 2) stopBreathing();
+    if (n === 3 && state.cardIndex === null) drawCard();
+    if (n === 'end') populateEnd();
+  }
+
+  function updateNav() {
+    var isEnd = state.step === 'end';
+    var n = isEnd ? 0 : state.step;
+    backBtn.disabled = isEnd ? true : (n <= 1);
+    backBtn.style.visibility = isEnd ? 'hidden' : 'visible';
+
+    if (isEnd) {
+      nextBtn.style.visibility = 'hidden';
+      return;
+    }
+    nextBtn.style.visibility = 'visible';
+
+    if (n === 1) {
+      nextBtn.textContent = state.word.trim() ? 'Begin' : 'Begin';
+      nextBtn.classList.add('amber');
+      nextBtn.setAttribute('aria-disabled', state.word.trim() ? 'false' : 'true');
+    } else if (n === 2) {
+      nextBtn.textContent = 'Continue';
+      nextBtn.classList.remove('amber');
+      nextBtn.setAttribute('aria-disabled', 'false');
+    } else if (n === 3) {
+      nextBtn.textContent = 'Continue';
+      nextBtn.classList.remove('amber');
+      nextBtn.setAttribute('aria-disabled', 'false');
+    } else if (n === 4) {
+      nextBtn.textContent = state.chosenStep ? 'See your hinge' : 'Pick a step to continue';
+      nextBtn.classList.remove('amber');
+      nextBtn.setAttribute('aria-disabled', state.chosenStep ? 'false' : 'true');
+    }
+  }
+
+  function goNext() {
+    if (state.step === 1) {
+      if (!state.word.trim()) return;
+      showStep(2);
+    } else if (state.step === 2) {
+      showStep(3);
+    } else if (state.step === 3) {
+      showStep(4);
+    } else if (state.step === 4) {
+      if (!state.chosenStep) return;
+      showStep('end');
+    }
+  }
+
+  function goBack() {
+    if (state.step === 'end') {
+      showStep(4);
+    } else if (state.step > 1) {
+      showStep(state.step - 1);
+    }
+  }
+
+  backBtn.addEventListener('click', goBack);
+  nextBtn.addEventListener('click', goNext);
+
+  // ---------- Step 1: affect labelling ----------
+  nameInput.addEventListener('input', function (e) {
+    state.word = e.target.value;
+    updateNav();
+  });
+  suggestionBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var w = btn.getAttribute('data-word');
+      state.word = w;
+      nameInput.value = w;
+      updateNav();
+      nameInput.focus();
+    });
+  });
+
+  // ---------- Step 2: breathing ----------
+  // The orb animates on a 10s CSS keyframe. We sync a rAF loop to read the
+  // current cycle position and update the phase text + count cycles.
+  function startBreathing() {
+    if (state.breathing) return;
+    state.breathing = true;
+    state.breathStart = performance.now();
+    // reset the CSS animation cleanly
+    orb.style.animation = 'none';
+    void orb.offsetWidth;
+    orb.style.animation = '';
+    tickBreath();
+  }
+
+  function stopBreathing() {
+    state.breathing = false;
+    if (state.breathAnimFrame) {
+      cancelAnimationFrame(state.breathAnimFrame);
+      state.breathAnimFrame = null;
+    }
+  }
+
+  function tickBreath() {
+    if (!state.breathing) return;
+    var now = performance.now();
+    var elapsed = (now - state.breathStart) / 1000;
+    var cycle = 10; // seconds
+    var t = elapsed % cycle;
+    // Inhale 0-4s, hold 4-5s, exhale 5-10s (CSS keyframes: 0→1.0 at 4s, hold 1s, back to 0.55 at 10s)
+    var phaseText, count;
+    if (t < 4) {
+      var inT = Math.ceil(4 - t);
+      phaseText = 'Breathe in <span class="count">· ' + Math.max(inT, 1) + '</span>';
+    } else if (t < 5) {
+      phaseText = 'Hold <span class="count">·</span>';
+    } else {
+      var outT = Math.ceil(10 - t);
+      phaseText = 'Breathe out <span class="count">· ' + Math.max(outT, 1) + '</span>';
+    }
+    phaseEl.innerHTML = phaseText;
+
+    // Cycle counter: increments when we cross a 10s boundary
+    var cycles = Math.floor(elapsed / cycle);
+    if (cycles !== state.breathCount) {
+      state.breathCount = cycles;
+      breathN.textContent = cycles;
+    }
+
+    state.breathAnimFrame = requestAnimationFrame(tickBreath);
+  }
+
+  // ---------- Step 3: humanity card ----------
+  function drawCard() {
+    var i;
+    if (state.cardIndex === null) {
+      i = Math.floor(Math.random() * CARDS.length);
+    } else {
+      // avoid repeating the same card twice in a row if there's another option
+      do {
+        i = Math.floor(Math.random() * CARDS.length);
+      } while (i === state.cardIndex && CARDS.length > 1);
+    }
+    state.cardIndex = i;
+    cardEl.classList.remove('is-shown');
+    setTimeout(function () {
+      cardText.textContent = CARDS[i];
+      cardEl.classList.add('is-shown');
+    }, 120);
+  }
+  drawAgainBtn.addEventListener('click', drawCard);
+
+  // ---------- Step 4: tiny step ----------
+  stepCards.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      state.chosenStep = btn.getAttribute('data-step-name');
+      stepCards.forEach(function (b) { b.classList.remove('is-selected'); });
+      btn.classList.add('is-selected');
+      updateNav();
+    });
+  });
+
+  // ---------- End screen ----------
+  function populateEnd() {
+    endWord.textContent = state.word.trim() || '—';
+    endCardText.textContent = state.cardIndex !== null ? CARDS[state.cardIndex] : '—';
+    endStep.textContent = state.chosenStep || '—';
+  }
+
+  copyBtn.addEventListener('click', function () {
+    var lines = [
+      'A 90-Second Hinge',
+      '',
+      'I named it: ' + (state.word.trim() || '—'),
+      '',
+      'A reminder: ' + (state.cardIndex !== null ? CARDS[state.cardIndex] : '—'),
+      '',
+      'My steadying step: ' + (state.chosenStep || '—'),
+      '',
+      '— Grounded Humanity'
+    ];
+    var text = lines.join('\n');
+    var done = function () {
+      copyBtn.textContent = 'Copied';
+      setTimeout(function () { copyBtn.textContent = 'Copy as text'; }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () {
+        window.prompt('Copy this:', text);
+      });
+    } else {
+      window.prompt('Copy this:', text);
+    }
+  });
+
+  restartBtn.addEventListener('click', function () {
+    state.word = '';
+    state.breathCount = 0;
+    state.cardIndex = null;
+    state.chosenStep = null;
+    nameInput.value = '';
+    stepCards.forEach(function (b) { b.classList.remove('is-selected'); });
+    breathN.textContent = '0';
+    showStep(1);
+  });
+
+  // ---------- Keyboard nav ----------
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      if (state.step === 1 && !state.word.trim()) return;
+      goNext();
+    } else if (e.key === 'Escape' && state.step > 1 && state.step !== 'end') {
+      goBack();
+    }
+  });
+
+  // ---------- Init ----------
+  showStep(1);
+
+  // Expose for debugging
+  window.__hinge = state;
+})();
+</script>
+
+</body>
+</html>
