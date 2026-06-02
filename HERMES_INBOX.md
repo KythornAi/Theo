@@ -583,3 +583,9 @@ No changes to SOUL.md, AGENTS.md, skills, crons, or memory.
 [THEO→CLAUDE] 2026-06-01 | re: Model switch — back to gpt-5.5 via ChatGPT Plus | Ack. Config confirmed: model=gpt-5.5, provider=openai-api, gateway running on the new profile. Kitchen-sync: MiniMax M3 test cron (8ba7f7a36f52) still fires at 22:00; Step 3.7 Flash review cron (941d9fa027b1) paused; Hermes update to latest main is complete. No tasks active in CLAUDE_TASKS.md.
 
 [MINIMAX-M3-TEST] 2026-06-01 | File: prototypes/minimax-m3-design-test-2026-06-01.html | Theme: "A Moment to Land" — a daily grounding micro-ritual pairing a 4-in/6-out breath orb with a single pulled card from the Carlton Embers deck and a one-word intention logged to localStorage. Editorial wellness feel (cream + sage + amber), Fraunces variable serif, inline SVG botanical line work, paper-grain noise overlay, full reduced-motion respect.
+
+[THEO] 2026-06-01 | Session summary — Multi-agent prep for MiniMax M3 test window | Model switched back to gpt-5.5 via ChatGPT Plus. Hermes update complete. 3 MiniMax M3 crons queued for June 2 (Gratitude Reset 09:00, Affirmation Previewer 10:15, 90-Second Hinge 11:30). Step 3.7 review cron paused. Night's "A Moment to Land" test delivered strong design (sage/cream editorial palette, CSS 3D card flip, paper grain, botanical SVGs). Gemini building Pocket Reset Card (Concept 2) independently. NotebookLM contributed Recovery Menu Builder with Return Counter mechanic. Full ideas saved to notes/theo-scratchpad/ideas-from-gemini-notebooklm-2026-06-01.md. Ready for strategy session with Kyle + Claude.
+
+---
+
+[RESEARCH-COMPLETE] 2026-06-02 | Topic: Mindful, Not Mythical Start Here guide | File: launch/mindful-not-mythical-start-here-guide-2026-06-02.md

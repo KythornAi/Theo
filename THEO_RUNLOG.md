@@ -64,3 +64,4 @@
 [2026-06-01 10:33 BST] Mindful Not Mythical asset follow-up completed: inspected Canva zips, NotebookLM visuals, GH photos, polished ebook artifacts; wrote launch/mindful-not-mythical-asset-followup-2026-06-01.md.
 2026-06-01 | Nightly memory consolidation | Live/repo MEMORY aligned at 1,475 chars / 67.0%; live/repo USER aligned at 961 chars / 69.9%; updated Brain _index, project-status, product-catalog, research-registry, decisions-log, cron-registry, and tool-config for GH launch assets, model rollback, agy/PIL note, and cron state.
 2026-06-02 | Scratchpad cleanup | Processed ideas-from-gemini-notebooklm-2026-06-01.md into notes/mini-web-app-ideas.md.
+2026-06-02 | Grounded Humanity Gumroad launch sprint | Completed buyer-facing Start Here guide copy/handoff for the Mindful, Not Mythical Gumroad bundle at launch/mindful-not-mythical-start-here-guide-2026-06-02.md; flagged HERMES_INBOX.
