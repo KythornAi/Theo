@@ -4,68 +4,74 @@
 
 ---
 
-### Session 20 — VS Code — 2026-05-26
+### Session 28 — VS Code — 2026-06-01
 
 **Done:**
-- SOUL.md full path cleanup: all remaining `~/hermes_files/theo/` references replaced with `~/theo/` across §7, §22, §23, §24, §34, §37 (×2), §40
-- Added §45 Co-builder mode: formalises the partnership rule ("move mountains in thinking, ask before moving furniture, never demolish walls without Kyle")
-- [CLAUDE→THEO] notification sent and acknowledged by gateway; 3 commits pushed
+- Confirmed Step 3.7 Flash (stepfun/step-3.7-flash via OpenRouter) is live as Theo's default model
+- Reviewed Theo's first Step 3.7 output: `notes/step37-lead-magnet-test-2026-06-01.md` — 7-day Everyday Gratitude Reset HTML lead magnet; usable draft, needs copy polish before use
+- Diagnosed /api/updates/check 401 — WebUI auth gate, not Codex OAuth; non-issue for Theo's operation
+- Diagnosed PIL error: Theo received a screenshot from Kyle and reached for Python PIL instead of `agy`; PIL blocked by virtualenv restriction
+- Sent [CLAUDE→THEO] correcting image tool choice: use `agy` for image understanding, not PIL (committed b233459)
+- Tailscale update on Mac resolved WebUI "Connection Lost" banner
 
-**Next:** MTD build session on pause (~1 week). PNP web app is Kyle's current active workstream (separate session).
+**Next:** Kyle has something else for next session. Theo to handle his own Hermes update (10 commits behind) when ready — he should save/backup first per his preference.
 
-**Blockers for Kyle:** Submit 4 affiliate applications (Sage, Coconut, QuickBooks, Xero) before MTD build session.
+**Blockers for Kyle:** Set up Gumroad business account (bank + PayPal). Register groundedhumanity.co.uk when ready ($6.98/yr Hostinger).
 
 ---
 
-### Session 21 — VS Code — 2026-05-27
+### Session 29 — VS Code — 2026-06-01
 
 **Done:**
-- Verified memory-watchdog deployment: confirmed in user crontab (`0 */6 * * *`), not Hermes cron or systemd timer
-- Fixed Q3 gap: watchdog now auto-commits and pushes `MEMORY.md` to `~/theo` origin/main after any successful trim (commit `1e17ca3`)
-- [CLAUDE→THEO] notification written, committed and pushed (commit `3691e3a`)
+- Switched Theo back to `gpt-5.5` via `openai-api` (ChatGPT Plus OAuth) — away from `stepfun/step-3.7-flash` which produced lazy, low-ambition responses
+- Restarted hermes-gateway — running cleanly on new model
+- Updated CLAUDE.md LLM Stack table to reflect gpt-5.5 for Chat and Cron tiers
+- Sent [CLAUDE→THEO] model switch notification, committed da03904
+- MiniMax M3 lead magnet build test confirmed queued for 22:00 tonight (one-shot, pinned to minimax/minimax-m3 — not affected by model switch)
+- Grounded Humanity Gumroad Launch Sprint cron (08:30 daily) will now run on gpt-5.5 going forward
 
-**Next:** No outstanding Theo infrastructure work. MTD build session when domain + affiliate blockers cleared. Telegram alert thresholds (70%/85%) unverified — check `/tmp/memory-watchdog.log`.
+**Next:** Review MiniMax M3 output when it lands tonight. Kyle to update SOUL.md re: ambition/initiative — Theo repeatedly defaulted to "safest smallest thing" rather than "best possible version" in the Step 3.7 session. Offer to draft specific SOUL.md rule if Kyle wants help.
 
-**Blockers for Kyle:** Submit 4 affiliate applications (Sage, Coconut, QuickBooks, Xero) before MTD build session.
+**Blockers for Kyle:** Set up Gumroad business account (bank + PayPal). Register groundedhumanity.co.uk when ready ($6.98/yr Hostinger).
 
 ---
 
-### Session 22 — VS Code — 2026-05-27
+### Session 30 — VS Code — 2026-06-02
 
 **Done:**
-- Ran vault-health planning session: INDEX.md approach adopted over mass-copy-to-vault
-- Revised `project_vault_north_star.md` memory; added `feedback_fix_the_bottleneck.md` memory
-- Plan written and approved at `~/.claude/plans/ok-no-worries-wobbly-phoenix.md`
+- Fixed Hermes compression error "No provider configured -- cannot compress": `auxiliary.compression.provider` was set to `gemini` but no `gemini` provider exists in `providers` section — changed to `openrouter` with `google/gemini-3.1-flash-lite`
+- Restarted hermes-gateway — running cleanly, Theo confirmed compression fix in chat
+- Memory health checked: MEMORY.md 67.5%, USER.md 70.4% — both fine after nightly consolidation ran
 
-**Next:** Execute the plan — INDEX.md, legacy tidy, PNP handover archival, sync tighten.
+**Next:** Review MiniMax M3 cron outputs when they land (Gratitude Reset 09:00, Affirmation Previewer 10:15, 90-Second Hinge 11:30 today). Kyle to update SOUL.md re: ambition/initiative if still wanted.
 
-**Blockers for Kyle:** Submit 4 affiliate applications (Sage, Coconut, QuickBooks, Xero) before MTD build session.
+**Blockers for Kyle:** Set up Gumroad business account (bank + PayPal). Register groundedhumanity.co.uk when ready ($6.98/yr Hostinger).
 
 ---
 
-### Session 23 — VS Code — 2026-05-28
+### Session 31 — VS Code — 2026-06-02
 
 **Done:**
-- Created INDEX.md at ~/theo/ root — navigation table for 7 active folders, 6 core docs, archive — commit f1c6dfc
-- Archived 16 legacy files from ~/theo/ root to archive/2026-05/ — commit 0b328c0
-- Archived 41 PNP session handovers (S8–S59) from Brain vault into handover-archive/2026-04/ and 2026-05/ — commit 05fe761
-- Tightened laptop Brain sync cron from */30 to */5 (worst-case lag: ~40 min → ~15 min)
-- Created `feedback_vault_sprawl.md` memory; `project_vault_north_star.md` already current from S22
-- Restored CLAUDE_TASKS.md (empty), notes/, prototypes/, brain_out/ — accidentally archived; all referenced by SOUL.md/AGENTS.md as write paths — commit 3221e31
+- Critiqued all 7 MNM mini web-app prototypes in full, per file (4 Theo/MiniMax + 3 Gemini). Set Theo's brand-locked design system as the polish base; Gemini files are idea-donors only.
+- Discovered the apps map to the book's 9 "Exercise Invitation" exercises. Extracted the full exercise inventory and the 58 affirmation strings (OCR'd from the Canva deck), confirmed the brand palette, and pulled the Grounded Humanity logo set (tree-only icon for the corner motif).
+- Produced and handed off a MiniMax build brief for 4 new apps (Body Stress Scan Ch1, Balance Audit + Reset Card Ch2, Recovery Menu hub Ch6, 90-Second Pause merge Ch8) with brand tokens, strict legibility/contrast rules, and claim-safe + UK + no-em-dash spec. [CLAUDE→THEO] approved by Kyle, committed + pushed (d61c51a). Theo to run 4 MiniMax jobs overnight.
+- Saved everything to Brain vault + project files: critique/polish plan, exercise inventory, affirmations, build brief. Memories added: working model, thorough-critique, VoiceAssist dictation.
 
-**Next:** [CLAUDE→THEO] notification needs Kyle approval then write to HERMES_INBOX.md and push. Memory watchdog Telegram alert thresholds (70%/85%) still unverified — check /tmp/memory-watchdog.log. MTD build session when domain + affiliate blockers cleared.
+**Next:** Tomorrow, review the 4 MiniMax HTML outputs as they land, then polish the affirmation previewer first (load the real 58 lines, fix contrast/legibility, drop in the GH tree icon). All specs are in "Mini Web Apps - Critique & Polish Plan" and "MiniMax Build Brief" (project files folder + vault).
 
-**Blockers for Kyle:** Approve [CLAUDE→THEO] notification draft (shared in session). Submit 4 affiliate applications (Sage, Coconut, QuickBooks, Xero) before MTD build session.
+**Blockers for Kyle:** Set up Gumroad business account (bank + PayPal). Register groundedhumanity.co.uk. Optionally read the 58 affirmations and flag any to reword (UK spelling + card 31 already approved). Find the true .svg logo master if it exists (better web asset than PNG).
 
 ---
 
-### Session 24 — VS Code — 2026-05-28
+### Session 32 — VS Code — 2026-06-02
 
 **Done:**
-- Diagnosed Theo silence: internet outage caused Telegram to hit 10 consecutive connection failures and self-pause the gateway
-- Confirmed laptop internet restored, restarted hermes-gateway — Theo back up at 20:11 BST
-- Baseline check: Python 3.12.3 (latest for Pop!_OS noble), Node v24.15.0 via nvm lts/krypton — both current, no action needed
+- Fixed Hermes /compress "No provider configured -- cannot compress" for real — root cause was `model.provider: openai-api` with no `OPENAI_API_KEY` in .env; `_handle_compress_command` checks the main provider's api_key before attempting compression
+- Changed `model.provider` from `openai-api` → `openai-codex` (Codex OAuth credential pool, same as cron jobs) — fixes both compression AND Theo falling back to deepseek for all chat turns
+- Also fixed `auxiliary.compression` to `provider: gemini` + `model: gemini-3.1-flash-lite` (mirrors vision, secondary fix)
+- Updated CLAUDE.md LLM stack table: Chat and Cron rows now show `openai-codex` (was incorrectly `openai-api`)
+- Gateway restarted, compression confirmed working by Kyle
 
-**Next:** [CLAUDE→THEO] notification from Session 23 still needs Kyle approval then write to HERMES_INBOX.md and push. Memory watchdog Telegram alert thresholds (70%/85%) still unverified. MTD build session when domain + affiliate blockers cleared.
+**Next:** Kyle has one more thing to ask — start next session with that. Verify Theo comes up on gpt-5.5 (not deepseek) in the next chat session. Consider [CLAUDE→THEO] to let Theo know his provider was corrected.
 
-**Blockers for Kyle:** Approve [CLAUDE→THEO] notification draft from Session 23. Submit 4 affiliate applications (Sage, Coconut, QuickBooks, Xero) before MTD build session.
+**Blockers for Kyle:** Set up Gumroad business account (bank + PayPal). Register groundedhumanity.co.uk ($6.98/yr Hostinger).
