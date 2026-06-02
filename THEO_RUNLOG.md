@@ -66,3 +66,4 @@
 2026-06-02 | Scratchpad cleanup | Processed ideas-from-gemini-notebooklm-2026-06-01.md into notes/mini-web-app-ideas.md.
 2026-06-02 | Grounded Humanity Gumroad launch sprint | Completed buyer-facing Start Here guide copy/handoff for the Mindful, Not Mythical Gumroad bundle at launch/mindful-not-mythical-start-here-guide-2026-06-02.md; flagged HERMES_INBOX.
 [2026-06-02] git push: launch: Mindful Not Mythical start here guide 2026-06-02 (3c9053b)
+[2026-06-02 10:15 BST] git push: prototypes: Affirmation Deck Previewer (interactive card flip + shuffle) 2026-06-02 (534262f)
