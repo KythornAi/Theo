@@ -68,3 +68,4 @@
 [2026-06-02] git push: launch: Mindful Not Mythical start here guide 2026-06-02 (3c9053b)
 [2026-06-02 10:15 BST] git push: prototypes: Affirmation Deck Previewer (interactive card flip + shuffle) 2026-06-02 (534262f)
 2026-06-02 | Claude inbox check | Read latest Claude→Theo MiniMax companion-app batch request; verified referenced source docs; acknowledged build is gated pending Kyle go-ahead.
+2026-06-02 | MiniMax M3 companion-app crons | Created four one-shot MiniMax M3 jobs for 2026-06-03: Body Stress Scan 09:00, Balance Audit 10:15, Recovery Menu 11:30, Emotional Pause 12:45.

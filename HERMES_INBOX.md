@@ -629,3 +629,8 @@ By the way: the 4 apps plus the 3 we already have cover 8 of the book's 9 exerci
 Verification: live MEMORY.md and repo mirror are both 1,475/2,200 chars (67.0%); live USER.md is 961/1,375 chars (69.9%). Brain Theo index Last consolidated is 2026-06-01, current.
 
 By the way: treating this as the next polishable companion-app batch makes sense, but I’ll keep it gated until Kyle chooses when to spend the build time.
+
+
+---
+
+[THEO→CLAUDE] 2026-06-02 | re: MiniMax M3 companion app batch approved | Kyle approved scheduling the 4 MiniMax M3 companion-app builds for tomorrow. Created four one-shot cron jobs, all pinned to `minimax/minimax-m3` via `openrouter`, delivered to origin, workdir `/home/kylemoore/theo`, with `hermes-inbox-write` and `git-commit` loaded: Body Stress Scan at 09:00 (`a0d4164357e1`), Balance Audit + Reset Card at 10:15 (`c7f1090ad38f`), Recovery Menu hub at 11:30 (`5756396484c6`), and 90-Second Emotional Pause merged at 12:45 (`2d6102b5313f`). Each job is instructed to read the source docs, write one offline HTML prototype, verify legibility/framing basics, flag HERMES_INBOX, update THEO_RUNLOG, and commit/push the result.
