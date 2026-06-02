@@ -1,0 +1,1165 @@
+<!doctype html>
+<!--
+  Design Retro — Grounded Humanity / Paper N Pixels
+  Concept: "Affirmation Deck Previewer" — an interactive sample-deck previewer
+  for the Carlton Embers 60-card ADHD affirmation deck (Mindful, Not Mythical).
+  A single card sits in the user's hand. Tap Shuffle to draw the next card from
+  a sample deck of eight. Tap the card to flip between the affirmation (front)
+  and a "try this now" grounding prompt (back). Tap Save to keep it.
+
+  Design intent
+  - Tactile, not app-y. The whole interaction is a small object on a paper
+    surface — not a feed, not a list, not a swipe deck. One card, on stage,
+    with two silhouettes behind it to suggest the rest of the deck.
+  - ADHD-aware pacing. The card appears calmly. There is no autoplay, no timer
+    pressure, no confetti, no "great job!". The interface respects attention.
+  - Strictly inside the brand guardrails: practical, accessible, everyday
+    mindfulness. No retreats, no crystals, no mystic framing, no medical
+    claims, no toxic positivity.
+
+  Why Fraunces (not Cormorant Garamond this time)
+  - The earlier Gratitude Reset prototype used Cormorant for its literary-
+    journal feel. This product is a physical card deck, so the type needed
+    to read as letterpressed stock rather than typeset prose. Fraunces
+    variable has a softer, slightly bulbous terminal and a more generous
+    x-height, which makes short affirmation strings feel anchored and warm
+    on cream stock. Cormorant would have been too literary for a 1-sentence
+    card front. Inter still carries the UI labels and counters.
+
+  Palette (locked to the brand brief)
+  - cream         #F4EFE4   page background, the "paper" everything sits on
+  - cream lift    #FBF7EE   card front surface — a half-step lighter so the
+                             card reads as a separate sheet, not part of the
+                             page
+  - sage          #6B7F5E   primary brand colour, the back of the card,
+                             pressed-leaf motifs, primary button resting
+                             state, focus rings
+  - sage soft     #8FA17E   hint text, deck silhouette, micro-rules
+  - sage deep     #4A5B41   heading text, the brand mark
+  - amber         #B89060   the "saved" state, the active shuffle button,
+                             focus accent. Used twice, never as a fill.
+  - clay          #C4794A   reserved for a single decorative rule. Not
+                             present in this prototype on purpose — see the
+                             refine section below.
+  - ink           #1F1D17   the only true near-black, for affirmation text
+  - ink soft      #5A5249   secondary body, warm so it doesn't fight the
+                             cream
+
+  Mechanics
+  - 3D flip via transform-style: preserve-3d + backface-visibility: hidden on
+    a card whose two faces are absolutely positioned. Perspective lives on
+    the .deck-stack so the flip reads in scene, not in isolation.
+  - A two-card silhouette stack behind the active card sells "deck in hand".
+    The stack is offset by a few pixels and rotated ±1° to feel like a real
+    print stack rather than a UI ghost element.
+  - Paper grain is generated inline with an SVG feTurbulence filter on the
+    page (5% opacity) and on the card front (16% opacity). The back of the
+    card is a flat sage fill with a single inner cream rule, no grain — to
+    read as a printed back-of-card rather than another sheet of paper.
+  - The pressed-leaf motif is a hand-built inline SVG (eight side veins,
+    single midrib, low-opacity sage stroke). It appears once in the top-
+    left of the card front, mirrored in the bottom-right, and once centered
+    on the back. Three ornaments, three placements — restrained.
+  - Shuffle pulls the next card from a Fisher-Yates shuffled deck of 8
+    indices. When all 8 have been drawn in a run, the next shuffle
+    automatically reshuffles and starts a new run. Counter resets to
+    "Card 1 of 8".
+  - Saved cards persist in localStorage under
+    'papernpixels.affirmationDeck.v1' as an array of affirmation indices.
+    A small "Saved · N" link opens a drawer listing the favorited
+    affirmation previews.
+
+  What I would refine with more time
+  - The clay colour from the palette brief is deliberately absent here. With
+    a sage back-of-card already carrying the "second surface" role, adding
+    clay would have been a third competing surface. I would introduce clay
+    as a single ornamental rule on the back (e.g. a thin amber-clay line
+    under the "TRY THIS NOW" label) once the layout has been user-tested.
+  - The shuffle action currently swaps text content with a 200ms fade. With
+    more time I'd add a brief "lift + new card slides up from the deck"
+    micro-animation: the active card lifts ~12px and the deck silhouette
+    shifts in to take its place, then the new card rises into view. ~600ms,
+    no bounce. Held off because the simple fade is more honest about what
+    is happening (a new card, not a new card pulled from a magic stack).
+  - The leaf SVG is the same on the front and back. A second variant —
+    fern, olive, or a smaller simple sprig — on the back would visually
+    separate the two sides without adding a second visual vocabulary.
+  - I would add a "view this card larger" mode (a true fullscreen lightbox
+    with the back side accessible via tap) so people can show a friend a
+    single card without a screenshot. The drawer is the right step before
+    that feature, not a substitute.
+  - The reduced-motion branch disables the deck-stack offset and shortens the
+    flip to 1ms but keeps the 3D transition itself, so the card still
+    reveals its back. Vestibular-sensitive users would probably prefer
+    content swap without a 3D rotation in that mode; I'd add a 2D crossfade
+    variant behind a more aggressive media query.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light only" />
+<meta name="theme-color" content="#F4EFE4" />
+<title>Affirmation Deck Previewer — Paper N Pixels</title>
+<style>
+  /* ---------- Imports ---------- */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap');
+
+  /* ---------- Tokens ---------- */
+  :root {
+    --cream:        #F4EFE4;
+    --cream-lift:   #FBF7EE;
+    --cream-deep:   #ECE4D2;
+    --sage:         #6B7F5E;
+    --sage-soft:    #8FA17E;
+    --sage-mist:    #C8D2BC;
+    --sage-deep:    #4A5B41;
+    --amber:        #B89060;
+    --amber-soft:   #D2B58A;
+    --clay:         #C4794A;
+    --ink:          #1F1D17;
+    --ink-soft:     #5A5249;
+    --ink-faint:    #8A8276;
+
+    --serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+    --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --r-sm: 4px;
+    --r-md: 10px;
+    --r-lg: 18px;
+
+    --shadow-card:  0 1px 0 rgba(31,29,23,0.04),
+                    0 18px 40px -22px rgba(31,29,23,0.22),
+                    0 4px 10px -8px rgba(31,29,23,0.10);
+    --shadow-stack: 0 1px 0 rgba(31,29,23,0.04),
+                    0 10px 24px -22px rgba(31,29,23,0.18);
+    --shadow-deep:  0 24px 60px -30px rgba(31,29,23,0.32),
+                    0 8px 20px -14px rgba(31,29,23,0.16);
+  }
+
+  /* ---------- Reset / base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--sans);
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: var(--r-sm); }
+
+  /* ---------- Page paper grain ---------- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.11  0 0 0 0 0.09  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+    opacity: 0.7;
+    z-index: 1;
+  }
+
+  /* ---------- Layout ---------- */
+  .page {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 480px;
+    padding: 32px 22px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  @media (min-width: 640px) {
+    .page { padding: 56px 32px 40px; gap: 28px; }
+  }
+
+  /* ---------- Header ---------- */
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+  }
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    color: var(--sage-deep);
+  }
+  .brand-mark .dot { color: var(--amber); }
+  .brand-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right,
+      rgba(143,161,126,0.5),
+      rgba(143,161,126,0.0));
+  }
+  .brand-sub {
+    margin: 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+  .brand-sub strong {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--sage-deep);
+  }
+
+  /* ---------- Deck stage ---------- */
+  .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .deck-stack {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 5 / 7;
+    perspective: 1600px;
+    margin-top: 4px;
+  }
+  @media (min-width: 640px) {
+    .deck-stack { max-width: 360px; }
+  }
+
+  .deck-card {
+    position: absolute;
+    inset: 0;
+    background: var(--cream-lift);
+    border: 1px solid rgba(107,127,94,0.18);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-stack);
+    pointer-events: none;
+  }
+  .deck-card--1 {
+    transform: translate(0, 7px) rotate(-1.4deg);
+    background: var(--cream);
+  }
+  .deck-card--2 {
+    transform: translate(0, 14px) rotate(0.9deg);
+    background: var(--cream-deep);
+    opacity: 0.85;
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.75s cubic-bezier(0.4, 0.0, 0.2, 1);
+    cursor: pointer;
+  }
+  .card.is-flipped { transform: rotateY(180deg); }
+  .card.is-shuffling { animation: card-lift 0.42s ease; }
+  @keyframes card-lift {
+    0%   { transform: translateY(0)    rotate(0); }
+    35%  { transform: translateY(-14px) rotate(-0.6deg); }
+    100% { transform: translateY(0)    rotate(0); }
+  }
+  .card.is-flipped.is-shuffling {
+    animation: card-flip-lift 0.42s ease;
+  }
+  @keyframes card-flip-lift {
+    0%   { transform: rotateY(180deg) translateY(0)    rotate(0); }
+    35%  { transform: rotateY(180deg) translateY(-14px) rotate(-0.6deg); }
+    100% { transform: rotateY(180deg) translateY(0)    rotate(0); }
+  }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--r-lg);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+  }
+  .card-face--front {
+    background: var(--cream-lift);
+    border: 1px solid rgba(107,127,94,0.22);
+    padding: 22px 22px 18px;
+  }
+  .card-face--back {
+    background: var(--sage);
+    transform: rotateY(180deg);
+    padding: 24px 22px 20px;
+    color: var(--cream-lift);
+    box-shadow:
+      0 1px 0 rgba(31,29,23,0.05),
+      0 22px 48px -22px rgba(74,91,65,0.45),
+      0 6px 14px -10px rgba(74,91,65,0.20);
+  }
+
+  /* Card front grain */
+  .card-face--front::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.11  0 0 0 0 0.09  0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+    opacity: 0.55;
+  }
+  .card-face--front::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(107,127,94,0.16);
+    border-radius: calc(var(--r-lg) - 6px);
+    pointer-events: none;
+  }
+
+  /* Front content */
+  .front-leaf {
+    position: absolute;
+    color: var(--sage);
+    opacity: 0.42;
+    pointer-events: none;
+  }
+  .front-leaf--top    { top: 22px; left: 22px; width: 26px; height: 38px; }
+  .front-leaf--bottom { bottom: 22px; right: 22px; width: 26px; height: 38px; transform: rotate(160deg); }
+
+  .affirmation-wrap {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 36px 8px 24px;
+  }
+  .affirmation {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(20px, 5.6vw, 24px);
+    line-height: 1.28;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    font-variation-settings: "opsz" 60, "SOFT" 50;
+    transition: opacity 0.2s ease;
+  }
+  .affirmation.is-swapping { opacity: 0; }
+
+  .card-num {
+    position: relative;
+    z-index: 2;
+    align-self: center;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sage-soft);
+  }
+
+  /* Back content */
+  .back-inner {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 8px 4px 0;
+  }
+  .back-eyebrow {
+    margin: 0 0 14px;
+    font-size: 10.5px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--amber-soft);
+    font-weight: 500;
+  }
+  .back-prompt {
+    margin: 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(18px, 4.8vw, 22px);
+    line-height: 1.36;
+    color: var(--cream-lift);
+    font-variation-settings: "opsz" 36, "SOFT" 60;
+    transition: opacity 0.2s ease;
+  }
+  .back-prompt.is-swapping { opacity: 0; }
+
+  .back-leaf {
+    color: var(--cream-lift);
+    opacity: 0.22;
+    width: 36px;
+    height: 54px;
+    margin-top: auto;
+    margin-bottom: 14px;
+  }
+
+  .back-mark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .back-mark .word {
+    font-size: 9.5px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--cream-lift);
+    opacity: 0.7;
+  }
+
+  /* Card hover / press */
+  .card:hover { transform: translateY(-2px); }
+  .card.is-flipped:hover { transform: rotateY(180deg) translateY(-2px); }
+  .card:active { transform: translateY(0) scale(0.998); }
+  .card.is-flipped:active { transform: rotateY(180deg) scale(0.998); }
+
+  /* Flip hint */
+  .flip-hint {
+    margin: 0;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+  .flip-hint .icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    vertical-align: -1px;
+    margin-right: 6px;
+    color: var(--sage-soft);
+  }
+
+  /* ---------- Controls ---------- */
+  .controls {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 10px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 52px;
+    padding: 0 18px;
+    border-radius: var(--r-md);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn .icon { width: 16px; height: 16px; flex-shrink: 0; }
+  .btn--primary {
+    background: var(--sage);
+    color: var(--cream-lift);
+    box-shadow: 0 1px 0 rgba(74,91,65,0.06),
+                0 8px 16px -10px rgba(74,91,65,0.45);
+  }
+  .btn--primary:hover  { background: var(--sage-deep); transform: translateY(-1px); }
+  .btn--primary:active { transform: translateY(0); }
+  .btn--primary:disabled {
+    background: var(--sage-mist);
+    color: var(--cream);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+  .btn--ghost {
+    background: transparent;
+    color: var(--sage-deep);
+    border: 1px solid rgba(107,127,94,0.32);
+  }
+  .btn--ghost:hover {
+    background: rgba(107,127,94,0.06);
+    border-color: rgba(107,127,94,0.55);
+  }
+  .btn--ghost.is-saved {
+    color: var(--amber);
+    border-color: var(--amber);
+    background: rgba(184,144,96,0.06);
+  }
+  .btn--ghost.is-saved .icon { color: var(--amber); }
+
+  /* ---------- Status row ---------- */
+  .status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .counter {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+  .counter .now { color: var(--sage-deep); font-weight: 600; }
+  .link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+    font-weight: 500;
+    padding: 8px 4px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .link-btn:hover { color: var(--sage); }
+  .link-btn .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    display: inline-block;
+  }
+  .link-btn .dot.is-empty { background: rgba(184,144,96,0.25); }
+  .link-btn .count {
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  /* ---------- Footer ---------- */
+  .footnote {
+    margin: 8px 0 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+  .footnote em {
+    font-family: var(--serif);
+    font-style: italic;
+    letter-spacing: 0;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- Saved drawer ---------- */
+  .drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(31,29,23,0.42);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+  .drawer {
+    position: fixed;
+    top: 0; right: 0;
+    height: 100vh; height: 100dvh;
+    width: min(360px, 92vw);
+    background: var(--cream);
+    z-index: 60;
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.4, 0.0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -24px 0 60px -20px rgba(31,29,23,0.30);
+  }
+  .drawer.is-open { transform: translateX(0); }
+  .drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 22px 16px;
+    border-bottom: 1px solid rgba(107,127,94,0.18);
+  }
+  .drawer-head h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--sage-deep);
+  }
+  .drawer-head h2 .count {
+    font-size: 14px;
+    color: var(--ink-faint);
+    margin-left: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .drawer-close {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-soft);
+    border-radius: 50%;
+  }
+  .drawer-close:hover { background: rgba(107,127,94,0.08); }
+  .drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 22px 28px;
+  }
+  .saved-card {
+    padding: 16px 16px 14px;
+    background: var(--cream-lift);
+    border: 1px solid rgba(107,127,94,0.16);
+    border-radius: var(--r-md);
+    margin-bottom: 10px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 15.5px;
+    line-height: 1.36;
+    color: var(--ink);
+    position: relative;
+  }
+  .saved-card .remove {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 24px; height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-faint);
+    border-radius: 50%;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .saved-card .remove:hover { color: var(--amber); background: rgba(184,144,96,0.10); }
+  .drawer-empty {
+    margin: 24px 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+  .drawer-foot {
+    padding: 14px 22px 22px;
+    border-top: 1px solid rgba(107,127,94,0.18);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .card, .card.is-flipped { transition-duration: 0.01ms; }
+    .card.is-shuffling, .card.is-flipped.is-shuffling { animation: none; }
+    .deck-card--1, .deck-card--2 { transform: none; }
+    .drawer, .drawer-backdrop { transition: opacity 0.15s ease; }
+    .drawer { transform: none; }
+    .drawer:not(.is-open) { display: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="page" aria-label="Affirmation Deck Previewer">
+
+    <!-- Header -->
+    <header>
+      <div class="brand" aria-label="Paper N Pixels, Grounded Humanity shop">
+        <span class="brand-mark">
+          <span>P</span><span class="dot">·</span><span>N</span><span class="dot">·</span><span>P</span>
+        </span>
+        <span>Paper N Pixels</span>
+        <span class="brand-rule" aria-hidden="true"></span>
+        <span style="color: var(--ink-faint); font-weight: 400;">Grounded Humanity</span>
+      </div>
+      <p class="brand-sub">
+        <strong>Mindful, Not Mythical</strong> — a sample of the 60-card ADHD
+        affirmation deck by Carlton Embers.
+      </p>
+    </header>
+
+    <!-- Card stage -->
+    <section class="stage" aria-label="Current card">
+      <div class="deck-stack">
+        <div class="deck-card deck-card--2" aria-hidden="true"></div>
+        <div class="deck-card deck-card--1" aria-hidden="true"></div>
+
+        <div
+          class="card"
+          id="card"
+          role="button"
+          tabindex="0"
+          aria-label="Current affirmation card. Tap to flip between the affirmation and a try-this-now prompt."
+        >
+          <!-- FRONT -->
+          <div class="card-face card-face--front">
+            <span class="front-leaf front-leaf--top" aria-hidden="true">
+              <svg viewBox="0 0 80 120" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;">
+                <path d="M40 6 C 60 24, 64 60, 40 114 C 16 60, 20 24, 40 6 Z" />
+                <path d="M40 14 L 40 108" stroke-width="0.6" />
+                <path d="M40 28 Q 50 32, 56 40" stroke-width="0.5" />
+                <path d="M40 28 Q 30 32, 24 40" stroke-width="0.5" />
+                <path d="M40 46 Q 52 50, 58 60" stroke-width="0.5" />
+                <path d="M40 46 Q 28 50, 22 60" stroke-width="0.5" />
+                <path d="M40 64 Q 52 68, 56 78" stroke-width="0.5" />
+                <path d="M40 64 Q 28 68, 24 78" stroke-width="0.5" />
+                <path d="M40 82 Q 50 86, 52 94" stroke-width="0.5" />
+                <path d="M40 82 Q 30 86, 28 94" stroke-width="0.5" />
+              </svg>
+            </span>
+            <span class="front-leaf front-leaf--bottom" aria-hidden="true">
+              <svg viewBox="0 0 80 120" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;">
+                <path d="M40 6 C 60 24, 64 60, 40 114 C 16 60, 20 24, 40 6 Z" />
+                <path d="M40 14 L 40 108" stroke-width="0.6" />
+                <path d="M40 28 Q 50 32, 56 40" stroke-width="0.5" />
+                <path d="M40 28 Q 30 32, 24 40" stroke-width="0.5" />
+                <path d="M40 46 Q 52 50, 58 60" stroke-width="0.5" />
+                <path d="M40 46 Q 28 50, 22 60" stroke-width="0.5" />
+                <path d="M40 64 Q 52 68, 56 78" stroke-width="0.5" />
+                <path d="M40 64 Q 28 68, 24 78" stroke-width="0.5" />
+                <path d="M40 82 Q 50 86, 52 94" stroke-width="0.5" />
+                <path d="M40 82 Q 30 86, 28 94" stroke-width="0.5" />
+              </svg>
+            </span>
+
+            <div class="affirmation-wrap">
+              <p class="affirmation" id="affirmation">Loading…</p>
+            </div>
+
+            <span class="card-num" id="card-num-front">1 / 8</span>
+          </div>
+
+          <!-- BACK -->
+          <div class="card-face card-face--back">
+            <div class="back-inner">
+              <p class="back-eyebrow">Try this now</p>
+              <p class="back-prompt" id="prompt">Loading…</p>
+              <span class="back-leaf" aria-hidden="true">
+                <svg viewBox="0 0 80 120" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;">
+                  <path d="M40 6 C 60 24, 64 60, 40 114 C 16 60, 20 24, 40 6 Z" />
+                  <path d="M40 14 L 40 108" stroke-width="0.6" />
+                  <path d="M40 28 Q 50 32, 56 40" stroke-width="0.5" />
+                  <path d="M40 28 Q 30 32, 24 40" stroke-width="0.5" />
+                  <path d="M40 46 Q 52 50, 58 60" stroke-width="0.5" />
+                  <path d="M40 46 Q 28 50, 22 60" stroke-width="0.5" />
+                  <path d="M40 64 Q 52 68, 56 78" stroke-width="0.5" />
+                  <path d="M40 64 Q 28 68, 24 78" stroke-width="0.5" />
+                  <path d="M40 82 Q 50 86, 52 94" stroke-width="0.5" />
+                  <path d="M40 82 Q 30 86, 28 94" stroke-width="0.5" />
+                </svg>
+              </span>
+              <div class="back-mark">
+                <span class="word">Paper N Pixels</span>
+              </div>
+            </div>
+            <span class="card-num" id="card-num-back" style="color: rgba(251,247,238,0.55);">1 / 8</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="flip-hint" id="flip-hint">
+        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 8 Q 5 4 8 4 Q 11 4 13 8 Q 11 12 8 12 Q 5 12 3 8 Z" />
+          <path d="M6 6 L 3 8 L 6 10" />
+          <path d="M10 6 L 13 8 L 10 10" />
+        </svg>
+        <span id="flip-hint-text">Tap to flip</span>
+      </p>
+    </section>
+
+    <!-- Controls -->
+    <div class="controls" role="group" aria-label="Deck controls">
+      <button class="btn btn--primary" id="shuffle-btn" type="button">
+        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 4 L 14 4" />
+          <path d="M2 12 L 14 12" />
+          <path d="M5 4 L 2 4 L 5 4" />
+          <path d="M11 12 L 14 12 L 11 12" />
+          <path d="M9 4 L 14 4" />
+          <path d="M2 12 L 7 12" />
+          <path d="M2 4 L 7 12" />
+          <path d="M14 4 L 9 12" />
+        </svg>
+        <span id="shuffle-label">Shuffle</span>
+      </button>
+      <button class="btn btn--ghost" id="save-btn" type="button" aria-pressed="false">
+        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 2.5 L 12 2.5 L 12 14 L 8 11.5 L 4 14 Z" />
+        </svg>
+        <span class="save-label" id="save-label">Save this card</span>
+      </button>
+    </div>
+
+    <!-- Status row -->
+    <div class="status-row">
+      <span class="counter" id="counter">
+        Card <span class="now" id="counter-now">1</span> of <span id="counter-total">8</span>
+      </span>
+      <button class="link-btn" id="view-saved-btn" type="button" aria-label="View saved cards">
+        <span class="dot" id="saved-dot" aria-hidden="true"></span>
+        <span>Saved</span>
+        <span class="count" id="saved-count">0</span>
+      </button>
+    </div>
+
+    <!-- Footnote -->
+    <p class="footnote">
+      <em>Carlton Embers</em> · 60 ADHD affirmation cards · This is a sample of eight.
+    </p>
+  </main>
+
+  <!-- Saved drawer -->
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="drawer" id="drawer" aria-label="Saved cards" aria-hidden="true">
+    <div class="drawer-head">
+      <h2>Saved cards<span class="count" id="drawer-count">0</span></h2>
+      <button class="drawer-close" id="drawer-close" type="button" aria-label="Close saved cards">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 4 L 12 12" />
+          <path d="M12 4 L 4 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="drawer-body" id="drawer-body">
+      <p class="drawer-empty" id="drawer-empty">
+        No saved cards yet. Tap "Save" on any card to keep it close.
+      </p>
+    </div>
+    <p class="drawer-foot">
+      Saved on this device. Clear your browser storage to reset.
+    </p>
+  </aside>
+
+<script>
+  (function () {
+    'use strict';
+
+    // ---------- Affirmations + matching "try this now" prompts ----------
+    var CARDS = [
+      {
+        text:   "It's okay to need extra support. Asking for help is strength.",
+        prompt: "Text one person who gets it. Even \"thinking of you\" counts."
+      },
+      {
+        text:   "Rest is not a reward. It's how you keep going.",
+        prompt: "Set a ten-minute timer. Lie down. No phone. Let your eyes unfocus."
+      },
+      {
+        text:   "You don't have to earn the right to pause.",
+        prompt: "Step away from the task for sixty seconds. No justification needed."
+      },
+      {
+        text:   "Small steps still move you forward.",
+        prompt: "Do the smallest possible version of the next step. Just the first one."
+      },
+      {
+        text:   "Your brain works differently — that's not a flaw.",
+        prompt: "Name one thing your brain did well today — even finding your keys counts."
+      },
+      {
+        text:   "One breath is enough to reset.",
+        prompt: "Inhale for four. Exhale for six. Repeat three times. That's the whole practice."
+      },
+      {
+        text:   "You're allowed to change your mind.",
+        prompt: "If a plan isn't working, let it change. Adapting is not giving up."
+      },
+      {
+        text:   "Progress isn't always visible. It's still real.",
+        prompt: "List three things you've figured out recently. They don't have to be big."
+      }
+    ];
+
+    var STORAGE_KEY = 'papernpixels.affirmationDeck.v1';
+    var TOTAL = CARDS.length;
+
+    // ---------- State ----------
+    var state = {
+      deckOrder: [],
+      drawnCount: 0,    // 0-based; how many cards from the current deckOrder have been drawn
+      current: null,    // index into CARDS
+      saved: loadSaved(),
+      isFlipped: false
+    };
+
+    // ---------- Storage ----------
+    function loadSaved() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [];
+        var parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter(function (i) {
+          return typeof i === 'number' && i >= 0 && i < TOTAL && i === Math.floor(i);
+        });
+      } catch (e) {
+        return [];
+      }
+    }
+    function saveStorage() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.saved)); }
+      catch (e) { /* storage unavailable — silent */ }
+    }
+
+    // ---------- Deck mechanics ----------
+    function shuffleDeck() {
+      state.deckOrder = [];
+      for (var i = 0; i < TOTAL; i++) state.deckOrder.push(i);
+      // Fisher-Yates
+      for (var j = state.deckOrder.length - 1; j > 0; j--) {
+        var k = Math.floor(Math.random() * (j + 1));
+        var tmp = state.deckOrder[j];
+        state.deckOrder[j] = state.deckOrder[k];
+        state.deckOrder[k] = tmp;
+      }
+      state.drawnCount = 0;
+    }
+
+    function drawCard() {
+      if (state.drawnCount >= state.deckOrder.length) {
+        // Completed a run — start a new one
+        shuffleDeck();
+      }
+      var idx = state.deckOrder[state.drawnCount];
+      state.drawnCount++;
+      state.current = idx;
+      state.isFlipped = false;
+
+      // Reset flip visual to front before swapping text
+      cardEl.classList.remove('is-flipped');
+      renderFlipHint();
+
+      // Animate text swap
+      var aff = document.getElementById('affirmation');
+      var prm = document.getElementById('prompt');
+      aff.classList.add('is-swapping');
+      prm.classList.add('is-swapping');
+      cardEl.classList.add('is-shuffling');
+
+      setTimeout(function () {
+        aff.textContent = CARDS[idx].text;
+        prm.textContent = CARDS[idx].prompt;
+        aff.classList.remove('is-swapping');
+        prm.classList.remove('is-swapping');
+        renderCounter();
+        renderSaveState();
+        renderSavedLink();
+      }, 200);
+
+      setTimeout(function () {
+        cardEl.classList.remove('is-shuffling');
+      }, 460);
+
+      // If the deck is fresh, also pre-render the counter immediately
+      if (state.drawnCount === 1) {
+        renderCounter();
+        renderSaveState();
+        renderSavedLink();
+        aff.textContent = CARDS[idx].text;
+        prm.textContent = CARDS[idx].prompt;
+        aff.classList.remove('is-swapping');
+        prm.classList.remove('is-swapping');
+      }
+
+      updateShuffleLabel();
+    }
+
+    function toggleFlip() {
+      state.isFlipped = !state.isFlipped;
+      cardEl.classList.toggle('is-flipped', state.isFlipped);
+      renderFlipHint();
+    }
+
+    function toggleSave() {
+      if (state.current == null) return;
+      var set = {};
+      for (var i = 0; i < state.saved.length; i++) set[state.saved[i]] = true;
+      if (set[state.current]) {
+        delete set[state.current];
+        state.saved = Object.keys(set).map(function (k) { return parseInt(k, 10); });
+      } else {
+        state.saved.push(state.current);
+      }
+      state.saved.sort(function (a, b) { return a - b; });
+      saveStorage();
+      renderSaveState();
+      renderSavedLink();
+      if (drawerEl.classList.contains('is-open')) renderDrawerList();
+    }
+
+    // ---------- Render ----------
+    function renderCounter() {
+      document.getElementById('counter-now').textContent = String(state.drawnCount);
+      document.getElementById('counter-total').textContent = String(TOTAL);
+      var n = state.drawnCount + ' / ' + TOTAL;
+      var el1 = document.getElementById('card-num-front');
+      var el2 = document.getElementById('card-num-back');
+      if (el1) el1.textContent = n;
+      if (el2) el2.textContent = n;
+    }
+    function renderFlipHint() {
+      document.getElementById('flip-hint-text').textContent =
+        state.isFlipped ? 'Tap to return' : 'Tap to flip';
+    }
+    function renderSaveState() {
+      var isSaved = state.saved.indexOf(state.current) !== -1;
+      var btn = document.getElementById('save-btn');
+      btn.classList.toggle('is-saved', isSaved);
+      btn.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
+      var label = document.getElementById('save-label');
+      label.textContent = isSaved ? 'Saved' : 'Save this card';
+    }
+    function renderSavedLink() {
+      var n = state.saved.length;
+      document.getElementById('saved-count').textContent = String(n);
+      var dot = document.getElementById('saved-dot');
+      dot.classList.toggle('is-empty', n === 0);
+      document.getElementById('drawer-count').textContent = '(' + n + ')';
+    }
+    function updateShuffleLabel() {
+      // When the run is exhausted, the next shuffle begins a fresh one.
+      // No need to change the label; the counter resets visually.
+    }
+    function renderDrawerList() {
+      var body = document.getElementById('drawer-body');
+      var empty = document.getElementById('drawer-empty');
+      // Remove any previously rendered saved cards
+      var existing = body.querySelectorAll('.saved-card');
+      for (var i = 0; i < existing.length; i++) {
+        body.removeChild(existing[i]);
+      }
+      if (state.saved.length === 0) {
+        empty.style.display = '';
+        return;
+      }
+      empty.style.display = 'none';
+      for (var j = 0; j < state.saved.length; j++) {
+        var idx = state.saved[j];
+        var div = document.createElement('div');
+        div.className = 'saved-card';
+        div.setAttribute('data-idx', String(idx));
+        var text = document.createElement('span');
+        text.textContent = CARDS[idx].text;
+        var remove = document.createElement('button');
+        remove.className = 'remove';
+        remove.type = 'button';
+        remove.setAttribute('aria-label', 'Remove saved card');
+        remove.innerHTML =
+          '<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 4 L 12 12"/><path d="M12 4 L 4 12"/></svg>';
+        remove.addEventListener('click', (function (i) {
+          return function () {
+            var set = state.saved.filter(function (x) { return x !== i; });
+            state.saved = set;
+            saveStorage();
+            renderSaveState();
+            renderSavedLink();
+            renderDrawerList();
+          };
+        })(idx));
+        div.addEventListener('click', (function (i) {
+          return function () {
+            // Jump to that card on the deck
+            state.deckOrder = [i];
+            state.drawnCount = 0;
+            closeDrawer();
+            drawCard();
+          };
+        })(idx));
+        div.appendChild(text);
+        div.appendChild(remove);
+        body.appendChild(div);
+      }
+    }
+
+    // ---------- Drawer ----------
+    function openDrawer() {
+      renderDrawerList();
+      drawerEl.classList.add('is-open');
+      drawerEl.setAttribute('aria-hidden', 'false');
+      var bd = document.getElementById('drawer-backdrop');
+      bd.hidden = false;
+      // next frame
+      requestAnimationFrame(function () {
+        bd.classList.add('is-open');
+      });
+      document.addEventListener('keydown', escClose);
+    }
+    function closeDrawer() {
+      drawerEl.classList.remove('is-open');
+      drawerEl.setAttribute('aria-hidden', 'true');
+      var bd = document.getElementById('drawer-backdrop');
+      bd.classList.remove('is-open');
+      setTimeout(function () { bd.hidden = true; }, 250);
+      document.removeEventListener('keydown', escClose);
+    }
+    function escClose(e) { if (e.key === 'Escape') closeDrawer(); }
+
+    // ---------- DOM refs ----------
+    var cardEl    = document.getElementById('card');
+    var drawerEl  = document.getElementById('drawer');
+
+    // ---------- Events ----------
+    cardEl.addEventListener('click', function (e) {
+      // Don't flip if the user clicked a button inside the card (none right now, but defensive)
+      if (e.target.closest('button')) return;
+      toggleFlip();
+    });
+    cardEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleFlip();
+      }
+    });
+    document.getElementById('shuffle-btn').addEventListener('click', drawCard);
+    document.getElementById('save-btn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleSave();
+    });
+    document.getElementById('view-saved-btn').addEventListener('click', openDrawer);
+    document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+    document.getElementById('drawer-backdrop').addEventListener('click', closeDrawer);
+
+    // ---------- Init ----------
+    shuffleDeck();
+    drawCard();    // draws the first card with no fade
+    // After first draw the swap animation is gated off, but make sure
+    // counter/save state is consistent on cold load.
+    renderCounter();
+    renderSaveState();
+    renderSavedLink();
+    renderFlipHint();
+  })();
+</script>
+</body>
+</html>
