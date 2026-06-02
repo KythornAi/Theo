@@ -2,7 +2,7 @@ EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ - read _index.md first. Product, mar
 §
 Platform: Pop OS laptop (/home/kylemoore/). Hermes at ~/.hermes/. Workspace: ~/theo/ with INDEX.md. Brain vault: ~/Brain/.
 §
-Tool strategy: gpt-5.5 via ChatGPT Plus/OpenAI API for critical crons and synthesis; TinyFish first; Perplexity for cited synthesis; Firecrawl for complex crawls; agy for screenshot/image/video understanding.
+Tool strategy: gpt-5.5 via ChatGPT Plus/OAuth for critical crons and synthesis; use openai-codex if OPENAI_API_KEY is absent. TinyFish first; Perplexity for cited synthesis; Firecrawl for complex crawls; agy for image/video understanding.
 §
 Protocol: Theo researches, Kyle chooses, Claude builds/drafts, Theo reviews, Kyle final-calls. HERMES_INBOX carries async Theo↔Claude handoffs.
 §
@@ -13,5 +13,3 @@ Memory files: live canonical ~/.hermes/memories/MEMORY.md and git mirror ~/theo/
 PNP guardrails: Daily Reset is flagship and never free; Task Paralysis Rescue is tabled. Avoid hidden AI promises, medical/therapy claims, and unclear save/button logic.
 §
 Grounded Humanity: Carlton Embers pen name; GH brand, PNP shop, Gumroad first. First offer is Mindful, Not Mythical ebook + 60 ADHD cards; practical no-woo mindfulness framing; avoid medical/therapy/cure claims.
-§
-GH launch bottlenecks: Gumroad setup, affirmation deck copy/export pass, one ebook+cards mockup, Canva/journal ZIP polish, and asset artifact review.
