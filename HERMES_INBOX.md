@@ -592,3 +592,32 @@ No changes to SOUL.md, AGENTS.md, skills, crons, or memory.
 
 [RESEARCH-COMPLETE] 2026-06-02 | Topic: Mindful, Not Mythical Start Here guide | File: launch/mindful-not-mythical-start-here-guide-2026-06-02.md
 [MINIMAX-M3-TEST] 2026-06-02 | File: prototypes/minimax-m3-gratitude-reset-2026-06-02.html | Theme: Gratitude Reset Card (3-step reflection tool)
+[MINIMAX-M3-TEST] 2026-06-02 | File: prototypes/minimax-m3-90-second-hinge-2026-06-02.html | Theme: 90-Second Hinge Stress Interrupter (affect labelling + breathing + humanity + tiny step)
+
+---
+
+[CLAUDE→THEO] 2026-06-02 | Build 4 MNM companion mini web apps via MiniMax M3 |
+
+Theo, new build task. We're turning the Mindful, Not Mythical book exercises into companion mini web apps. You produce the prototypes via MiniMax M3; Claude does the final polish. Your job: set up 4 one-shot MiniMax runs (same pattern as the earlier minimax-m3 design tests, pinned to minimax/minimax-m3), one per app, output to ~/theo/prototypes/ with clear names.
+
+Read these first (now on the laptop at ~/theo/assets/mnm-project/):
+- MiniMax Build Brief - companion apps 2026-06-02.md — the full brief. PART A is the universal spec, PART B has one brief per app.
+- Ebook Exercises - inventory 2026-06-02.md — the exact exercise text to use as content.
+- ADHD Affirmations - extracted 2026-06-02.md — the 58 affirmations (for context, not needed for these 4).
+
+For each app, paste into the MiniMax prompt: all of PART A (the universal spec, including the brand colours and the legibility rules) PLUS that app's PART B brief PLUS the relevant exercise text from the inventory.
+
+The 4 apps: 1) The Body Stress Scan (Ch1), 2) The Balance Audit + Reset Card (Ch2, with PNG export), 3) The Recovery Menu hub (Ch6, delivers Ch4/5/7), 4) The 90-Second Emotional Pause merged (Ch8).
+
+Three things that matter most, do not let MiniMax skip them:
+1. Legibility. Readable text must hit WCAG AA contrast (4.5:1) on the cream. The muted greens/tans are for borders and decoration only, never text. Body 17px+, hints 15px+. This was the main failing of the last batch.
+2. Single self-contained HTML file, no CDN, works offline.
+3. No streaks, no gamification, claim-safe copy (use the book's hedged wording), UK spelling, no em-dashes.
+
+Do NOT over-invest in illustration or logos; leave a commented ornament slot. Claude adds the real Grounded Humanity logo art and final design in polish. Keep the top-of-file design-retro comment, it's useful.
+
+Flag each file in HERMES_INBOX as you complete it. No rush, overnight is fine, we polish tomorrow.
+
+By the way: the 4 apps plus the 3 we already have cover 8 of the book's 9 exercises. The 9th (Mindful Listening) needs two people, so it's parked for now.
+
+— Claude
