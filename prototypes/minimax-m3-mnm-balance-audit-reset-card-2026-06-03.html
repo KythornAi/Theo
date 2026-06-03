@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<!--
+DESIGN RETRO. The Balance Audit + Reset Card (Chapter 2 companion app, App 2 of 4)
+Date: 2026-06-03
+For: Mindful, Not Mythical / Grounded Humanity, sold via Paper N Pixels.
+
+CONCEPT
+A two-column audit (what tips me off balance vs what steadies me), followed by a single
+weekly adjustment prompt, finished with a designed "Reset Card" the user can keep as
+text or save as an image. Not a tracker, not a streak. Just a small piece of paper that
+says: when things tilt, here is what helps.
+
+INTENT
+Match the book's tone (calm, plain, warm, anti-pressure) and the Canva affirmation deck's
+watercolour-sage tone visually, without shipping illustrations. The Reset Card is the
+centrepiece: short, screenshot-friendly, on brand. PNG export is a real export, not a
+fake one. The on-screen preview and the exported image must look like the same artefact.
+
+PALETTE (from MiniMax Build Brief 2026-06-02, PART A A0)
+  page:        #f3eee3 cream
+  card:        #e8dacb deeper cream
+  heading ink: #2f4633 deep forest green
+  body ink:    #30232d near-black aubergine
+  hint ink:    #536445 readable sage (>=4.5:1 on cream AND on card bg #e8dacb; darkened from the brief's #5a6849 because that fell to 4.36:1 on the card surface)
+  focus mark:  #a4492f terracotta (focus rings, "you are here", thin rules only)
+  borders:     #a8b3a2 soft sage, #c8a784 tan, #e8dacb beige (decoration only)
+
+TYPE SCALE
+  display:     serif (Cormorant Garamond / Fraunces fallback to Georgia)
+  UI:          Inter / system sans
+  body:        17px
+  hint:        15px (italic for tone)
+  label:       12px, darker tone if it carries meaning
+  heading:     32-40px on mobile, 44px on wider screens
+
+ACCESSIBILITY NOTES
+  - Every input is a real <input>/<textarea> with a visible <label>, not a div.
+  - prefers-reduced-motion honoured: no pulse, no scale, just static state.
+  - Focus states visible (terracotta 2px outline, offset).
+  - aria-live="polite" announces step changes.
+  - Chip buttons (gentle example prefills) are real <button> elements with aria-pressed.
+  - LocalStorage is used for the in-progress draft ONLY. The card is export-only.
+  - Canvas export waits for document.fonts.ready before drawing (the brief flagged this
+    as buggy in the earlier draft and it must not be the failure mode here).
+  - Wrapped text in the canvas is measured against an explicit line height, not guessed.
+
+WHAT I'D REFINE WITH MORE TIME
+  - Replace the placeholder ornament with the real GH_Icon_TreeOnly_Transparent_1024.png
+    as a quiet corner watermark on the Reset Card, and the GroundedHumanity_FullLogo_
+    Transparent_2400w.png as the single brand signature (currently a marked-up slot).
+  - Optional phone-wallpaper safe-area inset (roughly 200px top and bottom) for the
+    1080x1920 export so the card never sits under a clock or dock. Punted to Claude.
+  - A "save draft" history to localStorage (currently we only store the in-progress
+    draft; final keepsake is export-only to keep the app from feeling like a tracker).
+  - Soft tactile haptics via navigator.vibrate on tap (mobile only, behind a feature
+    check), particularly when a chip is tapped to prefill.
+  - A "regenerate phrasing" affordance for the three-line reset, so the user can
+    re-pick a wording that fits them. Punted: the book gives one clean form.
+
+COMPROMISES
+  - No real GH logo assets embedded (prototype, per A8).
+  - Example chips are short on purpose: longer examples would dominate the page. The
+    book gives richer examples in prose; the chips are just gentle seeds.
+  - "Up to 5" per column is a hard ceiling. The book is permissive on count; we
+    picked 5 because it is the number the book uses and it keeps the card readable.
+  - "Nothing yet" is the empty-state for both columns. The audit is meant to be
+    honest, not prescriptive, so we never auto-suggest "you should add 3 here".
+-->
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3eee3">
+<meta name="description" content="A two-column balance audit and a small Reset Card. Notice what steadies you, notice what tips you, save a card you can keep.">
+<title>The Balance Audit + Reset Card. Grounded Humanity</title>
+<style>
+  /* ====== RESET AND ROOT ====== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: #f3eee3;
+    color: #30232d;
+    font-family: "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  :root {
+    --cream:        #f3eee3;
+    --card:         #e8dacb;
+    --ink:          #30232d;
+    --ink-heading:  #2f4633;
+    --ink-hint:     #536445; /* AA on cream AND on card #e8dacb; ~5.5:1 on cream, ~4.7:1 on card */
+    --terracotta:   #a4492f;
+    --sage-soft:    #a8b3a2; /* decoration only */
+    --tan:          #c8a784; /* decoration only */
+    --beige:        #e8dacb;
+    --serif:        "Cormorant Garamond", "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --sans:         "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --maxw:         560px;
+  }
+
+  /* ====== LAYOUT ====== */
+  .app {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 32px 22px 80px;
+  }
+  .brand-slot {
+    /* ornament slot: GH full lockup (GroundedHumanity_FullLogo_Transparent_2400w.png) goes here in final polish */
+    text-align: center;
+    color: var(--ink-hint);
+    font-family: var(--serif);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    margin: 0 0 18px;
+    font-style: italic;
+    opacity: 0.85;
+  }
+  .screen { display: none; }
+  .screen.is-active { display: block; }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-hint);
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  h1, h2, h3 {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-weight: 500;
+    margin: 0 0 12px;
+    line-height: 1.18;
+  }
+  h1 { font-size: 38px; letter-spacing: -0.005em; }
+  h2 { font-size: 26px; }
+  h3 { font-size: 20px; }
+  p { margin: 0 0 14px; }
+  .hint {
+    font-size: 15px;
+    color: var(--ink-hint);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .divider {
+    height: 1px;
+    background: var(--sage-soft);
+    border: 0;
+    margin: 22px 0;
+    opacity: 0.55;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+  }
+  .stack > * + * { margin-top: 14px; }
+  .stack-lg > * + * { margin-top: 22px; }
+
+  /* ====== BUTTONS ====== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background: var(--ink-heading);
+    color: var(--cream);
+    cursor: pointer;
+    min-height: 48px;
+    min-width: 48px;
+    text-decoration: none;
+    transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+  }
+  .btn:hover { background: #243a28; }
+  .btn:active { transform: translateY(1px); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink-heading);
+    border-color: var(--ink-heading);
+  }
+  .btn--ghost:hover { background: var(--ink-heading); color: var(--cream); }
+  .btn--small { font-size: 14px; padding: 10px 16px; min-height: 40px; }
+  .btn[disabled] {
+    background: #b9b0a1;
+    color: var(--cream);
+    cursor: not-allowed;
+    border-color: #b9b0a1;
+  }
+  .btn--ghost[disabled] {
+    background: transparent;
+    color: #8a8276;
+    border-color: #c8bda9;
+  }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .row--between { justify-content: space-between; align-items: center; }
+
+  /* ====== FOCUS STATES ====== */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+  .chip:focus-visible, .area-btn:focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 3px;
+  }
+
+  /* ====== PROGRESS ====== */
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 18px;
+    color: var(--ink-hint);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+  .progress__dots { display: flex; gap: 6px; }
+  .progress__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--sage-soft);
+    opacity: 0.5;
+  }
+  .progress__dot.is-done { background: var(--ink-hint); opacity: 0.8; }
+  .progress__dot.is-current { background: var(--terracotta); opacity: 1; }
+
+  /* ====== INPUTS ====== */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field__label {
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--ink-heading);
+    font-weight: 600;
+  }
+  .field__hint {
+    font-size: 14px;
+    color: var(--ink-hint);
+    font-style: italic;
+    margin: 0;
+  }
+  textarea, input[type="text"] {
+    width: 100%;
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1.5px solid var(--tan);
+    border-radius: 12px;
+    padding: 12px 14px;
+    min-height: 56px;
+    resize: vertical;
+    transition: border-color 160ms ease, background 160ms ease;
+  }
+  textarea:focus, input[type="text"]:focus {
+    border-color: var(--ink-heading);
+    background: #fbf6ec;
+  }
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 4px 0 6px;
+  }
+  .chip {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1.5px solid var(--sage-soft);
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+    min-height: 36px;
+    line-height: 1.2;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+  .chip:hover { background: #ece2d0; }
+  .chip[aria-pressed="true"] {
+    background: var(--ink-heading);
+    color: var(--cream);
+    border-color: var(--ink-heading);
+  }
+  .count {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-hint);
+    margin: 4px 0 0;
+  }
+  .count.is-full { color: var(--terracotta); }
+
+  /* ====== TWO-COLUMN AUDIT ====== */
+  .audit {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .column {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 20px 18px;
+  }
+  .column__title {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 22px;
+    margin: 0 0 4px;
+    line-height: 1.2;
+  }
+  .column__letter {
+    font-family: var(--serif);
+    color: var(--terracotta);
+    font-size: 16px;
+    font-style: italic;
+    margin-right: 4px;
+  }
+  .column__list {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+  }
+  .column__item {
+    font-family: var(--sans);
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1px solid var(--sage-soft);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .column__item-text { flex: 1; word-break: break-word; }
+  .column__remove {
+    background: transparent;
+    border: 0;
+    color: var(--ink-hint);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+    min-height: 32px;
+    min-width: 32px;
+    border-radius: 6px;
+  }
+  .column__remove:hover { color: var(--terracotta); background: #f0e6d4; }
+
+  /* ====== RESET CARD PREVIEW ====== */
+  .card-preview {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 16px;
+    padding: 28px 24px;
+    position: relative;
+  }
+  .card-preview__eyebrow {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-hint);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .card-preview__title {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 30px;
+    line-height: 1.15;
+    margin: 0 0 18px;
+  }
+  .card-preview__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .card-preview__step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-top: 1px solid var(--sage-soft);
+  }
+  .card-preview__step:first-child { border-top: 0; padding-top: 4px; }
+  .card-preview__num {
+    font-family: var(--serif);
+    color: var(--terracotta);
+    font-size: 26px;
+    line-height: 1;
+    flex: 0 0 28px;
+  }
+  .card-preview__body {
+    flex: 1;
+  }
+  .card-preview__line {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 19px;
+    line-height: 1.3;
+    margin: 0 0 4px;
+  }
+  .card-preview__detail {
+    font-family: var(--sans);
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.45;
+    margin: 0;
+  }
+  .card-preview__empty {
+    font-style: italic;
+    color: var(--ink-hint);
+  }
+  .card-preview__ornament {
+    /* ornament slot: GH tree icon (GH_Icon_TreeOnly_Transparent_1024.png) goes here in final polish */
+    text-align: center;
+    color: var(--ink-hint);
+    font-family: var(--serif);
+    font-size: 13px;
+    font-style: italic;
+    letter-spacing: 0.04em;
+    margin: 18px 0 0;
+    opacity: 0.7;
+  }
+  .card-preview__adjustment {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--sage-soft);
+  }
+  .card-preview__adjustment-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-hint);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .card-preview__adjustment-text {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 18px;
+    line-height: 1.4;
+    margin: 0;
+    word-break: break-word;
+  }
+  .card-preview__adjustment-empty {
+    font-style: italic;
+    color: var(--ink-hint);
+    font-size: 15px;
+  }
+
+  /* ====== KEEPSAKE TEXT ====== */
+  .keepsake {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 18px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .keepsake__small {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink-hint);
+    margin: 12px 0 0;
+    line-height: 1.45;
+    font-style: italic;
+  }
+
+  /* ====== EXPORT PANEL ====== */
+  .export-panel {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 20px 18px;
+  }
+  .export-panel__title {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 20px;
+    margin: 0 0 6px;
+  }
+  .export-panel__sub {
+    font-size: 15px;
+    color: var(--ink-hint);
+    margin: 0 0 14px;
+  }
+  .export-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .export-status {
+    font-size: 14px;
+    color: var(--ink-hint);
+    font-style: italic;
+    margin: 0;
+    min-height: 1.2em;
+  }
+  .export-status.is-ok { color: var(--ink-heading); font-style: normal; }
+  .export-status.is-err { color: var(--terracotta); font-style: normal; }
+  .export-canvas-host {
+    /* hidden: we draw into an off-DOM canvas, but the link is appended to body */
+  }
+
+  /* ====== DISCLAIMER ====== */
+  .disclaimer {
+    margin-top: 32px;
+    padding-top: 18px;
+    border-top: 1px solid var(--sage-soft);
+    font-size: 14px;
+    color: var(--ink-hint);
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .disclaimer strong { color: var(--ink-heading); font-style: normal; }
+
+  /* ====== SR ONLY ====== */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* ====== REDUCED MOTION ====== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<main class="app" id="app">
+
+  <p class="brand-slot" aria-hidden="true">Grounded Humanity</p>
+
+  <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ============== SCREEN 1: INTRO ============== -->
+  <section class="screen is-active" id="screen-intro" aria-labelledby="intro-title">
+    <p class="eyebrow">Chapter 2. Companion app.</p>
+    <h1 id="intro-title">The Balance Audit + Reset Card</h1>
+    <p>A two-column audit, one weekly adjustment, and a small card you can keep on you. Not a tracker. Not a streak. Just a piece of paper that says, when things tilt, here is what helps.</p>
+    <p class="hint">Takes about five minutes. Your draft is saved in this browser only, never sent anywhere.</p>
+
+    <hr class="divider" aria-hidden="true">
+
+    <div class="stack">
+      <button class="btn" id="btn-begin" type="button">Begin the audit</button>
+    </div>
+
+    <p class="hint" style="margin-top: 22px;">If you would rather just see an example, you can also tap the chips inside the audit and we will prefill the card for you.</p>
+  </section>
+
+  <!-- ============== SCREEN 2: TWO-COLUMN AUDIT ============== -->
+  <section class="screen" id="screen-audit" aria-labelledby="audit-title">
+    <div class="progress" aria-hidden="true">
+      <span>Step 1 of 3</span>
+      <span class="progress__dots" aria-hidden="true">
+        <span class="progress__dot is-current"></span>
+        <span class="progress__dot"></span>
+        <span class="progress__dot"></span>
+      </span>
+    </div>
+
+    <p class="eyebrow">The audit</p>
+    <h2 id="audit-title">Two columns, side by side</h2>
+    <p>List up to five things in each. Short phrases are fine. Whatever you actually notice is the right answer.</p>
+
+    <div class="audit" style="margin-top: 20px;">
+      <div class="column" aria-labelledby="col-a-title">
+        <h3 class="column__title" id="col-a-title"><span class="column__letter">A.</span>What steadies me</h3>
+        <p class="hint" style="margin: 0 0 10px;">Small actions that reliably bring you back. Tap a chip to add it, or type your own.</p>
+
+        <div class="chip-row" role="group" aria-label="Example steadiers">
+          <button class="chip" type="button" data-col="A" data-text="A two-minute walk">Two-minute walk</button>
+          <button class="chip" type="button" data-col="A" data-text="Water and a stretch">Water and stretch</button>
+          <button class="chip" type="button" data-col="A" data-text="Close the door for a call">Close the door</button>
+          <button class="chip" type="button" data-col="A" data-text="A 60-second breath">60-second breath</button>
+          <button class="chip" type="button" data-col="A" data-text="Phone in another room for 10 minutes">Phone away 10 min</button>
+        </div>
+
+        <form id="form-a" class="field" style="margin-top: 12px;" onsubmit="return false;">
+          <label class="sr-only" for="input-a">Add a steadier</label>
+          <textarea id="input-a" name="steadier" rows="2" maxlength="120" placeholder="e.g. a two-minute walk"></textarea>
+          <div class="row">
+            <button class="btn btn--small" type="button" id="btn-add-a">Add to column A</button>
+            <span class="count" id="count-a" aria-live="polite">0 of 5</span>
+          </div>
+        </form>
+
+        <ul class="column__list" id="list-a" aria-label="What steadies me"></ul>
+      </div>
+
+      <div class="column" aria-labelledby="col-b-title">
+        <h3 class="column__title" id="col-b-title"><span class="column__letter">B.</span>What tips me off balance</h3>
+        <p class="hint" style="margin: 0 0 10px;">Things that quietly drain your attention or energy. No judgement, just noticing.</p>
+
+        <div class="chip-row" role="group" aria-label="Example tilters">
+          <button class="chip" type="button" data-col="B" data-text="Doom-scrolling at night">Doom-scrolling</button>
+          <button class="chip" type="button" data-col="B" data-text="Pings during deep work">Pings mid-focus</button>
+          <button class="chip" type="button" data-col="B" data-text="Skipping lunch">Skipping lunch</button>
+          <button class="chip" type="button" data-col="B" data-text="Saying yes automatically">Auto-saying yes</button>
+          <button class="chip" type="button" data-col="B" data-text="Back-to-back meetings with no break">No meeting breaks</button>
+        </div>
+
+        <form id="form-b" class="field" style="margin-top: 12px;" onsubmit="return false;">
+          <label class="sr-only" for="input-b">Add a tilter</label>
+          <textarea id="input-b" name="tilter" rows="2" maxlength="120" placeholder="e.g. doom-scrolling at night"></textarea>
+          <div class="row">
+            <button class="btn btn--small" type="button" id="btn-add-b">Add to column B</button>
+            <span class="count" id="count-b" aria-live="polite">0 of 5</span>
+          </div>
+        </form>
+
+        <ul class="column__list" id="list-b" aria-label="What tips me off balance"></ul>
+      </div>
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <div class="row row--between">
+      <button class="btn btn--ghost btn--small" type="button" id="btn-audit-back">Back</button>
+      <button class="btn" type="button" id="btn-audit-next">One adjustment</button>
+    </div>
+
+    <p class="hint" style="margin-top: 14px;">You can come back and edit this any time before you make your card. After that, the card is yours to keep.</p>
+  </section>
+
+  <!-- ============== SCREEN 3: ONE ADJUSTMENT ============== -->
+  <section class="screen" id="screen-adjust" aria-labelledby="adjust-title">
+    <div class="progress" aria-hidden="true">
+      <span>Step 2 of 3</span>
+      <span class="progress__dots" aria-hidden="true">
+        <span class="progress__dot is-done"></span>
+        <span class="progress__dot is-current"></span>
+        <span class="progress__dot"></span>
+      </span>
+    </div>
+
+    <p class="eyebrow">One adjustment</p>
+    <h2 id="adjust-title">A change I can lean into this week</h2>
+    <p>From what you just wrote: which Column A action could you reach for more often? Or which Column B thing could you do less of, just a little?</p>
+
+    <form id="form-adjust" class="field" style="margin-top: 18px;" onsubmit="return false;">
+      <label class="field__label" for="input-adjust">One change I can lean into this week</label>
+      <p class="field__hint">A short, honest sentence. Not a grand plan. A small lean.</p>
+      <textarea id="input-adjust" name="adjustment" rows="3" maxlength="180" placeholder="e.g. I will put my phone in another room for the first 10 minutes of my morning."></textarea>
+    </form>
+
+    <p class="hint" style="margin-top: 16px;">This is not a goal to chase. It is a direction to lean.</p>
+
+    <hr class="divider" aria-hidden="true">
+
+    <div class="row row--between">
+      <button class="btn btn--ghost btn--small" type="button" id="btn-adjust-back">Back</button>
+      <button class="btn" type="button" id="btn-adjust-next">Make my card</button>
+    </div>
+  </section>
+
+  <!-- ============== SCREEN 4: RESET CARD ============== -->
+  <section class="screen" id="screen-card" aria-labelledby="card-title">
+    <div class="progress" aria-hidden="true">
+      <span>Step 3 of 3</span>
+      <span class="progress__dots" aria-hidden="true">
+        <span class="progress__dot is-done"></span>
+        <span class="progress__dot is-done"></span>
+        <span class="progress__dot is-current"></span>
+      </span>
+    </div>
+
+    <p class="eyebrow">Your Reset Card</p>
+    <h2 id="card-title">Keep this somewhere close</h2>
+    <p>Three lines, written down. When things tilt, you read it and you do the smallest next thing.</p>
+
+    <!-- On-screen preview of the Reset Card (mirrors the PNG layout) -->
+    <article class="card-preview" id="card-preview" aria-label="Your Reset Card, on-screen preview">
+      <p class="card-preview__eyebrow">Reset Card</p>
+      <h3 class="card-preview__title">When things tilt</h3>
+      <ol class="card-preview__steps">
+        <li class="card-preview__step">
+          <span class="card-preview__num" aria-hidden="true">1</span>
+          <div class="card-preview__body">
+            <p class="card-preview__line">Three breaths.</p>
+            <p class="card-preview__detail">In through the nose, out through the mouth. Slow, not deep.</p>
+          </div>
+        </li>
+        <li class="card-preview__step">
+          <span class="card-preview__num" aria-hidden="true">2</span>
+          <div class="card-preview__body">
+            <p class="card-preview__line">Name the tilt.</p>
+            <p class="card-preview__detail" id="card-name-tilt">"I'm anxious." "I'm exhausted." Just the word, not the story.</p>
+          </div>
+        </li>
+        <li class="card-preview__step">
+          <span class="card-preview__num" aria-hidden="true">3</span>
+          <div class="card-preview__body">
+            <p class="card-preview__line">One tiny steadying action.</p>
+            <p class="card-preview__detail" id="card-tiny-action">Pick the smallest good step and do it. Let that be the hinge.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="card-preview__adjustment" id="card-adjustment-block">
+        <p class="card-preview__adjustment-label">This week I am leaning into</p>
+        <p class="card-preview__adjustment-text" id="card-adjustment-text">&nbsp;</p>
+      </div>
+
+      <p class="card-preview__ornament" aria-hidden="true">Grounded Humanity</p>
+    </article>
+
+    <hr class="divider" aria-hidden="true">
+
+    <!-- Keep-as-text -->
+    <div class="stack">
+      <h3 style="font-family: var(--serif); color: var(--ink-heading); font-size: 20px; margin: 0;">Keep it as text</h3>
+      <p class="hint" style="margin: 0;">A plain-text version you can paste into Notes, email, or anywhere else.</p>
+      <div class="keepsake" id="keepsake" tabindex="0" aria-label="Plain-text version of your card"></div>
+      <div class="row">
+        <button class="btn btn--small" type="button" id="btn-copy">Copy as text</button>
+        <span class="hint" id="copy-status" style="align-self: center; margin: 0;" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <!-- Save as image -->
+    <div class="export-panel">
+      <h3 class="export-panel__title">Save as image</h3>
+      <p class="export-panel__sub">Two sizes. Same content as the preview. The phone one is sized for a lock screen; the wallet one is for printing or pasting in a notebook.</p>
+      <div class="export-row">
+        <button class="btn" type="button" id="btn-export-lock">Save phone lock-screen (1080 x 1920)</button>
+        <button class="btn btn--ghost" type="button" id="btn-export-wallet">Save wallet card (~720 x 1080)</button>
+        <p class="export-status" id="export-status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <div class="row row--between">
+      <button class="btn btn--ghost btn--small" type="button" id="btn-card-back">Edit my answers</button>
+      <button class="btn btn--small" type="button" id="btn-restart">Start over</button>
+    </div>
+
+    <p class="disclaimer">
+      <strong>Self-guided reflection, not medical advice.</strong>
+      This is a quiet tool for noticing what steadies you. If you are struggling, please reach out to someone you trust or a qualified professional.
+    </p>
+  </section>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ====== CONFIG ======
+  var MAX_ITEMS = 5;
+  var STORAGE_KEY = "mnm.balanceAudit.draft.v1";
+
+  // Example data lifted from the book exercise (Ch2). Used for chips and to mark
+  // their origin so the user can tell what came from the book vs. their own typing.
+  var EXAMPLES = {
+    A: [
+      "A two-minute walk",
+      "Water and a stretch",
+      "Close the door for a call",
+      "A 60-second breath",
+      "Phone in another room for 10 minutes"
+    ],
+    B: [
+      "Doom-scrolling at night",
+      "Pings during deep work",
+      "Skipping lunch",
+      "Saying yes automatically",
+      "Back-to-back meetings with no break"
+    ]
+  };
+
+  // ====== DOM HELPERS ======
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+  function announce(msg) {
+    var live = $("#live");
+    if (!live) return;
+    live.textContent = "";
+    setTimeout(function () { live.textContent = msg; }, 30);
+  }
+
+  function showScreen(id) {
+    $$(".screen").forEach(function (s) { s.classList.remove("is-active"); });
+    var next = document.getElementById(id);
+    if (next) {
+      next.classList.add("is-active");
+      // Move focus to the first heading for screen readers
+      var h = next.querySelector("h1, h2");
+      if (h) {
+        h.setAttribute("tabindex", "-1");
+        // Don't scroll-jack; just expose for AT
+      }
+      // Bring the screen to the top
+      window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    }
+  }
+
+  // ====== STATE ======
+  var state = {
+    A: [],   // array of strings, max 5
+    B: [],   // array of strings, max 5
+    adjust: ""
+  };
+
+  function persistDraft() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      // localStorage may be disabled (private mode, file:// in some browsers);
+      // we silently skip. The on-screen notice at the bottom covers this.
+    }
+  }
+
+  function loadDraft() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.A) && Array.isArray(parsed.B)) {
+        state.A = parsed.A.slice(0, MAX_ITEMS);
+        state.B = parsed.B.slice(0, MAX_ITEMS);
+        state.adjust = typeof parsed.adjust === "string" ? parsed.adjust : "";
+      }
+    } catch (e) {
+      // Corrupt draft: ignore.
+    }
+  }
+
+  // ====== RENDER: COLUMNS ======
+  function renderColumn(col) {
+    var list = $("#list-" + col.toLowerCase());
+    var count = $("#count-" + col.toLowerCase());
+    if (!list || !count) return;
+
+    list.innerHTML = "";
+    state[col].forEach(function (text, idx) {
+      var li = document.createElement("li");
+      li.className = "column__item";
+
+      var span = document.createElement("span");
+      span.className = "column__item-text";
+      span.textContent = text;
+
+      var btn = document.createElement("button");
+      btn.className = "column__remove";
+      btn.type = "button";
+      btn.setAttribute("aria-label", "Remove: " + text);
+      btn.innerHTML = "&times;";
+      btn.addEventListener("click", function () {
+        state[col].splice(idx, 1);
+        persistDraft();
+        renderColumn(col);
+        // Remove aria-pressed from any chip that matches this text in this column
+        $$(".chip[data-col='" + col + "']").forEach(function (chip) {
+          if (chip.getAttribute("data-text") === text) {
+            chip.setAttribute("aria-pressed", "false");
+          }
+        });
+      });
+
+      li.appendChild(span);
+      li.appendChild(btn);
+      list.appendChild(li);
+    });
+
+    var n = state[col].length;
+    count.textContent = n + " of " + MAX_ITEMS;
+    count.classList.toggle("is-full", n >= MAX_ITEMS);
+  }
+
+  function addToColumn(col, rawText) {
+    var text = (rawText || "").trim();
+    if (!text) return false;
+    if (state[col].length >= MAX_ITEMS) return false;
+    if (state[col].indexOf(text) !== -1) return false; // dedupe
+    state[col].push(text);
+    persistDraft();
+    renderColumn(col);
+    return true;
+  }
+
+  // ====== CHIP HANDLERS ======
+  $$(".chip").forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      var col = chip.getAttribute("data-col");
+      var text = chip.getAttribute("data-text") || chip.textContent;
+      var ok = addToColumn(col, text);
+      if (ok) {
+        chip.setAttribute("aria-pressed", "true");
+        announce("Added to column " + col + ": " + text);
+      } else if (state[col].length >= MAX_ITEMS) {
+        announce("Column " + col + " is full. Remove one to add more.");
+      } else {
+        // already in list
+        announce("Already in column " + col + ".");
+      }
+    });
+  });
+
+  // ====== ADD BUTTONS (textarea submit) ======
+  $("#btn-add-a").addEventListener("click", function () {
+    var input = $("#input-a");
+    var ok = addToColumn("A", input.value);
+    if (ok) {
+      // If this matches an example chip, also flip it on
+      $$(".chip[data-col='A']").forEach(function (chip) {
+        if (chip.getAttribute("data-text") === input.value.trim()) {
+          chip.setAttribute("aria-pressed", "true");
+        }
+      });
+      input.value = "";
+      input.focus();
+      announce("Added to column A.");
+    } else {
+      announce("That entry is empty, a duplicate, or column A is full.");
+    }
+  });
+  $("#btn-add-b").addEventListener("click", function () {
+    var input = $("#input-b");
+    var ok = addToColumn("B", input.value);
+    if (ok) {
+      $$(".chip[data-col='B']").forEach(function (chip) {
+        if (chip.getAttribute("data-text") === input.value.trim()) {
+          chip.setAttribute("aria-pressed", "true");
+        }
+      });
+      input.value = "";
+      input.focus();
+      announce("Added to column B.");
+    } else {
+      announce("That entry is empty, a duplicate, or column B is full.");
+    }
+  });
+
+  // Cmd/Ctrl+Enter inside textareas submits the add
+  ["#input-a", "#input-b"].forEach(function (sel) {
+    var el = $(sel);
+    if (!el) return;
+    el.addEventListener("keydown", function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        var col = sel === "#input-a" ? "A" : "B";
+        var ok = addToColumn(col, el.value);
+        if (ok) { el.value = ""; announce("Added to column " + col + "."); }
+      }
+    });
+  });
+
+  // ====== NAVIGATION ======
+  $("#btn-begin").addEventListener("click", function () {
+    showScreen("screen-audit");
+    announce("Step 1 of 3. The audit.");
+  });
+
+  $("#btn-audit-back").addEventListener("click", function () {
+    showScreen("screen-intro");
+    announce("Back to the beginning.");
+  });
+  $("#btn-audit-next").addEventListener("click", function () {
+    showScreen("screen-adjust");
+    var ta = $("#input-adjust");
+    if (ta && state.adjust) ta.value = state.adjust;
+    announce("Step 2 of 3. One adjustment.");
+  });
+
+  $("#btn-adjust-back").addEventListener("click", function () {
+    showScreen("screen-audit");
+    announce("Back to the audit.");
+  });
+  $("#btn-adjust-next").addEventListener("click", function () {
+    var ta = $("#input-adjust");
+    state.adjust = (ta && ta.value || "").trim();
+    persistDraft();
+    renderCard();
+    showScreen("screen-card");
+    announce("Step 3 of 3. Your reset card.");
+  });
+
+  $("#btn-card-back").addEventListener("click", function () {
+    showScreen("screen-adjust");
+    var ta = $("#input-adjust");
+    if (ta) ta.value = state.adjust;
+    announce("Back to your adjustment.");
+  });
+
+  $("#btn-restart").addEventListener("click", function () {
+    var confirmed = window.confirm("Start over? This clears your draft and your card.");
+    if (!confirmed) return;
+    state = { A: [], B: [], adjust: "" };
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    // Reset chips
+    $$(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+    renderColumn("A");
+    renderColumn("B");
+    var ta = $("#input-adjust"); if (ta) ta.value = "";
+    showScreen("screen-intro");
+    announce("Cleared. Starting over.");
+  });
+
+  // ====== CARD RENDER ======
+  function firstSteadier() {
+    if (state.A.length > 0) return state.A[0];
+    if (EXAMPLES.A.length > 0) return EXAMPLES.A[0];
+    return "A 60-second breath";
+  }
+  function nameTiltFromB() {
+    // We don't try to read minds. If the user wrote tilters, we surface a gentle
+    // prompt that names the pattern without diagnosing. If they wrote nothing,
+    // we fall back to the book's own example wording.
+    if (state.B.length === 0) {
+      return "\"I'm anxious.\" \"I'm exhausted.\" Just the word, not the story.";
+    }
+    // Use the first tilter as the prompt: "name what's happening" is a verb,
+    // so we hand back the user's own words rather than rephrasing them.
+    return "\"" + state.B[0] + ".\" Just the word, not the story.";
+  }
+
+  function renderCard() {
+    var nameTilt = $("#card-name-tilt");
+    var tinyAction = $("#card-tiny-action");
+    var adjustText = $("#card-adjustment-text");
+    var adjustBlock = $("#card-adjustment-block");
+    if (nameTilt) nameTilt.textContent = nameTiltFromB();
+    if (tinyAction) {
+      tinyAction.textContent = firstSteadier() + ".";
+    }
+    if (adjustText) {
+      if (state.adjust) {
+        adjustText.textContent = state.adjust;
+        adjustText.classList.remove("card-preview__adjustment-empty");
+      } else {
+        adjustText.textContent = "(No adjustment written. That is fine, this card still works without it.)";
+        adjustText.classList.add("card-preview__adjustment-empty");
+      }
+    }
+    // Plain-text keepsake
+    renderKeepsake();
+  }
+
+  function renderKeepsake() {
+    var k = $("#keepsake");
+    if (!k) return;
+    var a = state.A.length > 0 ? state.A : [];
+    var b = state.B.length > 0 ? state.B : [];
+    var lines = [];
+    lines.push("MY RESET CARD");
+    lines.push("");
+    lines.push("When things tilt:");
+    lines.push("1. Three breaths. In through the nose, out through the mouth.");
+    lines.push("2. Name the tilt. " + (b[0] ? "\"" + b[0] + ".\"" : "\"I'm anxious.\" or \"I'm exhausted.\""));
+    lines.push("3. One tiny steadying action. " + (a[0] ? a[0] + "." : "A 60-second breath."));
+    if (state.adjust) {
+      lines.push("");
+      lines.push("This week I am leaning into:");
+      lines.push(state.adjust);
+    }
+    if (a.length > 0) {
+      lines.push("");
+      lines.push("What steadies me (Column A):");
+      a.forEach(function (s) { lines.push("- " + s); });
+    }
+    if (b.length > 0) {
+      lines.push("");
+      lines.push("What tips me off balance (Column B):");
+      b.forEach(function (s) { lines.push("- " + s); });
+    }
+    lines.push("");
+    lines.push("Balance is not found. It is built, one pause at a time.");
+    k.textContent = lines.join("\n");
+  }
+
+  // ====== COPY AS TEXT ======
+  $("#btn-copy").addEventListener("click", function () {
+    var text = $("#keepsake").textContent || "";
+    var status = $("#copy-status");
+    function ok() {
+      status.textContent = "Copied to clipboard.";
+      announce("Reset card copied to clipboard.");
+      setTimeout(function () { status.textContent = ""; }, 4000);
+    }
+    function fail() {
+      status.textContent = "Copy did not work. Select the text above and copy manually.";
+      announce("Copy failed. Please select the text manually.");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok).catch(function () {
+        // Fallback to execCommand
+        legacyCopy(text) ? ok() : fail();
+      });
+    } else {
+      legacyCopy(text) ? ok() : fail();
+    }
+  });
+
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "absolute";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // ====== PNG EXPORT ======
+  // Renders the same Reset Card the user sees, sized for a phone lock screen
+  // (1080 x 1920) or a small wallet card (~720 x 1080). The draw waits for
+  // document.fonts.ready so the on-screen serif actually shows up in the
+  // exported image (this was the bug in the earlier draft).
+  //
+  // Layout: a cream card on a cream page, with the same eyebrow / title /
+  // three numbered steps / "this week" line / brand signature. The user gets
+  // a downloaded PNG via a temporary <a download> link.
+
+  var EXPORT_LAYOUT = {
+    phone: { w: 1080, h: 1920, padX: 96, padY: 140, cardPadX: 88, cardPadY: 110, gutter: 56, fontScale: 1.0 },
+    wallet: { w: 720,  h: 1080, padX: 64, padY: 80,  cardPadX: 56, cardPadY: 70,  gutter: 36, fontScale: 0.72 }
+  };
+
+  function setStatus(msg, kind) {
+    var el = $("#export-status");
+    if (!el) return;
+    el.textContent = msg || "";
+    el.classList.remove("is-ok", "is-err");
+    if (kind === "ok") el.classList.add("is-ok");
+    if (kind === "err") el.classList.add("is-err");
+  }
+
+  function buildCardModel() {
+    // The data the canvas will draw. Kept independent of the DOM where possible
+    // (so an off-screen export and an on-screen preview can never disagree on
+    // substance even if the DOM preview is styled later).
+    var firstA = state.A[0] || "A 60-second breath";
+    var firstB = state.B[0]; // optional
+    return {
+      eyebrow: "RESET CARD",
+      title: "When things tilt",
+      steps: [
+        { n: "1", line: "Three breaths.", detail: "In through the nose, out through the mouth. Slow, not deep." },
+        { n: "2", line: "Name the tilt.",
+          detail: firstB ? "\u201C" + firstB + ".\u201D Just the word, not the story."
+                        : "\u201CI'm anxious.\u201D \u201CI'm exhausted.\u201D Just the word, not the story." },
+        { n: "3", line: "One tiny steadying action.",
+          detail: firstA + "." }
+      ],
+      adjustment: state.adjust || "",
+      signature: "Grounded Humanity"
+    };
+  }
+
+  function waitForFonts() {
+    if (document.fonts && document.fonts.ready) {
+      return document.fonts.ready.catch(function () { return null; });
+    }
+    return Promise.resolve();
+  }
+
+  function exportPNG(kind) {
+    var cfg = EXPORT_LAYOUT[kind];
+    if (!cfg) { setStatus("Unknown export size.", "err"); return; }
+
+    setStatus("Preparing your image...");
+    $("#btn-export-lock").disabled = true;
+    $("#btn-export-wallet").disabled = true;
+
+    waitForFonts().then(function () {
+      try {
+        var canvas = document.createElement("canvas");
+        canvas.width = cfg.w;
+        canvas.height = cfg.h;
+        var ctx = canvas.getContext("2d");
+        if (!ctx) throw new Error("Canvas unsupported in this browser.");
+
+        drawResetCard(ctx, cfg, buildCardModel());
+
+        // Convert to data URL and trigger download
+        var dataURL;
+        try {
+          dataURL = canvas.toDataURL("image/png");
+        } catch (e) {
+          throw new Error("Could not encode the image. " + (e && e.message ? e.message : ""));
+        }
+        var filename = kind === "phone"
+          ? "reset-card-lockscreen-1080x1920.png"
+          : "reset-card-wallet-720x1080.png";
+        triggerDownload(dataURL, filename);
+        setStatus("Saved " + filename + ".", "ok");
+      } catch (err) {
+        setStatus(err && err.message ? err.message : "Export failed.", "err");
+      } finally {
+        $("#btn-export-lock").disabled = false;
+        $("#btn-export-wallet").disabled = false;
+      }
+    });
+  }
+
+  function triggerDownload(dataURL, filename) {
+    var a = document.createElement("a");
+    a.href = dataURL;
+    a.download = filename;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      if (a.parentNode) a.parentNode.removeChild(a);
+    }, 100);
+  }
+
+  function drawResetCard(ctx, cfg, model) {
+    var W = cfg.w, H = cfg.h;
+    var cream = "#f3eee3";
+    var cardBg = "#e8dacb";
+    var inkHeading = "#2f4633";
+    var inkBody = "#30232d";
+    var hint = "#536445";
+    var terracotta = "#a4492f";
+    var sageSoft = "#a8b3a2";
+    var tan = "#c8a784";
+
+    // Page background
+    ctx.fillStyle = cream;
+    ctx.fillRect(0, 0, W, H);
+
+    // Card frame
+    var cardX = cfg.padX;
+    var cardY = cfg.padY;
+    var cardW = W - cfg.padX * 2;
+    var cardH = H - cfg.padY * 2;
+
+    // Outer card
+    roundRect(ctx, cardX, cardY, cardW, cardH, 32);
+    ctx.fillStyle = cardBg;
+    ctx.fill();
+    ctx.strokeStyle = tan;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Inner content area
+    var ix = cardX + cfg.cardPadX;
+    var iy = cardY + cfg.cardPadY;
+    var iw = cardW - cfg.cardPadX * 2;
+    var cursorY = iy;
+
+    // Eyebrow
+    var s = cfg.fontScale;
+    ctx.fillStyle = hint;
+    ctx.font = "600 " + Math.round(18 * s) + "px Inter, Helvetica Neue, system-ui, sans-serif";
+    ctx.textBaseline = "top";
+    drawTracked(ctx, model.eyebrow.toUpperCase(), ix, cursorY, iw, 0.22);
+    cursorY += Math.round(34 * s);
+
+    // Title
+    ctx.fillStyle = inkHeading;
+    ctx.font = "500 " + Math.round(58 * s) + "px \"Cormorant Garamond\", Fraunces, Georgia, serif";
+    cursorY = drawWrapped(ctx, model.title, ix, cursorY, iw, Math.round(70 * s));
+
+    // Spacer
+    cursorY += Math.round(28 * s);
+
+    // Steps
+    var stepGap = cfg.gutter;
+    for (var i = 0; i < model.steps.length; i++) {
+      var step = model.steps[i];
+
+      // Divider above each step except the first
+      if (i > 0) {
+        ctx.strokeStyle = sageSoft;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(ix, cursorY);
+        ctx.lineTo(ix + iw, cursorY);
+        ctx.stroke();
+        cursorY += Math.round(28 * s);
+      }
+
+      var startY = cursorY;
+      var numberBoxX = ix;
+      var numberBoxW = Math.round(56 * s);
+
+      // Number
+      ctx.fillStyle = terracotta;
+      ctx.font = "500 " + Math.round(50 * s) + "px \"Cormorant Garamond\", Fraunces, Georgia, serif";
+      ctx.textBaseline = "top";
+      ctx.fillText(step.n + ".", numberBoxX, startY);
+
+      // Body
+      var bx = numberBoxX + numberBoxW;
+      var bw = iw - numberBoxW;
+      var by = startY;
+
+      ctx.fillStyle = inkHeading;
+      ctx.font = "500 " + Math.round(40 * s) + "px \"Cormorant Garamond\", Fraunces, Georgia, serif";
+      var lineH1 = Math.round(50 * s);
+      by = drawWrapped(ctx, step.line, bx, by, bw, lineH1);
+
+      by += Math.round(10 * s);
+
+      ctx.fillStyle = inkBody;
+      ctx.font = "400 " + Math.round(28 * s) + "px Inter, Helvetica Neue, system-ui, sans-serif";
+      var lineH2 = Math.round(40 * s);
+      by = drawWrapped(ctx, step.detail, bx, by, bw, lineH2);
+
+      // Advance cursor to whichever is taller
+      cursorY = Math.max(startY + lineH1 + 10 + lineH2 * 2, by) + stepGap;
+    }
+
+    // Adjustment block
+    if (model.adjustment) {
+      // Divider
+      ctx.strokeStyle = sageSoft;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(ix, cursorY);
+      ctx.lineTo(ix + iw, cursorY);
+      ctx.stroke();
+      cursorY += Math.round(28 * s);
+
+      // Eyebrow
+      ctx.fillStyle = hint;
+      ctx.font = "600 " + Math.round(18 * s) + "px Inter, Helvetica Neue, system-ui, sans-serif";
+      drawTracked(ctx, "THIS WEEK I AM LEANING INTO", ix, cursorY, iw, 0.22);
+      cursorY += Math.round(34 * s);
+
+      // Body
+      ctx.fillStyle = inkHeading;
+ctx.font = "500 " + Math.round(34 * s) + "px \"Cormorant Garamond\", Fraunces, Georgia, serif";
+      cursorY = drawWrapped(ctx, model.adjustment, ix, cursorY, iw, Math.round(44 * s));
+    }
+
+    // Signature (ornament slot, low-key)
+    var sigY = cardY + cardH - Math.round(54 * s);
+    ctx.fillStyle = hint;
+    ctx.font = "italic 400 " + Math.round(22 * s) + "px \"Cormorant Garamond\", Fraunces, Georgia, serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText(model.signature, cardX + cardW / 2, sigY);
+    ctx.textAlign = "left";
+  }
+
+  // Render text with letter-spacing. Used for the small uppercase eyebrow.
+  function drawTracked(ctx, text, x, y, maxWidth, trackingEm) {
+    var tracking = trackingEm * parseFloat(ctx.font); // approximate per-em tracking
+    var chars = text.split("");
+    var total = 0;
+    var charWidths = chars.map(function (c) {
+      var w = ctx.measureText(c).width;
+      total += w + tracking;
+      return w;
+    });
+    total -= tracking; // no trailing tracking
+    // If tracking would push us past maxWidth, drop it.
+    if (total > maxWidth) tracking = 0;
+    var cursor = x;
+    for (var i = 0; i < chars.length; i++) {
+      ctx.fillText(chars[i], cursor, y);
+      cursor += charWidths[i] + tracking;
+    }
+  }
+
+  // Wrap and draw text starting at (x, y) within maxWidth and a fixed line
+  // height. Returns the y at which the next line SHOULD start (i.e. cursor
+  // past the last drawn line). This is the explicit line height the brief
+  // called for: never guess, never overlap.
+  function drawWrapped(ctx, text, x, y, maxWidth, lineHeight) {
+    if (text == null) return y;
+    var words = String(text).split(/\s+/);
+    var line = "";
+    var lines = [];
+    for (var i = 0; i < words.length; i++) {
+      var test = line ? line + " " + words[i] : words[i];
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = words[i];
+      } else {
+        line = test;
+      }
+    }
+    if (line) lines.push(line);
+    var curY = y;
+    ctx.textBaseline = "top";
+    for (var j = 0; j < lines.length; j++) {
+      ctx.fillText(lines[j], x, curY);
+      curY += lineHeight;
+    }
+    return curY;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  $("#btn-export-lock").addEventListener("click", function () { exportPNG("phone"); });
+  $("#btn-export-wallet").addEventListener("click", function () { exportPNG("wallet"); });
+
+  // ====== INIT ======
+  loadDraft();
+  renderColumn("A");
+  renderColumn("B");
+  // Mark chips that match loaded draft
+  ["A", "B"].forEach(function (col) {
+    state[col].forEach(function (text) {
+      $$(".chip[data-col='" + col + "']").forEach(function (chip) {
+        if (chip.getAttribute("data-text") === text) {
+          chip.setAttribute("aria-pressed", "true");
+        }
+      });
+    });
+  });
+  // If the user lands on the card screen with a draft, prep the card view.
+  // (They start on intro; this just makes sure any state.adjust is in the
+  // textarea next time they reach it.)
+  if (state.adjust) {
+    var ta = $("#input-adjust");
+    if (ta) ta.value = state.adjust;
+  }
+
+})();
+</script>
+</body>
+</html>
