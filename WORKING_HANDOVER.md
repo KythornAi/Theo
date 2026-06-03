@@ -75,3 +75,14 @@
 **Next:** Kyle has one more thing to ask — start next session with that. Verify Theo comes up on gpt-5.5 (not deepseek) in the next chat session. Consider [CLAUDE→THEO] to let Theo know his provider was corrected.
 
 **Blockers for Kyle:** Set up Gumroad business account (bank + PayPal). Register groundedhumanity.co.uk ($6.98/yr Hostinger).
+
+### Session 33 — VS Code — 2026-06-03
+
+**Done:**
+- Reviewed all 4 overnight MiniMax M3 apps (Body Stress Scan, Balance Audit + Reset Card, Recovery Menu Hub, 90-Second Emotional Pause) — solid builds, consistent brand, logo slots ready for polish
+- Transferred and committed 12 edited MNM infographics + GH logo set to ~/theo/assets/mnm-project/ (cfcac23)
+- Scoped Agent OS: hermes-webui already running at :8787, plan written at ~/.claude/plans/yea-i-want-you-glistening-pike.md; Kyle's answers: personal command centre, real CLI terminals (constraint flagged), stay on v0.15.1, plan-only session
+
+**Next:** View hermes-webui at :8787 to see baseline, agree on terminal embedding approach (xterm.js panes vs launcher buttons vs Hermes TUI only), then Phase 1 spike: earthtone re-theme + 2-3 agent profiles. MNM app polish (colours, human figure, copy, typography, intro/cover pages) runs in parallel.
+
+**Blockers for Kyle:** Gumroad business account (bank + PayPal). groundedhumanity.co.uk registration. Agree on Agent OS terminal approach before Phase 1 build starts.
