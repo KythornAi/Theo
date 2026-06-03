@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<!--
+DESIGN RETRO. The 90-Second Emotional Pause, merged (Chapter 8 companion app, App 4 of 4)
+Date: 2026-06-03
+For: Mindful, Not Mythical / Grounded Humanity, sold via Paper N Pixels.
+
+CONCEPT
+A single, calm, brand-aligned take on Chapter 8's "90-Second Emotional Pause". This merges
+the Theo's 90-second-hinge (Stop, Name, Locate, Breathe, Reopen) with the Gemini wave-rider's
+emphasis on letting the wave rise and fall without fuelling it. The body-locate step uses
+the same warm human silhouette as App 1 (Body Stress Scan) for visual consistency, but
+the user always picks both the emotion and the body location themselves: the app never
+auto-assigns either, so the same emotion can land anywhere the user actually feels it.
+
+INTENT
+Match the book's tone (calm, plain, warm, anti-pressure) and the Canva affirmation deck's
+watercolour-sage tone visually, without shipping illustrations. The five steps are a
+gentle ladder, not a checklist. The breath clock is the only animation in the room.
+The "about 90 seconds" wording uses the book's own hedged framing: many people find
+the wave peaks and begins to ease within about 90 seconds if they don't fuel it, though
+this varies from person to person and emotion to emotion.
+
+PALETTE (from MiniMax Build Brief 2026-06-02, PART A A0)
+  page:        #f3eee3 cream
+  card:        #e8dacb deeper cream
+  heading ink: #2f4633 deep forest green
+  body ink:    #30232d near-black aubergine
+  hint ink:    #5a6849 readable sage (>=4.5:1 on cream)
+  focus mark:  #a4492f terracotta (focus rings, "you are here", thin rules only)
+  borders:     #a8b3a2 soft sage, #c8a784 tan, #e8dacb beige (decoration only)
+
+TYPE SCALE
+  display:     serif (Cormorant Garamond / Fraunces fallback to Georgia)
+  UI:          Inter / system sans
+  body:        17px
+  hint:        15px (italic for tone)
+  label:       12px, darker tone if it carries meaning
+  heading:     38px on mobile, 44px on wider screens
+
+ACCESSIBILITY NOTES
+  - One breath clock (single timer source) so visual and label never drift apart.
+  - prefers-reduced-motion: skip the breath circle animation, keep the cycle moving on text alone.
+  - Visible focus states (terracotta 2-3px outline, offset).
+  - aria-live="polite" announces step changes, not every second.
+  - Every step is keyboard reachable; emotion chips, body regions, buttons all operable.
+  - Keepsake summary copies as plain text with the modern Clipboard API and an execCommand fallback.
+  - The "90 seconds" target is the book's hedged wording; the app lets the user end the
+    breath early if the wave has eased, or stay a few cycles longer if it has not.
+
+WHAT I'D REFINE WITH MORE TIME
+  - Replace the placeholder brand slot with the real GroundedHumanity_FullLogo_Transparent_2400w.png
+    as a single, consistent brand signature.
+  - Add a quiet "[Social] GH_Icon_TreeOnly_Transparent_1024.png" tree-icon watermark in the corner.
+  - A user-toggle for breath ratio (the book says "slow in, longer out"; some prefer 4/6,
+    some prefer 4/8, some prefer box breath).
+  - Optional: save the most recent pause to LocalStorage so returning users can see what
+    they noticed last time, with a clear "browser only" label.
+  - A small sound-free haptic tap on step change for mobile users who want a tactile cue.
+  - The book notes that Chapter 9 (Mindful Listening) needs two people, so this is the
+    final solo companion in the suite.
+
+COMPROMISES
+  - No real GH logo assets embedded (prototype, per A8).
+  - The body figure is a clean, simple human silhouette rather than a polished illustrated figure.
+  - "90 seconds" is presented as a gentle target, not a stopwatch, in line with the book's
+    hedged claim.
+  - The "wise next step" prompt is free text, no templates. The book invites the user to ask
+    it gently of themselves; templating it would feel prescriptive.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3eee3">
+<meta name="description" content="The 90-Second Emotional Pause. A five-step companion from Chapter 8 of Mindful, Not Mythical. Stop, name, locate, breathe, reopen.">
+<title>The 90-Second Emotional Pause. Grounded Humanity</title>
+<style>
+  /* ====== RESET AND ROOT ====== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: #f3eee3;
+    color: #30232d;
+    font-family: "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  :root {
+    --cream:        #f3eee3;
+    --card:         #e8dacb;
+    --ink:          #30232d;
+    --ink-heading:  #2f4633;
+    --ink-hint:     #5a6849; /* AA on cream, ~5.3:1 */
+    --terracotta:   #a4492f;
+    --sage-soft:    #a8b3a2; /* decoration only */
+    --tan:          #c8a784; /* decoration only */
+    --beige:        #e8dacb;
+    --serif:        "Cormorant Garamond", "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --sans:         "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --maxw:         600px;
+  }
+
+  /* ====== LAYOUT ====== */
+  .app {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 32px 22px 96px;
+  }
+  .brand-slot {
+    /* ornament slot: GH full lockup (GroundedHumanity_FullLogo_Transparent_2400w.png) goes here in final polish */
+    text-align: center;
+    color: var(--ink-hint);
+    font-family: var(--serif);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    margin: 0 0 22px;
+    font-style: italic;
+    opacity: 0.85;
+  }
+  .screen { display: none; }
+  .screen.is-active { display: block; }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-hint);
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  h1, h2, h3 {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-weight: 500;
+    margin: 0 0 12px;
+    line-height: 1.18;
+  }
+  h1 { font-size: 40px; letter-spacing: -0.005em; }
+  h2 { font-size: 28px; }
+  h3 { font-size: 20px; }
+  p { margin: 0 0 14px; }
+  .hint {
+    font-size: 15px;
+    color: var(--ink-hint);
+    font-style: italic;
+    line-height: 1.55;
+  }
+  .disclaimer {
+    font-size: 13px;
+    color: var(--ink-hint);
+    line-height: 1.5;
+    margin-top: 32px;
+    padding-top: 18px;
+    border-top: 1px solid var(--sage-soft);
+    opacity: 0.9;
+  }
+  .divider {
+    height: 1px;
+    background: var(--sage-soft);
+    border: 0;
+    margin: 22px 0;
+    opacity: 0.55;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+  }
+  .stack > * + * { margin-top: 14px; }
+  .stack-lg > * + * { margin-top: 22px; }
+
+  /* ====== BUTTONS ====== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background: var(--ink-heading);
+    color: var(--cream);
+    cursor: pointer;
+    min-height: 48px;
+    min-width: 48px;
+    text-decoration: none;
+    transition: background 160ms ease, color 160ms ease, transform 160ms ease, border-color 160ms ease;
+  }
+  .btn:hover { background: #243a28; }
+  .btn:active { transform: translateY(1px); }
+  .btn:focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 3px;
+  }
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink-heading);
+    border-color: var(--ink-heading);
+  }
+  .btn--ghost:hover {
+    background: var(--card);
+    color: var(--ink-heading);
+  }
+  .btn--row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .btn--row .btn { flex: 1 1 auto; min-width: 140px; }
+
+  /* ====== STEP RAIL ====== */
+  .step-rail {
+    display: flex;
+    gap: 6px;
+    margin: 0 0 22px;
+    padding: 0;
+    list-style: none;
+    justify-content: center;
+  }
+  .step-rail li {
+    flex: 1;
+    height: 4px;
+    background: var(--tan);
+    border-radius: 999px;
+    opacity: 0.55;
+    transition: background 200ms ease, opacity 200ms ease;
+  }
+  .step-rail li.is-done { background: var(--ink-heading); opacity: 0.55; }
+  .step-rail li.is-current { background: var(--ink-heading); opacity: 1; }
+
+  /* ====== EMOTION CHIPS (NAME STEP) ====== */
+  .chip-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0 4px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1;
+    padding: 12px 16px;
+    min-height: 44px;
+    border-radius: 999px;
+    background: var(--cream);
+    color: var(--ink-heading);
+    border: 1.5px solid var(--sage-soft);
+    cursor: pointer;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+  .chip:hover { background: var(--card); border-color: var(--ink-hint); }
+  .chip.is-selected {
+    background: var(--ink-heading);
+    color: var(--cream);
+    border-color: var(--ink-heading);
+  }
+  .chip:focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 3px;
+  }
+  .custom-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+    margin-top: 14px;
+  }
+  .custom-row input[type="text"] {
+    flex: 1;
+    min-height: 44px;
+    padding: 10px 14px;
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1.5px solid var(--sage-soft);
+    border-radius: 10px;
+  }
+  .custom-row input[type="text"]:focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 2px;
+    border-color: var(--ink-heading);
+  }
+
+  /* ====== BODY FIGURE (LOCATE STEP) ====== */
+  .figure-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 4px;
+  }
+  .figure-wrap svg { width: 100%; max-width: 260px; height: auto; display: block; }
+  .figure-silhouette path, .figure-silhouette ellipse {
+    fill: var(--beige);
+    stroke: var(--sage-soft);
+    stroke-width: 1.2;
+    transition: fill 200ms ease, stroke 200ms ease;
+  }
+  .figure-silhouette .area { cursor: pointer; }
+  .figure-silhouette .area:hover { fill: #d8c4ad; stroke: var(--ink-hint); }
+  .figure-silhouette .area.is-selected {
+    fill: var(--ink-heading);
+    stroke: var(--ink-heading);
+  }
+  .figure-silhouette .area:focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 2px;
+  }
+  .figure-legend {
+    text-align: center;
+    margin: 8px 0 0;
+  }
+
+  /* ====== BREATH CLOCK (Breathe STEP) ====== */
+  .breath-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0 4px;
+  }
+  .breath-circle {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .breath-circle svg { width: 100%; height: 100%; display: block; }
+  .breath-circle .ring-bg {
+    fill: none;
+    stroke: var(--sage-soft);
+    stroke-width: 1.5;
+    opacity: 0.6;
+  }
+  .breath-circle .ring-grow {
+    fill: none;
+    stroke: var(--ink-heading);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    transform-origin: 50% 50%;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 100ms linear;
+  }
+  .breath-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    pointer-events: none;
+  }
+  .breath-label__word {
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+  .breath-label__count {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-hint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .breath-sub {
+    text-align: center;
+    color: var(--ink-hint);
+    font-size: 15px;
+    font-style: italic;
+    max-width: 360px;
+  }
+  .breath-meta {
+    text-align: center;
+    color: var(--ink-hint);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .pause-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .breath-circle .ring-grow { transition: none; }
+  }
+
+  /* ====== WRITE CARD (REOPEN STEP) ====== */
+  .write-card {
+    background: var(--cream);
+    border: 1.5px solid var(--tan);
+    border-radius: 14px;
+    padding: 18px 18px 16px;
+  }
+  .write-card label {
+    display: block;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-hint);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .write-card textarea {
+    width: 100%;
+    min-height: 110px;
+    border: 1px solid var(--sage-soft);
+    background: #fbf6ec;
+    border-radius: 10px;
+    padding: 12px;
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.45;
+    color: var(--ink);
+    resize: vertical;
+  }
+  .write-card textarea:focus-visible {
+    border-color: var(--ink-heading);
+    outline: 3px solid var(--terracotta);
+    outline-offset: 2px;
+  }
+  .write-card .hint { margin-top: 10px; }
+
+  /* ====== KEEPSAKE ====== */
+  .keepsake {
+    background: var(--cream);
+    border: 1.5px solid var(--tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+  }
+  .keepsake__head {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 22px;
+    line-height: 1.2;
+    margin: 0 0 14px;
+  }
+  .keepsake__line {
+    margin: 0 0 8px;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .keepsake__line .label {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-hint);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .keepsake__close {
+    font-style: italic;
+    color: var(--ink-hint);
+    font-size: 15px;
+    margin: 14px 0 0;
+  }
+  .copy-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .copy-status {
+    font-size: 14px;
+    color: var(--ink-hint);
+    font-style: italic;
+    min-height: 1.4em;
+    margin: 8px 0 0;
+  }
+
+  /* ====== SCREEN-SPECIFIC ====== */
+  .intro p.lede { font-size: 19px; line-height: 1.55; color: var(--ink); }
+  .screen-tag {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    background: transparent;
+    border: 1px solid var(--terracotta);
+    border-radius: 999px;
+    padding: 4px 10px;
+    margin: 0 0 12px;
+  }
+  .center { text-align: center; }
+  .mt { margin-top: 16px; }
+
+  /* ====== FOOTER BRAND SLOTS (ornament only) ====== */
+  .ornament {
+    text-align: center;
+    margin: 36px 0 0;
+    color: var(--sage-soft);
+    font-size: 18px;
+    letter-spacing: 0.4em;
+  }
+  /* ornament slot: GH_Icon_TreeOnly_Transparent_1024.png goes here in final polish, low opacity */
+
+  /* ====== SR-ONLY ====== */
+  .sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0,0,0,0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="brand-slot" aria-hidden="true">
+    <!-- ornament slot: GroundedHumanity_FullLogo_Transparent_2400w.png goes here in final polish -->
+    Grounded Humanity
+  </div>
+
+  <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ====== SCREEN: INTRO ====== -->
+  <section class="screen is-active" id="screen-intro" aria-labelledby="intro-title">
+    <span class="screen-tag">Chapter 8 companion</span>
+    <h1 id="intro-title">The 90-Second Emotional Pause</h1>
+    <p class="lede">A short pause for when a strong emotion lands. Not to fight it. Not to fix it. To let the wave rise and begin to ease.</p>
+    <p class="hint">You will be guided through five gentle steps: stop, name, locate, breathe, reopen. It should take about three minutes.</p>
+    <div class="btn--row">
+      <button type="button" class="btn" id="btn-begin">Begin</button>
+    </div>
+  </section>
+
+  <!-- ====== SCREEN: STOP ====== -->
+  <section class="screen" id="screen-stop" aria-labelledby="stop-title">
+    <ol class="step-rail" aria-hidden="true">
+      <li class="is-current"></li><li></li><li></li><li></li><li></li>
+    </ol>
+    <p class="eyebrow">Step 1 of 5</p>
+    <h2 id="stop-title">Stop.</h2>
+    <p>If you can, close your eyes. If not, soften your gaze. Notice your feet on the floor, or your hands in your lap. You do not have to do anything else right now.</p>
+    <p class="hint">One slow breath in through the nose. A longer breath out. That is enough to begin.</p>
+    <div class="btn--row">
+      <button type="button" class="btn" id="btn-stop-next">I'm here</button>
+    </div>
+  </section>
+
+  <!-- ====== SCREEN: NAME ====== -->
+  <section class="screen" id="screen-name" aria-labelledby="name-title">
+    <ol class="step-rail" aria-hidden="true">
+      <li class="is-done"></li><li class="is-current"></li><li></li><li></li><li></li>
+    </ol>
+    <p class="eyebrow">Step 2 of 5</p>
+    <h2 id="name-title">Name what you feel.</h2>
+    <p>Silently, in your own words. A simple label is enough.</p>
+    <p class="hint">Tap a word, or write your own. There is no wrong answer.</p>
+
+    <div class="chip-grid" id="emotion-chips" role="group" aria-label="Emotion suggestions">
+      <button type="button" class="chip" data-emotion="anger">Anger</button>
+      <button type="button" class="chip" data-emotion="fear">Fear</button>
+      <button type="button" class="chip" data-emotion="sadness">Sadness</button>
+      <button type="button" class="chip" data-emotion="anxiety">Anxiety</button>
+      <button type="button" class="chip" data-emotion="frustration">Frustration</button>
+      <button type="button" class="chip" data-emotion="shame">Shame</button>
+      <button type="button" class="chip" data-emotion="overwhelm">Overwhelm</button>
+      <button type="button" class="chip" data-emotion="grief">Grief</button>
+      <button type="button" class="chip" data-emotion="tenderness">Tenderness</button>
+      <button type="button" class="chip" data-emotion="relief">Relief</button>
+    </div>
+
+    <div class="custom-row">
+      <label class="sr-only" for="emotion-custom">Or write your own word for the feeling</label>
+      <input type="text" id="emotion-custom" placeholder="Or write your own word" autocomplete="off" maxlength="60">
+    </div>
+
+    <div class="btn--row">
+      <button type="button" class="btn btn--ghost" id="btn-name-back">Back</button>
+      <button type="button" class="btn" id="btn-name-next" disabled>Continue</button>
+    </div>
+  </section>
+
+  <!-- ====== SCREEN: LOCATE ====== -->
+  <section class="screen" id="screen-locate" aria-labelledby="locate-title">
+    <ol class="step-rail" aria-hidden="true">
+      <li class="is-done"></li><li class="is-done"></li><li class="is-current"></li><li></li><li></li>
+    </ol>
+    <p class="eyebrow">Step 3 of 5</p>
+    <h2 id="locate-title">Where does it sit in your body?</h2>
+    <p>Tap the place where you feel the <span id="locate-emotion-label">feeling</span> most clearly. The location is your own choice, the app simply records what you tap.</p>
+
+    <div class="figure-wrap">
+      <!-- Soft human silhouette, on-brand. Each region is a focusable button. -->
+      <svg class="figure-silhouette" viewBox="0 0 240 480" role="group" aria-label="Body figure, tap a region to mark where the feeling sits" focusable="false">
+        <!-- Forehead (top of head) -->
+        <ellipse class="area" data-area="forehead" role="button" tabindex="0"
+                 aria-label="Forehead"
+                 cx="120" cy="42" rx="32" ry="22"></ellipse>
+        <!-- Jaw (lower head) -->
+        <ellipse class="area" data-area="jaw" role="button" tabindex="0"
+                 aria-label="Jaw"
+                 cx="120" cy="78" rx="26" ry="20"></ellipse>
+        <!-- Throat (front of neck) -->
+        <ellipse class="area" data-area="throat" role="button" tabindex="0"
+                 aria-label="Throat"
+                 cx="120" cy="110" rx="16" ry="14"></ellipse>
+        <!-- Shoulders (top of torso bar) -->
+        <path class="area" data-area="shoulders" role="button" tabindex="0"
+              aria-label="Shoulders"
+              d="M62,128 Q120,104 178,128 Q170,142 120,142 Q70,142 62,128 Z"></path>
+        <!-- Arms (left + right) -->
+        <path class="area" data-area="arms" role="button" tabindex="0"
+              aria-label="Arms"
+              d="M62,128 Q40,170 38,228 Q44,236 58,232 Q66,180 84,150 Z
+                 M178,128 Q200,170 202,228 Q196,236 182,232 Q174,180 156,150 Z"></path>
+        <!-- Chest (upper torso) -->
+        <path class="area" data-area="chest" role="button" tabindex="0"
+              aria-label="Chest"
+              d="M78,144 Q120,150 162,144 L160,210 Q120,218 80,210 Z"></path>
+        <!-- Stomach (mid torso) -->
+        <path class="area" data-area="stomach" role="button" tabindex="0"
+              aria-label="Stomach"
+              d="M80,210 Q120,218 160,210 L158,278 Q120,288 82,278 Z"></path>
+        <!-- Legs (lower body) -->
+        <path class="area" data-area="legs" role="button" tabindex="0"
+              aria-label="Legs"
+              d="M82,278 Q120,288 158,278 L150,420 Q140,432 128,430 L122,360 L118,430 Q106,432 96,420 Z"></path>
+      </svg>
+    </div>
+    <p class="hint figure-legend" id="locate-status">No location chosen yet.</p>
+
+    <div class="btn--row">
+      <button type="button" class="btn btn--ghost" id="btn-locate-back">Back</button>
+      <button type="button" class="btn" id="btn-locate-next" disabled>Continue</button>
+    </div>
+  </section>
+
+  <!-- ====== SCREEN: BREATHE ====== -->
+  <section class="screen" id="screen-breathe" aria-labelledby="breathe-title">
+    <ol class="step-rail" aria-hidden="true">
+      <li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-current"></li><li></li>
+    </ol>
+    <p class="eyebrow">Step 4 of 5</p>
+    <h2 id="breathe-title">Breathe through the wave.</h2>
+    <p>Slow in through the nose. A longer breath out. Let the wave rise and fall. You are not trying to push the feeling away, just giving it room to move.</p>
+    <p class="hint">Many people find the initial emotional wave peaks and begins to ease within about 90 seconds if they don't fuel it, though this varies from person to person and emotion to emotion.</p>
+
+    <div class="breath-stage">
+      <div class="breath-circle" aria-hidden="true">
+        <svg viewBox="0 0 220 220" focusable="false">
+          <circle class="ring-bg" cx="110" cy="110" r="100"></circle>
+          <circle class="ring-grow" id="breath-ring" cx="110" cy="110" r="100"
+                  stroke-dasharray="628.32" stroke-dashoffset="628.32"></circle>
+        </svg>
+        <div class="breath-label">
+          <div class="breath-label__word" id="breath-word">Ready</div>
+          <div class="breath-label__count" id="breath-count">Tap to begin</div>
+        </div>
+      </div>
+      <p class="breath-meta" id="breath-meta">00 / 90 s</p>
+      <p class="breath-sub" id="breath-sub">The clock is here as a guide. If the wave eases sooner, end when you are ready. If it has not, stay a few breaths longer.</p>
+
+      <div class="pause-controls">
+        <button type="button" class="btn" id="btn-breath-start">Begin breathing</button>
+        <button type="button" class="btn btn--ghost" id="btn-breath-pause" hidden>Pause</button>
+        <button type="button" class="btn btn--ghost" id="btn-breath-end" hidden>End early</button>
+      </div>
+    </div>
+
+    <div class="btn--row" id="breathe-continue-row" hidden>
+      <button type="button" class="btn btn--ghost" id="btn-breathe-back">Back</button>
+      <button type="button" class="btn" id="btn-breathe-next">Continue</button>
+    </div>
+  </section>
+
+  <!-- ====== SCREEN: REOPEN ====== -->
+  <section class="screen" id="screen-reopen" aria-labelledby="reopen-title">
+    <ol class="step-rail" aria-hidden="true">
+      <li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-current"></li>
+    </ol>
+    <p class="eyebrow">Step 5 of 5</p>
+    <h2 id="reopen-title">Reopen.</h2>
+    <p>Ask gently: <em>what is the next wise step?</em> It does not need to be a grand plan. The smallest good step is enough.</p>
+    <p class="hint">A drink of water. A single sentence. A two-minute walk. A message to one person. Write what comes to mind.</p>
+
+    <div class="write-card">
+      <label for="next-step">The next wise step</label>
+      <textarea id="next-step" placeholder="One small thing I can do next..." maxlength="280"></textarea>
+      <p class="hint">It is fine to leave this blank. Sometimes the wise step is just noticing.</p>
+    </div>
+
+    <div class="btn--row">
+      <button type="button" class="btn btn--ghost" id="btn-reopen-back">Back</button>
+      <button type="button" class="btn" id="btn-reopen-next">Close the pause</button>
+    </div>
+  </section>
+
+  <!-- ====== SCREEN: KEEPSAKE ====== -->
+  <section class="screen" id="screen-keep" aria-labelledby="keep-title">
+    <span class="screen-tag">Pause complete</span>
+    <h1 id="keep-title">A small keepsake.</h1>
+    <p class="hint">A short record of this pause. Copy it to keep, or screenshot the page. The app does not save anything by default.</p>
+
+    <div class="keepsake" aria-live="polite">
+      <p class="keepsake__head">The 90-Second Emotional Pause</p>
+      <p class="keepsake__line">
+        <span class="label">What I felt</span>
+        <span id="keep-emotion">Not yet</span>
+      </p>
+      <p class="keepsake__line">
+        <span class="label">Where it sat</span>
+        <span id="keep-area">Not yet</span>
+      </p>
+      <p class="keepsake__line">
+        <span class="label">What I noticed in the breath</span>
+        <span id="keep-breath">Not yet</span>
+      </p>
+      <p class="keepsake__line">
+        <span class="label">The next wise step</span>
+        <span id="keep-next">Not yet</span>
+      </p>
+      <p class="keepsake__close">Stress is here, but so am I.</p>
+    </div>
+
+    <div class="copy-row">
+      <button type="button" class="btn" id="btn-copy">Copy as text</button>
+      <button type="button" class="btn btn--ghost" id="btn-again">Start again</button>
+    </div>
+    <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+
+    <p class="hint mt">Browser-only note: this app does not send or store your pause anywhere. If you want to keep a record, copy the text or screenshot the page. Closing the tab will erase the draft.</p>
+
+    <div class="ornament" aria-hidden="true">. . .</div>
+    <!-- ornament slot: GH_Icon_TreeOnly_Transparent_1024.png low-opacity tree-icon watermark in final polish -->
+  </section>
+
+  <p class="disclaimer">A short self-guided reflection, not medical advice. If your feelings are overwhelming or persisting, please speak to a qualified professional.</p>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ====== STATE ======
+  var state = {
+    emotion: "",
+    emotionSource: "", // "chip" or "custom"
+    area: "",
+    breathSeconds: 0,  // how long the user actually breathed
+    breathTarget: 90,  // book's hedged target
+    nextStep: "",
+    startedAt: null
+  };
+
+  // ====== HELPERS ======
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+  function announce(msg) {
+    var live = $("#live");
+    if (live) { live.textContent = ""; setTimeout(function () { live.textContent = msg; }, 30); }
+  }
+
+  function showScreen(id) {
+    $$(".screen").forEach(function (s) { s.classList.remove("is-active"); });
+    var target = document.getElementById(id);
+    if (target) {
+      target.classList.add("is-active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      // Move focus to the first focusable heading/button for keyboard users
+      var heading = target.querySelector("h1, h2");
+      if (heading) {
+        heading.setAttribute("tabindex", "-1");
+        heading.focus({ preventScroll: true });
+      }
+    }
+  }
+
+  function capitalise(s) {
+    if (!s) return s;
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
+  // ====== STEP 1: STOP ======
+  $("#btn-begin").addEventListener("click", function () {
+    state.startedAt = new Date();
+    showScreen("screen-stop");
+    announce("Step 1: Stop. Take a moment to settle.");
+  });
+  $("#btn-stop-next").addEventListener("click", function () {
+    showScreen("screen-name");
+    announce("Step 2: Name the emotion.");
+  });
+
+  // ====== STEP 2: NAME ======
+  var emotionChips = $$("#emotion-chips .chip");
+  var emotionInput = $("#emotion-custom");
+
+  function updateNameNext() {
+    var has = (state.emotion && state.emotion.length > 0);
+    $("#btn-name-next").disabled = !has;
+  }
+
+  emotionChips.forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      emotionChips.forEach(function (c) { c.classList.remove("is-selected"); });
+      chip.classList.add("is-selected");
+      state.emotion = chip.getAttribute("data-emotion");
+      state.emotionSource = "chip";
+      emotionInput.value = "";
+      updateNameNext();
+      announce("Selected: " + state.emotion);
+    });
+  });
+
+  emotionInput.addEventListener("input", function () {
+    var v = emotionInput.value.trim();
+    if (v.length > 0) {
+      emotionChips.forEach(function (c) { c.classList.remove("is-selected"); });
+      state.emotion = v;
+      state.emotionSource = "custom";
+    } else if (state.emotionSource === "custom") {
+      state.emotion = "";
+    }
+    updateNameNext();
+  });
+
+  $("#btn-name-back").addEventListener("click", function () { showScreen("screen-stop"); });
+  $("#btn-name-next").addEventListener("click", function () {
+    if (!state.emotion) return;
+    showScreen("screen-locate");
+    $("#locate-emotion-label").textContent = state.emotion;
+    announce("Step 3: Locate the feeling in the body.");
+  });
+
+  // ====== STEP 3: LOCATE ======
+  var areaEls = $$(".figure-silhouette .area");
+
+  function setSelectedArea(areaId) {
+    areaEls.forEach(function (a) {
+      if (a.getAttribute("data-area") === areaId) {
+        a.classList.add("is-selected");
+        a.setAttribute("aria-pressed", "true");
+      } else {
+        a.classList.remove("is-selected");
+        a.setAttribute("aria-pressed", "false");
+      }
+    });
+  }
+
+  function clearAreaSelection() {
+    areaEls.forEach(function (a) { a.classList.remove("is-selected"); a.setAttribute("aria-pressed", "false"); });
+  }
+
+  areaEls.forEach(function (el) {
+    function pick() {
+      var id = el.getAttribute("data-area");
+      state.area = id;
+      setSelectedArea(id);
+      $("#locate-status").textContent = "You marked: " + id + ".";
+      $("#btn-locate-next").disabled = false;
+      announce("Marked: " + id);
+    }
+    el.addEventListener("click", pick);
+    el.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); }
+    });
+  });
+
+  $("#btn-locate-back").addEventListener("click", function () {
+    clearAreaSelection();
+    state.area = "";
+    $("#btn-locate-next").disabled = true;
+    $("#locate-status").textContent = "No location chosen yet.";
+    showScreen("screen-name");
+  });
+  $("#btn-locate-next").addEventListener("click", function () {
+    if (!state.area) return;
+    showScreen("screen-breathe");
+    announce("Step 4: Breathe through the wave.");
+  });
+
+  // ====== STEP 4: BREATHE ======
+  var ringEl = $("#breath-ring");
+  var wordEl = $("#breath-word");
+  var countEl = $("#breath-count");
+  var metaEl = $("#breath-meta");
+  var subEl = $("#breath-sub");
+
+  var RING_CIRCUM = 2 * Math.PI * 100; // r=100 in SVG
+  ringEl.setAttribute("stroke-dasharray", String(RING_CIRCUM));
+  ringEl.setAttribute("stroke-dashoffset", String(RING_CIRCUM));
+
+  // Single timer source: a requestAnimationFrame loop driven by performance.now()
+  var rafId = null;
+  var phaseStart = 0;       // performance.now() when current breath phase started
+  var phaseDuration = 0;    // ms
+  var cycleStart = 0;       // performance.now() when "begin" pressed
+  var totalElapsed = 0;     // seconds the user has been breathing
+  var totalTarget = 90;     // seconds
+  var isPaused = false;
+  var isRunning = false;
+  var phaseIndex = 0;       // 0 = in, 1 = out, alternates
+  var cyclesCompleted = 0;
+
+  // Simple in/out ratio: 4 in, 6 out, in the book's "longer out" spirit
+  var PHASES = [
+    { word: "Breathe in",  ms: 4000, next: 1 },
+    { word: "Breathe out", ms: 6000, next: 0 }
+  ];
+
+  function resetRing() {
+    ringEl.setAttribute("stroke-dashoffset", String(RING_CIRCUM));
+  }
+
+  function paintRing(progress) {
+    // progress: 0..1
+    var offset = RING_CIRCUM * (1 - Math.max(0, Math.min(1, progress)));
+    ringEl.setAttribute("stroke-dashoffset", String(offset));
+  }
+
+  function fmtClock(s) {
+    s = Math.max(0, Math.floor(s));
+    var mm = String(Math.floor(s / 60));
+    var ss = String(s % 60);
+    if (ss.length < 2) ss = "0" + ss;
+    return mm + ":" + ss;
+  }
+
+  function updateLabel() {
+    if (!isRunning) return;
+    var now = performance.now();
+    var phaseElapsed = now - phaseStart;
+    var progress = Math.min(1, phaseElapsed / phaseDuration);
+    paintRing(progress);
+
+    var phase = PHASES[phaseIndex];
+    wordEl.textContent = phase.word;
+    var phaseRemaining = Math.max(0, Math.ceil((phaseDuration - phaseElapsed) / 1000));
+    countEl.textContent = phaseRemaining + " s";
+
+    var totalNow = (now - cycleStart) / 1000;
+    metaEl.textContent = fmtClock(totalNow) + " / " + fmtClock(totalTarget) + " s";
+
+    if (progress >= 1) {
+      // advance phase
+      cyclesCompleted += (phaseIndex === 1) ? 1 : 0; // count an out-breath as a completed cycle
+      phaseIndex = phase.next;
+      phaseStart = now;
+      phaseDuration = PHASES[phaseIndex].ms;
+      paintRing(0);
+    }
+
+    if (totalNow >= totalTarget) {
+      finishBreath("natural");
+      return;
+    }
+
+    rafId = requestAnimationFrame(updateLabel);
+  }
+
+  function startBreath() {
+    if (isRunning) return;
+    isRunning = true;
+    isPaused = false;
+    cycleStart = performance.now();
+    phaseIndex = 0;
+    phaseStart = cycleStart;
+    phaseDuration = PHASES[phaseIndex].ms;
+    paintRing(0);
+    $("#btn-breath-start").hidden = true;
+    $("#btn-breath-pause").hidden = false;
+    $("#btn-breath-pause").textContent = "Pause";
+    $("#btn-breath-end").hidden = false;
+    subEl.textContent = "Follow the clock. The visual and the label are driven by the same timer, so they will not drift apart.";
+    announce("Breathing started. Many people find the wave eases within about 90 seconds.");
+    rafId = requestAnimationFrame(updateLabel);
+  }
+
+  function pauseBreath() {
+    if (!isRunning || isPaused) return;
+    isPaused = true;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+    // record accumulated total
+    state.breathSeconds = Math.floor((performance.now() - cycleStart) / 1000);
+    $("#btn-breath-pause").textContent = "Resume";
+    wordEl.textContent = "Paused";
+    countEl.textContent = "Tap resume to continue";
+    subEl.textContent = "Take your time. The clock will pick up where you left off.";
+    announce("Paused.");
+  }
+
+  function resumeBreath() {
+    if (!isRunning || !isPaused) return;
+    isPaused = false;
+    // adjust cycleStart so total elapsed continues from where we were
+    var pauseMs = state.breathSeconds * 1000;
+    cycleStart = performance.now() - pauseMs;
+    phaseStart = performance.now();
+    $("#btn-breath-pause").textContent = "Pause";
+    wordEl.textContent = PHASES[phaseIndex].word;
+    subEl.textContent = "Following the clock again. The visual and the label are driven by the same timer.";
+    announce("Resumed.");
+    rafId = requestAnimationFrame(updateLabel);
+  }
+
+  function finishBreath(reason) {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+    isRunning = false;
+    isPaused = false;
+    state.breathSeconds = Math.floor((performance.now() - (cycleStart || performance.now())) / 1000);
+    if (state.breathSeconds <= 0) state.breathSeconds = 1;
+
+    wordEl.textContent = "Done";
+    countEl.textContent = "Step complete";
+    metaEl.textContent = fmtClock(state.breathSeconds) + " / " + fmtClock(totalTarget) + " s";
+    paintRing(0);
+
+    if (reason === "early") {
+      subEl.textContent = "You ended the breath early. That is fine. Trust what you noticed.";
+    } else {
+      subEl.textContent = "About a minute and a half has passed. Notice what is here now, before reopening.";
+    }
+
+    $("#btn-breath-start").hidden = true;
+    $("#btn-breath-pause").hidden = true;
+    $("#btn-breath-end").hidden = true;
+    $("#breathe-continue-row").hidden = false;
+
+    announce("Breath complete. Ready to reopen.");
+  }
+
+  $("#btn-breath-start").addEventListener("click", startBreath);
+  $("#btn-breath-pause").addEventListener("click", function () {
+    if (isPaused) resumeBreath(); else pauseBreath();
+  });
+  $("#btn-breath-end").addEventListener("click", function () { finishBreath("early"); });
+
+  $("#btn-breathe-back").addEventListener("click", function () {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+    isRunning = false;
+    isPaused = false;
+    state.breathSeconds = 0;
+    showScreen("screen-locate");
+  });
+  $("#btn-breathe-next").addEventListener("click", function () {
+    showScreen("screen-reopen");
+    announce("Step 5: Reopen. Ask: what is the next wise step?");
+  });
+
+  // ====== STEP 5: REOPEN ======
+  var nextInput = $("#next-step");
+  nextInput.addEventListener("input", function () {
+    state.nextStep = nextInput.value;
+  });
+
+  $("#btn-reopen-back").addEventListener("click", function () {
+    showScreen("screen-breathe");
+  });
+  $("#btn-reopen-next").addEventListener("click", function () {
+    buildKeepsake();
+    showScreen("screen-keep");
+    announce("Pause complete. A small keepsake is ready.");
+  });
+
+  // ====== KEEPSAKE ======
+  function buildKeepsake() {
+    $("#keep-emotion").textContent = state.emotion ? capitalise(state.emotion) : "Not yet";
+    $("#keep-area").textContent = state.area ? capitalise(state.area) : "Not yet";
+    if (state.breathSeconds > 0) {
+      var mins = Math.floor(state.breathSeconds / 60);
+      var secs = state.breathSeconds % 60;
+      var human;
+      if (mins === 0) human = secs + " seconds of slow breathing";
+      else if (secs === 0) human = mins + " minute" + (mins > 1 ? "s" : "") + " of slow breathing";
+      else human = mins + " min " + secs + " s of slow breathing";
+      $("#keep-breath").textContent = human;
+    } else {
+      $("#keep-breath").textContent = "Not yet";
+    }
+    $("#keep-next").textContent = state.nextStep && state.nextStep.trim().length > 0
+      ? state.nextStep.trim()
+      : "Just noticing, for now.";
+  }
+
+  function buildCopyText() {
+    var lines = [];
+    lines.push("The 90-Second Emotional Pause");
+    lines.push("");
+    lines.push("What I felt: " + (state.emotion ? capitalise(state.emotion) : "Not yet"));
+    lines.push("Where it sat: " + (state.area ? capitalise(state.area) : "Not yet"));
+    if (state.breathSeconds > 0) {
+      var mins = Math.floor(state.breathSeconds / 60);
+      var secs = state.breathSeconds % 60;
+      var human;
+      if (mins === 0) human = secs + " seconds of slow breathing";
+      else if (secs === 0) human = mins + " minute" + (mins > 1 ? "s" : "") + " of slow breathing";
+      else human = mins + " min " + secs + " s of slow breathing";
+      lines.push("What I noticed in the breath: " + human);
+    } else {
+      lines.push("What I noticed in the breath: Not yet");
+    }
+    lines.push("The next wise step: " + (state.nextStep && state.nextStep.trim().length > 0 ? state.nextStep.trim() : "Just noticing, for now."));
+    lines.push("");
+    lines.push("Stress is here, but so am I.");
+    return lines.join("\n");
+  }
+
+  function copyToClipboard(text, onSuccess, onFail) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(onSuccess, function () {
+        fallbackCopy(text) ? onSuccess() : onFail();
+      });
+    } else {
+      fallbackCopy(text) ? onSuccess() : onFail();
+    }
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "absolute";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand && document.execCommand("copy");
+      document.body.removeChild(ta);
+      return !!ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  $("#btn-copy").addEventListener("click", function () {
+    var text = buildCopyText();
+    var status = $("#copy-status");
+    copyToClipboard(text,
+      function () { status.textContent = "Copied. You can paste it into notes, email, or a journal."; },
+      function () { status.textContent = "Could not copy automatically. Please long-press the text and copy it manually."; }
+    );
+  });
+
+  $("#btn-again").addEventListener("click", function () {
+    // Reset state
+    state.emotion = "";
+    state.emotionSource = "";
+    state.area = "";
+    state.breathSeconds = 0;
+    state.nextStep = "";
+    emotionChips.forEach(function (c) { c.classList.remove("is-selected"); });
+    emotionInput.value = "";
+    clearAreaSelection();
+    $("#locate-status").textContent = "No location chosen yet.";
+    nextInput.value = "";
+    $("#btn-name-next").disabled = true;
+    $("#btn-locate-next").disabled = true;
+    // Reset breath screen
+    wordEl.textContent = "Ready";
+    countEl.textContent = "Tap to begin";
+    metaEl.textContent = "00 / 90 s";
+    paintRing(0);
+    $("#btn-breath-start").hidden = false;
+    $("#btn-breath-pause").hidden = true;
+    $("#btn-breath-pause").textContent = "Pause";
+    $("#btn-breath-end").hidden = true;
+    $("#breathe-continue-row").hidden = true;
+    subEl.textContent = "The clock is here as a guide. If the wave eases sooner, end when you are ready. If it has not, stay a few breaths longer.";
+    $("#copy-status").textContent = "";
+    showScreen("screen-intro");
+    announce("Reset. Ready to begin again.");
+  });
+
+  // ====== INITIAL PAINT ======
+  paintRing(0);
+})();
+</script>
+</body>
+</html>
