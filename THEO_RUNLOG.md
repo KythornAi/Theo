@@ -70,3 +70,4 @@
 2026-06-02 | Claude inbox check | Read latest Claude→Theo MiniMax companion-app batch request; verified referenced source docs; acknowledged build is gated pending Kyle go-ahead.
 2026-06-02 | MiniMax M3 companion-app crons | Created four one-shot MiniMax M3 jobs for 2026-06-03: Body Stress Scan 09:00, Balance Audit 10:15, Recovery Menu 11:30, Emotional Pause 12:45.
 2026-06-02 | Nightly memory consolidation | Live/mirror MEMORY aligned at 1,354 chars / 61.5%; USER aligned at 955 chars / 69.5%; updated Brain index, project/product/research/cron/decision/tool files for GH launch and MiniMax crons.
+2026-06-03 | Grounded Humanity Gumroad launch sprint | Completed paste-ready Gumroad upload field pack for Mindful, Not Mythical at launch/mindful-not-mythical-gumroad-upload-fields-2026-06-03.md; flagged HERMES_INBOX.

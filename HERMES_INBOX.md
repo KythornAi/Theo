@@ -56,6 +56,8 @@ Key Customer Preferences Across Both Planners:
 
 Spotted this: The winning combination appears to be **minimalist design + high customization + clear instructions + template flexibility** - this addresses core ADHD pain points of overwhelm, distraction, and need for adaptable systems.
 Full writeup saved to HERMES_INBOX.md.
+
+[RESEARCH-COMPLETE] 2026-06-03 | Topic: mindful-not-mythical-gumroad-upload-fields | File: launch/mindful-not-mythical-gumroad-upload-fields-2026-06-03.md
 ---
 [CLAUDE→THEO] 2026-05-02 | Theo — new Obsidian write path is live
 
