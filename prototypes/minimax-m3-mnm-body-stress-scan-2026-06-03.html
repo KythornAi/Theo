@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<!--
+DESIGN RETRO. The Body Stress Scan (Chapter 1 companion app, App 1 of 4)
+Date: 2026-06-03
+For: Mindful, Not Mythical / Grounded Humanity, sold via Paper N Pixels.
+
+CONCEPT
+A guided, head-to-toe tension scan where the user notices where stress sits in the body.
+About observing, not fixing. No verdicts, no diagnosis, no compounding-habit mechanics.
+
+INTENT
+Match the book's tone (calm, plain, warm, anti-pressure) and the Canva affirmation deck's
+watercolour-sage tone visually, without shipping illustrations. The body scan step is the
+centrepiece: a soft human silhouette the user taps to record their own sensation, with the
+location never auto-assigned.
+
+PALETTE (from MiniMax Build Brief 2026-06-02, PART A A0)
+  page:        #f3eee3 cream
+  card:        #e8dacb deeper cream
+  heading ink: #2f4633 deep forest green
+  body ink:    #30232d near-black aubergine
+  hint ink:    #5a6849 readable sage (>=4.5:1 on cream)
+  focus mark:  #a4492f terracotta (focus rings, "you are here", thin rules only)
+  borders:     #a8b3a2 soft sage, #c8a784 tan, #e8dacb beige (decoration only)
+
+TYPE SCALE
+  display:     serif (Cormorant Garamond / Fraunces fallback to Georgia)
+  UI:          Inter / system sans
+  body:        17px
+  hint:        15px (italic for tone)
+  label:       12px, darker tone if it carries meaning
+  heading:     32-40px on mobile, 44px on wider screens
+
+ACCESSIBILITY NOTES
+  - One breath clock (single timer source) so visual and label never drift apart.
+  - prefers-reduced-motion: skip the breath circle animation, keep the cycle moving on text alone.
+  - Focus states visible (terracotta 2px outline, offset).
+  - aria-live="polite" announces step changes, not every second.
+  - Every step is keyboard reachable; areas on the figure have role="button" and aria-label.
+  - Keepsake summary copies as plain text with the modern Clipboard API and an execCommand fallback.
+
+WHAT I'D REFINE WITH MORE TIME
+  - Replace the placeholder SVG silhouette with the real GH_Icon_TreeOnly_Transparent_1024.png
+    as a quiet corner watermark, and the GroundedHumanity_FullLogo_Transparent_2400w.png
+    as the single brand signature (currently a marked-up slot).
+  - Add subtle tactile haptics via navigator.vibrate on tap (mobile only, behind a feature check).
+  - Soften the in/out breath ratio from 4/6 to a user-toggle (some prefer 4/4 or box breath).
+  - A "save scan" history to localStorage (currently we only store the in-progress scan; final
+    keepsake is export-only to keep the app from feeling like a habit tracker).
+  - A tiny "what does it feel like in your [area] right now" prompt before each label, so the
+    user actually pauses to notice rather than reflex-tapping.
+
+COMPROMISES
+  - No real GH logo assets embedded (prototype, per A8).
+  - Body figure is a clean, simple human silhouette rather than a polished illustrated figure.
+  - "Nothing" is the closest book-honest label for the user feeling nothing in an area
+    (the book says "wherever you feel tension". We extend gently to honour calm areas too).
+-->
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3eee3">
+<meta name="description" content="A guided head-to-toe tension scan. Notice where stress sits. No fixing, no keeping count, no verdicts.">
+<title>The Body Stress Scan. Grounded Humanity</title>
+<style>
+  /* ====== RESET AND ROOT ====== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: #f3eee3;
+    color: #30232d;
+    font-family: "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  :root {
+    --cream:        #f3eee3;
+    --card:         #e8dacb;
+    --ink:          #30232d;
+    --ink-heading:  #2f4633;
+    --ink-hint:     #5a6849; /* AA on cream, ~5.3:1 */
+    --terracotta:   #a4492f;
+    --sage-soft:    #a8b3a2; /* decoration only */
+    --tan:          #c8a784; /* decoration only */
+    --beige:        #e8dacb;
+    --serif:        "Cormorant Garamond", "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --sans:         "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --maxw:         560px;
+  }
+
+  /* ====== LAYOUT ====== */
+  .app {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 32px 22px 80px;
+  }
+  .brand-slot {
+    /* ornament slot: GH full lockup (GroundedHumanity_FullLogo_Transparent_2400w.png) goes here in final polish */
+    text-align: center;
+    color: var(--ink-hint);
+    font-family: var(--serif);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    margin: 0 0 18px;
+    font-style: italic;
+    opacity: 0.85;
+  }
+  .screen { display: none; }
+  .screen.is-active { display: block; }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-hint);
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  h1, h2, h3 {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-weight: 500;
+    margin: 0 0 12px;
+    line-height: 1.18;
+  }
+  h1 { font-size: 38px; letter-spacing: -0.005em; }
+  h2 { font-size: 26px; }
+  h3 { font-size: 20px; }
+  p { margin: 0 0 14px; }
+  .hint {
+    font-size: 15px;
+    color: var(--ink-hint);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .divider {
+    height: 1px;
+    background: var(--sage-soft);
+    border: 0;
+    margin: 22px 0;
+    opacity: 0.55;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+  }
+  .stack > * + * { margin-top: 14px; }
+  .stack-lg > * + * { margin-top: 22px; }
+
+  /* ====== BUTTONS ====== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background: var(--ink-heading);
+    color: var(--cream);
+    cursor: pointer;
+    min-height: 48px;
+    min-width: 48px;
+    text-decoration: none;
+    transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+  }
+  .btn:hover { background: #243a28; }
+  .btn:active { transform: translateY(1px); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink-heading);
+    border-color: var(--ink-heading);
+  }
+  .btn--ghost:hover { background: var(--ink-heading); color: var(--cream); }
+  .btn--small { font-size: 14px; padding: 10px 16px; min-height: 40px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .row--between { justify-content: space-between; align-items: center; }
+
+  /* ====== FOCUS STATES ====== */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+  .area-btn:focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 4px;
+  }
+
+  /* ====== PROGRESS ====== */
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 18px;
+    color: var(--ink-hint);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+  .progress__dots { display: flex; gap: 6px; }
+  .progress__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--sage-soft);
+    opacity: 0.5;
+  }
+  .progress__dot.is-done { background: var(--ink-hint); opacity: 0.8; }
+  .progress__dot.is-current { background: var(--terracotta); opacity: 1; }
+
+  /* ====== BREATH SCREEN ====== */
+  .breath-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding: 18px 0 8px;
+  }
+  .breath-circle {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .breath-circle svg { width: 100%; height: 100%; display: block; }
+  .breath-circle .ring-bg {
+    fill: none;
+    stroke: var(--sage-soft);
+    stroke-width: 1.5;
+    opacity: 0.6;
+  }
+  .breath-circle .ring-grow {
+    fill: none;
+    stroke: var(--ink-heading);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    transform-origin: 50% 50%;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 100ms linear;
+  }
+  .breath-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    font-family: var(--serif);
+    color: var(--ink-heading);
+  }
+  .breath-label__word {
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+  .breath-label__count {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-hint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .breath-sub {
+    text-align: center;
+    color: var(--ink-hint);
+    font-size: 15px;
+    font-style: italic;
+    max-width: 360px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .breath-circle .ring-grow { transition: none; }
+  }
+
+  /* ====== SCAN SCREEN ====== */
+  .scan-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  @media (min-width: 480px) {
+    .scan-layout { grid-template-columns: 1.1fr 0.9fr; gap: 22px; }
+  }
+  .figure-wrap {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 14px 10px 6px;
+    display: flex;
+    justify-content: center;
+  }
+  .figure-wrap svg { width: 100%; max-width: 280px; height: auto; display: block; }
+  .figure-silhouette path, .figure-silhouette ellipse {
+    fill: #d8c9b3;
+    stroke: #8a7a64;
+    stroke-width: 1;
+    transition: fill 220ms ease, stroke 220ms ease, opacity 220ms ease;
+  }
+  .figure-silhouette .area {
+    cursor: pointer;
+    fill: #d8c9b3;
+    stroke: #8a7a64;
+    stroke-width: 1.2;
+  }
+  .figure-silhouette .area:hover { fill: #c8b698; }
+  .figure-silhouette .area.is-current {
+    fill: var(--ink-heading);
+    stroke: var(--ink-heading);
+  }
+  .figure-silhouette .area.is-current + .area-hint,
+  .figure-silhouette .area.is-current ~ .area-label {
+    fill: var(--cream);
+  }
+  .figure-silhouette .area.is-marked-tight { fill: #8a3a2a; stroke: #6a2c1f; }
+  .figure-silhouette .area.is-marked-buzzing { fill: #b88f3a; stroke: #8a6a2a; }
+  .figure-silhouette .area.is-marked-numb { fill: #6a7a7a; stroke: #4a5a5a; }
+  .figure-silhouette .area.is-marked-calm { fill: #4a6a52; stroke: #2f4633; }
+  .figure-silhouette .area.is-marked-nothing { fill: #b8b0a3; stroke: #8a8478; }
+  .scan-controls { display: flex; flex-direction: column; gap: 14px; }
+  .feeling-label {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 22px;
+    margin: 0 0 4px;
+  }
+  .feeling-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (min-width: 380px) {
+    .feeling-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .feeling-btn {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1.5px solid var(--tan);
+    border-radius: 12px;
+    padding: 14px 10px;
+    cursor: pointer;
+    min-height: 56px;
+    text-align: center;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+  }
+  .feeling-btn:hover { background: #ece2d0; }
+  .feeling-btn:active { transform: translateY(1px); }
+  .feeling-btn.is-selected {
+    background: var(--ink-heading);
+    color: var(--cream);
+    border-color: var(--ink-heading);
+  }
+  .feeling-skip {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink-hint);
+    background: transparent;
+    border: 0;
+    padding: 8px 4px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    min-height: 36px;
+  }
+  .feeling-skip:hover { color: var(--ink); }
+
+  /* ====== KEEPSAKE ====== */
+  .keepsake {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 20px;
+    line-height: 1.45;
+  }
+  .keepsake__small {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink-hint);
+    margin: 0 0 10px;
+  }
+  .keepsake__line { margin: 0 0 12px; }
+  .keepsake__close {
+    font-size: 18px;
+    font-style: italic;
+    color: var(--ink);
+  }
+  .copy-status {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-hint);
+    min-height: 1.4em;
+    margin-top: 8px;
+  }
+
+  /* ====== FOOTER ====== */
+  .footer {
+    margin-top: 36px;
+    padding-top: 18px;
+    border-top: 1px solid var(--sage-soft);
+    color: var(--ink-hint);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .footer p { margin: 0 0 6px; }
+  .footer .disclaimer { font-style: italic; }
+
+  /* ====== UTIL ====== */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0);
+    white-space: nowrap; border: 0;
+  }
+  .visually-hidden-focusable:not(:focus):not(:focus-within) {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0);
+    white-space: nowrap; border: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<main class="app" id="app">
+
+  <!-- ornament slot: GH full lockup goes here in final polish -->
+  <p class="brand-slot" aria-hidden="true">Grounded Humanity</p>
+
+  <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ============ SCREEN 1: INTRO ============ -->
+  <section class="screen is-active" id="screen-intro" aria-labelledby="intro-title">
+    <p class="eyebrow">Chapter 1</p>
+    <h1 id="intro-title">The Body Stress Scan</h1>
+    <p>A short, guided scan to notice where stress sits in your body. Not to fix it. Just to notice.</p>
+    <p class="hint">You can do this sitting or lying down, eyes open or closed. There is no right way. There is no keeping count. You can stop at any time.</p>
+
+    <hr class="divider">
+
+    <div class="stack">
+      <p>You will be guided through three settling breaths, then asked, one area at a time, what you feel.</p>
+      <p class="hint">For each area, pick the word that fits best. If you feel nothing, that is a valid answer too.</p>
+      <div class="row">
+        <button type="button" class="btn" id="btn-begin">Begin</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 2: BREATHS ============ -->
+  <section class="screen" id="screen-breath" aria-labelledby="breath-title">
+    <p class="eyebrow">Settle</p>
+    <h2 id="breath-title">Three slow breaths</h2>
+    <p class="hint">In through the nose. Out through the mouth. Let your shoulders drop.</p>
+
+    <div class="breath-stage">
+      <div class="breath-circle" role="img" aria-labelledby="breath-status">
+        <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+          <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-grow" id="ring-grow" cx="60" cy="60" r="52"
+                  stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+        </svg>
+        <div class="breath-label" id="breath-status">
+          <span class="breath-label__word" id="breath-word">Get ready</span>
+          <span class="breath-label__count" id="breath-count">Breath 1 of 3</span>
+        </div>
+      </div>
+      <p class="breath-sub" id="breath-sub">We will move on when the three breaths are done.</p>
+    </div>
+
+    <div class="row row--between" style="margin-top: 18px;">
+      <button type="button" class="btn btn--ghost btn--small" id="btn-breath-skip">Skip the settling breaths</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 3: SCAN ============ -->
+  <section class="screen" id="screen-scan" aria-labelledby="scan-title">
+    <p class="eyebrow" id="scan-eyebrow">Area 1 of 7</p>
+    <h2 id="scan-title">Notice your forehead</h2>
+
+    <div class="progress" aria-hidden="true">
+      <span id="scan-progress-label">Forehead</span>
+      <span class="progress__dots" id="scan-dots"></span>
+    </div>
+
+    <div class="scan-layout">
+      <div class="figure-wrap">
+        <!-- Soft human silhouette, on-brand. Each region is a focusable button. -->
+        <svg class="figure-silhouette" viewBox="0 0 240 480" role="group" aria-label="Body figure, tap a region to mark it" focusable="false">
+          <!-- Forehead (top of head) -->
+          <ellipse class="area" data-area="forehead" role="button" tabindex="0"
+                   aria-label="Forehead"
+                   cx="120" cy="42" rx="32" ry="22"></ellipse>
+          <!-- Jaw (lower head) -->
+          <ellipse class="area" data-area="jaw" role="button" tabindex="0"
+                   aria-label="Jaw"
+                   cx="120" cy="78" rx="26" ry="20"></ellipse>
+          <!-- Shoulders (top of torso bar) -->
+          <path class="area" data-area="shoulders" role="button" tabindex="0"
+                aria-label="Shoulders"
+                d="M62,128 Q120,104 178,128 Q170,142 120,142 Q70,142 62,128 Z"></path>
+          <!-- Arms (left + right) -->
+          <path class="area" data-area="arms" role="button" tabindex="0"
+                aria-label="Arms"
+                d="M62,128 Q40,170 38,228 Q44,236 58,232 Q66,180 84,150 Z
+                   M178,128 Q200,170 202,228 Q196,236 182,232 Q174,180 156,150 Z"></path>
+          <!-- Chest (upper torso) -->
+          <path class="area" data-area="chest" role="button" tabindex="0"
+                aria-label="Chest"
+                d="M78,144 Q120,150 162,144 L160,210 Q120,218 80,210 Z"></path>
+          <!-- Stomach (mid torso) -->
+          <path class="area" data-area="stomach" role="button" tabindex="0"
+                aria-label="Stomach"
+                d="M80,210 Q120,218 160,210 L158,278 Q120,288 82,278 Z"></path>
+          <!-- Legs (lower body) -->
+          <path class="area" data-area="legs" role="button" tabindex="0"
+                aria-label="Legs"
+                d="M82,278 Q120,288 158,278 L150,420 Q140,432 128,430 L122,360 L118,430 Q106,432 96,420 Z"></path>
+        </svg>
+      </div>
+
+      <div class="scan-controls">
+        <p class="feeling-label" id="feeling-prompt">What do you notice in your forehead?</p>
+        <p class="hint" id="feeling-helper">Tap a word. You can also tap the area on the figure to focus it.</p>
+        <div class="feeling-grid" id="feeling-grid">
+          <button type="button" class="feeling-btn" data-feeling="tight">Tight</button>
+          <button type="button" class="feeling-btn" data-feeling="buzzing">Buzzing</button>
+          <button type="button" class="feeling-btn" data-feeling="numb">Numb</button>
+          <button type="button" class="feeling-btn" data-feeling="calm">Calm</button>
+          <button type="button" class="feeling-btn" data-feeling="nothing">Nothing</button>
+        </div>
+        <button type="button" class="feeling-skip" id="btn-feeling-skip">Skip this area</button>
+      </div>
+    </div>
+
+    <div class="row row--between" style="margin-top: 18px;">
+      <button type="button" class="btn btn--ghost btn--small" id="btn-scan-back">Back</button>
+      <button type="button" class="btn btn--small" id="btn-scan-next" disabled>Next</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 4: CLOSE ============ -->
+  <section class="screen" id="screen-close" aria-labelledby="close-title">
+    <p class="eyebrow">A small keepsake</p>
+    <h2 id="close-title">You noticed.</h2>
+    <p>That is the practice. You interrupted the automatic loop, just by looking.</p>
+
+    <hr class="divider">
+
+    <div class="keepsake" id="keepsake" aria-live="polite">
+      <p class="keepsake__small" id="ks-date">Today</p>
+      <p class="keepsake__line" id="ks-line-1">Today, stress sat mostly in your [areas].</p>
+      <p class="keepsake__close" id="ks-line-2">Stress is here, but so am I.</p>
+    </div>
+
+    <div class="row" style="margin-top: 16px;">
+      <button type="button" class="btn" id="btn-copy">Copy as text</button>
+      <button type="button" class="btn btn--ghost" id="btn-restart">Begin again</button>
+    </div>
+    <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+
+    <hr class="divider">
+
+    <p class="hint">A note on saving: this app does not store your scan on a server. Your notes stay in this browser only. If you clear your browser data, the scan goes with it. Copy the text above if you would like to keep it.</p>
+  </section>
+
+  <footer class="footer">
+    <p class="disclaimer">Self-guided reflection, not medical advice. If something feels too much, stop. If feelings keep returning, consider talking to a GP or a qualified clinician.</p>
+    <p>Grounded Humanity, sold via Paper N Pixels.</p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ====== DOM HELPERS ======
+  var $  = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  function announce(msg) {
+    var live = $("#live");
+    if (!live) return;
+    // Force re-announce by clearing first
+    live.textContent = "";
+    setTimeout(function () { live.textContent = msg; }, 30);
+  }
+  function showScreen(id) {
+    $$(".screen").forEach(function (s) { s.classList.remove("is-active"); });
+    var el = document.getElementById(id);
+    if (el) {
+      el.classList.add("is-active");
+      // Move focus to its heading for screen readers
+      var h = el.querySelector("h1, h2");
+      if (h) {
+        h.setAttribute("tabindex", "-1");
+        // Soft focus without scroll jump
+        var prev = document.activeElement;
+        try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
+        // Restore focus in case the browser scrolled
+        if (prev && prev !== h && typeof prev.focus === "function") {
+          // Keep focus on the heading for AT users; do not steal back.
+        }
+      }
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+  }
+
+  // ====== STATE ======
+  var areas = [
+    { id: "forehead",  label: "forehead",  body: "forehead" },
+    { id: "jaw",       label: "jaw",       body: "jaw" },
+    { id: "shoulders", label: "shoulders", body: "shoulders" },
+    { id: "arms",      label: "arms",      body: "arms" },
+    { id: "chest",     label: "chest",     body: "chest" },
+    { id: "stomach",   label: "stomach",   body: "stomach" },
+    { id: "legs",      label: "legs",      body: "legs" }
+  ];
+  var feelings = ["tight", "buzzing", "numb", "calm", "nothing"];
+  var areaIndex = 0;
+  var userFeelings = {}; // area id -> feeling
+  var breathTimer = null;
+  var breathStarted = false;
+
+  // ====== INTRO ======
+  $("#btn-begin").addEventListener("click", function () {
+    showScreen("screen-breath");
+    announce("Starting three settling breaths.");
+    setTimeout(startBreaths, 350);
+  });
+
+  // ====== BREATHS ======
+  // Single clock. 4s in, 1s hold, 6s out = 11s per breath. 3 breaths = 33s.
+  var BREATH_PHASES = [
+    { word: "Breathe in",     dur: 4000, kind: "in"  },
+    { word: "Hold",           dur: 1000, kind: "hold" },
+    { word: "Breathe out",    dur: 6000, kind: "out" }
+  ];
+  var PHASE_CIRCUM = 2 * Math.PI * 52; // matches r=52
+
+  function startBreaths() {
+    if (breathStarted) return;
+    breathStarted = true;
+    runBreathCycle(1);
+  }
+
+  function runBreathCycle(breathNum) {
+    if (breathNum > 3) {
+      // Done
+      stopBreathTimer();
+      $("#breath-word").textContent = "Well done";
+      $("#breath-count").textContent = "Three breaths done";
+      $("#breath-sub").textContent = "When you are ready, we will move to the scan.";
+      announce("Three breaths complete. Moving to the body scan.");
+      setTimeout(function () {
+        showScreen("screen-scan");
+        renderScanStep();
+      }, 1400);
+      return;
+    }
+    $("#breath-count").textContent = "Breath " + breathNum + " of 3";
+    runPhase(0, breathNum);
+  }
+
+  function runPhase(phaseIndex, breathNum) {
+    if (!breathStarted) return;
+    var phase = BREATH_PHASES[phaseIndex];
+    $("#breath-word").textContent = phase.word;
+    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var ring = $("#ring-grow");
+
+    if (phase.kind === "in") {
+      ring.setAttribute("stroke-dasharray", PHASE_CIRCUM.toFixed(2));
+      ring.setAttribute("stroke-dashoffset", PHASE_CIRCUM.toFixed(2));
+      if (!reduced) {
+        // Animate to 0 over dur
+        ring.style.transition = "stroke-dashoffset " + phase.dur + "ms linear";
+        // force reflow
+        void ring.getBoundingClientRect();
+        ring.setAttribute("stroke-dashoffset", "0");
+      } else {
+        ring.setAttribute("stroke-dashoffset", "0");
+      }
+    } else if (phase.kind === "out") {
+      if (!reduced) {
+        ring.style.transition = "stroke-dashoffset " + phase.dur + "ms linear";
+        void ring.getBoundingClientRect();
+        ring.setAttribute("stroke-dashoffset", PHASE_CIRCUM.toFixed(2));
+      } else {
+        ring.setAttribute("stroke-dashoffset", PHASE_CIRCUM.toFixed(2));
+      }
+    } else {
+      // hold: keep current state
+    }
+
+    breathTimer = setTimeout(function () {
+      var next = phaseIndex + 1;
+      if (next >= BREATH_PHASES.length) {
+        runBreathCycle(breathNum + 1);
+      } else {
+        runPhase(next, breathNum);
+      }
+    }, phase.dur);
+  }
+
+  function stopBreathTimer() {
+    if (breathTimer) { clearTimeout(breathTimer); breathTimer = null; }
+  }
+
+  $("#btn-breath-skip").addEventListener("click", function () {
+    stopBreathTimer();
+    breathStarted = false;
+    showScreen("screen-scan");
+    renderScanStep();
+    announce("Skipped settling breaths. Starting the body scan.");
+  });
+
+  // ====== SCAN ======
+  function renderScanStep() {
+    var area = areas[areaIndex];
+    $("#scan-eyebrow").textContent = "Area " + (areaIndex + 1) + " of " + areas.length;
+    $("#scan-title").textContent = "Notice your " + area.label;
+    $("#scan-progress-label").textContent = area.label.charAt(0).toUpperCase() + area.label.slice(1);
+    $("#feeling-prompt").textContent = "What do you notice in your " + area.body + "?";
+    $("#btn-scan-next").textContent = (areaIndex === areas.length - 1) ? "Finish" : "Next";
+
+    // Reset selection visual
+    $$(".feeling-btn").forEach(function (b) { b.classList.remove("is-selected"); });
+    $("#btn-scan-next").disabled = true;
+
+    // Pre-select if returning
+    var prev = userFeelings[area.id];
+    if (prev) {
+      var btn = $(".feeling-btn[data-feeling=\"" + prev + "\"]");
+      if (btn) btn.classList.add("is-selected");
+      $("#btn-scan-next").disabled = false;
+    }
+
+    // Highlight current area on the figure
+    $$(".figure-silhouette .area").forEach(function (a) {
+      a.classList.remove("is-current");
+      if (a.getAttribute("data-area") === area.id) a.classList.add("is-current");
+    });
+
+    // Render progress dots
+    var dotsHtml = "";
+    for (var i = 0; i < areas.length; i++) {
+      var cls = "progress__dot";
+      if (i < areaIndex) cls += " is-done";
+      else if (i === areaIndex) cls += " is-current";
+      dotsHtml += "<span class=\"" + cls + "\"></span>";
+    }
+    $("#scan-dots").innerHTML = dotsHtml;
+
+    announce("Area " + (areaIndex + 1) + " of " + areas.length + ": your " + area.body + ".");
+  }
+
+  $$(".feeling-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var feeling = btn.getAttribute("data-feeling");
+      var area = areas[areaIndex];
+      userFeelings[area.id] = feeling;
+      $$(".feeling-btn").forEach(function (b) { b.classList.remove("is-selected"); });
+      btn.classList.add("is-selected");
+      $("#btn-scan-next").disabled = false;
+
+      // Mark the area on the figure with a colour
+      var areaEl = $(".figure-silhouette .area[data-area=\"" + area.id + "\"]");
+      if (areaEl) {
+        $$(".figure-silhouette .area").forEach(function (a) {
+          a.classList.remove("is-marked-tight","is-marked-buzzing","is-marked-numb","is-marked-calm","is-marked-nothing");
+        });
+        areaEl.classList.add("is-marked-" + feeling);
+      }
+    });
+  });
+
+  // Tapping an area on the figure focuses the prompt and announces it
+  $$(".figure-silhouette .area").forEach(function (el) {
+    el.addEventListener("click", function () {
+      var id = el.getAttribute("data-area");
+      var idx = areas.findIndex(function (a) { return a.id === id; });
+      if (idx >= 0 && idx !== areaIndex) {
+        areaIndex = idx;
+        renderScanStep();
+      } else {
+        // Same area, just nudge attention
+        announce("Now noticing your " + areas[idx].body + ".");
+      }
+    });
+    el.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        el.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      }
+    });
+  });
+
+  $("#btn-feeling-skip").addEventListener("click", function () {
+    delete userFeelings[areas[areaIndex].id];
+    goNext();
+  });
+
+  $("#btn-scan-back").addEventListener("click", function () {
+    if (areaIndex === 0) {
+      showScreen("screen-breath");
+      breathStarted = false;
+      startBreaths();
+      return;
+    }
+    areaIndex -= 1;
+    renderScanStep();
+  });
+
+  $("#btn-scan-next").addEventListener("click", goNext);
+
+  function goNext() {
+    if (areaIndex >= areas.length - 1) {
+      renderKeepsake();
+      showScreen("screen-close");
+      announce("Scan complete. Here is your keepsake.");
+      return;
+    }
+    areaIndex += 1;
+    renderScanStep();
+  }
+
+  // ====== KEEPSAKE ======
+  function renderKeepsake() {
+    var d = new Date();
+    var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    var dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
+    $("#ks-date").textContent = "Noticed on " + dateStr;
+
+    // Group areas by feeling
+    var grouped = { tight: [], buzzing: [], numb: [], calm: [], nothing: [] };
+    areas.forEach(function (a) {
+      var f = userFeelings[a.id];
+      if (f && grouped[f]) grouped[f].push(a.body);
+    });
+    var doneAreas = areas.filter(function (a) { return userFeelings[a.id]; });
+
+    var summary;
+    if (doneAreas.length === 0) {
+      summary = "Today, I let the scan be a quiet pause.";
+    } else {
+      // Build a calm list of where the user noticed tension or calm
+      var tenseBits = [];
+      ["tight","buzzing","numb"].forEach(function (k) {
+        if (grouped[k].length) tenseBits.push(grouped[k].join(" and "));
+      });
+      var calmBits = [];
+      if (grouped.calm.length) calmBits.push(grouped.calm.join(" and "));
+
+      var tenseStr = tenseBits.length ? "tension sat in your " + joinNatural(tenseBits) : "no strong tension was named";
+      var calmStr  = calmBits.length  ? "your " + joinNatural(calmBits) + " felt calm" : null;
+      var nothingStr = grouped.nothing.length ? "your " + joinNatural(grouped.nothing) + " felt quiet" : null;
+
+      var extras = [calmStr, nothingStr].filter(Boolean);
+      if (extras.length) {
+        summary = "Today, " + tenseStr + ", and " + joinNatural(extras) + ".";
+      } else {
+        summary = "Today, " + tenseStr + ".";
+      }
+    }
+
+    $("#ks-line-1").textContent = summary;
+    $("#ks-line-2").textContent = "Stress is here, but so am I.";
+  }
+
+  function joinNatural(parts) {
+    if (parts.length === 0) return "";
+    if (parts.length === 1) return parts[0];
+    if (parts.length === 2) return parts[0] + " and " + parts[1];
+    return parts.slice(0, -1).join(", ") + ", and " + parts[parts.length - 1];
+  }
+
+  // ====== COPY ======
+  function buildCopyText() {
+    var d = new Date();
+    var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    var dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
+    var line1 = $("#ks-line-1").textContent;
+    var line2 = $("#ks-line-2").textContent;
+    return "The Body Stress Scan, " + dateStr + "\n\n" + line1 + "\n\n" + line2 + "\n\n. Grounded Humanity";
+  }
+
+  function setStatus(msg) {
+    var el = $("#copy-status");
+    if (el) el.textContent = msg;
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(function () { return true; });
+    }
+    return new Promise(function (resolve) {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.top = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        resolve(ok);
+      } catch (e) { resolve(false); }
+    });
+  }
+
+  $("#btn-copy").addEventListener("click", function () {
+    var text = buildCopyText();
+    copyToClipboard(text).then(function (ok) {
+      setStatus(ok ? "Copied. Paste it anywhere you like." : "Copy did not work in this browser. Long-press the text and copy it manually.");
+    });
+  });
+
+  $("#btn-restart").addEventListener("click", function () {
+    areaIndex = 0;
+    userFeelings = {};
+    breathStarted = false;
+    setStatus("");
+    $$(".figure-silhouette .area").forEach(function (a) {
+      a.classList.remove("is-marked-tight","is-marked-buzzing","is-marked-numb","is-marked-calm","is-marked-nothing","is-current");
+    });
+    // Reset ring
+    var ring = $("#ring-grow");
+    if (ring) {
+      ring.style.transition = "none";
+      ring.setAttribute("stroke-dashoffset", "326.7");
+    }
+    $("#breath-word").textContent = "Get ready";
+    $("#breath-count").textContent = "Breath 1 of 3";
+    $("#breath-sub").textContent = "We will move on when the three breaths are done.";
+    showScreen("screen-intro");
+    announce("Reset. Ready to begin again whenever you are.");
+  });
+
+  // ====== KEYBOARD SHORTCUT: ENTER on intro starts ======
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && $("#screen-intro").classList.contains("is-active")) {
+      // Avoid double-trigger if focus is on the begin button
+      if (document.activeElement && document.activeElement.id === "btn-begin") return;
+      $("#btn-begin").click();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>

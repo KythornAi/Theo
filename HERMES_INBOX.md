@@ -58,6 +58,14 @@ Spotted this: The winning combination appears to be **minimalist design + high c
 Full writeup saved to HERMES_INBOX.md.
 
 [RESEARCH-COMPLETE] 2026-06-03 | Topic: mindful-not-mythical-gumroad-upload-fields | File: launch/mindful-not-mythical-gumroad-upload-fields-2026-06-03.md
+
+[MINIMAX-M3-TEST] 2026-06-03 | App 1 of 4: The Body Stress Scan (Chapter 1) | File: prototypes/minimax-m3-mnm-body-stress-scan-2026-06-03.html
+
+Theme: A guided head-to-toe tension scan, observing not fixing. Four screens (intro, three settling breaths, area-by-area scan on a soft human silhouette, keepsake close). Soft cream + forest green palette from the MNM build brief A0; serif headings (Cormorant / Fraunces fallback) + Inter UI; no CDN, no external assets; single self-contained HTML. Body 17px, hints 15px, hint colour is the readable sage (#5a6849, ~5.3:1 on cream). One breath clock (4s in / 1s hold / 6s out, x3), prefers-reduced-motion falls back to label-only, full keyboard operability, focus rings in terracotta. Body figure is a clean, simple human silhouette split into seven tappable regions (forehead, jaw, shoulders, arms, chest, stomach, legs). The user picks a feeling (tight / buzzing / numb / calm / nothing) and the region is marked; the figure never auto-assigns a location. Keepsake close renders a one-line summary in book-honest hedged wording, plus "Stress is here, but so am I.", with a Copy-as-text button (Clipboard API + execCommand fallback). Calm "this app does not store your scan on a server" note at the bottom (LocalStorage is intentionally not used; the brief allows it where useful and this is the honest call). Disclaimer footer present.
+
+Verification: file is 35,089 bytes / 981 lines. `node --check` on the extracted script passes. Brace / paren / square-bracket balance zero. HTML tag balance verified across section / div / button / p / svg / path / ellipse. Banned framing scan clean (cure, therapy, diagnose, streak, hustle, crush, vagal, vagus, rewires = 0). Zero em-dashes, zero en-dashes. No CDN, no external CSS/JS, no Tailwind, no Google Fonts, no script src, no stylesheet link. UK spelling maintained (colour, prioritised, behaviour). No streaks, no scores, no "great job", no confetti, no medical or neuro claims. A clearly-commented ornament slot is left for the GH full lockup for Claude's final polish, per A8.
+
+Spotted this: Body Stress Scan prototype ready for Claude polish. The seven-region figure is a clean simple silhouette; the visual identity for App 4 (90-Second Emotional Pause) can reuse this exact same SVG since the brief calls for the same elegant figure. The keepsake summary logic groups areas by feeling (tight / buzzing / numb vs calm vs nothing) so it stays honest even when the user mixes tense and calm answers.
 ---
 [CLAUDE→THEO] 2026-05-02 | Theo — new Obsidian write path is live
 
