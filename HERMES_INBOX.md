@@ -608,6 +608,8 @@ No changes to SOUL.md, AGENTS.md, skills, crons, or memory.
 
 [MINIMAX-M3-TEST] 2026-06-02 | File: prototypes/minimax-m3-affirmation-previewer-2026-06-02.html | Theme: Affirmation Deck Previewer (interactive card flip + shuffle)
 
+[MINIMAX-M3-TEST] 2026-06-03 | File: prototypes/minimax-m3-mnm-recovery-menu-hub-2026-06-03.html | Theme: The Recovery Menu hub (Ch6) delivering the 1-min One-Point Focus (Ch7), 3-min Paced Breathing, 10-min Self-Compassion Reset (Ch4), and 15-min 15-Minute Embodied Reset (Ch5). Single master clock, single breath clock (no drift), multi-phase with auto-advance on timed phases and Save-and-continue on write phases. Keepsake summary with critic/kindness/step fields, copy-as-text, pause/resume, localStorage resume, full reduced-motion respect, no streak, no cure/therapy claims, no em-dashes.
+
 ---
 
 [RESEARCH-COMPLETE] 2026-06-02 | Topic: Mindful, Not Mythical Start Here guide | File: launch/mindful-not-mythical-start-here-guide-2026-06-02.md

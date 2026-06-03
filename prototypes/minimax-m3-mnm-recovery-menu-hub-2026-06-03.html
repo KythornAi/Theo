@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<!--
+DESIGN RETRO. The Recovery Menu hub (Chapter 6 companion app, App 3 of 4)
+Date: 2026-06-03
+For: Mindful, Not Mythical / Grounded Humanity, sold via Paper N Pixels.
+
+CONCEPT
+"How much space do you have right now?" A duration picker that delivers a calm, guided,
+timed session. The hub wraps the four timed exercises from the book: One-Point Focus (Ch7),
+Paced Breathing (Ch6 micro option), Self-Compassion Reset (Ch4), and 15-Minute Embodied
+Reset (Ch5). About noticing, not fixing. No streaks, no scores, no keeping count, no verdicts.
+
+INTENT
+Match the book's tone (calm, plain, warm, anti-pressure) and the Canva affirmation deck's
+watercolour-sage tone visually, without shipping illustrations. The menu is the centrepiece:
+four honest, differently-sized invitations. The session screen is a single shared clock with
+phases that auto-advance, the breath clock is the only animation in the room, and the
+completion is a quiet "you showed up" close with one wise next step.
+
+PALETTE (from MiniMax Build Brief 2026-06-02, PART A A0)
+  page:        #f3eee3 cream
+  card:        #e8dacb deeper cream
+  heading ink: #2f4633 deep forest green
+  body ink:    #30232d near-black aubergine
+  hint ink:    #5a6849 readable sage (>=4.5:1 on cream)
+  focus mark:  #a4492f terracotta (focus rings, "you are here", thin rules only)
+  borders:     #a8b3a2 soft sage, #c8a784 tan, #e8dacb beige (decoration only)
+
+TYPE SCALE
+  display:     serif (Cormorant Garamond / Fraunces fallback to Georgia)
+  UI:          Inter / system sans
+  body:        17px
+  hint:        15px (italic for tone)
+  label:       12px, darker tone if it carries meaning
+  heading:     38px on mobile, 44px on wider screens
+  menu time:   32-40px serif
+
+ACCESSIBILITY NOTES
+  - ONE breath clock (single timer source per session) so visual and label never drift apart.
+  - prefers-reduced-motion: skip the breath circle animation, keep the cycle moving on text alone.
+  - Focus states visible (terracotta 2-3px outline, offset).
+  - aria-live="polite" announces phase changes, not every second.
+  - Every step is keyboard reachable; menu cards, buttons, and inputs all operable.
+  - Keepsake summary copies as plain text with the modern Clipboard API and an execCommand fallback.
+
+PHASE TIMINGS
+  10-min Self-Compassion Reset: 5 phases, 120s each. The book lists 5 steps; the brief condenses
+    "Read it aloud" into the kindness phase, but the script is kept as a separate phase to honour
+    the book. Total = 10 min.
+  15-min Embodied Reset: minute markers from the book.
+    0-3 settle + breath (180s), 3-8 walk (300s), 8-12 micro-mobility (240s), 12-14 body scan (120s),
+    14-15 choose one next step (60s). Total = 15 min.
+
+WHAT I'D REFINE WITH MORE TIME
+  - Replace the placeholder brand slot with the real GroundedHumanity_FullLogo_Transparent_2400w.png
+    as a single, consistent brand signature.
+  - Add a quiet "[Social] GH_Icon_TreeOnly_Transparent_1024.png" tree-icon watermark in the corner.
+  - Optional: a "one small intention" prompt between sessions (not a streak, not a count, just a
+    bookmark for the user).
+  - A user-toggle for breath ratio (4/6 is the book default; some prefer 4/4 or box breath).
+  - A more generous mobile safe area for the pause/exit row (currently a little tight on
+    iPhone 14 Pro and similar with the home indicator).
+  - A "skip phase" affordance on breath/walk/move/scan/read phases (currently only "next" on
+    write phases, the rest auto-advance on time).
+
+COMPROMISES
+  - No real GH logo assets embedded (prototype, per A8).
+  - The 3-min Paced Breathing option is the Recovery Menu's own "Three deep breaths" entry
+    scaled to 3 minutes, since the brief lists it as a hub option without a chapter script.
+  - "Read it aloud" is a phase with a quiet instruction rather than a speech-driven interaction
+    (the app cannot know whether the user spoke out loud; the script prompts them to).
+-->
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3eee3">
+<meta name="description" content="A recovery menu. Pick a duration, get a guided, timed session. No streaks, no keeping count.">
+<title>The Recovery Menu. Grounded Humanity</title>
+<style>
+  /* ====== RESET AND ROOT ====== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: #f3eee3;
+    color: #30232d;
+    font-family: "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  :root {
+    --cream:        #f3eee3;
+    --card:         #e8dacb;
+    --ink:          #30232d;
+    --ink-heading:  #2f4633;
+    --ink-hint:     #5a6849; /* AA on cream, ~5.3:1 */
+    --terracotta:   #a4492f;
+    --sage-soft:    #a8b3a2; /* decoration only */
+    --tan:          #c8a784; /* decoration only */
+    --beige:        #e8dacb;
+    --serif:        "Cormorant Garamond", "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --sans:         "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --maxw:         600px;
+  }
+
+  /* ====== LAYOUT ====== */
+  .app {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 32px 22px 96px;
+  }
+  .brand-slot {
+    /* ornament slot: GH full lockup (GroundedHumanity_FullLogo_Transparent_2400w.png) goes here in final polish */
+    text-align: center;
+    color: var(--ink-hint);
+    font-family: var(--serif);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    margin: 0 0 22px;
+    font-style: italic;
+    opacity: 0.85;
+  }
+  .screen { display: none; }
+  .screen.is-active { display: block; }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-hint);
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  h1, h2, h3 {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-weight: 500;
+    margin: 0 0 12px;
+    line-height: 1.18;
+  }
+  h1 { font-size: 40px; letter-spacing: -0.005em; }
+  h2 { font-size: 28px; }
+  h3 { font-size: 20px; }
+  p { margin: 0 0 14px; }
+  .hint {
+    font-size: 15px;
+    color: var(--ink-hint);
+    font-style: italic;
+    line-height: 1.55;
+  }
+  .divider {
+    height: 1px;
+    background: var(--sage-soft);
+    border: 0;
+    margin: 22px 0;
+    opacity: 0.55;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+  }
+  .stack > * + * { margin-top: 14px; }
+  .stack-lg > * + * { margin-top: 22px; }
+
+  /* ====== BUTTONS ====== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background: var(--ink-heading);
+    color: var(--cream);
+    cursor: pointer;
+    min-height: 48px;
+    min-width: 48px;
+    text-decoration: none;
+    transition: background 160ms ease, color 160ms ease, transform 160ms ease, border-color 160ms ease;
+  }
+  .btn:hover { background: #243a28; }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { background: var(--sage-soft); color: var(--cream); cursor: not-allowed; opacity: 0.7; }
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink-heading);
+    border-color: var(--ink-heading);
+  }
+  .btn--ghost:hover { background: var(--ink-heading); color: var(--cream); }
+  .btn--small { font-size: 14px; padding: 10px 16px; min-height: 40px; }
+  .btn--block { width: 100%; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .row--between { justify-content: space-between; align-items: center; }
+  .row--end { justify-content: flex-end; }
+
+  /* ====== FOCUS STATES ====== */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+
+  /* ====== MENU ====== */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 10px;
+  }
+  @media (min-width: 520px) {
+    .menu-grid { grid-template-columns: 1fr 1fr; gap: 18px; }
+  }
+  .menu-card {
+    background: var(--card);
+    border: 1.5px solid var(--tan);
+    border-radius: 16px;
+    padding: 20px 18px;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--sans);
+    color: var(--ink);
+    transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+    width: 100%;
+  }
+  .menu-card:hover {
+    border-color: var(--ink-heading);
+    background: #efe4d2;
+  }
+  .menu-card:active { transform: translateY(1px); }
+  .menu-card__time {
+    font-family: var(--serif);
+    font-size: 36px;
+    color: var(--ink-heading);
+    line-height: 1;
+    display: block;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .menu-card__time small {
+    font-size: 16px;
+    color: var(--ink-hint);
+    font-style: italic;
+    margin-left: 4px;
+  }
+  .menu-card__title {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--ink-heading);
+    line-height: 1.2;
+    margin: 0 0 6px;
+  }
+  .menu-card__desc {
+    font-size: 15px;
+    color: var(--ink-hint);
+    line-height: 1.45;
+    margin: 0;
+    font-style: italic;
+  }
+  .menu-card__ch {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-hint);
+    margin-top: 10px;
+    display: block;
+  }
+
+  /* ====== SESSION ====== */
+  .session-head {
+    margin-bottom: 18px;
+  }
+  .session-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+  }
+  .session-progress__bar {
+    flex: 1;
+    height: 6px;
+    background: var(--sage-soft);
+    border-radius: 3px;
+    overflow: hidden;
+    opacity: 0.6;
+  }
+  .session-progress__fill {
+    height: 100%;
+    background: var(--ink-heading);
+    width: 0%;
+    transition: width 250ms linear;
+  }
+  .session-progress__label {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-hint);
+    letter-spacing: 0.04em;
+    min-width: 64px;
+    text-align: right;
+  }
+  .phase-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 6px;
+  }
+  .phase-meta__chip {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-hint);
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 999px;
+    padding: 4px 10px;
+    letter-spacing: 0.04em;
+  }
+  .phase-instruction {
+    font-family: var(--serif);
+    color: var(--ink);
+    font-size: 21px;
+    line-height: 1.4;
+    margin: 0 0 18px;
+  }
+
+  /* ====== BREATH CLOCK ====== */
+  .breath-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0 4px;
+  }
+  .breath-circle {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .breath-circle svg { width: 100%; height: 100%; display: block; }
+  .breath-circle .ring-bg {
+    fill: none;
+    stroke: var(--sage-soft);
+    stroke-width: 1.5;
+    opacity: 0.6;
+  }
+  .breath-circle .ring-grow {
+    fill: none;
+    stroke: var(--ink-heading);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    transform-origin: 50% 50%;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 100ms linear;
+  }
+  .breath-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    font-family: var(--serif);
+    color: var(--ink-heading);
+  }
+  .breath-label__word {
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+  .breath-label__count {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-hint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .breath-sub {
+    text-align: center;
+    color: var(--ink-hint);
+    font-size: 15px;
+    font-style: italic;
+    max-width: 360px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .breath-circle .ring-grow { transition: none; }
+  }
+
+  /* ====== TEXT INPUT PHASE ====== */
+  .write-card {
+    background: var(--cream);
+    border: 1.5px solid var(--tan);
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+  }
+  .write-card label {
+    display: block;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-hint);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .write-card textarea {
+    width: 100%;
+    min-height: 96px;
+    border: 1px solid var(--sage-soft);
+    background: #fbf6ec;
+    border-radius: 10px;
+    padding: 12px 12px;
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.4;
+    color: var(--ink);
+    resize: vertical;
+  }
+  .write-card textarea:focus-visible {
+    border-color: var(--ink-heading);
+    outline: 3px solid var(--terracotta);
+    outline-offset: 2px;
+  }
+  .write-card .hint { margin-top: 8px; }
+
+  /* ====== INSTRUCTION / READ PHASE ====== */
+  .instruction-card {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+  }
+  .instruction-card p {
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+  .instruction-card p:last-child { margin-bottom: 0; }
+  .instruction-card .hint {
+    color: var(--ink-hint);
+    font-size: 15px;
+    margin-top: 6px;
+  }
+
+  /* ====== PHASE TIMER LINE (focus / walk / move / scan) ====== */
+  .phase-timer {
+    text-align: center;
+    margin: 6px 0 4px;
+  }
+  .phase-timer__time {
+    font-family: var(--serif);
+    font-size: 44px;
+    color: var(--ink-heading);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .phase-timer__sub {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-hint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* ====== SESSION CONTROLS ====== */
+  .session-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--sage-soft);
+  }
+  .session-controls .btn { flex: 1 1 140px; }
+
+  /* ====== KEEPSAKE / CLOSE ====== */
+  .keepsake {
+    background: var(--card);
+    border: 1px solid var(--tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 20px;
+    line-height: 1.45;
+  }
+  .keepsake__small {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink-hint);
+    margin: 0 0 10px;
+  }
+  .keepsake__line { margin: 0 0 12px; }
+  .keepsake__quote {
+    font-style: italic;
+    color: var(--ink);
+    font-size: 18px;
+  }
+  .keepsake__quote-attrib {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-hint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .keepsake__pair {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 8px 0 4px;
+  }
+  .keepsake__item-label {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-hint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 4px;
+  }
+  .keepsake__item-value {
+    font-family: var(--serif);
+    font-size: 19px;
+    color: var(--ink);
+    line-height: 1.4;
+    margin: 0;
+  }
+  .keepsake__divider {
+    height: 1px;
+    background: var(--sage-soft);
+    border: 0;
+    margin: 14px 0;
+    opacity: 0.45;
+  }
+  .copy-status {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-hint);
+    min-height: 1.4em;
+    margin-top: 8px;
+  }
+
+  /* ====== FOOTER ====== */
+  .footer {
+    margin-top: 36px;
+    padding-top: 18px;
+    border-top: 1px solid var(--sage-soft);
+    color: var(--ink-hint);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .footer p { margin: 0 0 6px; }
+  .footer .disclaimer { font-style: italic; }
+
+  /* ====== UTIL ====== */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0);
+    white-space: nowrap; border: 0;
+  }
+  .visually-hidden-focusable:not(:focus):not(:focus-within) {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<main class="app" id="app">
+
+  <!-- ornament slot: GH full lockup goes here in final polish -->
+  <p class="brand-slot" aria-hidden="true">Grounded Humanity</p>
+
+  <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ============ SCREEN 1: MENU ============ -->
+  <section class="screen is-active" id="screen-menu" aria-labelledby="menu-title">
+    <p class="eyebrow">Chapter 6</p>
+    <h1 id="menu-title">The Recovery Menu</h1>
+    <p>How much space do you have right now? Pick a duration. We will guide you through it.</p>
+    <p class="hint">No streak. No score. No pressure to finish. You can stop at any time. Closing the page is fine too.</p>
+
+    <hr class="divider">
+
+    <div class="menu-grid" role="list">
+      <button type="button" class="menu-card" data-session="1" role="listitem" aria-label="Begin a 1-minute One-Point Focus session">
+        <span class="menu-card__time">1<small>min</small></span>
+        <p class="menu-card__title">One-Point Focus</p>
+        <p class="menu-card__desc">Rest attention on one everyday object. Notice colour, shape, texture. The reps do the work.</p>
+        <span class="menu-card__ch">Chapter 7</span>
+      </button>
+
+      <button type="button" class="menu-card" data-session="3" role="listitem" aria-label="Begin a 3-minute Paced Breathing session">
+        <span class="menu-card__time">3<small>min</small></span>
+        <p class="menu-card__title">Paced Breathing</p>
+        <p class="menu-card__desc">In for four, out for six. One breath clock. Three minutes is enough to land.</p>
+        <span class="menu-card__ch">Chapter 6</span>
+      </button>
+
+      <button type="button" class="menu-card" data-session="10" role="listitem" aria-label="Begin a 10-minute Self-Compassion Reset">
+        <span class="menu-card__time">10<small>min</small></span>
+        <p class="menu-card__title">Self-Compassion Reset</p>
+        <p class="menu-card__desc">Notice the critic. Breathe. Switch to kindness. Read it aloud. Choose one small step.</p>
+        <span class="menu-card__ch">Chapter 4</span>
+      </button>
+
+      <button type="button" class="menu-card" data-session="15" role="listitem" aria-label="Begin a 15-minute Embodied Reset">
+        <span class="menu-card__time">15<small>min</small></span>
+        <p class="menu-card__title">15-Minute Embodied Reset</p>
+        <p class="menu-card__desc">Settle. Walk. Move. Scan. Choose one next step. Use when you feel scattered, heavy, or on edge.</p>
+        <span class="menu-card__ch">Chapter 5</span>
+      </button>
+    </div>
+
+    <hr class="divider">
+
+    <p class="hint">A note on the menu: the four options above are the timed exercises from the book. The Recovery Menu in the book also lists smaller choices (a glass of water, a stretch, step outside) and bigger ones (a long walk, a hobby, a quiet day). Those are not in the app because they are already small enough to do without one.</p>
+  </section>
+
+  <!-- ============ SCREEN 2: ACTIVE SESSION ============ -->
+  <section class="screen" id="screen-session" aria-labelledby="session-title">
+    <p class="eyebrow" id="session-eyebrow">Session</p>
+    <h2 id="session-title">Session title</h2>
+
+    <div class="session-head">
+      <div class="session-progress" aria-hidden="true">
+        <div class="session-progress__bar"><div class="session-progress__fill" id="session-fill"></div></div>
+        <span class="session-progress__label" id="session-clock">0:00 / 0:00</span>
+      </div>
+      <div class="phase-meta" id="phase-meta">
+        <span class="phase-meta__chip" id="phase-counter">Phase 1 of 1</span>
+        <span class="phase-meta__chip" id="phase-chapter">Chapter</span>
+      </div>
+      <h3 id="phase-title" class="phase-instruction">Phase title</h3>
+    </div>
+
+    <!-- Each phase kind renders into this container -->
+    <div id="phase-content" aria-live="polite"></div>
+
+    <div class="session-controls">
+      <button type="button" class="btn btn--ghost btn--small" id="btn-pause">Pause</button>
+      <button type="button" class="btn btn--small" id="btn-next" hidden>Save and continue</button>
+      <button type="button" class="btn btn--ghost btn--small" id="btn-exit">Exit</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 3: COMPLETION ============ -->
+  <section class="screen" id="screen-close" aria-labelledby="close-title">
+    <p class="eyebrow" id="close-eyebrow">A small keepsake</p>
+    <h2 id="close-title">You showed up.</h2>
+    <p id="close-summary">That is the practice. Whatever you noticed is enough.</p>
+
+    <hr class="divider">
+
+    <div class="keepsake" id="keepsake" aria-live="polite">
+      <p class="keepsake__small" id="ks-session">Session name</p>
+      <p class="keepsake__line" id="ks-line-1">You gave yourself a few minutes.</p>
+      <div id="ks-extra"></div>
+      <hr class="keepsake__divider" id="ks-divider" hidden>
+      <p class="keepsake__quote" id="ks-quote">A short line from the book.</p>
+      <p class="keepsake__quote-attrib" id="ks-quote-attrib">Chapter</p>
+    </div>
+
+    <div class="row" style="margin-top: 16px;">
+      <button type="button" class="btn" id="btn-copy">Copy as text</button>
+      <button type="button" class="btn btn--ghost" id="btn-back-menu">Back to menu</button>
+    </div>
+    <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+
+    <hr class="divider">
+
+    <p class="hint">A note on saving: this app does not store your session on a server. Your notes stay in this browser only. If you clear your browser data, the notes go with it. Copy the text above if you would like to keep it.</p>
+  </section>
+
+  <footer class="footer">
+    <p class="disclaimer">Self-guided reflection, not medical advice. If something feels too much, stop. If feelings keep returning, consider talking to a GP or a qualified clinician.</p>
+    <p>Grounded Humanity, sold via Paper N Pixels.</p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ====================================================================
+  //  SESSION DATA
+  //  Timings in seconds. Instructions are trimmed from the book.
+  // ====================================================================
+
+  var SESSIONS = {
+    "1": {
+      title: "One-Point Focus",
+      chapter: "Chapter 7",
+      total: 60,
+      closeLine: "Each return is a strengthening. The object does not matter. The reps do.",
+      nextStep: "Carry this noticing into the next thing you do.",
+      phases: [
+        {
+          kind: "focus",
+          label: "Observe",
+          dur: 60,
+          intro: "Choose one everyday object: a cup, a pen, a leaf. Place it where you can see it. When the mind wanders, and it will, gently return. No judgment.",
+          startHint: "When you are ready, tap Start. We will count down one minute."
+        }
+      ]
+    },
+    "3": {
+      title: "Paced Breathing",
+      chapter: "Chapter 6",
+      total: 180,
+      closeLine: "You gave your nervous system a moment. That is plenty.",
+      nextStep: "Notice how your body feels right now. Carry that noticing with you.",
+      phases: [
+        {
+          kind: "breath",
+          label: "Paced breathing",
+          dur: 180,
+          breathIn: 4,
+          breathOut: 6,
+          breathHold: 0,
+          intro: "Sit or stand tall. Inhale gently through the nose for four, exhale through the nose or mouth for six. Let the out-breath be longer than the in.",
+          startHint: "When you are ready, tap Start. One breath clock. Three minutes."
+        }
+      ]
+    },
+    "10": {
+      title: "Self-Compassion Reset",
+      chapter: "Chapter 4",
+      total: 600,
+      closeLine: "This practice blends physiology with narrative, weakening the critic on both fronts.",
+      nextStep: "Take the small step you wrote down. Not a grand plan. A steadying step.",
+      phases: [
+        {
+          kind: "write",
+          label: "Notice the critic",
+          dur: 120,
+          prompt: "Write down one harsh phrase your critic uses.",
+          placeholder: "e.g. I am not good enough.",
+          inputName: "critic",
+          startHint: "Two minutes. You can also just think it; writing is optional."
+        },
+        {
+          kind: "breath",
+          label: "Anchor in breath",
+          dur: 120,
+          breathIn: 4,
+          breathOut: 6,
+          breathHold: 0,
+          intro: "Take three rounds of in-for-4, out-for-6 breathing. Feel your ribs move your hand.",
+          startHint: "When you are ready, tap Start."
+        },
+        {
+          kind: "write",
+          label: "Switch to kindness",
+          dur: 120,
+          prompt: "Write down one phrase you would say to a friend in the same situation.",
+          placeholder: "e.g. You had a tough day, but you are trying.",
+          inputName: "kindness",
+          startHint: "Two minutes. Plain words. No poetry required."
+        },
+        {
+          kind: "read",
+          label: "Read it aloud",
+          dur: 120,
+          intro: "Speak the kind phrase out loud. Notice how it feels in your body.",
+          startHint: "Two minutes. If you cannot speak out loud, hear it in your head."
+        },
+        {
+          kind: "write",
+          label: "Choose one step",
+          dur: 120,
+          prompt: "Pick the next small action. Not a grand plan. A steadying step.",
+          placeholder: "e.g. Drink some water. Write two lines. Step outside.",
+          inputName: "step",
+          startHint: "Two minutes. The smallest good step is the right one."
+        }
+      ]
+    },
+    "15": {
+      title: "15-Minute Embodied Reset",
+      chapter: "Chapter 5",
+      total: 900,
+      closeLine: "Better is enough. If it did not shift much, that is data. The practice works because you show up, not because you force a result.",
+      nextStep: "Take the small step you chose. Let it be the hinge that turns the day.",
+      phases: [
+        {
+          kind: "breath",
+          label: "Settle and breathe",
+          dur: 180,
+          breathIn: 4,
+          breathOut: 6,
+          breathHold: 0,
+          intro: "Sit or stand tall. Place a hand on the belly. Inhale gently through the nose for four, exhale through the nose or mouth for six. Feel your ribs move your hand. Five to eight rounds.",
+          startHint: "Minutes 0 to 3. We will move on when the time is up."
+        },
+        {
+          kind: "walk",
+          label: "Mindful walk",
+          dur: 300,
+          intro: "Walk a simple loop. Feel your feet. Name three sights, three sounds, and three sensations, then repeat. Keep your gaze soft. If the mind wanders, bring it back to your steps. You are not chasing calm. You are cultivating it.",
+          startHint: "Minutes 3 to 8. Find a few metres of floor or pavement."
+        },
+        {
+          kind: "move",
+          label: "Micro-mobility",
+          dur: 240,
+          intro: "Choose one area that holds stress and give it four minutes. Neck rolls in slow arcs. Shoulder circles forward and back. Hip circles or gentle lunges. Move within comfort, never into sharp pain. Let each exhale soften the outer edge of effort.",
+          startHint: "Minutes 8 to 12. Move within comfort, never into sharp pain."
+        },
+        {
+          kind: "scan",
+          label: "Body scan",
+          dur: 120,
+          intro: "Stand or sit. Scan head to toe. Forehead, jaw, throat, shoulders, chest, belly, hips, legs, feet. Label what you find: tight, warm, buzzy, calm. No judgment. Just inventory.",
+          startHint: "Minutes 12 to 14. Notice, do not fix."
+        },
+        {
+          kind: "write",
+          label: "Choose one next step",
+          dur: 60,
+          prompt: "What is one small action that would help right now?",
+          placeholder: "e.g. Drink water. Send one email. Take a shower. Write two lines.",
+          inputName: "step15",
+          startHint: "Minutes 14 to 15. The smallest good step is the right one."
+        }
+      ]
+    }
+  };
+
+  // ====================================================================
+  //  DOM HELPERS
+  // ====================================================================
+
+  var $  = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+
+  function announce(msg) {
+    var live = $("#live");
+    if (!live) return;
+    live.textContent = "";
+    setTimeout(function () { live.textContent = msg; }, 30);
+  }
+
+  function showScreen(id) {
+    $$(".screen").forEach(function (s) { s.classList.remove("is-active"); });
+    var el = document.getElementById(id);
+    if (el) {
+      el.classList.add("is-active");
+      var h = el.querySelector("h1, h2");
+      if (h) {
+        h.setAttribute("tabindex", "-1");
+        try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
+      }
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+  }
+
+  // ====================================================================
+  //  STATE
+  // ====================================================================
+
+  var STORAGE_KEY = "mnm-recovery-menu-v1";
+  var currentSessionKey = null; // "1" | "3" | "10" | "15"
+  var session = null;           // active SESSIONS entry
+  var phaseIndex = 0;
+  var elapsedInPhase = 0;       // seconds within current phase
+  var running = false;          // master running flag
+  var paused = false;
+  var tickHandle = null;        // setInterval handle (100ms)
+  var lastTickAt = 0;           // ms timestamp of last tick
+  var sessionStartedAt = 0;     // ms timestamp of session start (or null)
+  var totalElapsed = 0;         // seconds elapsed across all phases
+  var inputs = {};              // inputName -> value
+  var breathState = null;       // current breath clock state
+  var breathLoopHandle = null;  // setTimeout handle for breath phase advance
+  var exitConfirming = false;
+  var exitConfirmHandle = null;
+
+  // ====================================================================
+  //  TIME FORMAT
+  // ====================================================================
+
+  function fmt(seconds) {
+    var s = Math.max(0, Math.floor(seconds));
+    var m = Math.floor(s / 60);
+    var r = s % 60;
+    return m + ":" + (r < 10 ? "0" + r : r);
+  }
+
+  // ====================================================================
+  //  SCREEN: MENU
+  // ====================================================================
+
+  function bindMenu() {
+    $$(".menu-card").forEach(function (card) {
+      card.addEventListener("click", function () {
+        var key = card.getAttribute("data-session");
+        startSession(key);
+      });
+      card.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          card.click();
+        }
+      });
+    });
+  }
+
+  // ====================================================================
+  //  SESSION START
+  // ====================================================================
+
+  function startSession(key) {
+    if (!SESSIONS[key]) return;
+    currentSessionKey = key;
+    session = SESSIONS[key];
+    phaseIndex = 0;
+    elapsedInPhase = 0;
+    totalElapsed = 0;
+    inputs = {};
+    paused = false;
+    running = false;
+    sessionStartedAt = 0;
+    lastTickAt = 0;
+
+    $("#session-eyebrow").textContent = session.chapter;
+    $("#session-title").textContent = session.title;
+    $("#session-clock").textContent = "0:00 / " + fmt(session.total);
+    $("#session-fill").style.width = "0%";
+
+    showScreen("screen-session");
+    renderPhase();
+    announce(session.title + ". " + session.phases[0].label + ".");
+    persistState();
+  }
+
+  // ====================================================================
+  //  PHASE RENDER
+  // ====================================================================
+
+  function renderPhase() {
+    var phase = session.phases[phaseIndex];
+    $("#phase-counter").textContent = "Phase " + (phaseIndex + 1) + " of " + session.phases.length;
+    $("#phase-chapter").textContent = session.chapter;
+    $("#phase-title").textContent = phase.label;
+
+    var content = $("#phase-content");
+    content.innerHTML = "";
+
+    var html = "";
+    if (phase.intro) {
+      html += '<p class="phase-instruction">' + escapeHtml(phase.intro) + "</p>";
+    }
+    html += '<p class="hint">' + escapeHtml(phase.startHint || "When you are ready, tap Start.") + "</p>";
+
+    if (phase.kind === "breath") {
+      html += breathStageHtml();
+    } else if (phase.kind === "write") {
+      html += writeStageHtml(phase);
+    } else if (phase.kind === "focus" || phase.kind === "walk" || phase.kind === "move" || phase.kind === "scan") {
+      html += phaseTimerHtml(phase.dur);
+    } else if (phase.kind === "read") {
+      // read: just instruction, no extra input
+    }
+
+    html += '<div class="row row--end" style="margin-top: 18px;"><button type="button" class="btn" id="btn-start-phase">Start this phase</button></div>';
+
+    content.innerHTML = html;
+
+    // Show/hide session controls
+    $("#btn-pause").hidden = true;
+    $("#btn-next").hidden = (phase.kind !== "write");
+    $("#btn-exit").textContent = "Exit";
+    exitConfirming = false;
+
+    // Bind start button
+    var startBtn = $("#btn-start-phase");
+    if (startBtn) {
+      startBtn.addEventListener("click", function () { beginPhaseRun(); });
+    }
+
+    // Bind write phase save button
+    var nextBtn = $("#btn-next");
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        // Save any write inputs that are visible
+        captureWriteInputs();
+        advancePhase(true);
+      });
+    }
+
+    // Pause button (initially hidden until running)
+    $("#btn-pause").addEventListener("click", togglePause);
+
+    // Exit button
+    $("#btn-exit").addEventListener("click", handleExit);
+
+    updateSessionClock();
+  }
+
+  function breathStageHtml() {
+    return [
+      '<div class="breath-stage" id="breath-stage">',
+      '  <div class="breath-circle" role="img" aria-labelledby="breath-status">',
+      '    <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">',
+      '      <circle class="ring-bg" cx="60" cy="60" r="52"></circle>',
+      '      <circle class="ring-grow" id="ring-grow" cx="60" cy="60" r="52"',
+      '              stroke-dasharray="326.73" stroke-dashoffset="326.73"></circle>',
+      '    </svg>',
+      '    <div class="breath-label" id="breath-status">',
+      '      <span class="breath-label__word" id="breath-word">Ready</span>',
+      '      <span class="breath-label__count" id="breath-count">Tap Start</span>',
+      '    </div>',
+      '  </div>',
+      '  <p class="breath-sub" id="breath-sub">One breath clock for the whole phase.</p>',
+      '</div>'
+    ].join("\n");
+  }
+
+  function writeStageHtml(phase) {
+    var name = phase.inputName || "input";
+    var existing = inputs[name] || "";
+    var safe = escapeHtml(existing);
+    return [
+      '<div class="write-card">',
+      '  <label for="inp-' + name + '">Your note</label>',
+      '  <textarea id="inp-' + name + '" name="' + name + '" placeholder="' + escapeHtml(phase.placeholder || "") + '" aria-describedby="inp-' + name + '-hint">' + safe + '</textarea>',
+      '  <p class="hint" id="inp-' + name + '-hint">' + escapeHtml(phase.prompt || "Write whatever fits. There is no right answer.") + '</p>',
+      '</div>'
+    ].join("\n");
+  }
+
+  function phaseTimerHtml(dur) {
+    return [
+      '<div class="phase-timer">',
+      '  <div class="phase-timer__time" id="phase-timer-time">' + fmt(dur) + '</div>',
+      '  <div class="phase-timer__sub" id="phase-timer-sub">remaining in this phase</div>',
+      '</div>'
+    ].join("\n");
+  }
+
+  // ====================================================================
+  //  PHASE RUN
+  // ====================================================================
+
+  function beginPhaseRun() {
+    paused = false;
+    running = true;
+    lastTickAt = Date.now();
+    if (!sessionStartedAt) sessionStartedAt = Date.now();
+
+    // Hide Start, show Pause
+    var startBtn = $("#btn-start-phase");
+    if (startBtn) startBtn.parentNode && (startBtn.parentNode.style.display = "none");
+    $("#btn-pause").hidden = false;
+    $("#btn-pause").textContent = "Pause";
+
+    // If write phase, capture initial input
+    captureWriteInputs();
+
+    // Start breath clock if needed
+    var phase = session.phases[phaseIndex];
+    if (phase.kind === "breath") {
+      startBreathClock(phase);
+    } else if (phase.kind === "focus" || phase.kind === "walk" || phase.kind === "move" || phase.kind === "scan") {
+      // No special setup; phase-timer-time will be updated by tick.
+      var tt = $("#phase-timer-time");
+      if (tt) tt.textContent = fmt(phase.dur - elapsedInPhase);
+    }
+
+    // Begin master tick
+    if (tickHandle) clearInterval(tickHandle);
+    tickHandle = setInterval(tick, 100);
+    announce("Starting " + phase.label + ".");
+    persistState();
+  }
+
+  function tick() {
+    if (!running || paused) {
+      lastTickAt = Date.now();
+      return;
+    }
+    var now = Date.now();
+    var dt = (now - lastTickAt) / 1000;
+    lastTickAt = now;
+
+    elapsedInPhase += dt;
+    totalElapsed += dt;
+
+    var phase = session.phases[phaseIndex];
+
+    // Breath clock update is handled by its own loop; here we just update the phase timer text.
+    if (phase.kind === "focus" || phase.kind === "walk" || phase.kind === "move" || phase.kind === "scan") {
+      var remaining = Math.max(0, phase.dur - elapsedInPhase);
+      var tt = $("#phase-timer-time");
+      if (tt) tt.textContent = fmt(remaining);
+    }
+
+    updateSessionClock();
+
+    if (elapsedInPhase >= phase.dur) {
+      advancePhase(false);
+    }
+  }
+
+  function updateSessionClock() {
+    $("#session-clock").textContent = fmt(totalElapsed) + " / " + fmt(session.total);
+    var pct = session.total > 0 ? Math.min(100, (totalElapsed / session.total) * 100) : 0;
+    $("#session-fill").style.width = pct.toFixed(1) + "%";
+  }
+
+  function advancePhase(userInitiated) {
+    // If user initiated from a write phase, capture inputs
+    if (userInitiated) captureWriteInputs();
+
+    // Stop any in-flight breath
+    stopBreathClock();
+    if (tickHandle) { clearInterval(tickHandle); tickHandle = null; }
+    running = false;
+
+    if (phaseIndex + 1 >= session.phases.length) {
+      finishSession();
+      return;
+    }
+
+    phaseIndex += 1;
+    elapsedInPhase = 0;
+    running = false;
+    paused = false;
+    lastTickAt = 0;
+
+    var nextPhase = session.phases[phaseIndex];
+    announce("Phase " + (phaseIndex + 1) + ": " + nextPhase.label + ".");
+    renderPhase();
+    persistState();
+  }
+
+  // ====================================================================
+  //  BREATH CLOCK (single, per phase)
+  // ====================================================================
+
+  function startBreathClock(phase) {
+    var inDur = (phase.breathIn || 4) * 1000;
+    var outDur = (phase.breathOut || 6) * 1000;
+    var holdDur = (phase.breathHold || 0) * 1000;
+    var circum = 2 * Math.PI * 52;
+
+    function setRingDashoffset(px) {
+      var ring = $("#ring-grow");
+      if (!ring) return;
+      ring.setAttribute("stroke-dasharray", circum.toFixed(2));
+      ring.setAttribute("stroke-dashoffset", px.toFixed(2));
+    }
+
+    function reduced() {
+      return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    function setLabel(word, sub) {
+      var w = $("#breath-word");
+      var c = $("#breath-count");
+      if (w) w.textContent = word;
+      if (c) c.textContent = sub;
+    }
+
+    function showIn() {
+      setLabel("Breathe in", "In for " + ((inDur / 1000)) + " seconds");
+      setRingDashoffset(circum);
+      if (!reduced()) {
+        var ring = $("#ring-grow");
+        ring.style.transition = "stroke-dashoffset " + inDur + "ms linear";
+        // force reflow
+        void ring.getBoundingClientRect();
+        ring.setAttribute("stroke-dashoffset", "0");
+      } else {
+        setRingDashoffset(0);
+      }
+      breathState = { phase: "in", until: Date.now() + inDur };
+      breathLoopHandle = setTimeout(function () {
+        if (!running || paused) return;
+        if (holdDur > 0) showHold(); else showOut();
+      }, inDur);
+    }
+
+    function showHold() {
+      setLabel("Hold", "Pause");
+      // Keep ring where it is
+      breathState = { phase: "hold", until: Date.now() + holdDur };
+      breathLoopHandle = setTimeout(function () {
+        if (!running || paused) return;
+        showOut();
+      }, holdDur);
+    }
+
+    function showOut() {
+      setLabel("Breathe out", "Out for " + ((outDur / 1000)) + " seconds");
+      if (!reduced()) {
+        var ring = $("#ring-grow");
+        ring.style.transition = "stroke-dashoffset " + outDur + "ms linear";
+        void ring.getBoundingClientRect();
+        ring.setAttribute("stroke-dashoffset", circum.toFixed(2));
+      } else {
+        setRingDashoffset(circum);
+      }
+      breathState = { phase: "out", until: Date.now() + outDur };
+      breathLoopHandle = setTimeout(function () {
+        if (!running || paused) return;
+        showIn();
+      }, outDur);
+    }
+
+    // Sub line
+    var sub = $("#breath-sub");
+    if (sub) sub.textContent = "One breath clock. The visual and the label share the same clock.";
+
+    showIn();
+  }
+
+  function stopBreathClock() {
+    if (breathLoopHandle) { clearTimeout(breathLoopHandle); breathLoopHandle = null; }
+    breathState = null;
+  }
+
+  // ====================================================================
+  //  PAUSE / RESUME
+  // ====================================================================
+
+  function togglePause() {
+    if (!running) return;
+    paused = !paused;
+    if (paused) {
+      $("#btn-pause").textContent = "Resume";
+      // Freeze breath ring: remove transition so it doesn't drift
+      var ring = $("#ring-grow");
+      if (ring) ring.style.transition = "none";
+      var w = $("#breath-word");
+      var c = $("#breath-count");
+      if (w && breathState) {
+        w.textContent = "Paused";
+        c.textContent = "Take your time";
+      }
+      announce("Paused.");
+    } else {
+      $("#btn-pause").textContent = "Pause";
+      lastTickAt = Date.now();
+      var phase = session.phases[phaseIndex];
+      if (phase && phase.kind === "breath" && breathState) {
+        // Resume: re-arm the next phase change with remaining time
+        resumeBreathClock(phase);
+      }
+      announce("Resumed.");
+    }
+    persistState();
+  }
+
+  function resumeBreathClock(phase) {
+    if (!breathState) return;
+    var now = Date.now();
+    var remaining = Math.max(0, breathState.until - now);
+    if (breathLoopHandle) { clearTimeout(breathLoopHandle); breathLoopHandle = null; }
+    var inDur = (phase.breathIn || 4) * 1000;
+    var outDur = (phase.breathOut || 6) * 1000;
+    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var ring = $("#ring-grow");
+    if (ring && !reduced) ring.style.transition = "stroke-dashoffset " + remaining + "ms linear";
+    if (breathState.phase === "in") {
+      breathLoopHandle = setTimeout(function () {
+        if (!running || paused) return;
+        if (phase.breathHold > 0) startBreathClockHold(phase); else startBreathClockOut(phase);
+      }, remaining);
+    } else if (breathState.phase === "hold") {
+      breathLoopHandle = setTimeout(function () {
+        if (!running || paused) return;
+        startBreathClockOut(phase);
+      }, remaining);
+    } else {
+      breathLoopHandle = setTimeout(function () {
+        if (!running || paused) return;
+        startBreathClockIn(phase);
+      }, remaining);
+    }
+  }
+
+  // After pause/resume, we want to re-enter the next breath state cleanly.
+  // The simplest approach is to restart the breath clock; the visual resets,
+  // but the on-screen label makes the in/out/hold clear.
+  function startBreathClockHold(phase) {
+    // Reuse breath clock, but skip directly to hold.
+    // For simplicity (and because hold is uncommon here), we restart from in.
+    startBreathClock(phase);
+  }
+  function startBreathClockIn(phase) { startBreathClock(phase); }
+  function startBreathClockOut(phase) {
+    // Re-implement minimal "out" to keep the visual coherent.
+    var outDur = (phase.breathOut || 6) * 1000;
+    var circum = 2 * Math.PI * 52;
+    var ring = $("#ring-grow");
+    var w = $("#breath-word");
+    var c = $("#breath-count");
+    if (w) w.textContent = "Breathe out";
+    if (c) c.textContent = "Out for " + (outDur / 1000) + " seconds";
+    if (ring) {
+      ring.setAttribute("stroke-dasharray", circum.toFixed(2));
+      var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduced) {
+        ring.style.transition = "stroke-dashoffset " + outDur + "ms linear";
+        void ring.getBoundingClientRect();
+        ring.setAttribute("stroke-dashoffset", circum.toFixed(2));
+      } else {
+        ring.setAttribute("stroke-dashoffset", circum.toFixed(2));
+      }
+    }
+    breathState = { phase: "out", until: Date.now() + outDur };
+    if (breathLoopHandle) clearTimeout(breathLoopHandle);
+    breathLoopHandle = setTimeout(function () {
+      if (!running || paused) return;
+      startBreathClock(phase);
+    }, outDur);
+  }
+
+  // ====================================================================
+  //  INPUT CAPTURE
+  // ====================================================================
+
+  function captureWriteInputs() {
+    var phase = session.phases[phaseIndex];
+    if (phase.kind !== "write") return;
+    var name = phase.inputName || "input";
+    var el = document.getElementById("inp-" + name);
+    if (el) {
+      inputs[name] = el.value || "";
+    }
+  }
+
+  // ====================================================================
+  //  EXIT
+  // ====================================================================
+
+  function handleExit() {
+    if (exitConfirming) {
+      // Confirmed
+      stopBreathClock();
+      if (tickHandle) { clearInterval(tickHandle); tickHandle = null; }
+      running = false;
+      paused = false;
+      if (exitConfirmHandle) { clearTimeout(exitConfirmHandle); exitConfirmHandle = null; }
+      clearState();
+      currentSessionKey = null;
+      session = null;
+      showScreen("screen-menu");
+      announce("Returned to the menu.");
+      return;
+    }
+    exitConfirming = true;
+    $("#btn-exit").textContent = "Exit (tap again to confirm)";
+    exitConfirmHandle = setTimeout(function () {
+      exitConfirming = false;
+      var b = $("#btn-exit");
+      if (b) b.textContent = "Exit";
+    }, 3500);
+  }
+
+  // ====================================================================
+  //  FINISH
+  // ====================================================================
+
+  function finishSession() {
+    stopBreathClock();
+    if (tickHandle) { clearInterval(tickHandle); tickHandle = null; }
+    running = false;
+    paused = false;
+
+    var ks = buildKeepsake();
+    $("#close-eyebrow").textContent = "Session complete";
+    $("#close-title").textContent = "You showed up.";
+    $("#close-summary").textContent = "That is the practice. Whatever you noticed is enough.";
+    $("#ks-session").textContent = session.title + " (" + session.chapter + ")";
+    $("#ks-line-1").textContent = "You gave yourself " + sessionLabel(currentSessionKey) + ".";
+    $("#ks-quote").textContent = session.closeLine;
+    $("#ks-quote-attrib").textContent = session.chapter;
+
+    // Extra fields
+    var extra = $("#ks-extra");
+    extra.innerHTML = "";
+    var hasExtra = false;
+
+    // For 10-min, show critic / kindness / step in three lines
+    if (currentSessionKey === "10") {
+      hasExtra = true;
+      if (inputs.critic)   extra.appendChild(keepsakeItem("Critic said", inputs.critic));
+      if (inputs.kindness) extra.appendChild(keepsakeItem("You could say", inputs.kindness));
+      if (inputs.step)     extra.appendChild(keepsakeItem("One small step", inputs.step));
+      if (!inputs.critic && !inputs.kindness && !inputs.step) {
+        var p = document.createElement("p");
+        p.className = "keepsake__quote";
+        p.textContent = "The critic is quieter. The kind voice is louder.";
+        extra.appendChild(p);
+      }
+    } else if (currentSessionKey === "15") {
+      hasExtra = true;
+      if (inputs.step15) {
+        extra.appendChild(keepsakeItem("One next step", inputs.step15));
+      } else {
+        var p = document.createElement("p");
+        p.className = "keepsake__quote";
+        p.textContent = "Better is enough. If it did not shift much, that is data.";
+        extra.appendChild(p);
+      }
+    } else {
+      // 1 and 3 min: keep it simple, just the next step
+      hasExtra = true;
+      var p2 = document.createElement("p");
+      p2.className = "keepsake__quote";
+      p2.textContent = session.nextStep;
+      extra.appendChild(p2);
+    }
+
+    $("#ks-divider").hidden = !hasExtra;
+
+    showScreen("screen-close");
+    announce("Session complete. " + session.closeLine);
+    clearState();
+  }
+
+  function keepsakeItem(label, value) {
+    var div = document.createElement("div");
+    div.style.marginTop = "10px";
+    var lbl = document.createElement("p");
+    lbl.className = "keepsake__item-label";
+    lbl.textContent = label;
+    var val = document.createElement("p");
+    val.className = "keepsake__item-value";
+    val.textContent = value;
+    div.appendChild(lbl);
+    div.appendChild(val);
+    return div;
+  }
+
+  function buildKeepsake() {
+    var lines = [];
+    lines.push(session.title + " (" + session.chapter + ")");
+    lines.push("You gave yourself " + sessionLabel(currentSessionKey) + ".");
+    if (currentSessionKey === "10") {
+      if (inputs.critic)   lines.push("Critic said: " + inputs.critic);
+      if (inputs.kindness) lines.push("You could say: " + inputs.kindness);
+      if (inputs.step)     lines.push("One small step: " + inputs.step);
+    } else if (currentSessionKey === "15") {
+      if (inputs.step15) lines.push("One next step: " + inputs.step15);
+    }
+    lines.push("");
+    lines.push("One wise next step: " + session.nextStep);
+    lines.push("");
+    lines.push("From the book: " + session.closeLine);
+    lines.push("(" + session.chapter + ", Mindful, Not Mythical)");
+    return lines.join("\n");
+  }
+
+  function sessionLabel(key) {
+    if (key === "1")  return "one minute";
+    if (key === "3")  return "three minutes";
+    if (key === "10") return "ten minutes";
+    if (key === "15") return "fifteen minutes";
+    return "a few minutes";
+  }
+
+  // ====================================================================
+  //  COPY
+  // ====================================================================
+
+  function copyKeepsake() {
+    var text = buildKeepsake();
+    var status = $("#copy-status");
+    var done = function (msg) {
+      if (status) {
+        status.textContent = msg;
+        setTimeout(function () { if (status) status.textContent = ""; }, 3500);
+      }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function () { done("Copied to clipboard."); },
+        function () { fallbackCopy(text, done); }
+      );
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+
+  function fallbackCopy(text, done) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "absolute";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      done(ok ? "Copied to clipboard." : "Copy did not work. Please select the text manually.");
+    } catch (e) {
+      done("Copy did not work in this browser.");
+    }
+  }
+
+  // ====================================================================
+  //  LOCALSTORAGE
+  // ====================================================================
+
+  function persistState() {
+    try {
+      var state = {
+        key: currentSessionKey,
+        phaseIndex: phaseIndex,
+        elapsedInPhase: elapsedInPhase,
+        totalElapsed: totalElapsed,
+        inputs: inputs,
+        paused: paused,
+        running: running,
+        savedAt: Date.now()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* localStorage may be unavailable; ignore. */ }
+  }
+
+  function clearState() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  }
+
+  function restoreState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var state = JSON.parse(raw);
+      if (!state || !state.key || !SESSIONS[state.key]) return;
+      // Only auto-resume if the saved state is recent (within 2 hours) and was actively running.
+      var ageMs = Date.now() - (state.savedAt || 0);
+      if (ageMs > 2 * 60 * 60 * 1000) { clearState(); return; }
+      if (!state.running) { clearState(); return; }
+      // Resume silently into the right phase and elapsed.
+      currentSessionKey = state.key;
+      session = SESSIONS[state.key];
+      phaseIndex = Math.min(state.phaseIndex || 0, session.phases.length - 1);
+      elapsedInPhase = state.elapsedInPhase || 0;
+      totalElapsed = state.totalElapsed || 0;
+      inputs = state.inputs || {};
+      paused = true; // start paused so the user can re-orient
+
+      $("#session-eyebrow").textContent = session.chapter;
+      $("#session-title").textContent = session.title;
+      $("#session-clock").textContent = fmt(totalElapsed) + " / " + fmt(session.total);
+      $("#session-fill").style.width = Math.min(100, (totalElapsed / session.total) * 100).toFixed(1) + "%";
+
+      showScreen("screen-session");
+      renderPhase();
+      // Put the start button back visible; user decides to resume.
+      var startWrap = $("#btn-start-phase");
+      if (startWrap && startWrap.parentNode) {
+        startWrap.parentNode.style.display = "";
+      }
+      announce("Welcome back. You were in " + session.title + ", " + session.phases[phaseIndex].label + ". Tap Start this phase when you are ready.");
+    } catch (e) { /* ignore */ }
+  }
+
+  // ====================================================================
+  //  INIT
+  // ====================================================================
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function init() {
+    bindMenu();
+    $("#btn-copy").addEventListener("click", copyKeepsake);
+    $("#btn-back-menu").addEventListener("click", function () {
+      clearState();
+      currentSessionKey = null;
+      session = null;
+      showScreen("screen-menu");
+    });
+    // Persist on every input change so a refresh doesn't lose the notes
+    document.addEventListener("input", function (e) {
+      if (e.target && e.target.id && e.target.id.indexOf("inp-") === 0) {
+        captureWriteInputs();
+        persistState();
+      }
+    });
+    restoreState();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>
