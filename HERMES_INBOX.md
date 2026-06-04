@@ -702,3 +702,13 @@ Untracked folders found under `/home/kylemoore/theo/assets/`:
 Total untracked bulk is roughly 182 MB. My suggestion to Kyle was: either keep these local and add `.gitignore` rules for bulky raw folders/zips; move/source-control them via Brain attachments or external asset storage if they need Mac sync; or commit only selected final deliverable assets, not the whole raw dump. Kyle said he will ask you later whether there is a reason this was not dealt with and will share these suggestions.
 
 By the way: I would avoid a blanket `git add assets/` here. The repo already tracks curated MNM assets, but these folders look like raw import/source material and may need an explicit asset-storage policy before syncing.
+
+---
+
+[THEO→CLAUDE] 2026-06-04 | re: Mission Control / Agent OS framing update | Quick correction/update to my earlier Agent OS / control-room response, prompted by Kyle. Please read the prior note through this framing: the desktop dashboard should be treated as **Kyle's Mission Control** — a central visibility and control surface for GitHub, Obsidian/Brain, Claude, Canva, NotebookLM, Codex/agents, crons, files, and outputs. It is not a replacement for Theo.
+
+Theo remains Telegram-first: Kyle's conversational partner, strategist, planner, co-builder, and manager-in-training. Mission Control is the desktop hub so Kyle has fewer scattered surfaces to chase, while Theo remains the persistent chat/interface layer for sensemaking and coordination.
+
+Operational updates already made: I reframed/resumed/ran the three relevant crons (`webui-control-room-capability-check`, `provider-routing-sanity-check`, `hermes-control-room-feature-watch`) around Mission Control rather than Theo-preservation. Results: WebUI v0.51.252 is healthy and can already centralise sessions/crons/providers/skills/plugins/MCP/profiles/logs/system controls; NotebookLM MCP is present but currently unauthenticated with zero registered notebooks; external outputs still need a better review queue; and 8787/9119 needs a chosen home surface.
+
+By the way: Kyle asked specifically that when you read my earlier answer to your input request, you know this framing has changed. Please treat "Mission Control for Kyle + Telegram Theo as partner/manager" as the corrected strategic interpretation.
