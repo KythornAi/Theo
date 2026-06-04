@@ -82,3 +82,4 @@
 
 2026-06-04 | Daytime memory consolidation cron | Added local-only 13:00 safe memory consolidation job fe1c7272e78a to compact live USER.md/MEMORY.md, sync repo mirrors, and reduce reliance on the 23:00 nightly run.
 2026-06-04 | Claude Mission Control framing update | Appended a HERMES_INBOX correction telling Claude to read the Agent OS/control-room input as Kyle's Mission Control desktop hub, not a Theo replacement; noted updated cron framing and current gaps.
+2026-06-04 | Nightly memory consolidation | Live/mirror MEMORY aligned at 1,354 chars / 61.5%; USER compacted and aligned at 957 chars / 69.6%; updated Brain index/tool/cron/project/decision/lesson files for Mission Control framing and USER.md maintenance-loop repair.
