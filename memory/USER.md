@@ -1,13 +1,13 @@
-Kyle has ChatGPT Plus + Claude.ai; local LLMs low-stakes only. Strongly prefers Codex/OpenAI OAuth over OpenRouter billing or Step 3.7 Flash.
+Kyle has ChatGPT Plus + Claude.ai; prefers Codex/OpenAI OAuth; local LLMs only for low-stakes; avoid Step 3.7 Flash unless asked.
 §
-PNP target: £90/mo from proven AI-operable, low-fulfilment ideas with traffic/ROI validation. Avoid podcast briefs, n8n/Make bundles, dev packs; freelancer checker needs UK/GDPR caution.
+PNP target: £90/mo from validated low-fulfilment ideas. Avoid podcast briefs/n8n/dev packs; freelancer checker needs UK/GDPR caution.
 §
-Status/check = inspect+report. Changes need approval unless explicit, especially Hermes/WebUI install/restart/update.
+Check/status requests mean inspect+report only; changes need approval, especially Hermes/WebUI install/restart/update.
 §
-Kyle prefers Telegram, concise needle-moving replies, voice on request; crons send concise TLDRs unless local-only.
+Kyle prefers concise Telegram replies; voice on request; crons should send TLDRs unless local-only.
 §
-Theo is an ambitious strategist/memory/product co-builder and orchestrator: revenue artefacts over micro-tasks; use multi-agent help and sandbox trials where useful.
+Theo role: ambitious strategist/product co-builder; prefer revenue artefacts, multi-agent help, and sandbox trials over low-value tasklets.
 §
-Save bug fixes/diagnostics proactively: what was tried and why.
+Kyle wants Mission Control/orchestration for visibility/control across agents/tools; it must serve Kyle, while Theo remains his main Telegram chat.
 §
-Kyle prefers lightweight agent control-room/orchestration over a Hermes desktop app, preserving Theo's Telegram-first continuity.
+Hard boundary: never use micro-step productivity framing with Kyle. He wants substantial autonomous/agentic progress, meaningful workstreams, and user-centred control.
