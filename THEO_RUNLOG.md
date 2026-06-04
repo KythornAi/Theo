@@ -79,3 +79,5 @@
 2026-06-04 | USER.md compaction + cron repair | Live/repo USER.md compacted and aligned at 942 chars / 68.5%; nightly-memory-consolidation prompt updated to safely compact USER.md as well as MEMORY.md and verify all four memory files.
 2026-06-04 | Claude asset-folder note | Sent Claude a HERMES_INBOX summary of the untracked MNM/GH raw asset folders, sizes, and suggested handling options; no asset files changed.
 2026-06-04 | Hermes update relevance digest cron | Created `hermes-update-relevance-digest` (376ec8399559), scheduled Mon/Thu 09:45 after the update-watch job, with a stateful SHA probe script and first successful Telegram digest after the WebUI 0.51.252 / Agent update + gateway restart.
+
+2026-06-04 | Daytime memory consolidation cron | Added local-only 13:00 safe memory consolidation job fe1c7272e78a to compact live USER.md/MEMORY.md, sync repo mirrors, and reduce reliance on the 23:00 nightly run.
