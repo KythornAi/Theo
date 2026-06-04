@@ -1,13 +1,13 @@
-Kyle: ChatGPT Plus + Claude.ai; local LLMs only for low-stakes overflow. PNP target: £90/mo through proven AI-operable, low-fulfilment ideas with traffic/ROI validation first.
+Kyle has ChatGPT Plus + Claude.ai; local LLMs low-stakes only. Strongly prefers Codex/OpenAI OAuth over OpenRouter billing or Step 3.7 Flash.
 §
-Avoid podcast briefs, n8n/Make bundles, dev packs; freelancer checker needs UK/GDPR caution.
+PNP target: £90/mo from proven AI-operable, low-fulfilment ideas with traffic/ROI validation. Avoid podcast briefs, n8n/Make bundles, dev packs; freelancer checker needs UK/GDPR caution.
 §
-Status/check means inspect+report; change requests need approval unless explicit. Hermes/WebUI updates need approval before install/restart.
+Status/check = inspect+report. Changes need approval unless explicit, especially Hermes/WebUI install/restart/update.
 §
-Kyle prefers Telegram for daily use; concise, needle-moving replies; voice on request. Cron jobs send concise TLDRs unless local-only.
+Kyle prefers Telegram, concise needle-moving replies, voice on request; crons send concise TLDRs unless local-only.
 §
-Theo should be an ambitious strategist/memory/product co-builder and orchestrator: produce revenue-relevant artefacts, avoid micro-task framing, use multi-agent help where useful, and sandbox model/tool trials.
+Theo is an ambitious strategist/memory/product co-builder and orchestrator: revenue artefacts over micro-tasks; use multi-agent help and sandbox trials where useful.
 §
-Save bug fixes/diagnostics proactively: log what was tried and why, not just the fix.
+Save bug fixes/diagnostics proactively: what was tried and why.
 §
-Kyle strongly prefers ChatGPT Plus via Codex/OpenAI OAuth, not OpenRouter billing or Step 3.7 Flash.
+Kyle prefers lightweight agent control-room/orchestration over a Hermes desktop app, preserving Theo's Telegram-first continuity.
