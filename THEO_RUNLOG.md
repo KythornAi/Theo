@@ -84,3 +84,4 @@
 2026-06-04 | Claude Mission Control framing update | Appended a HERMES_INBOX correction telling Claude to read the Agent OS/control-room input as Kyle's Mission Control desktop hub, not a Theo replacement; noted updated cron framing and current gaps.
 2026-06-04 | Nightly memory consolidation | Live/mirror MEMORY aligned at 1,354 chars / 61.5%; USER compacted and aligned at 957 chars / 69.6%; updated Brain index/tool/cron/project/decision/lesson files for Mission Control framing and USER.md maintenance-loop repair.
 2026-06-05 | Daytime memory consolidation | No memory edits needed; live/mirror MEMORY aligned at 1,354 chars / 61.5%, USER aligned at 957 chars / 69.6%.
+2026-06-05 19:01 BST | SOUL/operator prompt update | Updated SOUL.md to emphasise outcome ownership, strongest-suitable-tool use, exact-surface verification, Codex/delegation for technical trust recovery, and committed a reusable operator prompt addendum in notes/.
