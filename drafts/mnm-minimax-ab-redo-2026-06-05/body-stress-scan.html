@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<!--
+DESIGN RETRO. The Body Stress Scan (Chapter 1 companion app, App 1 of 4). A/B rebuild.
+Date: 2026-06-05
+For: Mindful, Not Mythical / Grounded Humanity, sold via Paper N Pixels.
+
+CONCEPT (UNCHANGED FROM 2026-06-03)
+A guided, head-to-toe tension scan where the user notices where stress sits in the body.
+About observing, not fixing. No verdicts, no diagnosis, no compounding-habit mechanics.
+
+WHAT IS NEW IN THIS CANDIDATE
+- A small accent palette is in use, not just sage. Each "feeling" now has its own warm
+  colour token (aubergine, ochre, dusty rose, forest, teal). The figure region is
+  tinted with the chosen feeling, and the matching chip on the right echoes the same
+  colour as a quiet visual rhyme.
+- The display serif (Fraunces) is now used with an italic optical, and a soft display
+  weight, so headings feel more editorial and less neutral. A small-caps eyebrow sits
+  above the title; a serif drop cap opens the intro paragraph.
+- The body silhouette is drawn with slightly more shape (broader shoulders, narrower
+  waist, hint of neck) so the figure reads as a figure, not a stick.
+- The intro card is a two-row "what you will do" with a numbered list and a small
+  ornament mark, so the cover reads as an editorial spread rather than a welcome
+  page.
+- Type rhythm: hero 48px on mobile with a 0.95 line-height, body 17px, hint 14.5px
+  italic, label 11.5px tracked.
+
+VISUAL DIRECTION (CSS VARIABLE COMMENT)
+  Page:        warm cream with a hair more yellow than the previous build
+  Cards:       two depths, "warm" and "warm-soft", so we can stack without losing
+               hierarchy. A soft tan rule, a single accent stripe, no neon.
+  Type:        editorial serif display + humanist sans body. No faux bold, no
+               letter-spaced body. Eyebrow and label are tracked but kept light.
+  Accents:     deep forest (primary action), aubergine (tender), terracotta
+               (notice), ochre (warm), dusty rose (quiet), teal (cool). The
+               accents are decoration on the figure, and small accent lines or
+               chips. Body text never sits in an accent below 4.5:1.
+
+ACCESSIBILITY NOTES (UNCHANGED)
+- One breath clock, single timer source. Visual and label never drift.
+- prefers-reduced-motion: skip the breath ring animation, keep the cycle on text.
+- Focus states visible (terracotta 2px outline, offset 3px).
+- aria-live="polite" announces step changes, not every second.
+- Every step keyboard reachable. Areas on the figure have role="button" + aria-label.
+- Keepsake summary copies with the modern Clipboard API and an execCommand fallback.
+
+WHAT I DELIBERATELY DID NOT ADD
+- No streak / no score / no save-history. Still export-only, by design.
+- No real GH logo assets; ornament slot is left for the real PNG.
+- No box-breath toggle. The book default 4/1/6 stays.
+
+COMPROMISES
+- Drop cap is a single pseudo-element with first-letter, not a layered illustration.
+- Body figure is still a clean, simple silhouette, not a polished illustrated figure.
+- "Nothing" is still the closest book-honest label for the user feeling nothing.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4ede0">
+<meta name="description" content="A guided head-to-toe tension scan. Notice where stress sits. No fixing, no keeping count, no verdicts.">
+<title>The Body Stress Scan. Grounded Humanity</title>
+<style>
+  /* =====================================================================
+     VISUAL DIRECTION
+     Page:        warm cream, slightly more yellow than the previous build.
+     Cards:       two depths, "warm" and "warm-soft", with a single tan rule
+                  and a thin terracotta accent stripe on the figure card.
+     Type:        editorial serif display (Fraunces) + humanist sans (Inter).
+                  Italic optical for hero accents, tracked small-caps for
+                  eyebrows, tabular numerals for the timer. No faux bold.
+     Accents:     forest (primary), aubergine (tender), terracotta (notice),
+                  ochre (warm), dusty rose (quiet), teal (cool). Accents are
+                  used as figure region fills and as small chips / lines.
+                  Body text never sits on an accent below 4.5:1 contrast.
+     ===================================================================== */
+
+  :root {
+    /* base */
+    --cream:        #f4ede0;
+    --warm:         #ece1cc;
+    --warm-soft:    #efe7d6;
+
+    /* ink */
+    --ink:          #322133;          /* near-black aubergine */
+    --ink-heading:  #2a3a2f;          /* deep forest */
+    --ink-hint:     #4a523a;          /* darker sage, AA on cream and card */
+    --ink-muted:    #6e6a5a;          /* mid-warm, decorative labels only */
+
+    /* accents (decorative + figure fills) */
+    --forest:       #2a3a2f;
+    --aubergine:    #6a3a52;
+    --terracotta:   #b04a2c;
+    --ochre:        #876228;         /* darker ochre, 3:1+ on warm card */
+    --dusty-rose:   #a86868;
+    --teal:         #4a7572;
+
+    /* rules and borders */
+    --rule-soft:    #c8b693;
+    --rule-tan:     #c8a784;
+    --rule-line:    #b9a784;
+
+    /* type */
+    --serif:        "Fraunces", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --sans:         "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+    /* sizes */
+    --maxw:         580px;
+  }
+
+  /* =====================================================================
+     RESET AND ROOT
+     ===================================================================== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.55;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* =====================================================================
+     LAYOUT
+     ===================================================================== */
+  .app {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 36px 22px 96px;
+  }
+  .screen { display: none; }
+  .screen.is-active { display: block; }
+
+  /* brand slot: a tiny wordmark, ornament style. Real logo replaces this in final polish. */
+  .brand-slot {
+    text-align: center;
+    color: var(--ink-muted);
+    font-family: var(--serif);
+    font-size: 13px;
+    font-style: italic;
+    letter-spacing: 0.04em;
+    margin: 0 0 22px;
+    opacity: 0.9;
+  }
+  .brand-slot::before, .brand-slot::after {
+    content: "";
+    display: inline-block;
+    width: 22px;
+    height: 1px;
+    background: var(--rule-line);
+    vertical-align: middle;
+    margin: 0 10px;
+    opacity: 0.6;
+  }
+
+  /* editorial eyebrow, tracked small-caps */
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .eyebrow .eyebrow__mark {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--terracotta);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: 1px;
+  }
+  .eyebrow .eyebrow__roman {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink-hint);
+    margin-left: 6px;
+  }
+
+  /* editorial headings */
+  h1, h2, h3 {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-weight: 400; /* let the optical do the work, not the weight */
+    margin: 0 0 14px;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+  }
+  h1 { font-size: 46px; line-height: 0.98; }
+  h2 { font-size: 28px; line-height: 1.12; }
+  h3 { font-size: 21px; line-height: 1.2; }
+  h1 em, h2 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--aubergine);
+    font-variation-settings: "opsz" 96, "SOFT" 100;
+  }
+  p { margin: 0 0 14px; }
+  .hint {
+    font-size: 14.5px;
+    color: var(--ink-hint);
+    font-style: italic;
+    line-height: 1.55;
+  }
+  .hint--lead {
+    font-size: 16.5px;
+    font-style: normal;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+
+  /* drop cap on first paragraph of intro */
+  .dropcap::first-letter {
+    font-family: var(--serif);
+    font-size: 56px;
+    line-height: 0.9;
+    float: left;
+    padding: 6px 8px 0 0;
+    color: var(--aubergine);
+    font-weight: 400;
+    font-style: italic;
+    font-variation-settings: "opsz" 96, "SOFT" 100;
+  }
+
+  /* editorial divider with a small mark */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 26px 0;
+    color: var(--ink-muted);
+  }
+  .divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule-line);
+    opacity: 0.6;
+  }
+  .divider span {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-hint);
+  }
+
+  /* card variants */
+  .card {
+    background: var(--warm);
+    border: 1px solid var(--rule-tan);
+    border-radius: 14px;
+    padding: 22px 20px;
+    position: relative;
+  }
+  .card--soft { background: var(--warm-soft); }
+
+  /* accent stripe along the top of the figure card */
+  .card--accent {
+    padding-top: 26px;
+  }
+  .card--accent::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 18px; right: 18px;
+    height: 3px;
+    background: linear-gradient(90deg,
+      var(--forest) 0%, var(--aubergine) 28%, var(--terracotta) 55%, var(--ochre) 78%, var(--teal) 100%);
+    border-radius: 0 0 2px 2px;
+    opacity: 0.9;
+  }
+
+  .stack > * + * { margin-top: 14px; }
+  .stack-lg > * + * { margin-top: 22px; }
+
+  /* "what you will do" numbered list, editorial style */
+  .do-list {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 0;
+    counter-reset: do;
+  }
+  .do-list li {
+    counter-increment: do;
+    padding: 10px 0 10px 40px;
+    position: relative;
+    border-top: 1px solid var(--rule-soft);
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .do-list li:last-child { border-bottom: 1px solid var(--rule-soft); }
+  .do-list li::before {
+    content: counter(do, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 10px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--aubergine);
+    font-variation-settings: "opsz" 48, "SOFT" 100;
+  }
+
+  /* =====================================================================
+     BUTTONS
+     ===================================================================== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 14px 24px;
+    border-radius: 999px;
+    border: 1.5px solid transparent;
+    background: var(--forest);
+    color: var(--cream);
+    cursor: pointer;
+    min-height: 48px;
+    min-width: 48px;
+    text-decoration: none;
+    transition: background 180ms ease, color 180ms ease, transform 180ms ease, border-color 180ms ease;
+    letter-spacing: 0.01em;
+  }
+  .btn:hover { background: #1c2a20; }
+  .btn:active { transform: translateY(1px); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink-heading);
+    border-color: var(--ink-heading);
+  }
+  .btn--ghost:hover { background: var(--ink-heading); color: var(--cream); }
+  .btn--small { font-size: 14px; padding: 10px 18px; min-height: 42px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .row--between { justify-content: space-between; align-items: center; }
+
+  /* =====================================================================
+     PROGRESS
+     ===================================================================== */
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 20px;
+    color: var(--ink-hint);
+    font-size: 13px;
+  }
+  .progress__label {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink-hint);
+    font-size: 14px;
+  }
+  .progress__dots { display: flex; gap: 6px; }
+  .progress__dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--rule-soft);
+    opacity: 0.6;
+  }
+  .progress__dot.is-done { background: var(--ink-hint); opacity: 0.8; }
+  .progress__dot.is-current {
+    background: var(--terracotta);
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  /* =====================================================================
+     BREATH STAGE
+     ===================================================================== */
+  .breath-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding: 18px 0 8px;
+  }
+  .breath-circle {
+    position: relative;
+    width: 224px; height: 224px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .breath-circle svg { width: 100%; height: 100%; display: block; }
+  .breath-circle .ring-bg {
+    fill: none;
+    stroke: var(--rule-soft);
+    stroke-width: 1.5;
+    opacity: 0.7;
+  }
+  .breath-circle .ring-grow {
+    fill: none;
+    stroke: var(--forest);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    transform-origin: 50% 50%;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 100ms linear;
+  }
+  .breath-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    font-family: var(--serif);
+    color: var(--ink-heading);
+  }
+  .breath-label__word {
+    font-size: 26px;
+    line-height: 1.15;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+  }
+  .breath-label__count {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-hint);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .breath-sub {
+    text-align: center;
+    color: var(--ink-hint);
+    font-size: 14.5px;
+    font-style: italic;
+    max-width: 360px;
+    line-height: 1.5;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .breath-circle .ring-grow { transition: none; }
+  }
+
+  /* =====================================================================
+     SCAN SCREEN
+     ===================================================================== */
+  .scan-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  @media (min-width: 520px) {
+    .scan-layout { grid-template-columns: 1.05fr 0.95fr; gap: 22px; }
+  }
+  .figure-wrap {
+    background: var(--warm);
+    border: 1px solid var(--rule-tan);
+    border-radius: 14px;
+    padding: 18px 10px 8px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+  .figure-wrap svg { width: 100%; max-width: 280px; height: auto; display: block; }
+  .figure-silhouette .silhouette-base {
+    fill: #dcc9ad;
+    stroke: #8a7a64;
+    stroke-width: 1;
+  }
+  .figure-silhouette .area {
+    cursor: pointer;
+    fill: #dcc9ad;
+    stroke: #8a7a64;
+    stroke-width: 1.2;
+    transition: fill 220ms ease, stroke 220ms ease, opacity 220ms ease;
+  }
+  .figure-silhouette .area:hover { fill: #c8b698; }
+  .figure-silhouette .area.is-current {
+    fill: var(--forest);
+    stroke: var(--forest);
+  }
+  .figure-silhouette .area.is-marked-tight   { fill: var(--aubergine);  stroke: #4a2a3a; }
+  .figure-silhouette .area.is-marked-buzzing { fill: var(--ochre);      stroke: #7a5a20; }
+  .figure-silhouette .area.is-marked-numb    { fill: var(--teal);       stroke: #2f5250; }
+  .figure-silhouette .area.is-marked-calm    { fill: var(--forest);     stroke: #1c2a20; }
+  .figure-silhouette .area.is-marked-nothing { fill: var(--dusty-rose); stroke: #6e4444; }
+
+  .scan-controls { display: flex; flex-direction: column; gap: 14px; }
+  .feeling-label {
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 23px;
+    line-height: 1.2;
+    margin: 0 0 4px;
+    font-weight: 400;
+  }
+  .feeling-label em {
+    font-style: italic;
+    color: var(--aubergine);
+  }
+  .feeling-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (min-width: 380px) {
+    .feeling-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .feeling-btn {
+    font-family: var(--sans);
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink);
+    background: var(--warm-soft);
+    border: 1.5px solid var(--rule-tan);
+    border-radius: 12px;
+    padding: 14px 8px;
+    cursor: pointer;
+    min-height: 60px;
+    text-align: center;
+    transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    line-height: 1.2;
+  }
+  .feeling-btn:hover { background: #ece2cc; }
+  .feeling-btn:active { transform: translateY(1px); }
+  .feeling-btn__dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    display: inline-block;
+  }
+  .feeling-btn[data-feeling="tight"]   .feeling-btn__dot { background: var(--aubergine); }
+  .feeling-btn[data-feeling="buzzing"] .feeling-btn__dot { background: var(--ochre); }
+  .feeling-btn[data-feeling="numb"]    .feeling-btn__dot { background: var(--teal); }
+  .feeling-btn[data-feeling="calm"]    .feeling-btn__dot { background: var(--forest); }
+  .feeling-btn[data-feeling="nothing"] .feeling-btn__dot { background: var(--dusty-rose); }
+  .feeling-btn.is-selected {
+    background: var(--forest);
+    color: var(--cream);
+    border-color: var(--forest);
+  }
+  .feeling-btn.is-selected .feeling-btn__dot { background: var(--cream); }
+  .feeling-skip {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink-hint);
+    background: transparent;
+    border: 0;
+    padding: 8px 4px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    min-height: 36px;
+    align-self: flex-start;
+  }
+  .feeling-skip:hover { color: var(--ink); }
+
+  /* =====================================================================
+     KEEPSAKE
+     ===================================================================== */
+  .keepsake {
+    background: var(--warm);
+    border: 1px solid var(--rule-tan);
+    border-radius: 14px;
+    padding: 24px 22px;
+    font-family: var(--serif);
+    color: var(--ink-heading);
+    font-size: 21px;
+    line-height: 1.5;
+    position: relative;
+  }
+  .keepsake::before {
+    content: "\201C";
+    position: absolute;
+    top: 6px;
+    left: 14px;
+    font-family: var(--serif);
+    font-size: 56px;
+    line-height: 1;
+    color: var(--aubergine);
+    opacity: 0.35;
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+  .keepsake__small {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-hint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+  .keepsake__line { margin: 0 0 14px; padding-left: 8px; }
+  .keepsake__line em {
+    font-style: italic;
+    color: var(--aubergine);
+  }
+  .keepsake__close {
+    font-size: 19px;
+    font-style: italic;
+    color: var(--ink);
+    margin: 0;
+    padding-left: 8px;
+  }
+  .copy-status {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-hint);
+    min-height: 1.4em;
+    margin-top: 8px;
+  }
+
+  /* =====================================================================
+     FOOTER
+     ===================================================================== */
+  .footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-soft);
+    color: var(--ink-hint);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .footer p { margin: 0 0 6px; }
+  .footer .disclaimer { font-style: italic; }
+
+  /* =====================================================================
+     UTIL
+     ===================================================================== */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0);
+    white-space: nowrap; border: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<main class="app" id="app">
+
+  <!-- ornament slot: GH full lockup goes here in final polish -->
+  <p class="brand-slot" aria-hidden="true">Grounded Humanity</p>
+
+  <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ============ SCREEN 1: INTRO ============ -->
+  <section class="screen is-active" id="screen-intro" aria-labelledby="intro-title">
+    <p class="eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span>Chapter one<span class="eyebrow__roman"> &middot; a body scan</span></p>
+    <h1 id="intro-title">Where does stress <em>sit</em> in you?</h1>
+
+    <p class="dropcap hint--lead">A short, guided scan. You will be asked to notice, one area at a time, what you feel. Not to fix it. Not to grade the answer. Just to look.</p>
+
+    <hr class="divider"><span>what you will do</span>
+
+    <ol class="do-list">
+      <li>Three slow breaths to settle.</li>
+      <li>Tap a body area. Pick a word that fits.</li>
+      <li>Read the keepsake. Copy it if you want to keep it.</li>
+    </ol>
+
+    <div class="stack" style="margin-top: 22px;">
+      <p class="hint">You can do this sitting or lying down. Eyes open or closed. There is no right way. There is no keeping count. You can stop at any time.</p>
+      <div class="row">
+        <button type="button" class="btn" id="btn-begin">Begin</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 2: BREATHS ============ -->
+  <section class="screen" id="screen-breath" aria-labelledby="breath-title">
+    <p class="eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span>Settle</p>
+    <h2 id="breath-title">Three slow breaths</h2>
+    <p class="hint">In through the nose. Out through the mouth. Let your shoulders drop.</p>
+
+    <div class="breath-stage">
+      <div class="breath-circle" role="img" aria-labelledby="breath-status">
+        <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+          <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-grow" id="ring-grow" cx="60" cy="60" r="52"
+                  stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+        </svg>
+        <div class="breath-label" id="breath-status">
+          <span class="breath-label__word" id="breath-word">Get ready</span>
+          <span class="breath-label__count" id="breath-count">Breath 1 of 3</span>
+        </div>
+      </div>
+      <p class="breath-sub" id="breath-sub">We will move on when the three breaths are done.</p>
+    </div>
+
+    <div class="row row--between" style="margin-top: 18px;">
+      <button type="button" class="btn btn--ghost btn--small" id="btn-breath-skip">Skip the settling breaths</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 3: SCAN ============ -->
+  <section class="screen" id="screen-scan" aria-labelledby="scan-title">
+    <p class="eyebrow" id="scan-eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span>Area 1 of 7</p>
+    <h2 id="scan-title">Notice your forehead</h2>
+
+    <div class="progress" aria-hidden="true">
+      <span class="progress__label" id="scan-progress-label">Forehead</span>
+      <span class="progress__dots" id="scan-dots"></span>
+    </div>
+
+    <div class="scan-layout">
+      <div class="figure-wrap card--accent">
+        <!-- Soft human silhouette, on-brand. Each region is a focusable button. -->
+        <svg class="figure-silhouette" viewBox="0 0 240 480" role="group" aria-label="Body figure, tap a region to mark it" focusable="false">
+          <!-- Forehead (top of head) -->
+          <ellipse class="area" data-area="forehead" role="button" tabindex="0"
+                   aria-label="Forehead"
+                   cx="120" cy="42" rx="34" ry="24"></ellipse>
+          <!-- Jaw (lower head) -->
+          <ellipse class="area" data-area="jaw" role="button" tabindex="0"
+                   aria-label="Jaw"
+                   cx="120" cy="80" rx="28" ry="22"></ellipse>
+          <!-- Neck -->
+          <rect class="silhouette-base" x="112" y="100" width="16" height="22" rx="4"></rect>
+          <!-- Shoulders (top of torso bar) -->
+          <path class="area" data-area="shoulders" role="button" tabindex="0"
+                aria-label="Shoulders"
+                d="M58,128 Q120,100 182,128 Q172,144 120,144 Q68,144 58,128 Z"></path>
+          <!-- Arms (left + right) -->
+          <path class="area" data-area="arms" role="button" tabindex="0"
+                aria-label="Arms"
+                d="M58,128 Q34,170 30,232 Q36,242 52,238 Q60,180 80,150 Z
+                   M182,128 Q206,170 210,232 Q204,242 188,238 Q180,180 160,150 Z"></path>
+          <!-- Chest (upper torso) -->
+          <path class="area" data-area="chest" role="button" tabindex="0"
+                aria-label="Chest"
+                d="M76,146 Q120,152 164,146 L160,212 Q120,220 80,212 Z"></path>
+          <!-- Stomach (mid torso) -->
+          <path class="area" data-area="stomach" role="button" tabindex="0"
+                aria-label="Stomach"
+                d="M80,212 Q120,220 160,212 L158,280 Q120,290 82,280 Z"></path>
+          <!-- Legs (lower body) -->
+          <path class="area" data-area="legs" role="button" tabindex="0"
+                aria-label="Legs"
+                d="M82,280 Q120,290 158,280 L150,422 Q140,434 128,432 L122,360 L118,432 Q106,434 96,422 Z"></path>
+        </svg>
+      </div>
+
+      <div class="scan-controls">
+        <p class="feeling-label" id="feeling-prompt">What do you notice in your <em>forehead</em>?</p>
+        <p class="hint" id="feeling-helper">Tap a word. You can also tap the area on the figure to focus it.</p>
+        <div class="feeling-grid" id="feeling-grid">
+          <button type="button" class="feeling-btn" data-feeling="tight"><span class="feeling-btn__dot" aria-hidden="true"></span>Tight</button>
+          <button type="button" class="feeling-btn" data-feeling="buzzing"><span class="feeling-btn__dot" aria-hidden="true"></span>Buzzing</button>
+          <button type="button" class="feeling-btn" data-feeling="numb"><span class="feeling-btn__dot" aria-hidden="true"></span>Numb</button>
+          <button type="button" class="feeling-btn" data-feeling="calm"><span class="feeling-btn__dot" aria-hidden="true"></span>Calm</button>
+          <button type="button" class="feeling-btn" data-feeling="nothing"><span class="feeling-btn__dot" aria-hidden="true"></span>Nothing</button>
+        </div>
+        <button type="button" class="feeling-skip" id="btn-feeling-skip">Skip this area</button>
+      </div>
+    </div>
+
+    <div class="row row--between" style="margin-top: 18px;">
+      <button type="button" class="btn btn--ghost btn--small" id="btn-scan-back">Back</button>
+      <button type="button" class="btn btn--small" id="btn-scan-next" disabled>Next</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 4: CLOSE ============ -->
+  <section class="screen" id="screen-close" aria-labelledby="close-title">
+    <p class="eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span>A small keepsake</p>
+    <h2 id="close-title">You <em>noticed</em>.</h2>
+    <p>That is the practice. You interrupted the automatic loop, just by looking.</p>
+
+    <hr class="divider">
+
+    <div class="keepsake" id="keepsake" aria-live="polite">
+      <p class="keepsake__small" id="ks-date">Today</p>
+      <p class="keepsake__line" id="ks-line-1">Today, stress sat mostly in your [areas].</p>
+      <p class="keepsake__close" id="ks-line-2">Stress is here, but so am I.</p>
+    </div>
+
+    <div class="row" style="margin-top: 16px;">
+      <button type="button" class="btn" id="btn-copy">Copy as text</button>
+      <button type="button" class="btn btn--ghost" id="btn-restart">Begin again</button>
+    </div>
+    <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+
+    <hr class="divider">
+
+    <p class="hint">A note on saving: this app does not store your scan on a server. Your notes stay in this browser only. If you clear your browser data, the scan goes with it. Copy the text above if you would like to keep it.</p>
+  </section>
+
+  <footer class="footer">
+    <p class="disclaimer">Self-guided reflection, not medical advice. If something feels too much, stop. If feelings keep returning, consider talking to a GP or a qualified clinician.</p>
+    <p>Grounded Humanity, sold via Paper N Pixels.</p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ====== DOM HELPERS ======
+  var $  = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  function announce(msg) {
+    var live = $("#live");
+    if (!live) return;
+    live.textContent = "";
+    setTimeout(function () { live.textContent = msg; }, 30);
+  }
+  function showScreen(id) {
+    $$(".screen").forEach(function (s) { s.classList.remove("is-active"); });
+    var el = document.getElementById(id);
+    if (el) {
+      el.classList.add("is-active");
+      var h = el.querySelector("h1, h2");
+      if (h) {
+        h.setAttribute("tabindex", "-1");
+        try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
+      }
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+  }
+
+  // ====== STATE ======
+  var areas = [
+    { id: "forehead",  label: "forehead",  body: "forehead" },
+    { id: "jaw",       label: "jaw",       body: "jaw" },
+    { id: "shoulders", label: "shoulders", body: "shoulders" },
+    { id: "arms",      label: "arms",      body: "arms" },
+    { id: "chest",     label: "chest",     body: "chest" },
+    { id: "stomach",   label: "stomach",   body: "stomach" },
+    { id: "legs",      label: "legs",      body: "legs" }
+  ];
+  var feelings = ["tight", "buzzing", "numb", "calm", "nothing"];
+  var areaIndex = 0;
+  var userFeelings = {};
+  var breathTimer = null;
+  var breathStarted = false;
+
+  // ====== INTRO ======
+  $("#btn-begin").addEventListener("click", function () {
+    showScreen("screen-breath");
+    announce("Starting three settling breaths.");
+    setTimeout(startBreaths, 350);
+  });
+
+  // ====== BREATHS ======
+  var BREATH_PHASES = [
+    { word: "Breathe in",     dur: 4000, kind: "in"  },
+    { word: "Hold",           dur: 1000, kind: "hold" },
+    { word: "Breathe out",    dur: 6000, kind: "out" }
+  ];
+  var PHASE_CIRCUM = 2 * Math.PI * 52;
+
+  function startBreaths() {
+    if (breathStarted) return;
+    breathStarted = true;
+    runBreathCycle(1);
+  }
+
+  function runBreathCycle(breathNum) {
+    if (breathNum > 3) {
+      stopBreathTimer();
+      $("#breath-word").textContent = "Well done";
+      $("#breath-count").textContent = "Three breaths done";
+      $("#breath-sub").textContent = "When you are ready, we will move to the scan.";
+      announce("Three breaths complete. Moving to the body scan.");
+      setTimeout(function () {
+        showScreen("screen-scan");
+        renderScanStep();
+      }, 1400);
+      return;
+    }
+    $("#breath-count").textContent = "Breath " + breathNum + " of 3";
+    runPhase(0, breathNum);
+  }
+
+  function runPhase(phaseIndex, breathNum) {
+    if (!breathStarted) return;
+    var phase = BREATH_PHASES[phaseIndex];
+    $("#breath-word").textContent = phase.word;
+    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var ring = $("#ring-grow");
+
+    if (phase.kind === "in") {
+      ring.setAttribute("stroke-dasharray", PHASE_CIRCUM.toFixed(2));
+      ring.setAttribute("stroke-dashoffset", PHASE_CIRCUM.toFixed(2));
+      if (!reduced) {
+        ring.style.transition = "stroke-dashoffset " + phase.dur + "ms linear";
+        void ring.getBoundingClientRect();
+        ring.setAttribute("stroke-dashoffset", "0");
+      } else {
+        ring.setAttribute("stroke-dashoffset", "0");
+      }
+    } else if (phase.kind === "out") {
+      if (!reduced) {
+        ring.style.transition = "stroke-dashoffset " + phase.dur + "ms linear";
+        void ring.getBoundingClientRect();
+        ring.setAttribute("stroke-dashoffset", PHASE_CIRCUM.toFixed(2));
+      } else {
+        ring.setAttribute("stroke-dashoffset", PHASE_CIRCUM.toFixed(2));
+      }
+    }
+
+    breathTimer = setTimeout(function () {
+      var next = phaseIndex + 1;
+      if (next >= BREATH_PHASES.length) {
+        runBreathCycle(breathNum + 1);
+      } else {
+        runPhase(next, breathNum);
+      }
+    }, phase.dur);
+  }
+
+  function stopBreathTimer() {
+    if (breathTimer) { clearTimeout(breathTimer); breathTimer = null; }
+  }
+
+  $("#btn-breath-skip").addEventListener("click", function () {
+    stopBreathTimer();
+    breathStarted = false;
+    showScreen("screen-scan");
+    renderScanStep();
+    announce("Skipped settling breaths. Starting the body scan.");
+  });
+
+  // ====== SCAN ======
+  function renderScanStep() {
+    var area = areas[areaIndex];
+    $("#scan-eyebrow").innerHTML = '<span class="eyebrow__mark" aria-hidden="true"></span>Area ' + (areaIndex + 1) + ' of ' + areas.length;
+    $("#scan-title").textContent = "Notice your " + area.label;
+    $("#scan-progress-label").textContent = area.label.charAt(0).toUpperCase() + area.label.slice(1);
+    $("#feeling-prompt").innerHTML = "What do you notice in your <em>" + area.body + "</em>?";
+    $("#btn-scan-next").textContent = (areaIndex === areas.length - 1) ? "Finish" : "Next";
+
+    $$(".feeling-btn").forEach(function (b) { b.classList.remove("is-selected"); });
+    $("#btn-scan-next").disabled = true;
+
+    var prev = userFeelings[area.id];
+    if (prev) {
+      var btn = $(".feeling-btn[data-feeling=\"" + prev + "\"]");
+      if (btn) btn.classList.add("is-selected");
+      $("#btn-scan-next").disabled = false;
+    }
+
+    $$(".figure-silhouette .area").forEach(function (a) {
+      a.classList.remove("is-current");
+      if (a.getAttribute("data-area") === area.id) a.classList.add("is-current");
+    });
+
+    var dotsHtml = "";
+    for (var i = 0; i < areas.length; i++) {
+      var cls = "progress__dot";
+      if (i < areaIndex) cls += " is-done";
+      else if (i === areaIndex) cls += " is-current";
+      dotsHtml += "<span class=\"" + cls + "\"></span>";
+    }
+    $("#scan-dots").innerHTML = dotsHtml;
+
+    announce("Area " + (areaIndex + 1) + " of " + areas.length + ": your " + area.body + ".");
+  }
+
+  $$(".feeling-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var feeling = btn.getAttribute("data-feeling");
+      var area = areas[areaIndex];
+      userFeelings[area.id] = feeling;
+      $$(".feeling-btn").forEach(function (b) { b.classList.remove("is-selected"); });
+      btn.classList.add("is-selected");
+      $("#btn-scan-next").disabled = false;
+
+      var areaEl = $(".figure-silhouette .area[data-area=\"" + area.id + "\"]");
+      if (areaEl) {
+        $$(".figure-silhouette .area").forEach(function (a) {
+          a.classList.remove("is-marked-tight","is-marked-buzzing","is-marked-numb","is-marked-calm","is-marked-nothing");
+        });
+        areaEl.classList.add("is-marked-" + feeling);
+      }
+    });
+  });
+
+  $$(".figure-silhouette .area").forEach(function (el) {
+    el.addEventListener("click", function () {
+      var id = el.getAttribute("data-area");
+      var idx = areas.findIndex(function (a) { return a.id === id; });
+      if (idx >= 0 && idx !== areaIndex) {
+        areaIndex = idx;
+        renderScanStep();
+      } else {
+        announce("Now noticing your " + areas[idx].body + ".");
+      }
+    });
+    el.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        el.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      }
+    });
+  });
+
+  $("#btn-feeling-skip").addEventListener("click", function () {
+    delete userFeelings[areas[areaIndex].id];
+    goNext();
+  });
+
+  $("#btn-scan-back").addEventListener("click", function () {
+    if (areaIndex === 0) {
+      showScreen("screen-breath");
+      breathStarted = false;
+      startBreaths();
+      return;
+    }
+    areaIndex -= 1;
+    renderScanStep();
+  });
+
+  $("#btn-scan-next").addEventListener("click", goNext);
+
+  function goNext() {
+    if (areaIndex >= areas.length - 1) {
+      renderKeepsake();
+      showScreen("screen-close");
+      announce("Scan complete. Here is your keepsake.");
+      return;
+    }
+    areaIndex += 1;
+    renderScanStep();
+  }
+
+  // ====== KEEPSAKE ======
+  function renderKeepsake() {
+    var d = new Date();
+    var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    var dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
+    $("#ks-date").textContent = "Noticed on " + dateStr;
+
+    var grouped = { tight: [], buzzing: [], numb: [], calm: [], nothing: [] };
+    areas.forEach(function (a) {
+      var f = userFeelings[a.id];
+      if (f && grouped[f]) grouped[f].push(a.body);
+    });
+    var doneAreas = areas.filter(function (a) { return userFeelings[a.id]; });
+
+    var summary;
+    if (doneAreas.length === 0) {
+      summary = "Today, I let the scan be a quiet pause.";
+    } else {
+      var tenseBits = [];
+      ["tight","buzzing","numb"].forEach(function (k) {
+        if (grouped[k].length) tenseBits.push(grouped[k].join(" and "));
+      });
+      var calmBits = [];
+      if (grouped.calm.length) calmBits.push(grouped.calm.join(" and "));
+
+      var tenseStr = tenseBits.length ? "tension sat in your " + joinNatural(tenseBits) : "no strong tension was named";
+      var calmStr  = calmBits.length  ? "your " + joinNatural(calmBits) + " felt calm" : null;
+      var nothingStr = grouped.nothing.length ? "your " + joinNatural(grouped.nothing) + " felt quiet" : null;
+
+      var extras = [calmStr, nothingStr].filter(Boolean);
+      if (extras.length) {
+        summary = "Today, " + tenseStr + ", and " + joinNatural(extras) + ".";
+      } else {
+        summary = "Today, " + tenseStr + ".";
+      }
+    }
+
+    $("#ks-line-1").innerHTML = summary;
+    $("#ks-line-2").innerHTML = "Stress is here, but so am I.";
+  }
+
+  function joinNatural(parts) {
+    if (parts.length === 0) return "";
+    if (parts.length === 1) return parts[0];
+    if (parts.length === 2) return parts[0] + " and " + parts[1];
+    return parts.slice(0, -1).join(", ") + ", and " + parts[parts.length - 1];
+  }
+
+  // ====== COPY ======
+  function buildCopyText() {
+    var d = new Date();
+    var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    var dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
+    var line1 = $("#ks-line-1").textContent;
+    var line2 = $("#ks-line-2").textContent;
+    return "The Body Stress Scan, " + dateStr + "\n\n" + line1 + "\n\n" + line2 + "\n\n. Grounded Humanity";
+  }
+
+  function setStatus(msg) {
+    var el = $("#copy-status");
+    if (el) el.textContent = msg;
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(function () { return true; });
+    }
+    return new Promise(function (resolve) {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.top = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        resolve(ok);
+      } catch (e) { resolve(false); }
+    });
+  }
+
+  $("#btn-copy").addEventListener("click", function () {
+    var text = buildCopyText();
+    copyToClipboard(text).then(function (ok) {
+      setStatus(ok ? "Copied. Paste it anywhere you like." : "Copy did not work in this browser. Long-press the text and copy it manually.");
+    });
+  });
+
+  $("#btn-restart").addEventListener("click", function () {
+    areaIndex = 0;
+    userFeelings = {};
+    breathStarted = false;
+    setStatus("");
+    $$(".figure-silhouette .area").forEach(function (a) {
+      a.classList.remove("is-marked-tight","is-marked-buzzing","is-marked-numb","is-marked-calm","is-marked-nothing","is-current");
+    });
+    var ring = $("#ring-grow");
+    if (ring) {
+      ring.style.transition = "none";
+      ring.setAttribute("stroke-dashoffset", "326.7");
+    }
+    $("#breath-word").textContent = "Get ready";
+    $("#breath-count").textContent = "Breath 1 of 3";
+    $("#breath-sub").textContent = "We will move on when the three breaths are done.";
+    showScreen("screen-intro");
+    announce("Reset. Ready to begin again whenever you are.");
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && $("#screen-intro").classList.contains("is-active")) {
+      if (document.activeElement && document.activeElement.id === "btn-begin") return;
+      $("#btn-begin").click();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
