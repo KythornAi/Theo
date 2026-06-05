@@ -853,7 +853,7 @@ COMPROMISES
 
   <!-- ============ SCREEN 3: COMPLETION ============ -->
   <section class="screen" id="screen-close" aria-labelledby="close-title">
-    <p class="eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span>A small keepsake</p>
+    <p class="eyebrow" id="close-eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span>A small keepsake</p>
     <h2 id="close-title">You <em>showed up</em>.</h2>
     <p id="close-summary">That is the practice. Whatever you noticed is enough.</p>
 
@@ -1149,7 +1149,8 @@ COMPROMISES
       html += breathStageHtml();
     } else if (phase.kind === "write") {
       html += writeStageHtml(phase);
-    } else if (phase.kind === "focus" || phase.kind === "walk" || phase.kind === "move" || phase.kind === "scan") {
+      html += phaseTimerHtml(phase.dur);
+    } else if (phase.kind === "focus" || phase.kind === "walk" || phase.kind === "move" || phase.kind === "scan" || phase.kind === "read") {
       html += phaseTimerHtml(phase.dur);
     }
 
@@ -1159,24 +1160,25 @@ COMPROMISES
 
     $("#btn-pause").hidden = true;
     $("#btn-next").hidden = (phase.kind !== "write");
+    $("#btn-next").textContent = (phase.kind === "write" && phaseIndex + 1 >= session.phases.length) ? "Finish session" : "Save and continue";
     $("#btn-exit").textContent = "Exit";
     exitConfirming = false;
 
     var startBtn = $("#btn-start-phase");
     if (startBtn) {
-      startBtn.addEventListener("click", function () { beginPhaseRun(); });
+      startBtn.onclick = function () { beginPhaseRun(); };
     }
 
     var nextBtn = $("#btn-next");
     if (nextBtn) {
-      nextBtn.addEventListener("click", function () {
+      nextBtn.onclick = function () {
         captureWriteInputs();
         advancePhase(true);
-      });
+      };
     }
 
-    $("#btn-pause").addEventListener("click", togglePause);
-    $("#btn-exit").addEventListener("click", handleExit);
+    $("#btn-pause").onclick = togglePause;
+    $("#btn-exit").onclick = handleExit;
 
     updateSessionClock();
   }
@@ -1238,7 +1240,7 @@ COMPROMISES
     var phase = session.phases[phaseIndex];
     if (phase.kind === "breath") {
       startBreathClock(phase);
-    } else if (phase.kind === "focus" || phase.kind === "walk" || phase.kind === "move" || phase.kind === "scan") {
+    } else if (phase.kind === "focus" || phase.kind === "walk" || phase.kind === "move" || phase.kind === "scan" || phase.kind === "read" || phase.kind === "write") {
       var tt = $("#phase-timer-time");
       if (tt) tt.textContent = fmt(phase.dur - elapsedInPhase);
     }
@@ -1263,7 +1265,7 @@ COMPROMISES
 
     var phase = session.phases[phaseIndex];
 
-    if (phase.kind === "focus" || phase.kind === "walk" || phase.kind === "move" || phase.kind === "scan") {
+    if (phase.kind === "focus" || phase.kind === "walk" || phase.kind === "move" || phase.kind === "scan" || phase.kind === "read" || phase.kind === "write") {
       var remaining = Math.max(0, phase.dur - elapsedInPhase);
       var tt = $("#phase-timer-time");
       if (tt) tt.textContent = fmt(remaining);
