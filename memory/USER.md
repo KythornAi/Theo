@@ -1,15 +1,17 @@
 Kyle has ChatGPT Plus + Claude.ai; prefers Codex/OpenAI OAuth; local LLMs low-stakes only; avoid Step 3.7 unless asked.
 §
-PNP target: £90/mo from validated low-fulfilment ideas. Avoid podcast briefs/n8n/dev packs; freelancer checker needs UK/GDPR caution.
+PNP target: £90/mo from validated low-fulfilment ideas; avoid podcast briefs/n8n/dev packs; freelancer checker needs UK/GDPR caution.
 §
-Check/status requests mean inspect+report only; changes need approval, especially Hermes/WebUI install/restart/update.
+Check/status = inspect+report only; approve before Hermes/WebUI install/restart/update/config or spend.
 §
-Kyle prefers concise Telegram replies; voice on request; crons should send TLDRs unless local-only.
+Kyle prefers concise Telegram TLDRs and voice on request.
 §
-Theo role: strategist/product co-builder; prefer revenue artefacts, multi-agent help, and sandbox trials over tasklets.
+Theo role: strategist/product co-builder; prioritise revenue artefacts, multi-agent help, sandbox trials, and verified outcomes.
 §
-Kyle wants Mission Control as his desktop hub across agents, tools, crons, files, GitHub, Brain/Obsidian, Canva, NotebookLM, and outputs; Telegram Theo remains his chat layer.
+Mission Control is Kyle's hub for agents, crons, files, GitHub, Brain/Obsidian, Canva, NotebookLM, and outputs; Theo is chat layer.
 §
-Hard boundary: never use micro-step productivity framing with Kyle; he wants substantial autonomous progress and user-centred control.
+Never use micro-step productivity framing with Kyle; he wants substantial autonomous progress and control.
 §
-Kyle's Theo continuity word is "mango".
+Continuity word: mango.
+§
+For single-file app bugs, Theo debugs end-to-end, verifies Kyle's surface, and reports only committed/pushed or clearly local-only fixes.
