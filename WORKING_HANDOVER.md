@@ -4,6 +4,46 @@
 
 ***
 
+### Session 37 — VS Code — 2026-06-05
+
+**Done:**
+- Replaced geometric SVG body figure in body-stress-scan.html with real PNG silhouette (Human Body silluette for MNM.png) — mix-blend-mode:multiply makes white background disappear, clickable region paths redrawn in 780×1316 coordinate space. Committed 473c6f3.
+- Diagnosed Save/continue completion flow — confirmed working fine (Kyle tested); no timer gate exists on the button.
+- Hermes WebUI iframe: UFW not active (no firewall), auth removed by Kyle. Updated Mission Control to new WebUI at port 9119 (SSH-tunnelled). To use: `ssh -N -L 9119:127.0.0.1:9119 kylemoore@192.168.1.105` then refresh MC.
+
+**Next:** Test Hermes WebUI iframe in Mission Control (should now work). Tighten legs region path if highlight looks too wide. Deploy MC to laptop (rsync + live data). Continue MNM HTML polish (affirmation previewer next).
+
+**Blockers for Kyle:** Test Hermes tab in Mission Control. Set up Gumroad account. Register groundedhumanity.co.uk.
+
+***
+
+### Session 36 — VS Code — 2026-06-05
+
+**Done:**
+- Fixed Recovery Menu Hub bug: `finishSession()` crashed silently because `#close-eyebrow` ID was missing from HTML — querySelector returned null, TypeError prevented completion screen ever showing. Committed and pushed Theo's correct fix (4fcb70b) to Theo repo.
+- Added Hermes WebUI iframe tab to Mission Control sidebar: new "HERMES" nav section, full-height iframe embedding hermes-webui (:8787) with banner, error state, and "Open in tab" fallback. Eliminates need to rebuild Crons/Skills/Plugins panels. Committed to mission-control (5ca2e90).
+- Audited MC dashboard: all P1-P7 panels confirmed fully built by Ralph. Skills/Plugins panel still missing from sidebar (covered by Hermes tab instead).
+- A/B recovery hub: body-stress-scan.html and recovery-menu-hub.html are the two candidates (new Fraunces serif, accent stripes, contrast fixes). recovery-menu-hub-fixed-test.html is an identical copy — safe to delete.
+
+**Next:** Review body-stress-scan.html A/B candidate in browser. Deploy MC to laptop (rsync, switch config to live, wire real data). Consider committing untracked Theo repo assets (canva-zips, photos, infographics folders) or gitignoring them.
+
+**Blockers for Kyle:** Tell Theo to delete recovery-menu-hub-fixed-test.html (untracked local copy, no longer needed). Set up Gumroad account. Register groundedhumanity.co.uk.
+
+***
+
+### Session 38 — VS Code — 2026-06-05
+
+**Done:**
+- Fixed body-stress-scan.html step transitions: renderScanStep now clears ALL area marks on every step so no previous colour bleeds into the next area (committed dfcf0ec to mission-control)
+- Fixed Mission Control config.json: hermes_webui_url corrected from 100.126.155.50:8787 → 127.0.0.1:9119 so the Hermes WebUI panel loads correctly
+- Created LaunchAgent at ~/Library/LaunchAgents/com.kyle.hermes-tunnel.plist for persistent SSH tunnel — will auto-start at next Mac login; SSH tunnel is already running on port 9119 this session
+
+**Next:** Kyle to hard-refresh body scan (Cmd+Shift+R) and verify clean-slate step behaviour. Hard-refresh Mission Control (Cmd+Shift+R) and confirm Hermes WebUI tab loads. On next Mac restart the tunnel LaunchAgent should auto-start — check System Settings → General → Login Items if it doesn't.
+
+**Blockers for Kyle:** Hard-refresh body scan to confirm fix. Hard-refresh MC to confirm Hermes tab. Approve LaunchAgent in System Settings if macOS prompts on next login. Set up Gumroad account. Register groundedhumanity.co.uk.
+
+***
+
 ### Session 30 — VS Code — 2026-06-02
 
 **Done:**
