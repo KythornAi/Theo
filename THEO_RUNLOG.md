@@ -89,3 +89,5 @@
 [2026-06-06 12:21] git push: drafts: Daily Reset MiniMax visual redesign pack 2026-06-06 (13e8c99)
 [2026-06-06 12:53] Completed MNM four-app value-add audit report: /home/kylemoore/theo/research/mnm-four-app-value-add-audit-2026-06-06.md
 2026-06-06 | Daytime memory consolidation | Compacted USER.md live/mirror to 963 chars / 70.0%; MEMORY unchanged at 1354 chars / 61.5%; files aligned.
+
+[THEO] 2026-06-06 | Corrected MNM four-app feature shortlist: /home/kylemoore/theo/research/mnm-four-app-feature-shortlist-corrected-2026-06-06.md
