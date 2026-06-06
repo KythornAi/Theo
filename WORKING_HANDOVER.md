@@ -42,20 +42,6 @@
 
 ---
 
-### Session 36 — VS Code — 2026-06-05
-
-**Done:**
-- Fixed Recovery Menu Hub bug: `finishSession()` crashed silently because `#close-eyebrow` ID was missing from HTML — querySelector returned null, TypeError prevented completion screen ever showing. Committed and pushed Theo's correct fix (4fcb70b) to Theo repo.
-- Added Hermes WebUI iframe tab to Mission Control sidebar: new "HERMES" nav section, full-height iframe embedding hermes-webui (:8787) with banner, error state, and "Open in tab" fallback. Eliminates need to rebuild Crons/Skills/Plugins panels. Committed to mission-control (5ca2e90).
-- Audited MC dashboard: all P1-P7 panels confirmed fully built by Ralph. Skills/Plugins panel still missing from sidebar (covered by Hermes tab instead).
-- A/B recovery hub: body-stress-scan.html and recovery-menu-hub.html are the two candidates (new Fraunces serif, accent stripes, contrast fixes). recovery-menu-hub-fixed-test.html is an identical copy — safe to delete.
-
-**Next:** Review body-stress-scan.html A/B candidate in browser. Deploy MC to laptop (rsync, switch config to live, wire real data). Consider committing untracked Theo repo assets (canva-zips, photos, infographics folders) or gitignoring them.
-
-**Blockers for Kyle:** Tell Theo to delete recovery-menu-hub-fixed-test.html (untracked local copy, no longer needed). Set up Gumroad account. Register groundedhumanity.co.uk.
-
----
-
 ### Session 38 — VS Code — 2026-06-05
 
 **Done:**
@@ -66,3 +52,16 @@
 **Next:** Kyle to hard-refresh body scan (Cmd+Shift+R) and verify clean-slate step behaviour. Hard-refresh Mission Control (Cmd+Shift+R) and confirm Hermes WebUI tab loads. On next Mac restart the tunnel LaunchAgent should auto-start — check System Settings → General → Login Items if it doesn't.
 
 **Blockers for Kyle:** Hard-refresh body scan to confirm fix. Hard-refresh MC to confirm Hermes tab. Approve LaunchAgent in System Settings if macOS prompts on next login. Set up Gumroad account. Register groundedhumanity.co.uk.
+
+### Session 41 — VS Code — 2026-06-06
+
+**Done:**
+- Bootstrapped Mission Control (3737) and Hermes tunnel (9119) LaunchAgents — both plists existed but were never loaded; bootstrapped both, orphaned ssh process killed, LaunchAgents now cleanly own both services. http://127.0.0.1:3737 confirmed working.
+- Switched Theo's default model from gpt-5.5 (ChatGPT Plus OAuth) to DeepSeek V4 Flash via OpenRouter; fallback changed to MiniMax M3 via OpenRouter. Hermes restarted on new config.
+- Added §46 Execution Standard to SOUL.md: no placeholders, execute safe steps without asking, verify before reporting done (cron entry + manual run required before flagging complete), "Next move:" closing line. Committed df314a6.
+- Sent [CLAUDE→THEO] notifying Theo of model switch and §46; committed and pushed f90a205 to Theo repo.
+
+**Next:** Monitor Theo's first responses on DeepSeek V4 — check if execution standard holds on next task. Review MiniMax Daily Reset redesign at ~/theo/drafts/daily-reset-minimax-visual-redesign-2026-06-06/daily-reset-visual-redesign-copy.html. MC build-out: panels with live data (crons, agent registry, inbox).
+
+**Blockers for Kyle:** Watch Theo's next task — report if still passive or noticeably more action-oriented. Set up Gumroad account. Register groundedhumanity.co.uk.
+
