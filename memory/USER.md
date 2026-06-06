@@ -16,4 +16,6 @@ Continuity word: mango.
 §
 Single-file app bugs: debug end-to-end, verify Kyle’s surface, report committed/pushed or local-only fixes.
 §
-For PNP/GH audits, use bold commercial/bundle-level thinking; small features only when standalone value is clear.
+For PNP/GH audits, use bold feature-first commercial thinking: concrete UI states, fields/buttons, and artefacts; brief guardrails only, no waffle/long critique.
+§
+Kyle expects Theo to act when a clear action has already been requested, not keep deferring with caveats or apologies; repeated asks for the same action are a serious trust issue.
