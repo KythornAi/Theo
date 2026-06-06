@@ -1,0 +1,2903 @@
+<!doctype html>
+<!--
+This is a visual redesign copy only. Original flow and logic preserved.
+Source: KythornAi/paper-n-pixels theo/daily-reset-preview product/daily-reset/index.html
+Date:   2026-06-06
+For:    Paper N Pixels / Mindful Not Mythical
+Notes:  Visual redesign only. All IDs, classes, localStorage keys, JS logic,
+        button actions, settings behaviour, timer behaviour, parking lot
+        behaviour, wrap-up behaviour, and accessibility wiring are unchanged.
+-->
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4ede0" />
+  <meta name="description" content="A daily reset. Get it out of your head, sort what matters, wrap up, and come back tomorrow. No streak, no score, no judgement." />
+  <title>The Daily Reset</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..600,0..100;1,9..144,300..600,0..100&family=Inter:wght@400;500;600;700&display=swap" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* =====================================================================
+       VISUAL DIRECTION (Daily Reset redesign)
+       Page:        warm cream, slightly more yellow than the previous build.
+                    Calm editorial feel, premium spacing.
+       Cards:       two depths, "warm" and "warm-soft", with a thin tan rule
+                    and a single terracotta accent stripe on the focus card.
+       Type:        editorial serif display (Fraunces, opsz 96) for headings
+                    paired with humanist sans (Inter) for body. Italic optical
+                    for the welcome word, tracked small-caps for the eyebrow.
+       Accents:     forest (primary action), terracotta (notice, dot, ring),
+                    ochre (warm), dusty rose (quiet), sage (cool), aubergine
+                    (tender). Accents are decoration on cards, numerals, and
+                    the small ornament dot. Body text never sits on an accent
+                    below 4.5:1 contrast.
+       ===================================================================== */
+
+    :root {
+      --cream:        #f4ede0;
+      --warm:         #ece1cc;
+      --warm-soft:    #efe7d6;
+
+      --ink:          #322133;
+      --ink-heading:  #2a3a2f;
+      --ink-hint:     #4a523a;
+      --ink-muted:    #6e6a5a;
+
+      /* action / focus colours */
+      --forest:       #2a3a2f;
+      --terracotta:   #b04a2c;
+      --ochre:        #876228;
+      --dusty-rose:   #a86868;
+      --sage:         #556347;
+      --aubergine:    #6a3a52;
+      --teal:         #4a7572;
+
+      /* rules */
+      --rule-soft:    #c8b693;
+      --rule-tan:     #c8a784;
+      --rule-line:    #b9a784;
+
+      /* legacy pnp variables — kept so existing class names in the JS still
+         resolve to the new editorial palette. */
+      --pnp-primary:    var(--terracotta);
+      --pnp-secondary:  var(--cream);
+      --pnp-tertiary:   var(--warm);
+      --pnp-neutral:    var(--ink);
+      --pnp-muted:      var(--ink-muted);
+      --pnp-line:       var(--rule-tan);
+      --pnp-accent:     var(--forest);
+      --pnp-bg:         var(--cream);
+      --pnp-surface:    var(--warm);
+      --pnp-text:       var(--ink);
+
+      --serif:        "Fraunces", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+      --sans:         "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+      --maxw:         620px;
+    }
+
+    /* Dark mode still resolves to a warm dark, but the restyle here is the
+       light editorial system. Kept for backwards compatibility. */
+    [data-theme="dark"] {
+      --cream:        #1f1d1a;
+      --warm:         #29251f;
+      --warm-soft:    #25211c;
+      --ink:          #ece5d4;
+      --ink-heading:  #e3d8bf;
+      --ink-hint:     #b9ad94;
+      --ink-muted:    #94897a;
+      --rule-soft:    #443c30;
+      --rule-tan:     #4f4536;
+      --rule-line:    #5a4f3e;
+      --pnp-primary:    #f0a886;
+      --pnp-secondary:  #1f1d1a;
+      --pnp-tertiary:   #29251f;
+      --pnp-neutral:    #ece5d4;
+      --pnp-muted:      #94897a;
+      --pnp-line:       rgba(255,255,255,0.10);
+      --pnp-accent:     #d4a07c;
+      --pnp-bg:         #1f1d1a;
+      --pnp-surface:    #29251f;
+      --pnp-text:       #ece5d4;
+    }
+
+    [data-accent="warm"]   { --pnp-accent: var(--terracotta); }
+    [data-accent="cool"]   { --pnp-accent: var(--sage); }
+    [data-accent="amber"]  { --pnp-accent: var(--ochre); }
+    [data-theme="dark"][data-accent="warm"]  { --pnp-accent: #f0a886; }
+    [data-theme="dark"][data-accent="cool"]  { --pnp-accent: #7ea49a; }
+    [data-theme="dark"][data-accent="amber"] { --pnp-accent: #d4a858; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.55;
+      min-height: 100vh;
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    :focus { outline: none; }
+    :focus-visible {
+      outline: 2px solid var(--terracotta);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    /* =====================================================================
+       LAYOUT
+       ===================================================================== */
+    .pnp-app-wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 30px 22px 96px;
+    }
+    .pnp-stack > * + * { margin-top: 14px; }
+    .pnp-stack-lg > * + * { margin-top: 22px; }
+
+    /* brand slot at the top of every screen — small italic wordmark
+       flanked by a single rule, in the spirit of the body stress scan. */
+    .pnp-brand {
+      text-align: center;
+      color: var(--ink-muted);
+      font-family: var(--serif);
+      font-size: 13px;
+      font-style: italic;
+      letter-spacing: 0.04em;
+      margin: 0 0 18px;
+      opacity: 0.9;
+    }
+    .pnp-brand::before, .pnp-brand::after {
+      content: "";
+      display: inline-block;
+      width: 22px;
+      height: 1px;
+      background: var(--rule-line);
+      vertical-align: middle;
+      margin: 0 10px;
+      opacity: 0.6;
+    }
+
+    /* =====================================================================
+       EDITORIAL EYEBROW + HEADINGS
+       ===================================================================== */
+    .pnp-eyebrow {
+      font-family: var(--sans);
+      font-size: 11.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pnp-eyebrow::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--terracotta);
+      border-radius: 50%;
+    }
+    .pnp-eyebrow--inline { margin: 0; }
+
+    /* Editorial display headings — used by both the new top bar and any
+       heading the JS renders. Tailwind font-semibold becomes editorial
+       weight 400 with optical sizing. */
+    h1, h2, h3,
+    .text-2xl, .text-3xl, .text-4xl, .text-5xl,
+    [class*="text-2xl"], [class*="text-3xl"], [class*="text-4xl"] {
+      font-family: var(--serif);
+      color: var(--ink-heading);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      font-variation-settings: "opsz" 96, "SOFT" 50;
+    }
+    h1, .text-3xl { line-height: 1.05; }
+    h2, .text-2xl { line-height: 1.12; }
+    h3, .text-xl  { line-height: 1.2; }
+    .text-xl { font-family: var(--serif); font-weight: 400; }
+
+    /* Italic optical for accent words inside headings the JS produces.
+       Used sparingly, only where the heading colour also changes. */
+    em, .pnp-italic {
+      font-style: italic;
+      font-variation-settings: "opsz" 96, "SOFT" 100;
+      color: var(--aubergine);
+    }
+
+    /* =====================================================================
+       pnp-* LEGACY CLASSES (used by the unchanged JS view functions)
+       ===================================================================== */
+    .pnp-surface { background: var(--pnp-surface); }
+    .pnp-muted   { color: var(--pnp-muted); }
+    .pnp-accent  { color: var(--pnp-accent); }
+    .pnp-bg-accent {
+      background: var(--forest);
+      color: var(--cream);
+      border: 1.5px solid var(--forest);
+    }
+    .pnp-bg-accent:hover { background: #1c2a20; }
+    .pnp-border  { border-color: var(--rule-tan); }
+
+    /* The JS uses Tailwind border + pnp-border together. The bare Tailwind
+       border class defaults to gray-200, so override to the tan rule. */
+    .border { border-color: var(--rule-tan); }
+    .border.pnp-border { border-color: var(--rule-tan); }
+
+    /* Default Tailwind white background was overriding pnp-surface. Force
+       the warm card colour on white-bg surface variants. */
+    .bg-white { background-color: var(--warm); }
+
+    /* The "Settings" drawer and overlay cards used pnp-surface, which
+       now reads as the warm card surface — perfect for the editorial feel. */
+
+    /* =====================================================================
+       BUTTONS (used by the JS)
+       ===================================================================== */
+    /* The JS creates pnp-bg-accent buttons in many sizes. Give them a
+       consistent editorial shape. */
+    .pnp-bg-accent {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--sans);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      padding: 12px 22px;
+      border-radius: 999px;
+      cursor: pointer;
+      min-height: 44px;
+      transition: background 180ms ease, color 180ms ease, transform 180ms ease, border-color 180ms ease;
+    }
+    .pnp-bg-accent:active { transform: translateY(1px); }
+    button.pnp-bg-accent:disabled,
+    .pnp-bg-accent[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+    /* The JS also creates pnp-surface bordered buttons as the secondary
+       "ghost" action. Restyle them as ghost buttons. */
+    button.pnp-surface {
+      background: transparent;
+      color: var(--ink-heading);
+      border: 1.5px solid var(--ink-heading);
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 180ms ease, color 180ms ease;
+      min-height: 42px;
+    }
+    button.pnp-surface:hover { background: var(--ink-heading); color: var(--cream); }
+
+    /* Tailwind's text-utility underline ("Maybe later" / "Skip") used as
+       the soft tertiary action. */
+    button[class*="underline"],
+    a[class*="underline"] {
+      font-family: var(--sans);
+      color: var(--ink-hint);
+      background: transparent;
+      border: 0;
+      padding: 8px 4px;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      min-height: 36px;
+      font-size: 14px;
+    }
+    button[class*="underline"]:hover,
+    a[class*="underline"]:hover { color: var(--ink); }
+
+    /* =====================================================================
+       CARDS (used by the JS as: pnp-surface border pnp-border rounded-2xl)
+       ===================================================================== */
+    .rounded-2xl, .rounded-xl, .rounded-md, .rounded-lg {
+      border-radius: 14px;
+    }
+    /* The "card" pattern: pnp-surface border pnp-border rounded-2xl p-6
+       Tailwind's default border-radius was 1rem (16px); the new system
+       uses 14px, slightly softer. */
+
+    /* Accent stripe on the primary card (sort / today list). */
+    .pnp-card-accent { position: relative; padding-top: 28px; }
+    .pnp-card-accent::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 18px; right: 18px;
+      height: 3px;
+      background: linear-gradient(90deg,
+        var(--forest) 0%, var(--aubergine) 28%, var(--terracotta) 55%, var(--ochre) 78%, var(--teal) 100%);
+      border-radius: 0 0 2px 2px;
+      opacity: 0.9;
+    }
+
+    /* =====================================================================
+       INPUTS (textareas, text inputs the JS renders)
+       ===================================================================== */
+    textarea, input[type="text"] {
+      font-family: var(--sans);
+      color: var(--ink);
+      background: var(--warm-soft);
+      border: 1px solid var(--rule-tan);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 16px;
+      line-height: 1.45;
+      width: 100%;
+      outline: none;
+      transition: border-color 180ms ease, background 180ms ease;
+    }
+    textarea::placeholder, input[type="text"]::placeholder {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+    textarea:focus, input[type="text"]:focus {
+      border-color: var(--forest);
+      background: var(--cream);
+    }
+
+    /* =====================================================================
+       TOP BAR (back + label)
+       ===================================================================== */
+    #pnp-back {
+      font-family: var(--sans);
+      color: var(--ink-hint);
+      background: transparent;
+      border: 0;
+      padding: 8px 4px;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-size: 14px;
+    }
+    #pnp-back:hover { color: var(--ink); }
+
+    /* =====================================================================
+       DRAWER + FLOATING BUTTONS
+       ===================================================================== */
+    .pnp-drawer {
+      transform: translateX(100%);
+      transition: transform 220ms ease;
+    }
+    .pnp-drawer[data-open="true"] { transform: translateX(0); }
+
+    /* Settings open button (the gear) — restyled as a small icon button. */
+    #pnp-settings-open {
+      background: var(--warm);
+      border: 1px solid var(--rule-tan);
+      color: var(--ink-heading);
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 180ms ease, border-color 180ms ease;
+    }
+    #pnp-settings-open:hover { border-color: var(--forest); }
+
+    /* The "+" FAB used on the today list screen. */
+    #pnp-fab {
+      background: var(--forest);
+      color: var(--cream);
+      width: 56px;
+      height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(42, 58, 47, 0.18);
+      transition: background 180ms ease, transform 180ms ease;
+    }
+    #pnp-fab:hover { background: #1c2a20; }
+    #pnp-fab:active { transform: translateY(1px); }
+
+    /* Overlays (stuck, timer, fab dump, etc.). */
+    .pnp-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(20, 16, 14, 0.55);
+    }
+    @media (min-width: 640px) {
+      .pnp-overlay { align-items: center; }
+    }
+    .pnp-overlay__card {
+      background: var(--warm);
+      border: 1px solid var(--rule-tan);
+      border-radius: 16px;
+      padding: 24px 22px;
+      width: 100%;
+      max-width: 460px;
+      max-height: 100%;
+      overflow-y: auto;
+    }
+
+    /* Toast */
+    #pnp-toast {
+      background: var(--warm);
+      border: 1px solid var(--rule-tan);
+      border-radius: 999px;
+      box-shadow: 0 6px 20px rgba(20, 16, 14, 0.18);
+    }
+    #pnp-toast button {
+      color: var(--forest);
+      font-weight: 600;
+    }
+
+    /* =====================================================================
+       EDITORIAL DIVIDERS
+       ===================================================================== */
+    .pnp-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 22px 0;
+      color: var(--ink-muted);
+    }
+    .pnp-divider::before, .pnp-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--rule-line);
+      opacity: 0.6;
+    }
+    .pnp-divider span {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 14px;
+      color: var(--ink-hint);
+    }
+
+    /* =====================================================================
+       BANNERS (yesterday, sunday, overflow, plus-one)
+       ===================================================================== */
+    #pnp-banner-yesterday,
+    #pnp-banner-sunday,
+    #pnp-plusone {
+      background: var(--warm-soft);
+      border: 1px solid var(--rule-tan);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    #pnp-banner-overflow { color: var(--ink-muted); }
+
+    /* =====================================================================
+       TIMER (inside tiny timer overlay)
+       ===================================================================== */
+    [data-timer-display] {
+      font-family: var(--serif);
+      color: var(--ink-heading);
+      font-weight: 400;
+      font-variation-settings: "opsz" 96, "SOFT" 50;
+      font-variant-numeric: tabular-nums;
+      font-size: 48px;
+      line-height: 1;
+    }
+    [data-timer-note] { color: var(--ink-hint); font-style: italic; font-size: 13px; }
+
+    /* =====================================================================
+       MOOD + SORT CARDS (mood chooser on S2, sort items on S4)
+       ===================================================================== */
+    [data-mood], [data-pick], [data-stuck-pick], [data-plus-pick] {
+      transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+    [data-mood]:hover, [data-pick]:hover,
+    [data-stuck-pick]:hover, [data-plus-pick]:hover {
+      border-color: var(--forest);
+      background: var(--warm-soft);
+    }
+    [data-mood]:active, [data-pick]:active,
+    [data-stuck-pick]:active, [data-plus-pick]:active { transform: translateY(1px); }
+
+    /* "stuck" pnp-bg-accent button — let the JS still treat it as primary. */
+    #pnp-stuck {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--ink-heading);
+      background: transparent;
+      border: 1.5px solid var(--ink-heading);
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #pnp-stuck:hover { background: var(--ink-heading); color: var(--cream); }
+
+    /* =====================================================================
+       SETTINGS DRAWER (restyled for editorial feel; IDs preserved)
+       ===================================================================== */
+    #pnp-settings {
+      background: var(--warm);
+      border-left: 1px solid var(--rule-tan);
+      box-shadow: -12px 0 32px rgba(20, 16, 14, 0.12);
+    }
+    #pnp-settings h2 {
+      font-family: var(--serif);
+      color: var(--ink-heading);
+      font-weight: 400;
+    }
+    #pnp-settings label {
+      font-family: var(--sans);
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    #pnp-set-theme,
+    #pnp-set-motion {
+      background: var(--cream);
+      border: 1px solid var(--rule-tan);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: var(--sans);
+      color: var(--ink);
+      font-size: 15px;
+    }
+    #pnp-set-theme:focus,
+    #pnp-set-motion:focus { border-color: var(--forest); }
+    #pnp-set-showdate { accent-color: var(--forest); }
+    #pnp-set-reset-today, #pnp-set-reset {
+      font-family: var(--sans);
+      color: var(--ink-hint);
+      background: transparent;
+      border: 0;
+      padding: 6px 0;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-size: 13px;
+    }
+    #pnp-set-reset-today:hover, #pnp-set-reset:hover { color: var(--terracotta); }
+    #pnp-settings-close {
+      font-family: var(--sans);
+      color: var(--ink-hint);
+      background: transparent;
+      border: 0;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #pnp-settings-close:hover { color: var(--ink); }
+
+    /* =====================================================================
+       PRINT
+       ===================================================================== */
+    @media print {
+      body { background: #FFFFFF; color: #1A1A1A; }
+      .pnp-no-print { display: none !important; }
+    }
+
+    /* =====================================================================
+       MOTION
+       ===================================================================== */
+    :focus-visible {
+      outline: 2px solid var(--terracotta);
+      outline-offset: 3px;
+    }
+    [data-motion="reduced"] *,
+    [data-motion="reduced"] *::before,
+    [data-motion="reduced"] *::after {
+      animation-duration: 0ms !important;
+      transition-duration: 0ms !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      [data-motion="auto"] *,
+      [data-motion="auto"] *::before,
+      [data-motion="auto"] *::after {
+        animation-duration: 0ms !important;
+        transition-duration: 0ms !important;
+      }
+    }
+
+    /* Drop cap utility for the first paragraph of any welcome screen. */
+    .pnp-dropcap::first-letter {
+      font-family: var(--serif);
+      font-size: 56px;
+      line-height: 0.9;
+      float: left;
+      padding: 6px 8px 0 0;
+      color: var(--aubergine);
+      font-weight: 400;
+      font-style: italic;
+      font-variation-settings: "opsz" 96, "SOFT" 100;
+    }
+  </style>
+</head>
+<body data-theme="light" data-accent="warm" data-motion="auto">
+
+  <main id="pnp-app" class="pnp-app-wrap">
+    <!-- Screens render here. The JS render() function injects a brand-slot
+         above each screen. -->
+  </main>
+
+  <!-- Settings drawer (visually restyled; IDs and class names unchanged) -->
+  <aside id="pnp-settings"
+         class="pnp-no-print pnp-drawer fixed top-0 right-0 h-full w-full sm:w-96 shadow-2xl z-40 overflow-y-auto"
+         data-open="false"
+         aria-hidden="true"
+         aria-label="Settings">
+    <div class="px-5 py-5 border-b pnp-border flex items-center justify-between">
+      <h2 class="text-2xl font-semibold">Settings</h2>
+      <button id="pnp-settings-close"
+              class="rounded-full hover:opacity-70"
+              aria-label="Close settings">&#x2715;</button>
+    </div>
+
+    <div class="p-5 space-y-6 text-sm">
+      <section>
+        <label class="block font-medium mb-2">Theme</label>
+        <select id="pnp-set-theme" class="w-full border pnp-border rounded-md p-2">
+          <option value="auto">Follow OS</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </section>
+
+      <section>
+        <label class="block font-medium mb-2">Motion</label>
+        <select id="pnp-set-motion" class="w-full border pnp-border rounded-md p-2">
+          <option value="auto">Follow OS</option>
+          <option value="full">Full</option>
+          <option value="reduced">Reduced</option>
+        </select>
+      </section>
+
+      <section class="space-y-2">
+        <label class="flex items-center gap-2">
+          <input type="checkbox" id="pnp-set-showdate" />
+          <span>Show today's date</span>
+        </label>
+      </section>
+
+      <section class="pt-4 border-t pnp-border">
+        <p class="pnp-muted text-xs italic">Everything stays on this device. Nothing is sent anywhere.</p>
+        <button id="pnp-set-reset-today" class="mt-3 block text-xs pnp-muted underline hover:opacity-80">
+          Reset today's tasks
+        </button>
+        <button id="pnp-set-reset" class="mt-3 text-xs pnp-muted underline hover:opacity-80">
+          Reset all data on this device
+        </button>
+      </section>
+    </div>
+  </aside>
+
+  <button id="pnp-settings-open"
+          class="pnp-no-print fixed top-4 right-4 z-30 rounded-full shadow-sm hover:opacity-80"
+          aria-controls="pnp-settings"
+          aria-expanded="false"
+          aria-label="Open settings">&#x2699;</button>
+
+  <script type="module">
+
+    /* ---------- state ---------- */
+
+    const KEYS = {
+      version:          'pnp.version',
+      user:             'pnp.user',
+      welcomeShown:     'pnp.welcomeShown',
+      settings:         'pnp.settings',
+      lastVisit:        'pnp.lastVisit',
+      dumpUnsorted:     'pnp.dump.unsorted',
+      parked:           'pnp.parked',
+      themeWeek:        'pnp.theme.weekStart',
+    };
+    const SCHEMA_VERSION = '2';
+
+    const defaultSettings = {
+      theme: 'auto',
+      themeLocked: null,
+      motion: 'auto',
+      showDateOnToday: true,
+    };
+
+    const memoryStore = new Map();
+    const storage = {
+      getItem(key) {
+        try { return window.localStorage.getItem(key); }
+        catch { return memoryStore.has(key) ? memoryStore.get(key) : null; }
+      },
+      setItem(key, value) {
+        try { window.localStorage.setItem(key, value); }
+        catch { memoryStore.set(key, value); }
+      },
+      removeItem(key) {
+        try { window.localStorage.removeItem(key); }
+        catch { memoryStore.delete(key); }
+      },
+      keys() {
+        try { return Object.keys(window.localStorage); }
+        catch { return Array.from(memoryStore.keys()); }
+      },
+    };
+
+    const state = {
+      get(key, fallback = null) {
+        const raw = storage.getItem(key);
+        if (raw === null) return fallback;
+        try { return JSON.parse(raw); } catch { return fallback; }
+      },
+      set(key, value) {
+        storage.setItem(key, JSON.stringify(value));
+      },
+      remove(key) { storage.removeItem(key); },
+
+      todayKey(d = new Date()) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      },
+      todayEntryKey(date = state.todayKey()) { return `pnp.today.${date}`; },
+      dayMetaKey(date = state.todayKey()) { return `pnp.dayMeta.${date}`; },
+      getToday(date = state.todayKey()) { return state.get(state.todayEntryKey(date), null); },
+      setToday(entry, date = state.todayKey()) { state.set(state.todayEntryKey(date), entry); },
+      getDayMeta(date = state.todayKey()) { return state.get(state.dayMetaKey(date), { openCount: 0, lastOpenedAt: null }); },
+      setDayMeta(meta, date = state.todayKey()) { state.set(state.dayMetaKey(date), meta); },
+
+      ensureSchema() {
+        const v = state.get(KEYS.version);
+        if (v !== SCHEMA_VERSION) {
+          state.set(KEYS.version, SCHEMA_VERSION);
+        }
+        const settings = state.get(KEYS.settings);
+        if (!settings) state.set(KEYS.settings, defaultSettings);
+        else state.set(KEYS.settings, { ...defaultSettings, ...settings });
+
+        if (!state.get(KEYS.dumpUnsorted)) state.set(KEYS.dumpUnsorted, []);
+        if (!state.get(KEYS.parked)) state.set(KEYS.parked, []);
+      },
+    };
+
+    function cryptoId() {
+      if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+      return 'd_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
+
+    state.setUser = (name) => state.set(KEYS.user, { name: name || null, createdAt: new Date().toISOString() });
+
+    state.setMood = (mood) => {
+      const date = state.todayKey();
+      const entry = state.getToday(date) || { mood: null, items: [], dumpEntries: [], wrapped: false, plusOneDismissed: false };
+      entry.mood = mood;
+      state.setToday(entry, date);
+    };
+
+    state.addDump = (text) => {
+      const dump = state.get(KEYS.dumpUnsorted, []);
+      const entry = { id: cryptoId(), text, createdAt: new Date().toISOString() };
+      dump.push(entry);
+      state.set(KEYS.dumpUnsorted, dump);
+      return entry.id;
+    };
+
+    state.updateDump = (id, text) => {
+      const dump = state.get(KEYS.dumpUnsorted, []);
+      const idx = dump.findIndex(e => e.id === id);
+      if (idx >= 0) {
+        dump[idx] = { ...dump[idx], text };
+        state.set(KEYS.dumpUnsorted, dump);
+      }
+    };
+
+    state.removeDump = (id) => {
+      const dump = state.get(KEYS.dumpUnsorted, []);
+      state.set(KEYS.dumpUnsorted, dump.filter(e => e.id !== id));
+    };
+
+    state.addTodayItem = (text) => {
+      const date = state.todayKey();
+      const entry = state.getToday(date) || { mood: null, items: [], dumpEntries: [], wrapped: false, plusOneDismissed: false };
+      if (todayListCount(entry) >= 4) return null;
+      entry.items.push({ id: cryptoId(), text, done: false });
+      state.setToday(entry, date);
+      return entry.items[entry.items.length - 1].id;
+    };
+
+    state.setTodayItems = (items) => {
+      const date = state.todayKey();
+      const entry = state.getToday(date) || { mood: null, items: [], dumpEntries: [], wrapped: false, plusOneDismissed: false };
+      entry.items = items;
+      state.setToday(entry, date);
+    };
+
+    state.toggleTodayItem = (itemId) => {
+      const date = state.todayKey();
+      const entry = state.getToday(date);
+      if (!entry) return;
+      const it = entry.items.find(i => i.id === itemId);
+      if (!it) return;
+      it.done = !it.done;
+      state.setToday(entry, date);
+    };
+
+    state.addParked = (text) => {
+      const parked = state.get(KEYS.parked, []);
+      const now = new Date().toISOString();
+      const item = { id: cryptoId(), text, parkedAt: now, lastTouched: now };
+      parked.push(item);
+      state.set(KEYS.parked, parked);
+      return item.id;
+    };
+
+    state.refreshParkedTouched = (parkedId) => {
+      const parked = state.get(KEYS.parked, []);
+      const idx = parked.findIndex(p => p.id === parkedId);
+      if (idx >= 0) {
+        parked[idx] = { ...parked[idx], lastTouched: new Date().toISOString() };
+        state.set(KEYS.parked, parked);
+      }
+    };
+
+    state.removeParked = (parkedId) => {
+      const parked = state.get(KEYS.parked, []);
+      state.set(KEYS.parked, parked.filter(p => p.id !== parkedId));
+    };
+
+    /* ---------- render rule ---------- */
+
+    function renderText(s) {
+      if (!s) return '';
+      const trimmed = String(s).trim();
+      if (!trimmed) return '';
+      return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+    }
+
+    function todayListCount(entry = state.getToday()) {
+      if (!entry || !Array.isArray(entry.items)) return 0;
+      return entry.items.filter(item => !item.parentId).length;
+    }
+
+    function todayHasRoom(entry = state.getToday()) {
+      return todayListCount(entry) < 4;
+    }
+
+    function createEmptyTodaySession(mood = 'okay') {
+      state.remove(state.todayEntryKey());
+      state.set(KEYS.dumpUnsorted, []);
+      state.setToday({
+        mood,
+        items: [],
+        dumpEntries: [],
+        wrapped: false,
+        plusOneDismissed: true,
+      });
+      sessionFlags.newSessionMode = true;
+      screenHistory = [];
+    }
+
+    /* ---------- theme ---------- */
+
+    function isoWeekKey(d = new Date()) {
+      const target = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const dayNum = (target.getUTCDay() + 6) % 7;
+      target.setUTCDate(target.getUTCDate() - dayNum + 3);
+      const firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
+      const week = 1 + Math.round(
+        ((target - firstThursday) / 86400000 - 3 + ((firstThursday.getUTCDay() + 6) % 7)) / 7
+      );
+      return `${target.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
+    }
+
+    const ACCENTS = ['warm', 'cool', 'amber'];
+
+    function pickWeeklyAccent() {
+      const settings = state.get(KEYS.settings, defaultSettings);
+      if (settings.themeLocked) return settings.themeLocked;
+      return 'cool';
+    }
+
+    function resolveThemeMode(setting) {
+      if (setting === 'light' || setting === 'dark') return setting;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyTheme() {
+      const settings = state.get(KEYS.settings, defaultSettings);
+      const mode = resolveThemeMode(settings.theme);
+      const accent = pickWeeklyAccent();
+      document.body.dataset.theme = mode;
+      document.body.dataset.accent = accent;
+      document.body.dataset.motion = settings.motion;
+    }
+
+    /* ---------- parking lot ---------- */
+
+    function runDecay() {
+      // V1 never auto-deletes parked items. Users decide what to keep or remove.
+    }
+
+    /* ---------- ics ---------- */
+
+    const ics = {
+      pad(n) { return String(n).padStart(2, '0'); },
+      utcStamp() {
+        const d = new Date();
+        return `${d.getUTCFullYear()}${ics.pad(d.getUTCMonth()+1)}${ics.pad(d.getUTCDate())}T${ics.pad(d.getUTCHours())}${ics.pad(d.getUTCMinutes())}${ics.pad(d.getUTCSeconds())}Z`;
+      },
+      esc(s) {
+        return String(s == null ? '' : s)
+          .replace(/\\/g, '\\\\')
+          .replace(/;/g, '\\;')
+          .replace(/,/g, '\\,')
+          .replace(/\n/g, '\\n');
+      },
+      build(date, items) {
+        const dateNoDash = date.replace(/-/g, '');
+        const stamp = ics.utcStamp();
+        const events = items.map(item =>
+          [
+            'BEGIN:VEVENT',
+            `UID:${(item.id || cryptoId())}@papernpixels.local`,
+            `DTSTAMP:${stamp}`,
+            `DTSTART;VALUE=DATE:${dateNoDash}`,
+            `SUMMARY:${ics.esc(renderText(item.text))}`,
+            'END:VEVENT',
+          ].join('\r\n')
+        ).join('\r\n');
+        return [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Paper N Pixels//Daily Reset v2//EN',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH',
+          events,
+          'END:VCALENDAR',
+          '',
+        ].join('\r\n');
+      },
+      download(date, items) {
+        if (!items || items.length === 0) return;
+        const blob = new Blob([ics.build(date, items)], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `daily-reset-${date}.ics`;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 100);
+      },
+    };
+
+    /* ---------- flow / entry detection ---------- */
+
+    const SCREENS = ['S0','S1','S2','S2C','S3','S4','S5','S6','S7'];
+
+    /* Session flags — in-memory, reset on reload. */
+    const sessionFlags = {
+      overflowDismissed: false,
+      sundayDismissed: false,
+      yesterdayHandled: false,
+      newSessionMode: false,
+      askedAddMoreAfterParked: false,
+    };
+
+    /* Captured at boot before markVisited() overwrites lastVisit. */
+    let bootPrevVisit = null;
+
+    function daysBetween(isoA, isoB) {
+      const a = new Date(isoA + 'T00:00:00');
+      const b = new Date(isoB + 'T00:00:00');
+      return Math.round((b - a) / (24 * 60 * 60 * 1000));
+    }
+
+    function yesterdayKey(today = state.todayKey()) {
+      const d = new Date(today + 'T00:00:00');
+      d.setDate(d.getDate() - 1);
+      return state.todayKey(d);
+    }
+
+    function isSundayToday() {
+      return new Date(state.todayKey() + 'T00:00:00').getDay() === 0;
+    }
+
+    function markOpenedToday() {
+      const meta = state.getDayMeta();
+      const now = new Date();
+      const last = meta.lastOpenedAt ? Date.parse(meta.lastOpenedAt) : 0;
+      const countAsNewVisit = !last || (now.getTime() - last) > 10 * 60 * 1000;
+      state.setDayMeta({
+        ...meta,
+        openCount: countAsNewVisit ? (meta.openCount || 0) + 1 : (meta.openCount || 1),
+        lastOpenedAt: now.toISOString(),
+      });
+    }
+
+    function detectEntryScreen() {
+      const user = state.get(KEYS.user);
+      if (!user || !user.name) {
+        const welcomeShown = state.get(KEYS.welcomeShown);
+        return welcomeShown ? 'S2' : 'S1';
+      }
+
+      const today = state.todayKey();
+      const lastVisit = state.get(KEYS.lastVisit);
+      const todayEntry = state.getToday(today);
+
+      // Same-day closed resets intentionally reopen at the lightweight
+      // Parking Lot / add-new choice instead of asking for mood again.
+      if (lastVisit === today && todayEntry && todayEntry.wrapped) {
+        const parked = state.get(KEYS.parked, []);
+        return parked.length > 0 ? 'S2C' : 'S3';
+      }
+      if (lastVisit === today && todayEntry && !todayEntry.wrapped) return 'S6';
+      if (lastVisit && daysBetween(lastVisit, today) >= 3) return 'S0';
+      return 'S2';
+    }
+
+    /* ---------- views ---------- */
+
+    function makeStubView(label, sub) {
+      return (root) => {
+        root.innerHTML = `
+          <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+            <p class="pnp-muted text-xs uppercase tracking-wide">${label}</p>
+            <h1 class="text-2xl font-semibold mt-2">Coming in the next phase</h1>
+            <p class="pnp-muted mt-2">${sub}</p>
+            <div class="mt-6 flex flex-wrap gap-2 pnp-no-print">
+              ${SCREENS.map(s => `
+                <button data-goto="${s}"
+                  class="text-xs px-3 py-1.5 rounded-md border pnp-border hover:opacity-80">
+                  Jump to ${s}
+                </button>`).join('')}
+            </div>
+          </section>`;
+        root.querySelectorAll('[data-goto]').forEach(btn => {
+          btn.addEventListener('click', () => advance(btn.dataset.goto));
+        });
+      };
+    }
+
+    function viewS0(root) {
+      const user = state.get(KEYS.user);
+      const greeting = user && user.name ? `Hey ${user.name}, welcome back.` : 'Hey there, welcome back.';
+      const parked = state.get(KEYS.parked, []);
+      const hasParked = parked.length > 0;
+
+      root.innerHTML = `
+        <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+          <h1 class="text-3xl font-semibold tracking-tight">${escapeHtml(greeting)}</h1>
+          <p class="pnp-muted mt-3">No streak. No catch-up. Just pick how you want to start.</p>
+
+          <div class="mt-8 grid sm:grid-cols-2 gap-3">
+            <button id="pnp-s0-fresh"
+              class="text-left pnp-bg-accent rounded-xl p-5">
+              <div class="font-semibold text-lg">Start fresh</div>
+              <div class="text-sm opacity-80 mt-1">New mood, new dump, new day.</div>
+            </button>
+            <button id="pnp-s0-resume"
+              class="text-left pnp-surface border pnp-border rounded-xl p-5 hover:border-[var(--pnp-accent)] transition-colors ${hasParked ? '' : 'opacity-50 cursor-not-allowed'}"
+              ${hasParked ? '' : 'disabled'}>
+              <div class="font-semibold text-lg">Pick up where you left off</div>
+              <div class="text-sm pnp-muted mt-1">${hasParked ? `${parked.length} ${parked.length === 1 ? 'item' : 'items'} in your parking lot.` : 'Nothing parked yet.'}</div>
+            </button>
+          </div>
+        </section>`;
+
+      root.querySelector('#pnp-s0-fresh').addEventListener('click', () => {
+        sessionFlags.newSessionMode = true;
+        advance('S2');
+      });
+      const resume = root.querySelector('#pnp-s0-resume');
+      if (hasParked) {
+        resume.addEventListener('click', () => advance('S4', { source: 'parked', returnTo: 'S6' }));
+      }
+    }
+
+    function viewS1(root) {
+      let step = 'name';
+
+      function paint() {
+        if (step === 'name') paintName(); else paintFirstRun();
+      }
+
+      function paintName() {
+        root.innerHTML = `
+          <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+            <h1 class="text-3xl font-semibold tracking-tight">Hi, what should we call you?</h1>
+            <p class="pnp-muted mt-3">Just a name to make this feel like yours. Doesn't have to be your real one.</p>
+            <input id="pnp-name-input" type="text" maxlength="40" autocomplete="off" inputmode="text"
+              class="w-full mt-6 pnp-surface border pnp-border rounded-xl p-4 text-lg outline-none focus:border-[var(--pnp-accent)] transition-colors"
+              placeholder="e.g. Jade" />
+            <div class="mt-6 flex items-center gap-5">
+              <button id="pnp-name-continue" class="pnp-bg-accent rounded-md px-5 py-2.5 font-medium opacity-50" disabled>Continue</button>
+              <button id="pnp-name-skip" class="pnp-muted text-sm underline">Maybe later</button>
+            </div>
+          </section>`;
+
+        const input = root.querySelector('#pnp-name-input');
+        const cont  = root.querySelector('#pnp-name-continue');
+        const skip  = root.querySelector('#pnp-name-skip');
+        input.focus();
+
+        input.addEventListener('input', () => {
+          const has = input.value.trim().length > 0;
+          cont.disabled = !has;
+          cont.classList.toggle('opacity-50', !has);
+        });
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && !cont.disabled) { e.preventDefault(); cont.click(); }
+        });
+        cont.addEventListener('click', () => {
+          state.setUser(renderText(input.value));
+          step = 'firstrun'; paint();
+        });
+        skip.addEventListener('click', () => {
+          state.setUser(null);
+          step = 'firstrun'; paint();
+        });
+      }
+
+      function paintFirstRun() {
+        root.innerHTML = `
+          <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+            <p class="pnp-muted text-xs uppercase tracking-wide">First time</p>
+            <h1 class="text-3xl font-semibold tracking-tight mt-2">Here's the whole loop.</h1>
+            <p class="pnp-muted mt-3">Four steps. Take a couple of minutes.</p>
+            <ol class="mt-6 space-y-4 text-lg list-none">
+              <li class="flex gap-3"><span class="pnp-accent font-semibold w-6 mt-0.5">1.</span><span>Open this when your head feels full.</span></li>
+              <li class="flex gap-3"><span class="pnp-accent font-semibold w-6 mt-0.5">2.</span><span>Dump what's rattling around. One thing per bubble.</span></li>
+              <li class="flex gap-3"><span class="pnp-accent font-semibold w-6 mt-0.5">3.</span><span>Pick up to four you'll actually do today.</span></li>
+              <li class="flex gap-3"><span class="pnp-accent font-semibold w-6 mt-0.5">4.</span><span>Close it. Come back tomorrow.</span></li>
+            </ol>
+            <p class="pnp-muted mt-6 italic">That's the whole game.</p>
+            <div class="mt-6 flex items-center gap-5">
+              <button id="pnp-firstrun-go" class="pnp-bg-accent rounded-md px-5 py-2.5 font-medium">Let's go</button>
+              <button id="pnp-firstrun-skip" class="pnp-muted text-sm underline">Skip</button>
+            </div>
+          </section>`;
+        const finish = () => { state.set(KEYS.welcomeShown, true); advance('S2'); };
+        root.querySelector('#pnp-firstrun-go').addEventListener('click', finish);
+        root.querySelector('#pnp-firstrun-skip').addEventListener('click', finish);
+      }
+
+      paint();
+    }
+
+    function viewS2(root) {
+      const moods = [
+        { key: 'overwhelmed', label: 'Overwhelmed', sub: 'heavy, foggy, flooded' },
+        { key: 'tired',       label: 'Tired',       sub: 'low energy, depleted' },
+        { key: 'okay',        label: 'Okay',        sub: 'getting on with it' },
+        { key: 'great',       label: 'Great',       sub: 'strong, bright, ready' },
+      ];
+      const user = state.get(KEYS.user);
+      const greeting = user && user.name ? `Hey ${user.name},` : 'Hey there,';
+
+      root.innerHTML = `
+        <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+          <div class="flex justify-end">
+            <button id="pnp-s2-skip" class="pnp-muted text-sm underline">Skip</button>
+          </div>
+          <p class="pnp-muted mt-2">${greeting.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</p>
+          <h1 class="text-3xl font-semibold tracking-tight mt-1">${sessionFlags.newSessionMode ? 'Welcome back. How are you feeling?' : 'How are you feeling today?'}</h1>
+          <div class="mt-8 grid sm:grid-cols-2 gap-3">
+            ${moods.map(m => `
+              <button data-mood="${m.key}"
+                class="text-left pnp-surface border pnp-border rounded-xl p-5 hover:border-[var(--pnp-accent)] focus:border-[var(--pnp-accent)] transition-colors">
+                <div class="font-semibold text-lg">${m.label}</div>
+                <div class="pnp-muted text-sm mt-1">${m.sub}</div>
+              </button>`).join('')}
+          </div>
+        </section>`;
+
+      const goNext = (mood) => {
+        const parked = state.get(KEYS.parked, []);
+        const hasActiveToday = todayListCount() > 0;
+        if (sessionFlags.newSessionMode) {
+          state.remove(state.todayEntryKey());
+          state.set(KEYS.dumpUnsorted, []);
+        }
+        state.setMood(mood);
+        if ((sessionFlags.newSessionMode || !hasActiveToday) && parked.length > 0) {
+          advance('S2C');
+        } else {
+          advance('S3');
+        }
+      };
+      root.querySelectorAll('[data-mood]').forEach(btn => {
+        btn.addEventListener('click', () => goNext(btn.dataset.mood));
+      });
+      root.querySelector('#pnp-s2-skip').addEventListener('click', () => goNext('okay'));
+    }
+
+    function viewS2C(root) {
+      const parked = state.get(KEYS.parked, []);
+      const todayEntry = state.getToday();
+      const returningAfterClose = !!(todayEntry && todayEntry.wrapped);
+      const title = returningAfterClose || sessionFlags.newSessionMode
+        ? 'Welcome back. Where would you like to start?'
+        : 'Where do you want to start?';
+      const parkedLabel = parked.length === 1 ? '1 item' : `${parked.length} items`;
+      const subtitle = parked.length > 0
+        ? `You have ${parkedLabel} in your parking lot.`
+        : 'Nothing is parked right now. You can add something new.';
+      const parkedDisabled = parked.length === 0 ? 'disabled aria-disabled="true"' : '';
+      root.innerHTML = `
+        <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+          <h1 class="text-2xl font-semibold tracking-tight">${escapeHtml(title)}</h1>
+          <p class="pnp-muted text-sm mt-2">${escapeHtml(subtitle)}</p>
+          <div class="mt-6 flex flex-col gap-3">
+            <button id="pnp-s2c-parked"
+              ${parkedDisabled}
+              class="pnp-bg-accent rounded-md px-5 py-3 font-medium text-left disabled:opacity-40 disabled:cursor-not-allowed">
+              Pick from my parking lot
+            </button>
+            <button id="pnp-s2c-new"
+              class="pnp-surface border pnp-border rounded-md px-5 py-3 text-sm text-left hover:border-[var(--pnp-accent)] transition-colors">
+              Add new thoughts first
+            </button>
+          </div>
+        </section>`;
+
+      function prepareIfClosed() {
+        const current = state.getToday();
+        if (!current || !current.wrapped) return;
+        createEmptyTodaySession(current.mood || (current.wrapSnapshot && current.wrapSnapshot.mood) || 'okay');
+      }
+
+      root.querySelector('#pnp-s2c-parked').addEventListener('click', () => {
+        if (parked.length === 0) return;
+        prepareIfClosed();
+        advance('S4', { source: 'parked', returnTo: 'S6' });
+      });
+      root.querySelector('#pnp-s2c-new').addEventListener('click', () => {
+        prepareIfClosed();
+        advance('S3');
+      });
+    }
+
+    function viewS3(root) {
+      const MAX_BUBBLES = 8;
+      const HARD_CAP = 180;
+      const AMBER_AT = 160;
+      const INITIAL = 4;
+
+      const bubbles = [];
+      for (let i = 0; i < INITIAL; i++) bubbles.push({ localId: 'b' + i, dumpId: null, value: '' });
+
+      function persist(b) {
+        const text = renderText(b.value);
+        if (!text && b.dumpId) { state.removeDump(b.dumpId); b.dumpId = null; }
+        else if (text && !b.dumpId) { b.dumpId = state.addDump(text); }
+        else if (text && b.dumpId) { state.updateDump(b.dumpId, text); }
+      }
+
+      function paint() {
+        root.innerHTML = `
+          <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+            <div class="flex justify-end">
+              <button id="pnp-s3-skip" class="pnp-muted text-sm underline">Skip</button>
+            </div>
+            <h1 class="text-3xl font-semibold tracking-tight mt-2">Get it out of your head.</h1>
+            <p class="pnp-muted mt-2">One thing per bubble. Doesn't have to be tidy.</p>
+            <div id="pnp-bubbles" class="mt-6 space-y-3"></div>
+            <div id="pnp-add-row" class="mt-3 hidden">
+              <button id="pnp-add-bubble" class="text-sm pnp-muted hover:opacity-80">+ Add another</button>
+            </div>
+            <div class="mt-8 flex items-center gap-5">
+              <button id="pnp-s3-done" class="pnp-bg-accent rounded-md px-5 py-2.5 font-medium">Done</button>
+            </div>
+          </section>`;
+
+        const bubblesRoot = root.querySelector('#pnp-bubbles');
+        bubbles.forEach((b, idx) => bubblesRoot.appendChild(makeBubble(b, idx)));
+
+        updateAddVisibility();
+
+        root.querySelector('#pnp-add-bubble').addEventListener('click', addBubble);
+        root.querySelector('#pnp-s3-skip').addEventListener('click', finish);
+        root.querySelector('#pnp-s3-done').addEventListener('click', finish);
+      }
+
+      function makeBubble(b, idx) {
+        const wrap = document.createElement('div');
+        wrap.className = 'relative';
+        wrap.innerHTML = `
+          <textarea rows="2" maxlength="${HARD_CAP}"
+            class="w-full pnp-surface border pnp-border rounded-xl p-4 pr-20 resize-none outline-none focus:border-[var(--pnp-accent)] transition-colors"
+            placeholder="${idx === 0 ? "What's been rattling around in there?" : ''}"
+            data-bubble="${b.localId}"></textarea>
+          <span class="absolute bottom-2 right-3 text-xs pnp-muted" data-counter="${b.localId}"></span>`;
+        const ta = wrap.querySelector('textarea');
+        const counter = wrap.querySelector(`[data-counter="${b.localId}"]`);
+        ta.value = b.value;
+
+        const refreshCounter = () => {
+          const len = ta.value.length;
+          counter.textContent = `${len} / ${HARD_CAP}`;
+          counter.style.color = len >= AMBER_AT ? '#D97706' : '';
+        };
+        refreshCounter();
+
+        ta.addEventListener('input', () => {
+          b.value = ta.value;
+          refreshCounter();
+          updateAddVisibility();
+        });
+        ta.addEventListener('blur', () => persist(b));
+        ta.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            const all = Array.from(root.querySelectorAll('textarea[data-bubble]'));
+            const myIdx = all.indexOf(ta);
+            if (myIdx >= 0 && myIdx < all.length - 1) all[myIdx + 1].focus();
+            else if (bubbles.length < MAX_BUBBLES && allFilled()) addBubble();
+          }
+        });
+        return wrap;
+      }
+
+      function allFilled() {
+        return bubbles.every(b => b.value.trim().length > 0);
+      }
+
+      function updateAddVisibility() {
+        const filled = bubbles.filter(b => b.value.trim().length > 0).length;
+        const addRow = root.querySelector('#pnp-add-row');
+        if (!addRow) return;
+        if (filled >= INITIAL && bubbles.length < MAX_BUBBLES) addRow.classList.remove('hidden');
+        else addRow.classList.add('hidden');
+      }
+
+      function addBubble() {
+        if (bubbles.length >= MAX_BUBBLES) return;
+        bubbles.push({ localId: 'b' + bubbles.length, dumpId: null, value: '' });
+        paint();
+        const all = root.querySelectorAll('textarea[data-bubble]');
+        if (all.length) all[all.length - 1].focus();
+      }
+
+      function finish() {
+        bubbles.forEach(persist);
+        if (screenOpts && screenOpts.sourceAfterDump) {
+          advance('S4', {
+            source: screenOpts.sourceAfterDump,
+            returnTo: screenOpts.returnTo || 'S5',
+          });
+        } else {
+          advance('S4');
+        }
+      }
+
+      paint();
+    }
+
+    function escapeHtml(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function showToast(msg, actionLabel, onAction, durationMs = 5000) {
+      const existing = document.getElementById('pnp-toast');
+      if (existing) existing.remove();
+      const el = document.createElement('div');
+      el.id = 'pnp-toast';
+      el.className = 'pnp-no-print fixed bottom-5 left-1/2 -translate-x-1/2 pnp-surface border pnp-border rounded-full shadow-lg px-4 py-2 flex items-center gap-3 z-50 max-w-[90vw]';
+      el.innerHTML = `
+        <span class="text-sm truncate">${escapeHtml(msg)}</span>
+        <button class="text-sm pnp-accent font-medium hover:opacity-80 shrink-0" data-toast-action>${escapeHtml(actionLabel)}</button>`;
+      document.body.appendChild(el);
+      let consumed = false;
+      const timer = setTimeout(() => { if (!consumed) el.remove(); }, durationMs);
+      el.querySelector('[data-toast-action]').addEventListener('click', () => {
+        consumed = true;
+        clearTimeout(timer);
+        el.remove();
+        if (onAction) onAction();
+      });
+    }
+
+    function findDuplicate(text) {
+      const norm = String(text || '').trim().toLowerCase();
+      if (!norm) return null;
+      const today = state.getToday() || { items: [] };
+      const todayHit = (today.items || []).find(i => String(i.text || '').trim().toLowerCase() === norm);
+      if (todayHit) return { in: 'today', text: todayHit.text };
+      const parked = state.get(KEYS.parked, []);
+      const parkedHit = parked.find(p => String(p.text || '').trim().toLowerCase() === norm);
+      if (parkedHit) return { in: 'parked', text: parkedHit.text };
+      const dump = state.get(KEYS.dumpUnsorted, []);
+      const dumpHit = dump.find(d => String(d.text || '').trim().toLowerCase() === norm);
+      if (dumpHit) return { in: 'dump', text: dumpHit.text };
+      return null;
+    }
+
+    function showDuplicateConfirm(hit, onAdd, onSkip) {
+      const where = hit.in === 'today' ? "on today's list"
+                  : hit.in === 'parked' ? "in your parking lot"
+                  : "in your unsorted brain dump";
+      const overlay = document.createElement('div');
+      overlay.className = 'pnp-no-print fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4';
+      overlay.style.background = 'rgba(0,0,0,0.6)';
+      overlay.innerHTML = `
+        <div class="pnp-surface border pnp-border rounded-2xl p-6 w-full max-w-md">
+          <h2 class="text-xl font-semibold">You've got this one already</h2>
+          <p class="pnp-muted mt-3">"${escapeHtml(hit.text)}" is ${escapeHtml(where)}.</p>
+          <p class="pnp-muted mt-2 text-sm">Add it anyway if it's a separate task. Skip if it's a duplicate.</p>
+          <div class="mt-5 flex flex-wrap items-center gap-3 justify-end">
+            <button id="pnp-dup-skip" class="pnp-muted text-sm underline">Skip</button>
+            <button id="pnp-dup-add" class="pnp-bg-accent rounded-md px-4 py-2 font-medium">Add anyway</button>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      function done(action) {
+        document.removeEventListener('keydown', escHandler);
+        overlay.remove();
+        if (action === 'add' && onAdd) onAdd();
+        else if (action === 'skip' && onSkip) onSkip();
+      }
+      function escHandler(e) { if (e.key === 'Escape') done('skip'); }
+      overlay.querySelector('#pnp-dup-skip').addEventListener('click', () => done('skip'));
+      overlay.querySelector('#pnp-dup-add').addEventListener('click', () => done('add'));
+      overlay.addEventListener('click', e => { if (e.target === overlay) done('skip'); });
+      document.addEventListener('keydown', escHandler);
+    }
+
+    function viewS4(root) {
+      const sourceFilter = (screenOpts && screenOpts.source) || 'all';
+      const returnTo = (screenOpts && screenOpts.returnTo) || 'S5';
+
+      const dumpItems = sourceFilter === 'parked'
+        ? []
+        : state.get(KEYS.dumpUnsorted, []).map(d => ({ ...d, origin: 'dump' }));
+      const parkedItems = sourceFilter === 'dump'
+        ? []
+        : state.get(KEYS.parked, []).map(p => ({ ...p, origin: 'parked' }));
+      const queue = [...dumpItems, ...parkedItems];
+
+      if (queue.length === 0) { finishSort(); return; }
+
+      let cursor = 0;
+      const total = queue.length;
+
+      function paint() {
+        const item = queue[cursor];
+        if (!item) { finishSort(); return; }
+        const capFull = !todayHasRoom();
+
+        root.innerHTML = `
+          <section class="mt-6">
+            <div class="flex items-center justify-between">
+              <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Sort the noise</h1>
+              <p class="pnp-muted text-sm">${cursor + 1} of ${total}</p>
+            </div>
+            <div class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-4 min-h-[8rem]">
+              <p class="text-lg leading-relaxed">• ${escapeHtml(renderText(item.text))}</p>
+              ${item.origin === 'parked' ? '<p class="pnp-muted text-xs mt-3 uppercase tracking-wide">From your parking lot</p>' : ''}
+            </div>
+            <div class="mt-5 grid grid-cols-3 gap-3">
+              <button id="pnp-now"
+                class="rounded-xl ${capFull ? 'pnp-surface border pnp-border pnp-muted' : 'pnp-bg-accent'} font-medium py-3 text-base sm:text-lg"
+                ${capFull ? 'disabled' : ''}>${capFull ? 'Today is full' : 'Now'}</button>
+              <button id="pnp-park"
+                class="rounded-xl pnp-surface border pnp-border font-medium py-3 text-base sm:text-lg hover:border-[var(--pnp-accent)] transition-colors">Park</button>
+              <button id="pnp-remove"
+                class="rounded-xl pnp-surface border pnp-border font-medium py-3 text-base sm:text-lg hover:border-[var(--pnp-accent)] transition-colors">Remove</button>
+            </div>
+            <p class="pnp-no-print pnp-muted text-xs mt-2 text-center">Now = today's list · Park = save for later · Remove = let it go</p>
+          </section>`;
+
+        root.querySelector('#pnp-now').addEventListener('click', () => handle('now', item));
+        root.querySelector('#pnp-park').addEventListener('click', () => handle('park', item));
+        root.querySelector('#pnp-remove').addEventListener('click', () => handle('remove', item));
+      }
+
+      function removeFromOrigin(item) {
+        if (item.origin === 'dump') state.removeDump(item.id);
+        else state.removeParked(item.id);
+      }
+
+      function restore(item) {
+        if (item.origin === 'dump') {
+          const dump = state.get(KEYS.dumpUnsorted, []);
+          dump.push({ id: item.id, text: item.text, createdAt: item.createdAt });
+          state.set(KEYS.dumpUnsorted, dump);
+        } else {
+          const parked = state.get(KEYS.parked, []);
+          parked.push({ id: item.id, text: item.text, parkedAt: item.parkedAt, lastTouched: item.lastTouched });
+          state.set(KEYS.parked, parked);
+        }
+      }
+
+      function handle(action, item) {
+        if (action === 'now') {
+          const added = state.addTodayItem(renderText(item.text));
+          if (!added) {
+            showToast("Today's list is full.", 'Park it', () => handle('park', item), 4000);
+            return;
+          }
+          removeFromOrigin(item);
+        } else if (action === 'park') {
+          if (item.origin === 'dump') {
+            state.addParked(renderText(item.text));
+            state.removeDump(item.id);
+          } else {
+            state.refreshParkedTouched(item.id);
+          }
+        } else if (action === 'remove') {
+          removeFromOrigin(item);
+          const preview = renderText(item.text);
+          const short = preview.length > 40 ? preview.slice(0, 40) + '…' : preview;
+          showToast(`Removed "${short}"`, 'Undo', () => restore(item));
+        }
+        cursor++;
+        paint();
+      }
+
+      function finishSort() {
+        if (sourceFilter !== 'parked' || sessionFlags.askedAddMoreAfterParked || !todayHasRoom()) {
+          advance(returnTo);
+          return;
+        }
+
+        sessionFlags.askedAddMoreAfterParked = true;
+        const count = todayListCount();
+        const title = count > 0 ? 'Want to add anything new?' : 'Nothing chosen for today.';
+        const body = count > 0
+          ? 'You can add one or two fresh thoughts, or keep today light.'
+          : 'You can add something new, or keep today clear.';
+
+        root.innerHTML = `
+          <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+            <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">${title}</h1>
+            <p class="pnp-muted mt-3">${body}</p>
+            <div class="mt-6 grid gap-3">
+              <button id="pnp-add-new-after-parked"
+                class="pnp-bg-accent rounded-md px-5 py-3 font-medium text-left">
+                Add something new
+              </button>
+              <button id="pnp-keep-light-after-parked"
+                class="pnp-surface border pnp-border rounded-md px-5 py-3 text-left hover:border-[var(--pnp-accent)] transition-colors">
+                ${count > 0 ? 'Keep today light' : 'Keep today clear'}
+              </button>
+            </div>
+          </section>`;
+
+        root.querySelector('#pnp-add-new-after-parked').addEventListener('click', () => {
+          advance('S3', { sourceAfterDump: 'dump', returnTo });
+        });
+        root.querySelector('#pnp-keep-light-after-parked').addEventListener('click', () => advance(returnTo));
+      }
+
+      paint();
+    }
+
+    function viewS5(root) {
+      const today = state.getToday() || { items: [] };
+      const allItems = (today.items || []).slice();
+      const lockedItems = allItems.filter(i => i.locked);
+      const items = allItems.filter(i => !i.locked);
+
+      function unlockAll() {
+        const t = state.getToday();
+        if (!t || !Array.isArray(t.items)) return;
+        t.items = t.items.map(i => { const { locked, ...rest } = i; return rest; });
+        state.setToday(t);
+      }
+
+      if (items.length === 0) {
+        root.innerHTML = `
+          <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+            <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">What's the one thing that needs to happen today?</h1>
+            <input id="pnp-empty-task" type="text" maxlength="180"
+              class="w-full mt-6 pnp-surface border pnp-border rounded-xl p-4 text-lg outline-none focus:border-[var(--pnp-accent)] transition-colors"
+              placeholder="One thing." />
+            <div class="mt-6 flex items-center gap-5">
+              <button id="pnp-empty-add" class="pnp-bg-accent rounded-md px-5 py-2.5 font-medium opacity-50" disabled>Add</button>
+              <button id="pnp-empty-skip" class="pnp-muted text-sm underline">Nothing today</button>
+            </div>
+          </section>`;
+        const input = root.querySelector('#pnp-empty-task');
+        const add   = root.querySelector('#pnp-empty-add');
+        const skip  = root.querySelector('#pnp-empty-skip');
+        input.focus();
+        input.addEventListener('input', () => {
+          const has = input.value.trim().length > 0;
+          add.disabled = !has;
+          add.classList.toggle('opacity-50', !has);
+        });
+        input.addEventListener('keydown', e => { if (e.key === 'Enter' && !add.disabled) { e.preventDefault(); add.click(); } });
+        add.addEventListener('click', () => {
+          const text = renderText(input.value);
+          if (!text) return;
+          if (!todayHasRoom()) {
+            showToast("Today's list is full.", 'OK', null, 3000);
+            return;
+          }
+          const hit = findDuplicate(text);
+          const proceed = () => {
+            state.addTodayItem(text);
+            unlockAll();
+            sessionFlags.newSessionMode = false;
+            advance('S6');
+          };
+          if (hit) showDuplicateConfirm(hit, proceed, () => { input.focus(); });
+          else proceed();
+        });
+        skip.addEventListener('click', () => {
+          unlockAll();
+          sessionFlags.newSessionMode = false;
+          advance('S6');
+        });
+        return;
+      }
+
+      const selected = new Set();
+
+      function paint() {
+        const todayNow = state.getToday() || { items: [] };
+        const liveItems = (todayNow.items || []).filter(i => !i.locked);
+        const lockedNow = (todayNow.items || []).filter(i => i.locked);
+        const capacity = Math.max(0, 4 - todayListCount({ items: lockedNow }));
+
+        root.innerHTML = `
+          <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+            <div class="flex items-start justify-between gap-3">
+              <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">What feels doable today?</h1>
+              <button id="pnp-s5-skip" class="pnp-muted text-sm underline shrink-0 mt-1">Skip</button>
+            </div>
+            ${lockedNow.length > 0 ? `<p class="pnp-muted text-xs mt-2">${lockedNow.length} ${lockedNow.length === 1 ? 'task is' : 'tasks are'} already on today's list. Picking adds to that.</p>` : ''}
+            <div class="flex items-center justify-between mt-2">
+              <p class="pnp-muted text-sm">${capacity > 0 ? `Pick up to ${capacity}` : "Today's list is full"}</p>
+              <p class="pnp-muted text-sm"><span id="pnp-counter">${selected.size} of ${capacity} picked</span></p>
+            </div>
+            <ul id="pnp-pick-list" class="mt-6 space-y-2"></ul>
+            <p class="pnp-muted text-xs mt-4">Tap × beside any task to send it back to your parking lot.</p>
+            <div class="mt-4 flex items-center gap-5">
+              <button id="pnp-confirm" class="pnp-bg-accent rounded-md px-5 py-2.5 font-medium ${selected.size === 0 ? 'opacity-50' : ''}" ${selected.size === 0 ? 'disabled' : ''}>Confirm</button>
+            </div>
+          </section>`;
+
+        const list = root.querySelector('#pnp-pick-list');
+        liveItems.forEach(item => {
+          const li = document.createElement('li');
+          const checked = selected.has(item.id);
+          li.className = 'flex items-stretch gap-2';
+          li.innerHTML = `
+            <button data-pick="${escapeHtml(item.id)}"
+              class="flex-1 text-left pnp-surface border ${checked ? 'border-[var(--pnp-accent)]' : 'pnp-border'} rounded-xl p-4 hover:border-[var(--pnp-accent)] transition-colors flex items-start gap-3">
+              <span class="pnp-accent font-bold text-lg w-5 mt-0.5">${checked ? '✓' : '•'}</span>
+              <span class="flex-1">${escapeHtml(renderText(item.text))}</span>
+            </button>
+            <button data-remove="${escapeHtml(item.id)}"
+              class="pnp-muted px-3 hover:opacity-70 text-xl"
+              aria-label="Send back to parking lot"
+              title="Send to parking lot">×</button>`;
+          list.appendChild(li);
+        });
+
+        list.querySelectorAll('[data-pick]').forEach(btn => {
+          btn.addEventListener('click', () => togglePick(btn.dataset.pick));
+        });
+        list.querySelectorAll('[data-remove]').forEach(btn => {
+          btn.addEventListener('click', () => sendToParked(btn.dataset.remove));
+        });
+        root.querySelector('#pnp-confirm').addEventListener('click', confirm);
+        root.querySelector('#pnp-s5-skip').addEventListener('click', skipAll);
+      }
+
+      function togglePick(id) {
+        const todayNow = state.getToday() || { items: [] };
+        const lockedNow = (todayNow.items || []).filter(i => i.locked);
+        const capacity = Math.max(0, 4 - todayListCount({ items: lockedNow }));
+        if (selected.has(id)) selected.delete(id);
+        else if (selected.size < capacity) selected.add(id);
+        paint();
+      }
+
+      function sendToParked(id) {
+        const todayNow = state.getToday();
+        if (!todayNow) return;
+        const item = todayNow.items.find(i => i.id === id);
+        if (!item || item.locked) return;
+        state.addParked(item.text);
+        state.setTodayItems(todayNow.items.filter(i => i.id !== id));
+        selected.delete(id);
+        const remaining = todayNow.items.filter(i => i.id !== id && !i.locked);
+        if (remaining.length === 0) {
+          unlockAll();
+          sessionFlags.newSessionMode = false;
+          advance('S6');
+          return;
+        }
+        paint();
+      }
+
+      function skipAll() {
+        const todayNow = state.getToday();
+        if (todayNow && Array.isArray(todayNow.items)) {
+          const unlocked = todayNow.items.filter(i => !i.locked);
+          unlocked.forEach(i => state.addParked(i.text));
+          const locked = todayNow.items.filter(i => i.locked).map(i => { const { locked: _l, ...rest } = i; return rest; });
+          state.setTodayItems(locked);
+        }
+        sessionFlags.newSessionMode = false;
+        advance('S6');
+      }
+
+      function confirm() {
+        if (selected.size === 0) return;
+        const todayNow = state.getToday();
+        const lockedKeep = todayNow.items.filter(i => i.locked).map(i => { const { locked: _l, ...rest } = i; return rest; });
+        const unlocked = todayNow.items.filter(i => !i.locked);
+        const kept = unlocked.filter(i => selected.has(i.id));
+        const dropped = unlocked.filter(i => !selected.has(i.id));
+        dropped.forEach(d => state.addParked(d.text));
+        state.setTodayItems([...lockedKeep, ...kept]);
+        sessionFlags.newSessionMode = false;
+        advance('S6');
+      }
+
+      paint();
+    }
+
+    function viewS6(root) {
+      function paint() {
+        const today = state.getToday() || { items: [] };
+        const items = today.items || [];
+        const mood = today.mood || 'okay';
+        const priorityId = today.priorityItemId || null;
+        const settings = state.get(KEYS.settings, defaultSettings);
+        const dayMeta = state.getDayMeta();
+        const parked = state.get(KEYS.parked, []);
+        const parkedCount = parked.length;
+
+        const hasUndone = items.some(i => !i.done && !i.isParent);
+        const allDone = items.length > 0 && !hasUndone;
+        const doneCount = items.filter(i => i.done && !i.isParent).length;
+        const returnHint = dayMeta.openCount >= 3
+          ? (doneCount > 0
+            ? `Welcome back. ${doneCount} ${doneCount === 1 ? 'thing has' : 'things have'} moved already. Keep going, park what feels heavy, or wrap up.`
+            : 'Welcome back. Your list is still here. You can start small, park something, or wrap up.')
+          : dayMeta.openCount === 2
+            ? 'Welcome back. Pick up where you left off.'
+            : '';
+
+        const dateStr = settings.showDateOnToday
+          ? new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
+          : '';
+
+        const bannerHtml = renderBanners({ today, items, parked, settings });
+        const plusOneHtml = '';
+        const itemHighlight = (id) => priorityId && id === priorityId
+          ? 'pnp-surface border pnp-border rounded-lg p-2 -ml-2'
+          : '';
+
+        const parkedLabel = parkedCount === 1 ? '1 item parked' : `${parkedCount} items parked`;
+
+        root.innerHTML = `
+          <section class="mt-6">
+            <div class="flex items-center justify-between">
+              ${dateStr ? `<p class="pnp-muted text-sm">${escapeHtml(dateStr)}</p>` : '<span></span>'}
+              <button id="pnp-parked-badge" class="pnp-no-print pnp-muted text-sm underline hover:opacity-80">${parkedLabel}</button>
+            </div>
+
+            ${bannerHtml}
+
+            ${plusOneHtml}
+
+            ${returnHint ? `<p class="pnp-no-print pnp-muted text-sm mt-4">${escapeHtml(returnHint)}</p>` : ''}
+
+            ${hasUndone ? '<p class="pnp-no-print pnp-muted text-sm mt-4 mb-2">Tap a task to mark it done.</p>' : ''}
+
+            <div class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-2">
+              ${items.length === 0
+                ? '<p class="pnp-muted">Nothing on your list for today yet.</p>'
+                : '<ul id="pnp-today-list" class="space-y-3 text-lg"></ul>'}
+            </div>
+
+
+            ${allDone ? `
+              <div class="pnp-no-print pnp-surface border pnp-border rounded-xl p-4 mt-4">
+                <p class="text-sm">All ticked. Wrap up, or start a new session?</p>
+              </div>` : ''}
+
+            <div class="pnp-no-print mt-6 flex flex-wrap items-center gap-3">
+              <button id="pnp-wrap" class="pnp-bg-accent rounded-md px-5 py-2.5 font-medium">Wrap up</button>
+              ${hasUndone && doneCount > 0 ? '<button id="pnp-stuck" class="text-sm pnp-surface border pnp-border rounded-md px-4 py-2 hover:border-[var(--pnp-accent)] transition-colors">Stuck?</button>' : ''}
+              ${allDone ? '<button id="pnp-newsession-btn" class="text-sm pnp-surface border pnp-border rounded-md px-4 py-2 hover:border-[var(--pnp-accent)] transition-colors">Start a new session</button>' : ''}
+              <button id="pnp-print" class="text-sm pnp-muted underline hover:opacity-80">Print today</button>
+            </div>
+
+            ${!allDone ? `
+              <div class="pnp-no-print mt-6">
+                <button id="pnp-newsession" class="pnp-muted text-xs underline hover:opacity-80">Start a new session</button>
+              </div>` : ''}
+          </section>
+
+          <button id="pnp-fab"
+            class="pnp-no-print fixed bottom-5 right-5 w-14 h-14 rounded-full pnp-bg-accent text-2xl font-bold shadow-lg z-30 hover:opacity-90"
+            aria-label="Quick brain dump">+</button>`;
+
+        const list = root.querySelector('#pnp-today-list');
+        if (list) {
+          items.forEach(item => {
+            const li = document.createElement('li');
+            if (item.isParent) {
+              li.className = 'pt-3 pb-0.5';
+              li.innerHTML = `
+                <span class="block pnp-muted text-sm opacity-70">
+                  ${escapeHtml(renderText(item.text))}
+                </span>`;
+            } else if (item.parentId) {
+              li.className = `flex items-start gap-3 cursor-pointer transition-opacity duration-200 select-none pl-4 ${itemHighlight(item.id)}`;
+              if (item.done) li.style.opacity = '0.5';
+              li.innerHTML = `
+                <span class="pnp-accent text-base mt-0.5 w-5">${item.done ? '✓' : '•'}</span>
+                <span class="flex-1 ${item.done ? 'line-through' : ''}">${escapeHtml(renderText(item.text))}</span>
+                ${!item.done ? `<button data-timer="${escapeHtml(item.id)}" class="pnp-no-print text-xs pnp-surface border pnp-border rounded-full px-3 py-1 hover:border-[var(--pnp-accent)] transition-colors shrink-0">Timer</button>` : ''}`;
+              li.addEventListener('click', () => {
+                state.toggleTodayItem(item.id);
+                paint();
+              });
+              const timerBtn = li.querySelector('[data-timer]');
+              if (timerBtn) timerBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                openTinyTimer(item.id, paint);
+              });
+            } else {
+              li.className = `flex items-start gap-3 cursor-pointer transition-opacity duration-200 select-none ${itemHighlight(item.id)}`;
+              if (item.done) li.style.opacity = '0.5';
+              li.innerHTML = `
+                <span class="pnp-accent text-xl mt-0.5 w-5">${item.done ? '✓' : (priorityId === item.id ? '★' : '•')}</span>
+                <span class="flex-1 ${item.done ? 'line-through' : ''}">${escapeHtml(renderText(item.text))}</span>
+                ${!item.done ? `<button data-timer="${escapeHtml(item.id)}" class="pnp-no-print text-xs pnp-surface border pnp-border rounded-full px-3 py-1 hover:border-[var(--pnp-accent)] transition-colors shrink-0">Timer</button>` : ''}`;
+              li.addEventListener('click', () => {
+                state.toggleTodayItem(item.id);
+                paint();
+              });
+              const timerBtn = li.querySelector('[data-timer]');
+              if (timerBtn) timerBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                openTinyTimer(item.id, paint);
+              });
+            }
+            list.appendChild(li);
+          });
+        }
+
+        wireBanners(root);
+        root.querySelector('#pnp-parked-badge').addEventListener('click', () => {
+          advance('S4', { source: 'parked', returnTo: 'S6' });
+        });
+        root.querySelector('#pnp-wrap').addEventListener('click', () => advance('S7'));
+        root.querySelector('#pnp-print').addEventListener('click', () => window.print());
+        root.querySelector('#pnp-fab').addEventListener('click', openFab);
+        const newSessionLink = root.querySelector('#pnp-newsession');
+        if (newSessionLink) newSessionLink.addEventListener('click', startNewSession);
+        const newSessionBtn = root.querySelector('#pnp-newsession-btn');
+        if (newSessionBtn) newSessionBtn.addEventListener('click', startNewSession);
+        const stuckBtn = root.querySelector('#pnp-stuck');
+        if (stuckBtn) stuckBtn.addEventListener('click', () => openStuckOverlay(paint));
+      }
+
+      function startNewSession() {
+        const today = state.getToday();
+        const carriedMood = today && today.mood ? today.mood : 'okay';
+        if (today && Array.isArray(today.items)) {
+          today.items
+            .filter(i => !i.done && !i.isParent)
+            .forEach(i => state.addParked(i.text));
+        }
+        state.remove(state.todayEntryKey());
+        state.set(KEYS.dumpUnsorted, []);
+        state.setToday({
+          mood: carriedMood,
+          items: [],
+          dumpEntries: [],
+          wrapped: false,
+          plusOneDismissed: true,
+        });
+        sessionFlags.newSessionMode = true;
+        const parked = state.get(KEYS.parked, []);
+        if (parked.length > 0) advance('S2C');
+        else advance('S3');
+      }
+
+      function renderBanners({ today, items, parked, settings }) {
+        const out = [];
+
+        if (!sessionFlags.yesterdayHandled) {
+          const yKey = yesterdayKey();
+          const yEntry = state.getToday(yKey);
+          if (yEntry && yEntry.wrapped === false && Array.isArray(yEntry.items)) {
+            const outstanding = yEntry.items.filter(i => !i.done && !i.isParent);
+            if (outstanding.length > 0) {
+              out.push(`
+                <div id="pnp-banner-yesterday" class="pnp-no-print pnp-surface border pnp-border rounded-xl p-4 mt-4 flex items-start gap-3">
+                  <span class="pnp-accent text-lg">↻</span>
+                  <div class="flex-1">
+                    <p class="text-sm">Yesterday wasn't closed. ${outstanding.length} ${outstanding.length === 1 ? 'task was' : 'tasks were'} outstanding. Move them to your parking lot?</p>
+                    <div class="mt-2 flex gap-3">
+                      <button data-banner="yesterday-yes" class="pnp-bg-accent rounded-md px-3 py-1.5 text-sm font-medium">Move them</button>
+                      <button data-banner="yesterday-dismiss" class="pnp-muted text-sm underline">Not now</button>
+                    </div>
+                  </div>
+                </div>`);
+            }
+          }
+        }
+
+        if (!sessionFlags.sundayDismissed && settings.sundayReview && isSundayToday() && parked.length > 0) {
+          const today2 = state.todayKey();
+          const last = state.get(KEYS.lastSundayPrompt);
+          if (last !== today2) {
+            out.push(`
+              <div id="pnp-banner-sunday" class="pnp-no-print pnp-surface border pnp-border rounded-xl p-4 mt-4 flex items-start gap-3">
+                <span class="pnp-accent text-lg">☼</span>
+                <div class="flex-1">
+                  <p class="text-sm">You have ${parked.length} ${parked.length === 1 ? 'thing' : 'things'} parked. Want a quick skim?</p>
+                  <div class="mt-2 flex gap-3">
+                    <button data-banner="sunday-yes" class="pnp-bg-accent rounded-md px-3 py-1.5 text-sm font-medium">Skim now</button>
+                    <button data-banner="sunday-dismiss" class="pnp-muted text-sm underline">Not today</button>
+                  </div>
+                </div>
+              </div>`);
+          }
+        }
+
+        if (!sessionFlags.overflowDismissed && parked.length > 15) {
+          out.push(`
+            <div id="pnp-banner-overflow" class="pnp-no-print pnp-muted text-xs mt-3 flex items-center gap-2">
+              <span>Your lot's getting busy. Want to skim?</span>
+              <button data-banner="overflow-yes" class="underline hover:opacity-80">Skim</button>
+              <span>·</span>
+              <button data-banner="overflow-dismiss" class="underline hover:opacity-80">Dismiss</button>
+            </div>`);
+        }
+
+        return out.join('');
+      }
+
+      function wireBanners(root) {
+        const yes = root.querySelector('[data-banner="yesterday-yes"]');
+        if (yes) yes.addEventListener('click', () => {
+          const yKey = yesterdayKey();
+          const yEntry = state.getToday(yKey);
+          if (yEntry && Array.isArray(yEntry.items)) {
+            const outstanding = yEntry.items.filter(i => !i.done && !i.isParent);
+            outstanding.forEach(o => state.addParked(o.text));
+            yEntry.items = yEntry.items.filter(i => i.done && !i.isParent);
+            yEntry.wrapped = true;
+            state.setToday(yEntry, yKey);
+          }
+          sessionFlags.yesterdayHandled = true;
+          paint();
+        });
+        const yDis = root.querySelector('[data-banner="yesterday-dismiss"]');
+        if (yDis) yDis.addEventListener('click', () => { sessionFlags.yesterdayHandled = true; paint(); });
+
+        const sYes = root.querySelector('[data-banner="sunday-yes"]');
+        if (sYes) sYes.addEventListener('click', () => {
+          state.set(KEYS.lastSundayPrompt, state.todayKey());
+          sessionFlags.sundayDismissed = true;
+          advance('S4', { source: 'parked', returnTo: 'S6' });
+        });
+        const sDis = root.querySelector('[data-banner="sunday-dismiss"]');
+        if (sDis) sDis.addEventListener('click', () => {
+          state.set(KEYS.lastSundayPrompt, state.todayKey());
+          sessionFlags.sundayDismissed = true;
+          paint();
+        });
+
+        const oYes = root.querySelector('[data-banner="overflow-yes"]');
+        if (oYes) oYes.addEventListener('click', () => {
+          sessionFlags.overflowDismissed = true;
+          advance('S4', { source: 'parked', returnTo: 'S6' });
+        });
+        const oDis = root.querySelector('[data-banner="overflow-dismiss"]');
+        if (oDis) oDis.addEventListener('click', () => { sessionFlags.overflowDismissed = true; paint(); });
+      }
+
+      function renderPlusOneBanner({ today, items, mood }) {
+        if (!items || items.length === 0) return '';
+        if (!todayHasRoom(today)) return '';
+        if (today.plusOneUsed) return '';
+        if (today.plusOneDismissed) return '';
+
+        const actionable = items.filter(i => !i.isParent);
+        const total = actionable.length;
+        const done = actionable.filter(i => i.done).length;
+        if (done === 0) return '';
+        if (done >= total) return '';
+        const pct = done / total;
+        const lowEnergy = mood === 'overwhelmed' || mood === 'tired';
+        const trigger = lowEnergy ? 0.75 : 0.5;
+        if (pct < trigger) return '';
+
+        const isGreat = mood === 'great';
+        const addClass = isGreat
+          ? 'pnp-bg-accent rounded-md px-4 py-2 text-sm font-medium'
+          : 'pnp-bg-accent rounded-md px-3 py-1.5 text-sm font-medium';
+        const stayClass = lowEnergy
+          ? 'pnp-bg-accent rounded-md px-4 py-2 text-sm font-medium'
+          : 'pnp-muted text-sm underline';
+        const addLabel = lowEnergy ? 'Add one more' : 'Add one more';
+        const stayLabel = 'Stay focused';
+        // For low-energy moods, swap so "Stay focused" is the prominent button.
+        const buttonsHtml = lowEnergy
+          ? `<button data-plusone="stay" class="${stayClass}">${stayLabel}</button>
+             <button data-plusone="add" class="pnp-muted text-sm underline">${addLabel}</button>`
+          : `<button data-plusone="add" class="${addClass}">${addLabel}</button>
+             <button data-plusone="stay" class="${stayClass}">${stayLabel}</button>`;
+
+        return `
+          <div id="pnp-plusone" class="pnp-no-print pnp-surface border pnp-border rounded-xl p-4 mt-4">
+            <p class="text-sm">You're ${pct >= 0.75 ? 'most of the way there' : 'halfway'}. Want to add one more, or stay focused on your plan?</p>
+            <div class="mt-3 flex gap-3 items-center">${buttonsHtml}</div>
+          </div>`;
+      }
+
+      function wirePlusOne(root, repaint) {
+        const stay = root.querySelector('[data-plusone="stay"]');
+        if (stay) stay.addEventListener('click', () => {
+          const today = state.getToday();
+          if (today) { today.plusOneDismissed = true; state.setToday(today); }
+          repaint();
+        });
+        const add = root.querySelector('[data-plusone="add"]');
+        if (add) add.addEventListener('click', () => openPlusOneInput(repaint));
+      }
+
+      function openPlusOneInput(repaint) {
+        const parked = state.get(KEYS.parked, []);
+        const picks = parked
+          .slice()
+          .sort((a, b) => Date.parse(b.lastTouched || 0) - Date.parse(a.lastTouched || 0))
+          .slice(0, 4);
+        const hasParked = picks.length > 0;
+
+        let stage = hasParked ? 'pick' : 'new';
+
+        const overlay = document.createElement('div');
+        overlay.className = 'pnp-no-print fixed inset-0 z-40 flex items-end sm:items-center justify-center p-4';
+        overlay.style.background = 'rgba(0,0,0,0.6)';
+        document.body.appendChild(overlay);
+
+        function close() {
+          document.removeEventListener('keydown', escClose);
+          overlay.remove();
+        }
+        function escClose(e) { if (e.key === 'Escape') close(); }
+        overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+        document.addEventListener('keydown', escClose);
+
+        function markUsed() {
+          const today = state.getToday();
+          if (today) { today.plusOneUsed = true; state.setToday(today); }
+        }
+
+        function addFromParked(id) {
+          if (!todayHasRoom()) {
+            showToast("Today's list is full. Start a new reset if you want to do more.", 'OK', null, 4000);
+            close();
+            return;
+          }
+          const all = state.get(KEYS.parked, []);
+          const item = all.find(p => p.id === id);
+          if (!item) return;
+          state.addTodayItem(item.text);
+          state.removeParked(id);
+          markUsed();
+          close();
+          repaint();
+        }
+
+        function paintOverlay() {
+          if (stage === 'pick') {
+            overlay.innerHTML = `
+              <div class="pnp-surface border pnp-border rounded-2xl p-6 w-full max-w-md max-h-full overflow-y-auto">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 class="text-xl font-semibold">One more from your parking lot?</h2>
+                    <p class="pnp-muted text-sm mt-1">Tap one to add it to today.</p>
+                  </div>
+                  <button data-plus-close class="pnp-muted text-sm underline shrink-0">Close</button>
+                </div>
+                <ul class="mt-5 space-y-2">
+                  ${picks.map(p => `
+                    <li>
+                      <button data-plus-pick="${escapeHtml(p.id)}"
+                        class="w-full text-left pnp-surface border pnp-border rounded-xl p-4 hover:border-[var(--pnp-accent)] transition-colors flex items-start gap-3">
+                        <span class="pnp-accent">•</span>
+                        <span class="flex-1">${escapeHtml(renderText(p.text))}</span>
+                      </button>
+                    </li>`).join('')}
+                </ul>
+                <div class="mt-5 flex items-center gap-3">
+                  <button data-plus-new class="pnp-muted text-sm underline hover:opacity-80">Add something new instead</button>
+                </div>
+              </div>`;
+            overlay.querySelectorAll('[data-plus-pick]').forEach(btn => {
+              btn.addEventListener('click', () => addFromParked(btn.dataset.plusPick));
+            });
+            overlay.querySelector('[data-plus-close]').addEventListener('click', close);
+            overlay.querySelector('[data-plus-new]').addEventListener('click', () => { stage = 'new'; paintOverlay(); });
+            return;
+          }
+
+          // stage === 'new' — free-text input
+          overlay.innerHTML = `
+            <div class="pnp-surface border pnp-border rounded-2xl p-6 w-full max-w-md">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h2 class="text-xl font-semibold">One more thing</h2>
+                  <p class="pnp-muted text-sm mt-1">Goes onto today's list.</p>
+                </div>
+                <button data-plus-close class="pnp-muted text-sm underline shrink-0">Close</button>
+              </div>
+              <textarea data-plus-input rows="3" maxlength="180"
+                class="w-full mt-4 pnp-surface border pnp-border rounded-xl p-4 outline-none focus:border-[var(--pnp-accent)] resize-none"
+                placeholder="What's the one more?"></textarea>
+              <div class="mt-4 flex items-center gap-3 justify-end">
+                ${hasParked ? '<button data-plus-back class="pnp-muted text-sm underline">Back to parked</button>' : ''}
+                <button data-plus-save class="pnp-bg-accent rounded-md px-4 py-2 font-medium opacity-50" disabled>Add</button>
+              </div>
+            </div>`;
+          const ta = overlay.querySelector('[data-plus-input]');
+          const save = overlay.querySelector('[data-plus-save]');
+          ta.focus();
+          ta.addEventListener('input', () => {
+            const has = ta.value.trim().length > 0;
+            save.disabled = !has;
+            save.classList.toggle('opacity-50', !has);
+          });
+          overlay.querySelector('[data-plus-close]').addEventListener('click', close);
+          const backBtn = overlay.querySelector('[data-plus-back]');
+          if (backBtn) backBtn.addEventListener('click', () => { stage = 'pick'; paintOverlay(); });
+          save.addEventListener('click', () => {
+            const text = renderText(ta.value);
+            if (!text) { close(); return; }
+            if (!todayHasRoom()) {
+              showToast("Today's list is full. Start a new reset if you want to do more.", 'OK', null, 4000);
+              close();
+              return;
+            }
+            state.addTodayItem(text);
+            markUsed();
+            close();
+            repaint();
+          });
+        }
+
+        paintOverlay();
+      }
+
+      function openTinyTimer(taskId, repaint) {
+        const today = state.getToday();
+        const item = today && Array.isArray(today.items)
+          ? today.items.find(i => i.id === taskId)
+          : null;
+        if (!item || item.done) return;
+
+        let seconds = 5 * 60;
+        let remaining = seconds;
+        let running = false;
+        let timer = null;
+
+        const overlay = document.createElement('div');
+        overlay.className = 'pnp-no-print fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4';
+        overlay.style.background = 'rgba(0,0,0,0.6)';
+        document.body.appendChild(overlay);
+        overlay.innerHTML = `
+          <div class="pnp-surface border pnp-border rounded-2xl p-6 w-full max-w-md">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="pnp-muted text-xs uppercase tracking-wide">Tiny timer</p>
+                <h2 class="text-xl font-semibold mt-1">Just start.</h2>
+              </div>
+              <button data-timer-close class="pnp-muted text-sm underline shrink-0">Close</button>
+            </div>
+            <p class="pnp-muted text-sm mt-3">Do the first few minutes of:</p>
+            <p class="mt-2 text-lg">• ${escapeHtml(renderText(item.text))}</p>
+            <div class="mt-5 grid grid-cols-4 gap-2">
+              ${[5,10,15,20].map(min => `
+                <button data-min="${min}"
+                  class="rounded-md border pnp-border py-2 text-sm">
+                  ${min}
+                </button>`).join('')}
+            </div>
+            <div class="mt-6 text-center">
+              <div data-timer-display class="text-5xl font-semibold tabular-nums">${formatTime(remaining)}</div>
+              <p data-timer-note class="pnp-muted text-xs mt-2">Starting counts. Finishing is optional.</p>
+            </div>
+            <div class="mt-6 flex flex-wrap items-center gap-3 justify-center">
+              <button data-timer-toggle class="pnp-bg-accent rounded-md px-5 py-2.5 font-medium">Start</button>
+              <button data-timer-done class="pnp-surface border pnp-border rounded-md px-4 py-2 text-sm hover:border-[var(--pnp-accent)] transition-colors">Mark done</button>
+            </div>
+          </div>`;
+
+        function formatTime(value) {
+          const mins = Math.floor(value / 60);
+          const secs = String(value % 60).padStart(2, '0');
+          return `${mins}:${secs}`;
+        }
+
+        function refreshTimerUi() {
+          const display = overlay.querySelector('[data-timer-display]');
+          const note = overlay.querySelector('[data-timer-note]');
+          const toggle = overlay.querySelector('[data-timer-toggle]');
+          if (display) display.textContent = formatTime(remaining);
+          if (note) note.textContent = remaining === 0 ? 'That was a real start.' : 'Starting counts. Finishing is optional.';
+          if (toggle) toggle.textContent = running ? 'Pause' : remaining === 0 ? 'Restart' : 'Start';
+          overlay.querySelectorAll('[data-min]').forEach(btn => {
+            const selected = seconds === Number(btn.dataset.min) * 60;
+            btn.classList.toggle('pnp-bg-accent', selected);
+            btn.classList.toggle('pnp-surface', !selected);
+          });
+        }
+
+        function stopTimer() {
+          running = false;
+          if (timer) clearInterval(timer);
+          timer = null;
+          refreshTimerUi();
+        }
+
+        function close() {
+          stopTimer();
+          document.removeEventListener('keydown', escClose);
+          overlay.remove();
+        }
+
+        function tick() {
+          remaining = Math.max(0, remaining - 1);
+          refreshTimerUi();
+          if (remaining === 0) {
+            running = false;
+            if (timer) clearInterval(timer);
+            timer = null;
+            refreshTimerUi();
+          }
+        }
+
+        function startPause() {
+          if (running) { stopTimer(); return; }
+          if (timer) clearInterval(timer);
+          if (remaining === 0) remaining = seconds;
+          running = true;
+          timer = setInterval(tick, 1000);
+          refreshTimerUi();
+        }
+
+        function setMinutes(minutes) {
+          if (running) stopTimer();
+          seconds = minutes * 60;
+          remaining = seconds;
+          refreshTimerUi();
+        }
+
+        function markDone() {
+          const t = state.getToday();
+          if (t && Array.isArray(t.items)) {
+            const match = t.items.find(i => i.id === taskId);
+            if (match) match.done = true;
+            state.setToday(t);
+          }
+          close();
+          repaint();
+        }
+
+        function escClose(e) { if (e.key === 'Escape') close(); }
+        overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+        overlay.querySelectorAll('[data-min]').forEach(btn => {
+          btn.addEventListener('click', () => setMinutes(Number(btn.dataset.min)));
+        });
+        overlay.querySelector('[data-timer-toggle]').addEventListener('click', startPause);
+        overlay.querySelector('[data-timer-done]').addEventListener('click', markDone);
+        overlay.querySelector('[data-timer-close]').addEventListener('click', close);
+        document.addEventListener('keydown', escClose);
+        refreshTimerUi();
+      }
+
+      function openStuckOverlay(repaint) {
+        const today = state.getToday();
+        if (!today || !Array.isArray(today.items) || today.items.length === 0) return;
+        const mood = today.mood || 'okay';
+        const open = today.items.filter(i => !i.done && !i.isParent);
+        if (open.length === 0) return;
+
+        const prompts = {
+          overwhelmed: "Which task could be made smaller?",
+          tired:       "Which task could be made easier to start?",
+          okay:        "Pick one task to adjust.",
+          great:       "Pick one task to adjust.",
+        };
+        const prompt = prompts[mood] || prompts.okay;
+
+        let stage = 'pick';
+        let pickedId = null;
+
+        const overlay = document.createElement('div');
+        overlay.className = 'pnp-no-print fixed inset-0 z-40 flex items-end sm:items-center justify-center p-4';
+        overlay.style.background = 'rgba(0,0,0,0.6)';
+        document.body.appendChild(overlay);
+
+        function paintOverlay() {
+          if (stage === 'pick') {
+            overlay.innerHTML = `
+              <div class="pnp-surface border pnp-border rounded-2xl p-6 w-full max-w-md max-h-full overflow-y-auto">
+                <div class="flex items-start justify-between gap-3">
+                  <h2 class="text-xl font-semibold">${escapeHtml(prompt)}</h2>
+                  <button data-stuck-close class="pnp-muted text-sm underline shrink-0">Close</button>
+                </div>
+                <ul class="mt-5 space-y-2">
+                  ${open.map(it => `
+                    <li>
+                      <button data-stuck-pick="${escapeHtml(it.id)}"
+                        class="w-full text-left pnp-surface border pnp-border rounded-xl p-4 hover:border-[var(--pnp-accent)] transition-colors">
+                        <span class="pnp-accent">•</span>
+                        <span class="ml-2">${escapeHtml(renderText(it.text))}</span>
+                      </button>
+                    </li>`).join('')}
+                </ul>
+              </div>`;
+            overlay.querySelectorAll('[data-stuck-pick]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                pickedId = btn.dataset.stuckPick;
+                stage = 'choice';
+                paintOverlay();
+              });
+            });
+            overlay.querySelector('[data-stuck-close]').addEventListener('click', close);
+            return;
+          }
+
+          if (stage === 'choice') {
+            const item = open.find(i => i.id === pickedId);
+            const itemText = item ? renderText(item.text) : '';
+            overlay.innerHTML = `
+              <div class="pnp-surface border pnp-border rounded-2xl p-6 w-full max-w-md max-h-full overflow-y-auto">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <p class="pnp-muted text-xs uppercase tracking-wide">Breaking down</p>
+                    <h2 class="text-lg font-semibold mt-1">${escapeHtml(itemText)}</h2>
+                  </div>
+                  <button data-stuck-close class="pnp-muted text-sm underline shrink-0">Close</button>
+                </div>
+                <p class="pnp-muted text-sm mt-3">Choose a lighter way into it.</p>
+<div class="mt-5 grid gap-3">
+                  <button data-stuck-breakdown class="pnp-surface border pnp-border rounded-md px-4 py-3 text-left hover:border-[var(--pnp-accent)] transition-colors">Make it smaller</button>
+                  <button data-stuck-timer class="pnp-surface border pnp-border rounded-md px-4 py-3 text-left hover:border-[var(--pnp-accent)] transition-colors">Start a tiny timer</button>
+                </div>
+                <div class="mt-5 flex items-center gap-3 justify-end">
+                  <button data-stuck-back class="pnp-muted text-sm underline">Back</button>
+                </div>
+              </div>`;
+            overlay.querySelector('[data-stuck-back]').addEventListener('click', () => { stage = 'pick'; paintOverlay(); });
+            overlay.querySelector('[data-stuck-close]').addEventListener('click', close);
+            overlay.querySelector('[data-stuck-breakdown]').addEventListener('click', () => { stage = 'breakdown'; paintOverlay(); });
+            overlay.querySelector('[data-stuck-timer]').addEventListener('click', () => {
+              close();
+              openTinyTimer(pickedId, repaint);
+            });
+            return;
+          }
+
+          if (stage === 'breakdown') {
+            const item = open.find(i => i.id === pickedId);
+            const itemText = item ? renderText(item.text) : '';
+            overlay.innerHTML = `
+              <div class="pnp-surface border pnp-border rounded-2xl p-6 w-full max-w-md max-h-full overflow-y-auto">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <p class="pnp-muted text-xs uppercase tracking-wide">Make it smaller</p>
+                    <h2 class="text-lg font-semibold mt-1">What's one small step that would get this moving?</h2>
+                  </div>
+                  <button data-stuck-close class="pnp-muted text-sm underline shrink-0">Close</button>
+                </div>
+                <p class="pnp-muted text-sm mt-4 opacity-70">${escapeHtml(itemText)}</p>
+                <p class="pnp-muted text-xs mt-3">Start smaller than feels useful. Add as many steps as you need.</p>
+                <div class="mt-4 space-y-3">
+                  ${[0,1,2,3].map(i => `
+                    <input data-step="${i}" type="text" maxlength="180"
+                      class="w-full pnp-surface border pnp-border rounded-xl p-3 outline-none focus:border-[var(--pnp-accent)]"
+                      placeholder="${i === 0 ? 'First action (as small as possible)' : 'Next small step'}" />`).join('')}
+                </div>
+                <div class="mt-5 flex items-center gap-3 justify-end">
+                  <button data-stuck-back class="pnp-muted text-sm underline">Back</button>
+                  <button data-stuck-save class="pnp-bg-accent rounded-md px-4 py-2 text-sm font-medium opacity-50" disabled>Save steps</button>
+                </div>
+              </div>`;
+            const inputs = Array.from(overlay.querySelectorAll('input[data-step]'));
+            const save = overlay.querySelector('[data-stuck-save]');
+            inputs[0].focus();
+            const refresh = () => {
+              const has = inputs.some(input => input.value.trim().length > 0);
+              save.disabled = !has;
+              save.classList.toggle('opacity-50', !has);
+            };
+            inputs.forEach(input => input.addEventListener('input', refresh));
+            overlay.querySelector('[data-stuck-back]').addEventListener('click', () => { stage = 'choice'; paintOverlay(); });
+            overlay.querySelector('[data-stuck-close]').addEventListener('click', close);
+            save.addEventListener('click', () => {
+              const steps = inputs.map(input => renderText(input.value)).filter(Boolean);
+              if (steps.length === 0) return;
+              applyBreakdown(pickedId, steps);
+              close();
+              repaint();
+            });
+          }
+        }
+
+        function applyBreakdown(itemId, steps) {
+          const t = state.getToday();
+          if (!t || !Array.isArray(t.items)) return;
+          const idx = t.items.findIndex(i => i.id === itemId);
+          if (idx < 0) return;
+          const parent = t.items[idx];
+          const childSteps = steps.map(step => ({
+            id: cryptoId(),
+            text: step,
+            done: false,
+            parentId: parent.id,
+          }));
+          t.items.splice(idx, 1, { ...parent, done: false, isParent: true }, ...childSteps);
+          state.setToday(t);
+        }
+
+        function close() {
+          document.removeEventListener('keydown', escClose);
+          overlay.remove();
+        }
+        function escClose(e) { if (e.key === 'Escape') close(); }
+        overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+        document.addEventListener('keydown', escClose);
+
+        paintOverlay();
+      }
+
+      function openFab() {
+        const overlay = document.createElement('div');
+        overlay.className = 'pnp-no-print fixed inset-0 z-40 flex items-end sm:items-center justify-center p-4';
+        overlay.style.background = 'rgba(0,0,0,0.6)';
+        overlay.innerHTML = `
+          <div class="pnp-surface border pnp-border rounded-2xl p-6 w-full max-w-md">
+            <h2 class="text-xl font-semibold">Quick dump</h2>
+            <textarea id="pnp-fab-input" rows="3" maxlength="180"
+              class="w-full mt-4 pnp-surface border pnp-border rounded-xl p-4 outline-none focus:border-[var(--pnp-accent)] resize-none"
+              placeholder="What's on your mind?"></textarea>
+            <p class="pnp-muted text-xs mt-2">Goes to your unsorted dump. Sort it next time.</p>
+            <div class="mt-4 flex items-center gap-3 justify-end">
+              <button id="pnp-fab-cancel" class="pnp-muted text-sm underline">Cancel</button>
+              <button id="pnp-fab-save" class="pnp-bg-accent rounded-md px-4 py-2 font-medium opacity-50" disabled>Save</button>
+            </div>
+          </div>`;
+        document.body.appendChild(overlay);
+        const ta   = overlay.querySelector('#pnp-fab-input');
+        const save = overlay.querySelector('#pnp-fab-save');
+        ta.focus();
+        ta.addEventListener('input', () => {
+          const has = ta.value.trim().length > 0;
+          save.disabled = !has;
+          save.classList.toggle('opacity-50', !has);
+        });
+        function close() {
+          document.removeEventListener('keydown', escClose);
+          overlay.remove();
+        }
+        function escClose(e) { if (e.key === 'Escape') close(); }
+        overlay.querySelector('#pnp-fab-cancel').addEventListener('click', close);
+        save.addEventListener('click', () => {
+          const text = renderText(ta.value);
+          if (!text) { close(); return; }
+          const hit = findDuplicate(text);
+          const proceed = () => { state.addDump(text); close(); render(); };
+          if (hit) showDuplicateConfirm(hit, proceed, () => { ta.focus(); });
+          else proceed();
+        });
+        overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+        document.addEventListener('keydown', escClose);
+      }
+
+      paint();
+    }
+
+    function viewS7(root) {
+      const today = state.getToday() || { items: [], mood: 'okay' };
+      const items = (today.items || []).slice();
+      const mood = today.mood || 'okay';
+      const date = state.todayKey();
+
+      const done = items.filter(i => i.done && !i.isParent);
+      const undone = items.filter(i => !i.done && !i.isParent);
+
+      const removedDumpIds = new Set();
+
+      function carryFeeling() {
+        const pool = [
+          "Hold on to this feeling — it'll get you through tomorrow.",
+          "Remember how this day ends. You'll need it.",
+          "You did more than you thought you could. Carry that forward.",
+          "That feeling of 'I managed it' — keep it close.",
+          "The days that surprise you are worth remembering.",
+        ];
+        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+        return pool[dayOfYear % pool.length];
+      }
+
+      function affirmation() {
+        const n = done.length;
+        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+        const pick = (pool) => pool[dayOfYear % pool.length];
+
+        const pools = {
+          overwhelmed: {
+            none: [
+              "You showed up when everything felt like too much. That's enough.",
+              "Starting when you're flooded is its own kind of strength.",
+              "You opened this. That's further than yesterday.",
+              "Overwhelmed and here anyway. That takes something.",
+              "The bar today was showing up. You cleared it.",
+            ],
+            some: [
+              `Overwhelmed and still got ${n} done. That's not nothing.`,
+              `You arrived feeling flooded. ${n} ${n === 1 ? 'thing' : 'things'} still happened.`,
+              `${n} done, and you were running on fumes. Respect that.`,
+              `Felt overwhelmed, still moved. ${n} ticked off.`,
+              `${n} done through the fog. That counts as a real day.`,
+            ],
+          },
+          tired: {
+            none: [
+              "Low energy is real. You still showed up.",
+              "Rest is productive. Today still happened.",
+              "You opened this tired. That's further than you think.",
+              "Tired days count. You were here.",
+              "Sometimes holding steady is the whole job.",
+            ],
+            some: [
+              `Tired and still got ${n} done. Real work.`,
+              `${n} done on low. That's harder than it looks.`,
+              `You arrived depleted. ${n} ${n === 1 ? 'thing' : 'things'} still moved.`,
+              `Running low, still shipped ${n}. That's a good day.`,
+              `${n} ticked off when you had nothing left. Noted.`,
+            ],
+          },
+          great: {
+            none: [
+              "Strong start. Tomorrow picks up from here.",
+              "Energy was there. Rest when you can.",
+              "Momentum is still here when you come back.",
+              "Good days need rest too. Come back tomorrow.",
+              "You showed up strong. That's the foundation.",
+            ],
+            some: [
+              `${n} done. Strong day.`,
+              `${n} ticked off and the energy was there. Build on that.`,
+              `Good day. ${n} done. Come back tomorrow.`,
+              `${n} things moved. That's the rhythm.`,
+              `Strong. ${n} done. Rest well.`,
+            ],
+          },
+          okay: {
+            none: [
+              "You showed up today. That's the bar.",
+              "Okay days are the backbone of this. You were here.",
+              "Not every day has a highlight. This one still counted.",
+              "Being here is the first move. Tomorrow continues.",
+              "You opened this. That's the whole thing some days.",
+            ],
+            some: [
+              `You showed up. ${n} done. The rest is still here when you're ready.`,
+              `${n} done on an ordinary day. That's how it gets done.`,
+              `${n} ticked off. Steady as it goes.`,
+              `Okay day, ${n} done. Come back tomorrow.`,
+              `${n} things moved. That's enough.`,
+            ],
+          },
+        };
+
+        const moodPool = pools[mood] || pools.okay;
+        return pick(n === 0 ? moodPool.none : moodPool.some);
+      }
+
+      function paint() {
+        const todayEntryNow = state.getToday() || {};
+        if (todayEntryNow.wrapped && todayEntryNow.wrapSnapshot) {
+          paintClosed(todayEntryNow.wrapSnapshot);
+          return;
+        }
+
+        const dump = state.get(KEYS.dumpUnsorted, []);
+        const remainingDump = dump.filter(d => !removedDumpIds.has(d.id));
+
+        root.innerHTML = `
+          <section class="mt-6">
+            <p class="text-xl sm:text-2xl font-medium leading-snug">${escapeHtml(affirmation())}</p>
+            ${done.length > 0 ? `<p class="pnp-muted text-sm mt-2">${escapeHtml(carryFeeling())}</p>` : ''}
+
+            <div class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6 space-y-6">
+              <div>
+                <h2 class="text-sm pnp-muted uppercase tracking-wide">Done today</h2>
+                ${done.length === 0
+                  ? '<p class="pnp-muted mt-2">Nothing ticked.</p>'
+                  : `<ul class="mt-3 space-y-2">${done.map(d => `<li class="flex gap-3"><span class="pnp-accent">✓</span><span>${escapeHtml(renderText(d.text))}</span></li>`).join('')}</ul>`}
+              </div>
+
+              ${undone.length > 0 ? `
+                <div>
+                  <h2 class="text-sm pnp-muted uppercase tracking-wide">Still on your list</h2>
+                  <ul class="mt-3 space-y-2">${undone.map(u => `<li class="flex gap-3"><span class="pnp-accent">•</span><span>${escapeHtml(renderText(u.text))}</span></li>`).join('')}</ul>
+                  <p class="pnp-muted text-xs mt-2">These move to your parking lot. Find them next time you sort.</p>
+                </div>` : ''}
+
+              ${remainingDump.length > 0 ? `
+                <div>
+                  <h2 class="text-sm pnp-muted uppercase tracking-wide">Today's brain dump</h2>
+                  <ul id="pnp-dump-list" class="mt-3 space-y-2">
+                    ${remainingDump.map(d => `
+                      <li class="flex items-start gap-3">
+                        <span class="pnp-accent mt-1">•</span>
+                        <span class="flex-1">${escapeHtml(renderText(d.text))}</span>
+                        <button data-dump-remove="${escapeHtml(d.id)}" class="pnp-muted text-xs underline hover:opacity-80 shrink-0 mt-1">Remove</button>
+                      </li>`).join('')}
+                  </ul>
+                  <p class="pnp-muted text-xs mt-2">Kept items move to your parking lot. Removed items are discarded.</p>
+                </div>` : ''}
+            </div>
+
+            <div class="pnp-no-print mt-6 flex flex-wrap items-center gap-3">
+              <button id="pnp-close" class="pnp-bg-accent rounded-md px-5 py-2.5 font-medium">Close out</button>
+              <button id="pnp-print-summary" class="text-sm pnp-muted underline hover:opacity-80">Print summary</button>
+            </div>
+          </section>`;
+
+        root.querySelectorAll('[data-dump-remove]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            removedDumpIds.add(btn.dataset.dumpRemove);
+            paint();
+          });
+        });
+        root.querySelector('#pnp-close').addEventListener('click', closeOut);
+        root.querySelector('#pnp-print-summary').addEventListener('click', () => window.print());
+      }
+
+      function paintClosed(snap) {
+        const dateLabel = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+        const doneCount = snap && snap.done ? snap.done.length : 0;
+        const parkedCount = state.get(KEYS.parked, []).length;
+        const doneText = doneCount === 1 ? '1 thing moved forward.' : `${doneCount} things moved forward.`;
+        const parkedText = parkedCount === 1 ? '1 item is waiting in your Parking Lot.' : `${parkedCount} items are waiting in your Parking Lot.`;
+        root.innerHTML = `
+          <section class="mt-6">
+            <p class="pnp-muted text-sm uppercase tracking-wide">Reset closed · ${escapeHtml(dateLabel)}</p>
+            <div class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-4">
+              <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Today’s reset is closed.</h1>
+              <p class="pnp-muted mt-3">
+                ${doneCount > 0 ? escapeHtml(doneText) : 'You closed the loop for today.'}
+                ${parkedCount > 0 ? escapeHtml(parkedText) : 'Nothing is waiting in your Parking Lot.'}
+              </p>
+            </div>
+
+            <div class="pnp-no-print mt-4 flex flex-wrap items-center gap-3">
+              <button id="pnp-new-session" class="pnp-bg-accent rounded-md px-5 py-2.5 font-medium">Start another session</button>
+            </div>
+          </section>`;
+
+        root.querySelector('#pnp-new-session').addEventListener('click', () => {
+          const snapMood = snap && snap.mood ? snap.mood : 'okay';
+          createEmptyTodaySession(snapMood);
+          const parked = state.get(KEYS.parked, []);
+          if (parked.length > 0) advance('S2C');
+          else advance('S3');
+        });
+      }
+
+      function closeOut() {
+        const dump = state.get(KEYS.dumpUnsorted, []);
+        const keptDump = dump.filter(d => !removedDumpIds.has(d.id));
+
+        const snapshot = {
+          mood,
+          done: done.map(d => d.text),
+          carriedOver: undone.map(u => u.text),
+          keptDump: keptDump.map(d => d.text),
+          closedAt: new Date().toISOString(),
+        };
+
+        undone.forEach(u => state.addParked(u.text));
+        keptDump.forEach(d => state.addParked(d.text));
+        state.set(KEYS.dumpUnsorted, []);
+
+        const todayEntry = state.getToday();
+        if (todayEntry) {
+          todayEntry.items = items.filter(i => i.done && !i.isParent);
+          todayEntry.wrapped = true;
+          todayEntry.wrapSnapshot = snapshot;
+          state.setToday(todayEntry);
+        }
+
+        screenHistory = [];
+        advance('S7', { replace: true });
+      }
+
+      paint();
+    }
+
+    const views = {
+      S0: viewS0,
+      S1: viewS1,
+      S2: viewS2,
+      S2C: viewS2C,
+      S3: viewS3,
+      S4: viewS4,
+      S5: viewS5,
+      S6: viewS6,
+      S7: viewS7,
+    };
+
+    let currentScreen = 'S2';
+    let screenOpts = {};
+    let screenHistory = [];
+
+    function render() {
+      const root = document.getElementById('pnp-app');
+      root.innerHTML = `
+        <p class="pnp-brand" aria-hidden="true">Paper N Pixels</p>
+        <div class="pnp-no-print min-h-10 flex items-center justify-between">
+          ${canGoBack() ? '<button id="pnp-back" class="pnp-muted text-sm underline hover:opacity-80">Back</button>' : '<span></span>'}
+          <span class="pnp-eyebrow pnp-eyebrow--inline">Daily Reset</span>
+        </div>
+        <div id="pnp-screen"></div>`;
+      const screen = root.querySelector('#pnp-screen');
+      const view = views[currentScreen] || views.S2;
+      view(screen);
+      const back = root.querySelector('#pnp-back');
+      if (back) back.addEventListener('click', goBack);
+    }
+
+    function canGoBack() {
+      const today = state.getToday();
+      if (currentScreen === 'S7' && today && today.wrapped) return false;
+      return screenHistory.length > 0 && currentScreen !== 'S1' && currentScreen !== 'S0';
+    }
+
+    function goBack() {
+      const prev = screenHistory.pop();
+      if (!prev) return;
+      currentScreen = prev.screen;
+      screenOpts = prev.opts || {};
+      render();
+    }
+
+    function advance(target, opts = {}) {
+      if (!SCREENS.includes(target)) return;
+      if (!opts.replace && target !== currentScreen) {
+        screenHistory.push({ screen: currentScreen, opts: screenOpts });
+        if (screenHistory.length > 12) screenHistory = screenHistory.slice(-12);
+      }
+      currentScreen = target;
+      const { replace: _replace, ...nextOpts } = opts;
+      screenOpts = nextOpts;
+      render();
+    }
+
+    /* ---------- settings drawer wiring ---------- */
+
+    function bindSettingsUI() {
+      const drawer  = document.getElementById('pnp-settings');
+      const openBtn = document.getElementById('pnp-settings-open');
+      const closeBtn= document.getElementById('pnp-settings-close');
+
+      const fields = {
+        theme:           document.getElementById('pnp-set-theme'),
+        motion:          document.getElementById('pnp-set-motion'),
+        showDateOnToday: document.getElementById('pnp-set-showdate'),
+      };
+
+      function loadInto() {
+        const s = state.get(KEYS.settings, defaultSettings);
+        fields.theme.value           = s.theme;
+        fields.motion.value          = s.motion;
+        fields.showDateOnToday.checked = !!s.showDateOnToday;
+      }
+
+      function persist(patch) {
+        const s = state.get(KEYS.settings, defaultSettings);
+        state.set(KEYS.settings, { ...s, ...patch });
+        applyTheme();
+      }
+
+      fields.theme.addEventListener('change', e => persist({ theme: e.target.value }));
+      fields.motion.addEventListener('change', e => persist({ motion: e.target.value }));
+      fields.showDateOnToday.addEventListener('change', e => persist({ showDateOnToday: e.target.checked }));
+
+      function setOpen(open) {
+        drawer.dataset.open = open ? 'true' : 'false';
+        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+        openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      openBtn.addEventListener('click', () => { loadInto(); setOpen(true); });
+      closeBtn.addEventListener('click', () => setOpen(false));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+
+      const resetBtn = document.getElementById('pnp-set-reset');
+      const resetTodayBtn = document.getElementById('pnp-set-reset-today');
+      resetTodayBtn.addEventListener('click', () => {
+        const ok = window.confirm("Reset today's tasks and brain dump? Your name, settings, and parking lot stay saved.");
+        if (!ok) return;
+        state.remove(state.todayEntryKey());
+        state.set(KEYS.dumpUnsorted, []);
+        screenHistory = [];
+        sessionFlags.newSessionMode = true;
+        setOpen(false);
+        advance('S2', { replace: true });
+      });
+      resetBtn.addEventListener('click', () => {
+        const ok = window.confirm("This wipes everything on this device: name, parked items, today's plan, settings. Continue?");
+        if (!ok) return;
+        storage.keys().filter(k => k.startsWith('pnp.')).forEach(k => storage.removeItem(k));
+        window.location.reload();
+      });
+
+      loadInto();
+    }
+
+    /* ---------- boot ---------- */
+
+    function markVisited() {
+      state.set(KEYS.lastVisit, state.todayKey());
+    }
+
+    function boot() {
+      state.ensureSchema();
+      bootPrevVisit = state.get(KEYS.lastVisit);
+      const tEntry = state.getToday();
+      if (tEntry && Array.isArray(tEntry.items) && tEntry.items.some(i => i.locked)) {
+        tEntry.items = tEntry.items.map(i => { const { locked: _l, ...rest } = i; return rest; });
+        state.setToday(tEntry);
+      }
+      runDecay();
+      applyTheme();
+      bindSettingsUI();
+      markOpenedToday();
+      currentScreen = detectEntryScreen();
+      render();
+      markVisited();
+
+      const colourScheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+      if (colourScheme && colourScheme.addEventListener) {
+        colourScheme.addEventListener('change', applyTheme);
+      }
+    }
+
+    // Dev shim — visible from console for manual testing in Phase 1.
+    window.__pnp = { state, KEYS, defaultSettings, detectEntryScreen, applyTheme, render, get currentScreen() { return currentScreen; } };
+
+    try {
+      boot();
+    } catch (err) {
+      console.error(err);
+      document.getElementById('pnp-app').innerHTML = `
+        <section class="pnp-surface border pnp-border rounded-2xl p-6 sm:p-8 mt-6">
+          <h1 class="text-2xl font-semibold tracking-tight">Daily Reset could not start.</h1>
+          <p class="pnp-muted mt-3">Open this file through the local preview link, or clear this browser's saved data and reload.</p>
+        </section>`;
+    }
+  
+  </script>
+
+</body>
+</html>
