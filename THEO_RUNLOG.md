@@ -91,3 +91,4 @@
 2026-06-06 | Daytime memory consolidation | Compacted USER.md live/mirror to 963 chars / 70.0%; MEMORY unchanged at 1354 chars / 61.5%; files aligned.
 
 [THEO] 2026-06-06 | Corrected MNM four-app feature shortlist: /home/kylemoore/theo/research/mnm-four-app-feature-shortlist-corrected-2026-06-06.md
+2026-06-06 | Nightly memory consolidation | Compacted USER.md live/mirror to 957 chars / 69.6%; MEMORY unchanged at 1354 chars / 61.5%; updated Brain project-status and research-registry; files aligned.

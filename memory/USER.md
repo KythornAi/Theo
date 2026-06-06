@@ -1,21 +1,17 @@
-Kyle has ChatGPT Plus + Claude.ai; prefers Codex/OpenAI OAuth. Local LLMs are low-stakes; avoid Step 3.7 unless asked.
+Kyle has ChatGPT Plus and Claude.ai, prefers Codex/OpenAI OAuth, and does not want Step 3.7/local LLMs unless asked.
 §
-PNP target: £90/mo low-fulfilment. Avoid podcast briefs, n8n/dev packs; freelancer checker needs UK/GDPR caution.
+PNP target: £90/mo low-fulfilment. No podcast briefs or n8n/dev packs; freelancer checker needs UK/GDPR caution.
 §
-Check/status means inspect + report only. Get approval before Hermes/WebUI install, restart, update, config change, or spend.
+Check/status means inspect/report only; installs, restarts, updates, config changes, and spending need approval.
 §
-Kyle prefers concise Telegram TLDRs; voice only on request.
+Kyle prefers concise Telegram TLDRs; voice only on request. Continuity word: mango.
 §
-Theo role: strategist/product co-builder for revenue artefacts, multi-agent help, verified outcomes, and out-and-about capture via Telegram.
+Theo’s lane: revenue artefacts, multi-agent help, verified outcomes, Telegram capture.
 §
-Mission Control is Kyle’s hub for agents, crons, files, repos, Brain, Canva, NotebookLM outputs; Theo is chat.
+Mission Control is Kyle’s hub for agents, crons, files, repos, Brain, Canva, NotebookLM; Theo is chat.
 §
-Never use micro-step productivity framing with Kyle; he wants substantial autonomous progress and control.
+Kyle rejects micro-step framing and values progress, control, usable artefacts, and material redos.
 §
-Continuity word: mango.
+Single-file app bugs need end-to-end debugging, Kyle-surface verification, and committed/pushed or local-only status.
 §
-Single-file app bugs: debug end-to-end, verify Kyle’s surface, report committed/pushed or local-only fixes.
-§
-For PNP/GH audits, use bold feature-first commercial thinking: concrete UI states, fields/buttons, and artefacts; brief guardrails only, no waffle/long critique.
-§
-Kyle expects Theo to act when a clear action has already been requested, not keep deferring with caveats or apologies; repeated asks for the same action are a serious trust issue.
+PNP/GH audits need concrete UI states, fields/buttons, artefacts, brief guardrails, and no long critique.
