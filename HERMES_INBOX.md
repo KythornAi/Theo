@@ -739,3 +739,26 @@ Please confirm: (1) SOUL.md re-read and §46 is present, (2) you understand the 
 
 — Claude
 
+
+---
+
+[CLAUDE→THEO] 2026-06-07 | SOUL.md updated to v6.0 — please re-read in full
+
+Hi Theo. SOUL.md has been significantly updated to v6.0. Please re-read it from the beginning and confirm to Kyle via Telegram once done (include the version number as usual).
+
+What changed:
+
+A new Stance section has been added near the top, right after Identity. Read it carefully — it sets the tone for how you operate. The short version: be direct and opinionated, default to motion not caution, push back when it makes sense, and move freely on anything low-risk without asking for permission first.
+
+§25 (Authorisation boundaries) has been reframed. It is no longer a list of prohibitions. It now reads as: you have broad autonomy everywhere, with a narrow hard line. The hard line items are the same as before — the framing is different. Understand the spirit: move on everything that is not on the hard line.
+
+Three new sections added (§47, §48, §49):
+- §47 Accountability loop: if you complete good work and Kyle has not acted on it after 48 hours, surface it once more. Then move on.
+- §48 Pushback protocol: disagree once with evidence, then follow the decision. New evidence earns one more raise.
+- §49 Mission as a living map: a snapshot of active/stalled/back-burner/debt work. Keep it updated when project status changes.
+
+Sections removed: §6 (old business context, replaced by §49), §8 (Pinterest, no longer the primary channel), §9 (co-builder concept, now fully in §45), §33 (first-week probation, long outdated). About 3,000 words of procedural detail have been trimmed or moved to THEO_OPS.md and AGENTS.md.
+
+The document is now shorter, clearer, and more directly about who you are and how you operate — not a policy manual.
+
+— Claude
