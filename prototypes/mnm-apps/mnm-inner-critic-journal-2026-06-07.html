@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<!--
+DESIGN RETRO. The Inner Critic Journal (Chapter 4 companion app, App 6 of the MNM suite)
+Date: 2026-06-07
+For: Mindful, Not Mythical / Grounded Humanity, sold via Paper N Pixels.
+Serial: Nº [assigned at polish]
+Source: Exercise Inventory #4 (Self-Compassion Reset)
+
+CONCEPT
+A standalone, deeper journal experience for the Ch4 exercise. The inner critic
+is loudest when we are already struggling. This tool does not argue with it.
+It notices it, names it, and gently responds to it the way you would respond
+to a friend. The Recovery Menu Hub has a 10-minute route through Ch4; this
+is the dedicated tool, slower, more personal, written reflection.
+
+INTENT
+Match the book's tone (calm, plain, warm, anti-pressure) and the Canva
+affirmation deck's watercolour-sage tone visually, without shipping
+illustrations. Five clean screens: intro, notice (free-write the critic),
+name it (statement + body-locate on a warm human silhouette), respond
+(free-write the compassionate reply), close (keepsake summary with
+copy-as-text). The body silhouette is the same component used by App 1
+(Body Stress Scan) and App 4 (90-Second Emotional Pause): seven regions,
+user-driven, no auto-assignment.
+
+PALETTE (from MiniMax Build Brief 2026-06-02, PART A A0)
+  page:        #f3eee3 cream
+  card:        #e8dacb deeper cream
+  heading ink: #2f4633 deep forest green
+  body ink:    #30232d near-black aubergine
+  hint ink:    #5a6849 readable sage (>=4.5:1 on cream)
+  focus mark:  #a4492f terracotta (focus rings, "you are here", thin rules, selected body region)
+  borders:     #a8b3a2 soft sage, #c8a784 tan, #e8dacb beige (decoration only)
+
+TYPE SCALE
+  display:     serif (Cormorant Garamond / Fraunces fallback to Georgia)
+  UI:          Inter / system sans
+  body:        17px
+  hint:        15px (italic for tone)
+  label:       12px, darker tone if it carries meaning
+  heading:     32-40px on mobile, 44px on wider screens
+
+ACCESSIBILITY NOTES
+  - All five screens are real <section> elements; only the active one is
+    visible. aria-live="polite" announces step changes.
+  - Body silhouette: 7 region <path> elements, each with tabindex="0" and
+    role="button" and a labelled aria-label. Keyboard reachable, focus
+    ring visible (terracotta 2px outline).
+  - Selected body region: terracotta fill, distinct from default soft sage.
+    Selection is single-region; tapping the same region again deselects.
+  - Copy-as-text uses the modern navigator.clipboard API with a
+    document.execCommand("copy") fallback for older browsers and
+    non-secure contexts. Button label flips to "Copied" for 2s.
+  - prefers-reduced-motion: crossfade transitions removed; sections swap
+    instantly. The selected region still lights up, no scale or pulse.
+  - Fully keyboard reachable. Every interactive element has a real focus
+    ring and a label. Tab order matches visual order.
+  - UK spelling throughout (colour, recognise, organise, labelled).
+  - The "journal" word and its variants are kept out of the user-facing
+    buttons and prompts. We say "write what comes" or "just write"
+    instead. The word "journal" stays only in the title and the keepsake
+    card, where it reads as the artifact, not a task.
+
+CLAIM-SAFE COPY
+  - No medical or neuro claims (the kind of wording that promises biology
+    or rewiring). Uses the book's own phrasing where a claim is needed
+    (e.g. "This is a moment of difficulty. Struggle is part of being
+    human.").
+  - DISCLAIMER footer: self-guided reflection, not a substitute for
+    medical advice, therapy, or counselling.
+
+WHAT I'D REFINE WITH MORE TIME
+  - Replace the placeholder ornament with the real
+    GH_Icon_TreeOnly_Transparent_1024.png as a quiet corner watermark and
+    the GroundedHumanity_FullLogo_Transparent_2400w.png as the single
+    brand signature (currently a marked-up slot).
+  - Optional LocalStorage backup of the close-screen card (browser-only
+    note) so the user can return to a previous reflection. Skipped for
+    now; this is a fresh-write experience, not a journal archive.
+  - A small "I can't find a kind word yet" prompt on the respond screen
+    for users who feel stuck. We could surface 2-3 starter phrasings lifted
+    from the book (e.g. "You had a tough day, but you are trying.")
+    without prescribing them.
+  - Replace the inline SVG silhouette with the polished master from
+    App 1's final Claude-pass asset, so the suite uses one body figure.
+
+COMPROMISES
+  - No real GH logo assets embedded (prototype, per A8).
+  - The textareas are intentionally generous (no character limit, no
+    counter) per the brief's "no judgement" rule. The copy-as-text
+    output uses "(not yet)" as the empty placeholder rather than a
+    dash character, matching the App 4 pattern.
+  - The body silhouette is a single inline SVG drawn in the muted sage
+    family, not the final master asset. The 7 region boundaries are
+    clean and tappable, but the underlying figure is functional art.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3eee3">
+<meta name="description" content="A short, calm journal for working with the inner critic. Notice. Name. Respond with kindness.">
+<title>The Inner Critic Journal. Grounded Humanity</title>
+<style>
+  /* ====== RESET AND ROOT ====== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: #f3eee3;
+    color: #30232d;
+    font-family: "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3 {
+    font-family: "Cormorant Garamond", "Fraunces", "Georgia", "Times New Roman", serif;
+    color: #2f4633;
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: 0.005em;
+    margin: 0 0 0.5em;
+  }
+  h1 { font-size: clamp(2rem, 5.4vw, 2.6rem); }
+  h2 { font-size: clamp(1.5rem, 4.2vw, 1.9rem); }
+  h3 { font-size: 1.2rem; }
+  p { margin: 0 0 1em; }
+  a { color: #2f4633; }
+  button { font: inherit; cursor: pointer; }
+  :focus-visible {
+    outline: 2px solid #a4492f;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  :root { color-scheme: light; }
+
+  /* ====== LAYOUT ====== */
+  .app {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: clamp(20px, 4vw, 32px) clamp(20px, 5vw, 32px) calc(40px + env(safe-area-inset-bottom, 0));
+  }
+  .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #5a6849;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .brand-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #a4492f;
+    display: inline-block;
+  }
+  .brand-name {
+    font-family: "Cormorant Garamond", "Georgia", serif;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: #2f4633;
+  }
+
+  /* ====== SCREEN CONTROL ====== */
+  .screen {
+    display: none;
+    animation: fadeIn 420ms ease both;
+  }
+  .screen.is-active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .screen { animation: none; }
+  }
+
+  /* ====== CARDS ====== */
+  .card {
+    background: #e8dacb;
+    border: 1px solid #c8a784;
+    border-radius: 14px;
+    padding: clamp(18px, 4vw, 28px);
+    margin: 16px 0;
+  }
+  .card.soft { background: #efe6d5; }
+  .eyebrow {
+    color: #5a6849;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .hint {
+    color: #5a6849;
+    font-size: 15px;
+    font-style: italic;
+    margin: 0 0 12px;
+  }
+  .rule {
+    border: 0;
+    border-top: 1px solid #a8b3a2;
+    margin: 18px 0;
+    opacity: 0.6;
+  }
+
+  /* ====== BUTTONS ====== */
+  .btn {
+    background: #2f4633;
+    color: #f3eee3;
+    border: 0;
+    border-radius: 999px;
+    padding: 14px 26px;
+    font-size: 17px;
+    letter-spacing: 0.01em;
+    min-height: 48px;
+    transition: background 180ms ease, transform 180ms ease;
+  }
+  .btn:hover { background: #253a29; }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { background: #a8b3a2; cursor: not-allowed; }
+  .btn--secondary {
+    background: transparent;
+    color: #2f4633;
+    border: 1.5px solid #2f4633;
+  }
+  .btn--secondary:hover { background: #2f4633; color: #f3eee3; }
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .btn-row .btn { flex: 1 1 200px; }
+
+  /* ====== TEXTAREA / TEXT INPUT ====== */
+  textarea, .text-input {
+    width: 100%;
+    background: #f3eee3;
+    color: #30232d;
+    border: 1.5px solid #a8b3a2;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font: inherit;
+    font-size: 17px;
+    line-height: 1.5;
+    min-height: 160px;
+    resize: vertical;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+  }
+  textarea::placeholder, .text-input::placeholder {
+    color: #5a6849;
+    opacity: 0.75;
+    font-style: italic;
+  }
+  textarea:focus, .text-input:focus {
+    outline: 2px solid #a4492f;
+    outline-offset: 2px;
+    border-color: #a4492f;
+  }
+  .field-label {
+    display: block;
+    color: #2f4633;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  /* ====== BODY SILHOUETTE ====== */
+  .body-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 18px 0 6px;
+  }
+  .body-figure {
+    width: min(280px, 100%);
+    height: auto;
+    display: block;
+  }
+  .body-figure .region {
+    fill: #a8b3a2;
+    fill-opacity: 0.42;
+    stroke: #5a6849;
+    stroke-width: 0.6;
+    stroke-opacity: 0.55;
+    cursor: pointer;
+    transition: fill-opacity 180ms ease, stroke 180ms ease;
+  }
+  .body-figure .region:hover {
+    fill-opacity: 0.7;
+  }
+  .body-figure .region:focus-visible {
+    outline: 2px solid #a4492f;
+    outline-offset: 4px;
+  }
+  .body-figure .region[data-selected="true"] {
+    fill: #a4492f;
+    fill-opacity: 0.85;
+    stroke: #2f4633;
+    stroke-width: 1;
+  }
+  .body-hint {
+    color: #5a6849;
+    font-size: 15px;
+    font-style: italic;
+    margin: 12px 0 0;
+    text-align: center;
+    max-width: 32ch;
+  }
+  .body-selected-line {
+    color: #2f4633;
+    font-size: 16px;
+    margin: 14px 0 0;
+    text-align: center;
+    min-height: 1.4em;
+  }
+  .body-selected-line strong { font-weight: 600; }
+
+  /* ====== KEEPSAKE CARD ====== */
+  .keepsake {
+    background: #efe6d5;
+    border: 1px solid #c8a784;
+    border-radius: 18px;
+    padding: clamp(22px, 5vw, 32px);
+    margin: 16px 0;
+    position: relative;
+  }
+  .keepsake .kicker {
+    color: #5a6849;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+  }
+  .keepsake h2 {
+    font-size: clamp(1.6rem, 5vw, 2rem);
+    margin: 0 0 16px;
+  }
+  .keepsake .k-block { margin: 16px 0; }
+  .keepsake .k-label {
+    color: #5a6849;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  .keepsake .k-body {
+    color: #30232d;
+    font-size: 17px;
+    line-height: 1.55;
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .keepsake .k-body.empty { color: #5a6849; font-style: italic; }
+  .keepsake .signature {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid #a8b3a2;
+    color: #2f4633;
+    font-family: "Cormorant Garamond", "Georgia", serif;
+    font-size: 18px;
+    font-style: italic;
+  }
+
+  /* ====== DISCRETE LINK ====== */
+  .quiet {
+    color: #5a6849;
+    font-size: 14px;
+    text-decoration: underline;
+    text-decoration-color: #a8b3a2;
+    text-underline-offset: 3px;
+    background: none;
+    border: 0;
+    padding: 4px 0;
+  }
+  .quiet:hover { color: #2f4633; }
+
+  /* ====== FOOTER ====== */
+  .footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid #a8b3a2;
+    color: #5a6849;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .footer p { margin: 0 0 6px; }
+  .footer .ornament-note { color: #5a6849; font-size: 12px; opacity: 0.85; }
+
+  /* ====== ORNAMENT SLOT ====== */
+  /* ornament slot: GH tree icon goes here in final polish */
+  .ornament-watermark {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+    background: rgba(168, 179, 162, 0.18);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5a6849;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  /* ====== COPY BUTTON FEEDBACK ====== */
+  .copy-feedback {
+    display: inline-block;
+    margin-left: 12px;
+    color: #2f4633;
+    font-size: 14px;
+    font-style: italic;
+    min-height: 1em;
+  }
+
+  /* ====== UTILITY ====== */
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0);
+    white-space: nowrap; border: 0;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  @media (min-width: 720px) {
+    .app { padding-top: 40px; }
+    h1 { font-size: 2.6rem; }
+  }
+</style>
+</head>
+<body>
+<main class="app" id="app">
+
+  <div class="brand-mark" aria-label="Grounded Humanity">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span class="brand-name">Grounded Humanity</span>
+  </div>
+
+  <div aria-live="polite" aria-atomic="true" class="sr-only" id="step-announce"></div>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 1: INTRO                                              -->
+  <!-- ============================================================ -->
+  <section class="screen is-active" id="screen-intro" aria-labelledby="intro-title">
+    <p class="eyebrow">Companion app</p>
+    <h1 id="intro-title">The Inner Critic Journal.</h1>
+    <p class="hint">Notice. Name. Respond with kindness.</p>
+    <p>The inner critic is loudest when we are already struggling. This is a short, calm space to write what is here, and then respond the way you would to a close friend.</p>
+    <p>There is no right way to do this. Just write what comes.</p>
+    <div class="btn-row">
+      <button type="button" class="btn" id="btn-begin">Begin</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 2: NOTICE                                             -->
+  <!-- ============================================================ -->
+  <section class="screen" id="screen-notice" aria-labelledby="notice-title">
+    <p class="eyebrow">Step one</p>
+    <h2 id="notice-title">What is the inner critic saying right now?</h2>
+    <p class="hint">It does not have to be fair or rational. Just write what it is saying.</p>
+    <label class="field-label" for="critic-input">Your critic's words</label>
+    <textarea id="critic-input" name="critic" rows="6" placeholder="It doesn't have to be fair or rational. Just write what it's saying."></textarea>
+    <div class="btn-row">
+      <button type="button" class="btn btn--secondary" data-action="back" data-from="notice">Back</button>
+      <button type="button" class="btn" data-action="next" data-from="notice">Continue</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 3: NAME IT (with body silhouette)                     -->
+  <!-- ============================================================ -->
+  <section class="screen" id="screen-name" aria-labelledby="name-title">
+    <p class="eyebrow">Step two</p>
+    <h2 id="name-title">This is a moment of difficulty.</h2>
+    <p>Struggle is part of being human.</p>
+    <hr class="rule">
+    <p class="hint">Where do you feel this in your body? Tap the area that holds it. If you cannot find a place, that is also fine.</p>
+
+    <div class="body-wrap">
+      <svg class="body-figure" viewBox="0 0 240 480" role="group" aria-label="Body silhouette. Tap a region to mark where you feel this in your body.">
+        <!-- Forehead: top of head -->
+        <path class="region" data-region="forehead" tabindex="0" role="button" aria-label="Forehead"
+              d="M 88,30 Q 120,12 152,30 L 152,68 L 88,68 Z"/>
+        <!-- Jaw: lower head / jaw line -->
+        <path class="region" data-region="jaw" tabindex="0" role="button" aria-label="Jaw"
+              d="M 88,68 L 152,68 L 150,98 Q 120,114 90,98 Z"/>
+        <!-- Shoulders: across the top of the torso -->
+        <path class="region" data-region="shoulders" tabindex="0" role="button" aria-label="Shoulders"
+              d="M 92,108 L 148,108 L 178,142 L 62,142 Z"/>
+        <!-- Arms: down the sides -->
+        <path class="region" data-region="arms" tabindex="0" role="button" aria-label="Arms"
+              d="M 62,142 L 82,142 L 80,256 L 60,256 Z M 158,142 L 178,142 L 180,256 L 160,256 Z"/>
+        <!-- Chest: upper torso -->
+        <path class="region" data-region="chest" tabindex="0" role="button" aria-label="Chest"
+              d="M 82,142 L 158,142 L 156,210 L 84,210 Z"/>
+        <!-- Stomach: lower torso -->
+        <path class="region" data-region="stomach" tabindex="0" role="button" aria-label="Stomach"
+              d="M 84,210 L 156,210 L 150,288 L 90,288 Z"/>
+        <!-- Legs: lower body -->
+        <path class="region" data-region="legs" tabindex="0" role="button" aria-label="Legs"
+              d="M 90,288 L 118,288 L 118,460 L 100,460 Q 90,460 90,448 Z M 122,288 L 150,288 L 150,448 Q 150,460 140,460 L 122,460 Z"/>
+      </svg>
+      <p class="body-hint">Tap a region: forehead, jaw, shoulders, arms, chest, stomach, legs.</p>
+      <p class="body-selected-line" id="body-selected-line" aria-live="polite"></p>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn--secondary" data-action="back" data-from="name">Back</button>
+      <button type="button" class="btn" data-action="next" data-from="name">Continue</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 4: RESPOND                                            -->
+  <!-- ============================================================ -->
+  <section class="screen" id="screen-respond" aria-labelledby="respond-title">
+    <p class="eyebrow">Step three</p>
+    <h2 id="respond-title">What would you say to a close friend feeling exactly this?</h2>
+    <p class="hint">You do not need to be kind to yourself yet. Just write what you would say to someone you care about.</p>
+    <label class="field-label" for="response-input">Your compassionate reply</label>
+    <textarea id="response-input" name="response" rows="6" placeholder="You don't need to be kind to yourself yet. Just write what you'd say to someone you care about."></textarea>
+    <div class="btn-row">
+      <button type="button" class="btn btn--secondary" data-action="back" data-from="respond">Back</button>
+      <button type="button" class="btn" data-action="next" data-from="respond">Continue</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 5: CLOSE / KEEPSAKE                                   -->
+  <!-- ============================================================ -->
+  <section class="screen" id="screen-close" aria-labelledby="close-title">
+    <p class="eyebrow">For you</p>
+    <h2 id="close-title">That was for you.</h2>
+    <p>You can take it with you.</p>
+
+    <div class="keepsake" id="keepsake">
+      <span class="ornament-watermark" aria-hidden="true">GH</span>
+      <p class="kicker">A small card</p>
+      <h2>The Inner Critic Journal</h2>
+
+      <div class="k-block">
+        <p class="k-label">What the critic was saying</p>
+        <p class="k-body" id="k-critic"></p>
+      </div>
+      <hr class="rule">
+      <div class="k-block">
+        <p class="k-label">Where it sat in the body</p>
+        <p class="k-body" id="k-body"></p>
+      </div>
+      <hr class="rule">
+      <div class="k-block">
+        <p class="k-label">What you would say to a friend</p>
+        <p class="k-body" id="k-response"></p>
+      </div>
+
+      <p class="signature">Stress is here, but so am I.</p>
+    </div>
+
+    <div class="btn-row" style="align-items:center;">
+      <button type="button" class="btn" id="btn-copy">Copy as text</button>
+      <span class="copy-feedback" id="copy-feedback" aria-live="polite"></span>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="btn btn--secondary" id="btn-restart">Start again</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Self-guided reflection, not a substitute for medical advice, therapy, or counselling.</p>
+    <p>Grounded Humanity. Mindful, Not Mythical.</p>
+    <p class="ornament-note"><!-- ornament slot: GH tree icon goes here in final polish --></p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ====== STATE ======
+  var state = {
+    critic: "",
+    bodyRegion: null, // 'forehead' | 'jaw' | 'shoulders' | 'arms' | 'chest' | 'stomach' | 'legs' | null
+    response: ""
+  };
+
+  var regionLabels = {
+    forehead: "forehead",
+    jaw: "jaw",
+    shoulders: "shoulders",
+    arms: "arms",
+    chest: "chest",
+    stomach: "stomach",
+    legs: "legs"
+  };
+
+  var screenOrder = ["intro", "notice", "name", "respond", "close"];
+
+  // ====== DOM REFS ======
+  var announcer = document.getElementById("step-announce");
+  var criticInput = document.getElementById("critic-input");
+  var responseInput = document.getElementById("response-input");
+  var bodySelectedLine = document.getElementById("body-selected-line");
+  var kCritic = document.getElementById("k-critic");
+  var kBody = document.getElementById("k-body");
+  var kResponse = document.getElementById("k-response");
+  var copyBtn = document.getElementById("btn-copy");
+  var copyFeedback = document.getElementById("copy-feedback");
+  var copyFeedbackTimer = null;
+  var regions = Array.prototype.slice.call(document.querySelectorAll(".body-figure .region"));
+  var keepsakeEl = document.getElementById("keepsake");
+
+  // ====== SCREEN NAVIGATION ======
+  function showScreen(name) {
+    var screens = document.querySelectorAll(".screen");
+    for (var i = 0; i < screens.length; i++) {
+      screens[i].classList.remove("is-active");
+    }
+    var next = document.getElementById("screen-" + name);
+    if (next) {
+      next.classList.add("is-active");
+      // Move focus to first heading inside for screen readers
+      var heading = next.querySelector("h1, h2");
+      if (heading) {
+        // Don't steal focus if user is mid-typing; only on first paint of new screen
+        // We do set focus only when arriving via Continue/Begin (handled by callers)
+      }
+    }
+    // Announce
+    var labels = {
+      intro: "The Inner Critic Journal. Begin.",
+      notice: "Step one. What is the inner critic saying right now?",
+      name: "Step two. Where do you feel this in your body?",
+      respond: "Step three. What would you say to a close friend?",
+      close: "Done. Here is your card."
+    };
+    if (announcer) announcer.textContent = labels[name] || "";
+  }
+
+  function goTo(target) {
+    // Persist textarea state when leaving notice / respond
+    if (criticInput && document.activeElement === criticInput) {
+      state.critic = criticInput.value;
+    }
+    if (responseInput && document.activeElement === responseInput) {
+      state.response = responseInput.value;
+    }
+    if (target === "close") {
+      renderKeepsake();
+    }
+    showScreen(target);
+    // Focus first interactive element of the new screen
+    var next = document.getElementById("screen-" + target);
+    if (next) {
+      var firstFocusable = next.querySelector("button, [tabindex], textarea, a");
+      if (firstFocusable) {
+        try { firstFocusable.focus({ preventScroll: false }); } catch (e) { firstFocusable.focus(); }
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  // ====== BUTTONS ======
+  document.getElementById("btn-begin").addEventListener("click", function () {
+    goTo("notice");
+  });
+
+  var navButtons = document.querySelectorAll("[data-action]");
+  navButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var action = btn.getAttribute("data-action");
+      var from = btn.getAttribute("data-from");
+      if (action === "next") {
+        // Persist textareas before leaving
+        if (from === "notice") state.critic = criticInput.value;
+        if (from === "respond") state.response = responseInput.value;
+        var idx = screenOrder.indexOf(from);
+        if (idx >= 0 && idx < screenOrder.length - 1) {
+          goTo(screenOrder[idx + 1]);
+        }
+      } else if (action === "back") {
+        var backIdx = screenOrder.indexOf(from);
+        if (backIdx > 0) {
+          goTo(screenOrder[backIdx - 1]);
+        }
+      }
+    });
+  });
+
+  // ====== BODY SILHOUETTE: region selection ======
+  function updateBodyLine() {
+    if (state.bodyRegion && regionLabels[state.bodyRegion]) {
+      bodySelectedLine.innerHTML = "I am holding this in my <strong>" + regionLabels[state.bodyRegion] + "</strong>.";
+    } else {
+      bodySelectedLine.textContent = "";
+    }
+  }
+
+  function setRegionSelection(region) {
+    // Single-region selection; tapping the same region again deselects.
+    if (state.bodyRegion === region) {
+      state.bodyRegion = null;
+    } else {
+      state.bodyRegion = region;
+    }
+    for (var i = 0; i < regions.length; i++) {
+      if (regions[i].getAttribute("data-region") === state.bodyRegion) {
+        regions[i].setAttribute("data-selected", "true");
+        regions[i].setAttribute("aria-pressed", "true");
+      } else {
+        regions[i].removeAttribute("data-selected");
+        regions[i].setAttribute("aria-pressed", "false");
+      }
+    }
+    updateBodyLine();
+  }
+
+  regions.forEach(function (el) {
+    el.setAttribute("aria-pressed", "false");
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      var r = el.getAttribute("data-region");
+      setRegionSelection(r);
+    });
+    el.addEventListener("keydown", function (e) {
+      // Enter or Space activates (as a button)
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+        e.preventDefault();
+        var r2 = el.getAttribute("data-region");
+        setRegionSelection(r2);
+      }
+    });
+  });
+
+  // ====== KEEPSAKE RENDER ======
+  function renderKeepsake() {
+    var criticVal = (state.critic || "").trim();
+    var responseVal = (state.response || "").trim();
+    var regionVal = state.bodyRegion ? regionLabels[state.bodyRegion] : null;
+
+    if (criticVal.length > 0) {
+      kCritic.classList.remove("empty");
+      kCritic.textContent = criticVal;
+    } else {
+      kCritic.classList.add("empty");
+      kCritic.textContent = "(not yet)";
+    }
+
+    if (regionVal) {
+      kBody.classList.remove("empty");
+      kBody.textContent = "I am holding this in my " + regionVal + ".";
+    } else {
+      kBody.classList.add("empty");
+      kBody.textContent = "(not yet)";
+    }
+
+    if (responseVal.length > 0) {
+      kResponse.classList.remove("empty");
+      kResponse.textContent = responseVal;
+    } else {
+      kResponse.classList.add("empty");
+      kResponse.textContent = "(not yet)";
+    }
+  }
+
+  // ====== COPY-AS-TEXT (Clipboard API + execCommand fallback) ======
+  function buildCopyText() {
+    var lines = [];
+    lines.push("The Inner Critic Journal");
+    lines.push("------------------------");
+    lines.push("");
+    lines.push("What the critic was saying:");
+    lines.push(state.critic.trim().length > 0 ? state.critic.trim() : "(not yet)");
+    lines.push("");
+    lines.push("Where it sat in the body:");
+    lines.push(state.bodyRegion ? "I am holding this in my " + regionLabels[state.bodyRegion] + "." : "(not yet)");
+    lines.push("");
+    lines.push("What you would say to a friend:");
+    lines.push(state.response.trim().length > 0 ? state.response.trim() : "(not yet)");
+    lines.push("");
+    lines.push("Stress is here, but so am I.");
+    lines.push("");
+    lines.push("Grounded Humanity. Mindful, Not Mythical.");
+    return lines.join("\n");
+  }
+
+  function copyViaExecCommand(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.top = "-1000px";
+      ta.style.left = "-1000px";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      var ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function setCopyFeedback(success, fallbackSelected) {
+    if (copyFeedbackTimer) {
+      clearTimeout(copyFeedbackTimer);
+      copyFeedbackTimer = null;
+    }
+    if (success) {
+      copyFeedback.textContent = "Copied";
+    } else if (fallbackSelected) {
+      copyFeedback.textContent = "Could not copy automatically. The text is selected, press Ctrl+C or Cmd+C to copy.";
+    } else {
+      copyFeedback.textContent = "Copy failed. Try selecting the text manually.";
+    }
+    copyFeedbackTimer = setTimeout(function () {
+      copyFeedback.textContent = "";
+    }, 4000);
+  }
+
+  function selectKeepsakeText() {
+    try {
+      var range = document.createRange();
+      range.selectNodeContents(keepsakeEl);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  copyBtn.addEventListener("click", function () {
+    var text = buildCopyText();
+    // Try modern Clipboard API first (requires secure context)
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(
+        function () { setCopyFeedback(true, false); },
+        function () {
+          // Fall back to execCommand, then to manual selection
+          var ok = copyViaExecCommand(text);
+          if (ok) {
+            setCopyFeedback(true, false);
+          } else {
+            var selOk = selectKeepsakeText();
+            setCopyFeedback(false, selOk);
+          }
+        }
+      );
+    } else {
+      var ok2 = copyViaExecCommand(text);
+      if (ok2) {
+        setCopyFeedback(true, false);
+      } else {
+        var selOk2 = selectKeepsakeText();
+        setCopyFeedback(false, selOk2);
+      }
+    }
+  });
+
+  // ====== RESTART ======
+  document.getElementById("btn-restart").addEventListener("click", function () {
+    state.critic = "";
+    state.bodyRegion = null;
+    state.response = "";
+    if (criticInput) criticInput.value = "";
+    if (responseInput) responseInput.value = "";
+    for (var i = 0; i < regions.length; i++) {
+      regions[i].removeAttribute("data-selected");
+      regions[i].setAttribute("aria-pressed", "false");
+    }
+    updateBodyLine();
+    copyFeedback.textContent = "";
+    goTo("intro");
+  });
+
+  // ====== INIT ======
+  updateBodyLine();
+
+  // Expose a minimal API for headless testing
+  window.__innerCritic = {
+    state: state,
+    goTo: goTo,
+    setRegion: function (r) { setRegionSelection(r); },
+    getCopyText: buildCopyText
+  };
+})();
+</script>
+</body>
+</html>
