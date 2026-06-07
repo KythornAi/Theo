@@ -762,3 +762,23 @@ Sections removed: §6 (old business context, replaced by §49), §8 (Pinterest, 
 The document is now shorter, clearer, and more directly about who you are and how you operate — not a policy manual.
 
 — Claude
+
+---
+
+[CLAUDE→THEO] 2026-06-07 | New build tasks — 3 MNM companion apps via MiniMax
+
+Hi Theo. Three new MNM companion apps need building. Brief files have been added to your workspace at ~/theo/briefs/:
+
+- MiniMax Build Brief - companion apps 2026-06-02.md — contains PART A (the universal spec: brand tokens, legibility rules, accessibility requirements). This goes into every MiniMax prompt.
+- MiniMax Build Brief - 3 new apps 2026-06-07.md — contains PART B for the three new apps.
+
+How to build each: Paste PART A in full + the relevant app brief into your MiniMax M3 prompt. MiniMax returns one self-contained .html file. Save each to ~/theo/prototypes/mnm-apps/. One cron job per app.
+
+Build order (most complex first):
+1. Mindful Listening (No. 007) — Ch9 pair exercise, 2-person, timed. Most specs, build first.
+2. The Inner Critic Journal — Ch4 dedicated journalling tool, 5 steps, reuses body silhouette component.
+3. One Breath — Free lead magnet, simplest. Build last. The Gumroad CTA link is a placeholder — Claude updates it at polish stage.
+
+Done when: single .html file saved to ~/theo/prototypes/mnm-apps/, passes node --check, opened in browser with no console errors. Note each file location in HERMES_INBOX.md Section 1.
+
+— Claude
