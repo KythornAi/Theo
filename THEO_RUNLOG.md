@@ -94,3 +94,6 @@
 2026-06-06 | Nightly memory consolidation | Compacted USER.md live/mirror to 957 chars / 69.6%; MEMORY unchanged at 1354 chars / 61.5%; updated Brain project-status and research-registry; files aligned.
 2026-06-07 | Daytime memory consolidation | No memory edits needed; live/mirror MEMORY aligned at 1,354 chars / 61.5%, USER aligned at 957 chars / 69.6%.
 2026-06-07 | Nightly memory consolidation | Updated live/mirror MEMORY model route to DeepSeek V4 Flash and compacted USER.md; live/mirror MEMORY 1,366 chars / 62.1%, USER 962 chars / 69.9%; updated Brain _index, tool-config, cron-registry.
+2026-06-07 23:14 | Task: SOUL.md v6.0 re-read | Status: completed | Notes: SOUL.md v6.0 re-read and acknowledged. New Stance section, §25 reframed, §47-49 added.
+2026-06-07 23:14 | Task: Schedule 3 MNM companion app builds | Status: completed | Notes: 3 one-shot cron jobs created (Mindful Listening 23:30, Inner Critic Journal 00:15, One Breath 01:00). Model: minimax/minimax-m3 via OpenRouter.
+2026-06-07 23:39 | Task: Build App 7 Mindful Listening | Status: completed | Notes: prototypes/mnm-apps/mnm-mindful-listening-2026-06-07.html (36,083 bytes / 1,073 lines). 6 screens, single-clock 3-min timer, 440Hz tone, role-select both-tapped gate, AA contrast, node --check passed, browser walkthrough zero errors.
