@@ -462,6 +462,110 @@ COMPROMISES
   <!-- SCREEN 1: INTRO                                              -->
   <!-- ============================================================ -->
   <section class="screen is-active" id="screen-intro" aria-labelledby="intro-title">
+    <!-- Hero illustration: collage-style torn-paper composition -->
+    <svg class="hero-art" viewBox="0 0 260 220" role="img" aria-label="Collage-style illustration of a figure with hand on chest, framed by torn paper" style="display:block;margin:0 auto 24px;max-width:280px;width:100%;height:auto;">
+      <defs>
+        <!-- Paper grain filter -->
+        <filter id="paper-grain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise"/>
+          <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+          <feBlend in="SourceGraphic" in2="grayNoise" mode="multiply" result="textured"/>
+        </filter>
+        <!-- Torn edge clipping path -->
+        <clipPath id="torn-clip">
+          <path d="M 28,18 L 52,16 L 68,14 L 86,17 L 102,14 L 120,18 L 140,16 L 158,19 L 174,17 L 190,20 L 206,17 L 222,18 L 238,22 L 242,40 L 240,58 L 244,76 L 241,92 L 238,108 L 242,124 L 239,140 L 243,156 L 240,172 L 238,188 L 236,200 L 218,202 L 200,198 L 182,203 L 164,199 L 146,204 L 128,200 L 110,203 L 92,199 L 74,204 L 56,200 L 38,202 L 22,198 L 20,180 L 16,162 L 19,144 L 17,126 L 15,108 L 18,90 L 16,72 L 19,54 L 17,36 Z"/>
+        </clipPath>
+      </defs>
+      <!-- Canvas background -->
+      <rect width="260" height="220" fill="#f3eee3" filter="url(#paper-grain)" opacity="0.6"/>
+      <!-- Mustard yellow accent block -->
+      <rect x="170" y="10" width="80" height="80" fill="#d4a853" opacity="0.3" rx="2"/>
+      <!-- Torn paper frame: sage green -->
+      <path d="M 28,18 L 52,16 L 68,14 L 86,17 L 102,14 L 120,18 L 140,16 L 158,19 L 174,17 L 190,20 L 206,17 L 222,18 L 238,22 L 242,40 L 240,58 L 244,76 L 241,92 L 238,108 L 242,124 L 239,140 L 243,156 L 240,172 L 238,188 L 236,200 L 218,202 L 200,198 L 182,203 L 164,199 L 146,204 L 128,200 L 110,203 L 92,199 L 74,204 L 56,200 L 38,202 L 22,198 L 20,180 L 16,162 L 19,144 L 17,126 L 15,108 L 18,90 L 16,72 L 19,54 L 17,36 Z"
+            fill="#5a6849" opacity="0.12" stroke="#5a6849" stroke-width="0.5" stroke-opacity="0.2"/>
+      <!-- Torn paper frame: inner cream layer -->
+      <path d="M 34,24 L 54,22 L 72,20 L 90,23 L 106,20 L 124,24 L 142,22 L 158,25 L 172,23 L 188,26 L 202,23 L 216,24 L 230,28 L 233,46 L 231,62 L 234,80 L 232,96 L 230,112 L 233,128 L 230,144 L 233,160 L 232,176 L 230,192 L 218,194 L 200,190 L 184,195 L 166,192 L 148,196 L 130,193 L 112,196 L 94,192 L 78,196 L 60,193 L 44,195 L 30,192 L 28,174 L 26,156 L 28,140 L 26,122 L 24,104 L 26,86 L 24,68 L 26,50 L 28,36 Z"
+            fill="#e8dacb" opacity="0.4"/>
+      <!-- Human silhouette: profile bust with hand on chest -->
+      <g fill="#2f4633" opacity="0.85">
+        <!-- Head profile facing left -->
+        <path d="M 128,48
+                 C 120,44 112,46 108,50
+                 C 104,54 102,60 100,68
+                 C 98,74 96,78 94,82
+                 C 92,86 90,88 88,92
+                 C 86,94 85,96 86,98
+                 C 87,100 88,100 90,100
+                 C 92,100 94,98 96,96
+                 C 98,94 100,92 102,90
+                 C 104,92 106,94 108,96
+                 C 110,98 112,100 114,102
+                 C 116,104 118,106 120,108
+                 C 122,104 124,100 126,96
+                 C 128,92 130,88 130,84
+                 C 130,80 128,76 126,72
+                 C 128,68 130,64 132,60
+                 C 134,56 134,52 128,48 Z"/>
+        <!-- Neck -->
+        <path d="M 108,96 C 110,104 112,112 114,118 L 122,118 C 124,112 126,104 126,96 Z"/>
+        <!-- Torso / shoulders -->
+        <path d="M 114,118 C 106,120 98,124 92,130 L 94,138 C 100,134 106,132 114,130
+                 L 122,130 C 130,132 136,134 142,138 L 144,130 C 138,124 130,120 122,118 Z"/>
+        <!-- Right arm curving to chest -->
+        <path d="M 142,138
+                 C 148,142 152,148 154,156
+                 C 156,164 154,172 148,178
+                 C 142,184 134,186 126,184
+                 C 120,182 116,178 114,174
+                 C 112,170 112,166 114,162
+                 C 116,158 118,156 120,154"
+              fill="none" stroke="#2f4633" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+        <!-- Hand on chest (small oval) -->
+        <ellipse cx="120" cy="156" rx="6" ry="5" fill="#2f4633" opacity="0.65"/>
+      </g>
+      <!-- Botanical line art: sweeping leaf curves -->
+      <g fill="none" stroke="#5a6849" stroke-width="0.8" opacity="0.4" stroke-linecap="round">
+        <!-- Large leaf arc left -->
+        <path d="M 76,132 C 62,120 48,100 52,80 C 56,62 68,52 72,48"/>
+        <path d="M 72,48 C 64,64 58,82 62,100 C 66,116 76,128 76,132"/>
+        <!-- Small leaf stem -->
+        <path d="M 62,100 C 52,96 44,88 40,78"/>
+        <path d="M 40,78 C 46,80 52,84 58,90"/>
+        <!-- Right side botanical -->
+        <path d="M 156,52 C 168,44 182,40 196,44 C 208,48 216,56 220,66"/>
+        <path d="M 220,66 C 212,60 202,54 190,52 C 178,50 166,54 156,60"/>
+        <!-- Small bud -->
+        <path d="M 190,52 C 194,42 198,34 204,28"/>
+        <circle cx="204" cy="28" r="2.5" fill="#5a6849" stroke="none" opacity="0.3"/>
+      </g>
+      <!-- Grid overlay (technical/archival feel) -->
+      <g stroke="#2f4633" stroke-width="0.3" opacity="0.06">
+        <line x1="0" y1="55" x2="260" y2="55"/>
+        <line x1="0" y1="110" x2="260" y2="110"/>
+        <line x1="0" y1="165" x2="260" y2="165"/>
+        <line x1="65" y1="0" x2="65" y2="220"/>
+        <line x1="130" y1="0" x2="130" y2="220"/>
+        <line x1="195" y1="0" x2="195" y2="220"/>
+      </g>
+      <!-- Concentric circle line art -->
+      <g fill="none" stroke="#a4492f" stroke-width="0.6" opacity="0.15">
+        <circle cx="48" cy="52" r="8"/>
+        <circle cx="48" cy="52" r="14"/>
+        <circle cx="48" cy="52" r="20"/>
+        <circle cx="48" cy="52" r="26"/>
+        <!-- Tiny crosshair at center -->
+        <line x1="44" y1="52" x2="52" y2="52" stroke-width="0.4"/>
+        <line x1="48" y1="48" x2="48" y2="56" stroke-width="0.4"/>
+      </g>
+      <!-- Terracotta accent shape -->
+      <path d="M 192,180 L 206,176 L 218,180 L 214,194 L 200,200 L 190,194 Z"
+            fill="#a4492f" opacity="0.15"/>
+      <!-- Small decorative dots -->
+      <circle cx="56" cy="176" r="1.5" fill="#a4492f" opacity="0.2"/>
+      <circle cx="82" cy="168" r="1" fill="#2f4633" opacity="0.15"/>
+      <circle cx="170" cy="200" r="1.2" fill="#5a6849" opacity="0.15"/>
+      <circle cx="224" cy="148" r="1" fill="#d4a853" opacity="0.2"/>
+    </svg>
     <p class="eyebrow">Companion app</p>
     <h1 id="intro-title">The Inner Critic Journal.</h1>
     <p class="hint">Notice. Name. Respond with kindness.</p>

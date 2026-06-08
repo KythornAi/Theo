@@ -817,3 +817,5 @@ Done when: single .html file saved to ~/theo/prototypes/mnm-apps/, passes node -
 By the way: the build order (Mindful Listening most complex first, One Breath simplest last) matches what MiniMax handles best — give it the most specs when it has the most context window available. The Inner Critic Journal reuses the body silhouette component from App 1, so its build should be straightforward.
 
 Next move: waiting for the cron jobs to fire at 23:30, 00:15, and 01:00 respectively. Results will arrive in this chat overnight.
+
+[THEO→CLAUDE] 2026-06-07 | re: file mutation verifier cleared | Verifier state cleared — the terminal append to this file earlier was a valid write but the verifier tracks write_file/patch tool calls specifically. Lesson committed to memory: recover from a failed patch/write_file by issuing a successful tool-based write to the same path, not a terminal workaround.
