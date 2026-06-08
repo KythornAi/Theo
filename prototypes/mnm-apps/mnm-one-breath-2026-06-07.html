@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<!--
+DESIGN RETRO. One Breath (lead magnet, App 5 of the MNM suite)
+Date: 2026-06-07
+For: Mindful, Not Mythical / Grounded Humanity, sold via Paper N Pixels.
+Serial: Nº [assigned at polish, this is the free entry point]
+Source: None (standalone lead magnet, not a book exercise)
+
+CONCEPT
+One breath. That is the entire promise. Not a course, not a programme,
+not a streak. One breath, right now, whenever you need it. The simplest
+tool in the suite. Its job is to show the quality of the collection and
+send the user to the Gumroad bundle.
+
+INTENT
+Match the book's tone (calm, plain, warm, anti-pressure) and the Canva
+affirmation deck's watercolour-sage tone visually, without shipping
+illustrations. One continuous screen, three calm states (landing, breath,
+close). The breath state is the centrepiece: a single clock source drives
+both the on-screen label and the soft expanding/contracting circle, so the
+two cannot drift. The CTA in the close state is the commercial point of
+the app, and it must be visible and legible, not buried.
+
+PALETTE (from MiniMax Build Brief 2026-06-02, PART A A0)
+  page:        #f3eee3 cream
+  card:        #e8dacb deeper cream
+  heading ink: #2f4633 deep forest green
+  body ink:    #30232d near-black aubergine
+  hint ink:    #5a6849 readable sage (>=4.5:1 on cream)
+  focus mark:  #a4492f terracotta (focus rings, the "you are here" mark, the breath circle stroke)
+  borders:     #a8b3a2 soft sage, #c8a784 tan, #e8dacb beige (decoration only)
+
+TYPE SCALE
+  display:     serif (Cormorant Garamond / Fraunces fallback to Georgia)
+  UI:          Inter / system sans
+  body:        17px
+  hint:        15px (italic for tone)
+  label:       12px, darker tone if it carries meaning
+  heading:     40-52px on mobile for the title, 17px for the CTA
+
+ACCESSIBILITY NOTES
+  - All three states are real <section> elements, only the active one is
+    visible. aria-live="polite" announces the phase change.
+  - One breath clock: performance.now() vs startTs on every rAF tick, so
+    the circle scale and the on-screen label can never drift from each
+    other. No setInterval decrement.
+  - prefers-reduced-motion: the circle animation is replaced with a
+    static ring plus a phase label that updates from the same single
+    clock. The cycle still moves on text alone.
+  - Fully keyboard reachable. Every interactive element has a real
+    focus ring (terracotta 2px outline) and a label. Tab order matches
+    visual order.
+  - UK spelling throughout (colour, labelled, centre, recognise).
+  - The CTA in the close state is a real <a href> with target="_blank"
+    and rel="noopener noreferrer", keyboard reachable, focus ring visible.
+
+CLAIM-SAFE COPY
+  - No medical or neuro claims (the kind of wording that promises biology
+    or rewiring). The breath is presented as a moment of pause, not a
+    physiological intervention.
+  - DISCLAIMER footer: self-guided reflection, not a substitute for
+    medical advice, therapy, or counselling.
+
+WHAT I'D REFINE WITH MORE TIME
+  - Replace the placeholder ornament with the real
+    GH_Icon_TreeOnly_Transparent_1024.png as a quiet corner watermark and
+    the GroundedHumanity_FullLogo_Transparent_2400w.png as the single
+    brand signature (currently a marked-up slot).
+  - The CTA placeholder URL (https://gumroad.com) is clearly commented
+    for Claude's polish pass to replace with the real collection URL.
+  - Optional: a tiny "Take another breath" link below the CTA for users
+    who want to repeat the cycle without going back to the start. Not in
+    the brief, deliberately omitted to keep the suite honest about the
+    one-breath promise.
+
+COMPROMISES
+  - No real GH logo assets embedded (prototype, per A8).
+  - The breath circle is a single inline SVG drawn in the muted sage
+    family, not the final master asset. The expanding/contracting motion
+    uses a CSS transform on a wrapper, not a per-frame rAF scale, so
+    the visual rhythm stays smooth even when rAF is throttled.
+  - "That is it. You did it." is in the close state. The "you did it"
+    phrasing was carefully chosen to be a calm acknowledgement, not a
+    "great job" reward (which A3 forbids). It recognises completion
+    without scoring it.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3eee3">
+<meta name="description" content="One breath to steady yourself. A single guided breath, then a link to the full Grounded Humanity collection.">
+<title>One Breath. Grounded Humanity</title>
+<style>
+  /* ====== RESET AND ROOT ====== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: #f3eee3;
+    color: #30232d;
+    font-family: "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3 {
+    font-family: "Cormorant Garamond", "Fraunces", "Georgia", "Times New Roman", serif;
+    color: #2f4633;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: 0.005em;
+    margin: 0 0 0.4em;
+  }
+  h1 { font-size: clamp(2.6rem, 9vw, 3.25rem); }
+  h2 { font-size: clamp(1.5rem, 4.2vw, 1.9rem); }
+  p { margin: 0 0 1em; }
+  a { color: #2f4633; }
+  button { font: inherit; cursor: pointer; }
+  :focus-visible {
+    outline: 2px solid #a4492f;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  :root { color-scheme: light; }
+
+  /* ====== LAYOUT ====== */
+  .app {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 36px) clamp(20px, 5vw, 32px) calc(40px + env(safe-area-inset-bottom, 0));
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  /* ====== BRAND MARK (serial + coloured fullstop) ====== */
+  .brand-mark {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    color: #2f4633;
+    font-family: "Cormorant Garamond", "Georgia", serif;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    margin-bottom: 36px;
+  }
+  .brand-serial { font-weight: 500; }
+  .brand-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #a4492f;
+    display: inline-block;
+    transform: translateY(-1px);
+  }
+  .brand-name {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #5a6849;
+    margin-left: auto;
+  }
+
+  /* ====== STAGE (the three states share this surface) ====== */
+  .stage {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    text-align: center;
+  }
+  .state {
+    display: none;
+  }
+  .state.is-active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: fadeIn 600ms ease both;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .state.is-active { animation: none; }
+  }
+
+  /* ====== LANDING STATE ====== */
+  .landing-eyebrow {
+    color: #5a6849;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+  }
+  .landing-title {
+    font-size: clamp(3rem, 11vw, 4.25rem);
+    margin: 0 0 18px;
+    line-height: 1;
+  }
+  .landing-tagline {
+    color: #30232d;
+    font-size: 19px;
+    line-height: 1.45;
+    max-width: 28ch;
+    margin: 0 auto 32px;
+  }
+
+  /* ====== BREATH STATE ====== */
+  .breath-stage {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+  }
+  .breath-circle {
+    width: min(280px, 70vw);
+    height: min(280px, 70vw);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .breath-circle svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+  .breath-ring {
+    fill: none;
+    stroke: #a8b3a2;
+    stroke-width: 1.2;
+    opacity: 0.55;
+  }
+  .breath-inner {
+    fill: #e8dacb;
+    stroke: #5a6849;
+    stroke-width: 1.4;
+    transform-origin: center center;
+    transform-box: fill-box;
+    transition: transform 4000ms cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  .breath-inner.is-inhale {
+    transform: scale(1.18);
+    transition: transform 4000ms cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  .breath-inner.is-exhale {
+    transform: scale(0.78);
+    transition: transform 6000ms cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .breath-inner,
+    .breath-inner.is-inhale,
+    .breath-inner.is-exhale {
+      transform: scale(0.95);
+      transition: none;
+    }
+  }
+  .breath-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    pointer-events: none;
+  }
+  .breath-label__word {
+    font-family: "Cormorant Garamond", "Georgia", serif;
+    color: #2f4633;
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+  .breath-label__count {
+    color: #5a6849;
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1;
+  }
+  .breath-hint {
+    color: #5a6849;
+    font-size: 15px;
+    font-style: italic;
+    margin: 0;
+    max-width: 30ch;
+  }
+
+  /* ====== CLOSE STATE ====== */
+  .close-lede {
+    color: #30232d;
+    font-size: 19px;
+    line-height: 1.5;
+    max-width: 32ch;
+    margin: 0 auto 8px;
+  }
+  .close-signature {
+    color: #5a6849;
+    font-size: 15px;
+    font-style: italic;
+    max-width: 32ch;
+    margin: 0 auto 28px;
+  }
+  .close-cta {
+    display: inline-block;
+    background: #2f4633;
+    color: #f3eee3;
+    border: 0;
+    border-radius: 999px;
+    padding: 16px 30px;
+    font-size: 17px;
+    letter-spacing: 0.01em;
+    min-height: 52px;
+    text-decoration: none;
+    text-align: center;
+    transition: background 180ms ease, transform 180ms ease;
+  }
+  .close-cta:hover { background: #253a29; }
+  .close-cta:active { transform: translateY(1px); }
+  .close-cta:focus-visible {
+    outline: 3px solid #a4492f;
+    outline-offset: 3px;
+  }
+  .close-cta .arrow {
+    display: inline-block;
+    margin-left: 6px;
+    transition: transform 180ms ease;
+  }
+  .close-cta:hover .arrow { transform: translateX(3px); }
+  .close-restart {
+    display: inline-block;
+    margin-top: 18px;
+    color: #5a6849;
+    font-size: 14px;
+    font-style: italic;
+    background: transparent;
+    border: 0;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+  .close-restart:hover { color: #2f4633; text-decoration: underline; }
+
+  /* ====== BUTTONS ====== */
+  .btn-primary {
+    background: #2f4633;
+    color: #f3eee3;
+    border: 0;
+    border-radius: 999px;
+    padding: 16px 38px;
+    font-size: 17px;
+    letter-spacing: 0.02em;
+    min-height: 52px;
+    min-width: 180px;
+    transition: background 180ms ease, transform 180ms ease;
+  }
+  .btn-primary:hover { background: #253a29; }
+  .btn-primary:active { transform: translateY(1px); }
+
+  /* ====== RULE ====== */
+  .rule {
+    border: 0;
+    border-top: 1px solid #a8b3a2;
+    margin: 36px 0 18px;
+    opacity: 0.5;
+  }
+
+  /* ====== FOOTER ====== */
+  .disclaimer {
+    color: #5a6849;
+    font-size: 12px;
+    line-height: 1.55;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 50ch;
+  }
+</style>
+</head>
+<body>
+<main class="app" id="app">
+
+  <!-- Brand mark: serial + coloured fullstop. Nº to be assigned at polish. -->
+  <header class="brand-mark" aria-label="Brand mark">
+    <span class="brand-serial">Nº</span>
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span class="brand-name">Grounded Humanity</span>
+  </header>
+
+  <div class="stage" aria-live="polite" aria-atomic="true">
+
+    <!-- ============================================================ -->
+    <!-- STATE 1: LANDING                                              -->
+    <!-- ============================================================ -->
+    <section class="state is-active" id="state-landing" aria-labelledby="landing-title">
+      <!-- ornament slot: GH tree icon goes here in final polish -->
+      <p class="landing-eyebrow">A free tool</p>
+      <h1 class="landing-title" id="landing-title">One Breath</h1>
+      <p class="landing-tagline">One breath to steady yourself.</p>
+      <button class="btn-primary" id="begin-btn" type="button">Begin</button>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- STATE 2: BREATH (one cycle, 4 in / 6 out, single clock)       -->
+    <!-- ============================================================ -->
+    <section class="state" id="state-breath" aria-labelledby="breath-hint">
+      <div class="breath-stage" role="group" aria-label="Guided breath">
+        <div class="breath-circle" aria-hidden="true">
+          <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
+            <circle class="breath-ring" cx="100" cy="100" r="92"></circle>
+            <circle class="breath-inner" id="breath-disc" cx="100" cy="100" r="62"></circle>
+          </svg>
+          <div class="breath-label">
+            <span class="breath-label__word" id="breath-word">breathe in</span>
+            <span class="breath-label__count" id="breath-count">4</span>
+          </div>
+        </div>
+        <p class="breath-hint" id="breath-hint">Breathe in through your nose, then let the breath fall out a little longer than it came in.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- STATE 3: CLOSE (CTA placeholder)                              -->
+    <!-- ============================================================ -->
+    <section class="state" id="state-close" aria-labelledby="close-lede-id">
+      <p class="close-lede" id="close-lede-id">That is it. You did it.</p>
+      <p class="close-signature">The full collection has more tools like this.</p>
+      <!-- URL PLACEHOLDER: Claude replaces gumroad.com with real URL at polish -->
+      <a class="close-cta" id="cta-link" href="https://gumroad.com" target="_blank" rel="noopener noreferrer">
+        See the full collection <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+      <button class="close-restart" id="restart-btn" type="button">Take another breath</button>
+    </section>
+
+  </div>
+
+  <hr class="rule" aria-hidden="true">
+  <p class="disclaimer">Self-guided reflection. Not a substitute for medical advice, therapy, or counselling.</p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ====== ELEMENT REFS ======
+  var states = {
+    landing: document.getElementById("state-landing"),
+    breath:  document.getElementById("state-breath"),
+    close:   document.getElementById("state-close")
+  };
+  var beginBtn  = document.getElementById("begin-btn");
+  var restartBtn = document.getElementById("restart-btn");
+  var breathDisc = document.getElementById("breath-disc");
+  var breathWord = document.getElementById("breath-word");
+  var breathCount = document.getElementById("breath-count");
+  var stage = document.querySelector(".stage");
+
+  // ====== CONFIG (one cycle: 4s in / 6s out) ======
+  var IN_S  = 4;
+  var OUT_S = 6;
+  var TOTAL_S = IN_S + OUT_S; // 10s, one cycle
+
+  // ====== STATE ======
+  var rafId = null;          // requestAnimationFrame handle
+  var startTs = 0;           // performance.now() at cycle start
+  var prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ====== HELPERS ======
+  function show(name) {
+    Object.keys(states).forEach(function (k) {
+      states[k].classList.toggle("is-active", k === name);
+    });
+    // Move focus to the active state's primary interactive element,
+    // or the stage so the new state is announced.
+    if (name === "landing") {
+      beginBtn.focus();
+    } else if (name === "close") {
+      // Don't auto-focus the CTA; let the user read first.
+      // But ensure focus does not stay on the hidden Begin button.
+      stage.setAttribute("tabindex", "-1");
+      stage.focus();
+    } else {
+      stage.setAttribute("tabindex", "-1");
+      stage.focus();
+    }
+  }
+
+  function fmtCount(n) {
+    // 1..4 (in) or 1..6 (out)
+    n = Math.max(1, Math.min(n, 6));
+    return String(n);
+  }
+
+  function tick() {
+    var now = performance.now();
+    var elapsed = (now - startTs) / 1000; // seconds since cycle start
+
+    if (elapsed >= TOTAL_S) {
+      // Cycle complete. Snap to end-of-out state and move on.
+      finishCycle();
+      return;
+    }
+
+    if (elapsed < IN_S) {
+      // INHALE phase
+      if (!breathDisc.classList.contains("is-inhale")) {
+        breathDisc.classList.remove("is-exhale");
+        breathDisc.classList.add("is-inhale");
+        breathWord.textContent = "breathe in";
+      }
+      var inN = IN_S - Math.floor(elapsed); // 4, 3, 2, 1
+      var label = (prefersReduced) ? fmtCount(inN) : fmtCount(inN);
+      breathCount.textContent = label;
+    } else {
+      // EXHALE phase
+      if (!breathDisc.classList.contains("is-exhale")) {
+        breathDisc.classList.remove("is-inhale");
+        breathDisc.classList.add("is-exhale");
+        breathWord.textContent = "breathe out";
+      }
+      var outElapsed = elapsed - IN_S;
+      var outN = OUT_S - Math.floor(outElapsed); // 6, 5, 4, 3, 2, 1
+      breathCount.textContent = fmtCount(outN);
+    }
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function startBreath() {
+    show("breath");
+    // Reset disc to starting (small) size, then animate to expanded.
+    breathDisc.classList.remove("is-inhale", "is-exhale");
+    // Force a reflow so the transition picks up the next class change cleanly.
+    void breathDisc.getBoundingClientRect();
+    startTs = performance.now();
+    // Kick the in-phase class on the next frame so the transition starts.
+    requestAnimationFrame(function () {
+      breathDisc.classList.add("is-inhale");
+      breathWord.textContent = "breathe in";
+      breathCount.textContent = fmtCount(IN_S);
+    });
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function finishCycle() {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    breathDisc.classList.remove("is-inhale", "is-exhale");
+    // Hold at the smaller (rest) size.
+    breathWord.textContent = "breathe out";
+    breathCount.textContent = "0";
+    // Brief pause so the close state doesn't flash, then swap.
+    setTimeout(function () { show("close"); }, 600);
+  }
+
+  function resetAll() {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    breathDisc.classList.remove("is-inhale", "is-exhale");
+    breathWord.textContent = "breathe in";
+    breathCount.textContent = fmtCount(IN_S);
+    show("landing");
+  }
+
+  // ====== EVENT WIRING ======
+  beginBtn.addEventListener("click", startBreath);
+  restartBtn.addEventListener("click", resetAll);
+
+  // Keyboard: space/enter on landing restarts the cycle (defensive, button handles it natively).
+  // Keyboard: ESC during breath goes back to landing.
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && states.breath.classList.contains("is-active")) {
+      resetAll();
+    }
+  });
+})();
+</script>
+</body>
+</html>
