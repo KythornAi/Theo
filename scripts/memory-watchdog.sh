@@ -9,8 +9,8 @@ USER_FILE_GIT="/home/kylemoore/theo/memory/USER.md"
 USER_FILE_LIVE="/home/kylemoore/.hermes/memories/USER.md"
 ARCHIVE_FILE="/home/kylemoore/Brain/03_Resources/Theo/memory-archive-2026.md"
 ENV_FILE="/home/kylemoore/.hermes/.env"
-MEMORY_LIMIT=2200
-USER_LIMIT=1375
+MEMORY_LIMIT=5000
+USER_LIMIT=3000
 WARN_PCT=70
 AUTO_PCT=80
 
