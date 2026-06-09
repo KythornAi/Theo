@@ -97,8 +97,7 @@ if uploaded_file and api_key:
 
             transcript = response.text
 
-            # Remove the temp upload from Gemini servers
-            client.files.delete(file_ref)
+            # File auto-expires after 48h — no manual delete needed
             st.success("✅ Transcription complete!")
 
         except Exception as e:
