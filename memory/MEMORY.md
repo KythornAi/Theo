@@ -14,4 +14,4 @@ Hermes ops: failed write_file/patch verifier recovery needs a later successful w
 §
 MNM audio: Edge TTS + Python/pydub in ~/theo/prototypes/ makes two-host NotebookLM-style chapter podcasts; pipeline is generate_podcast_v3.py (Ryan/Sonia). Gemini transcription app: transcribe_app.py.
 §
-Plugins enabled 2026-06-11: web-parallel (Parallel.ai web_search backend), disk-cleanup (ephemeral file cleanup), security-guidance (file-write risk warnings).
+Plugins: web-parallel, disk-cleanup, security-guidance enabled.
