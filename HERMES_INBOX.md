@@ -842,3 +842,5 @@ Separate folders kept clean — `~/theo/mtd/` and `~/theo/demand-scans/` are ind
 [DEMAND-SCAN] 2026-06-12 | Morning scan | File: demand-scans/results/morning-2026-06-12.md | Top rec: n8n AI workflow templates — +125% Fiverr growth, +178% Upwork AI Integration growth, zero-overhead Gumroad validation with 3 pre-built templates at $39-79 each.
 
 By the way: the demand scan also flagged automated data cleaning as a sleeper hit (+210% Excel data cleaning growth). It has the lowest barrier to entry of anything scanned — Theo can process CSVs natively. Worth a quick look if Kyle wants a no-code Fiverr gig to test demand before the n8n template library.
+
+[DEMAND-SCAN] 2026-06-12 | Afternoon scan (Friday weekly roundup) | File: demand-scans/results/afternoon-2026-06-12.md | Top 3: (1) n8n workflow templates for small businesses — cross-validated by Reddit admin overload threads + Fiverr/Upwork growth data, (2) automated data cleaning service — +210% growth, lowest barrier, (3) ADHD-friendly self-employed admin pack — ties Paper N Pixels audience to admin-automation niche, needs competitor scan first.
