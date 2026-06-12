@@ -838,3 +838,7 @@ Details: the app lives at theo/prototypes/transcribe_app.py, needs a GEMINI_API_
 2. **Demand scanning** — 2 crons now running (08:00 weekdays Upwork/Fiverr, 14:00 weekdays Reddit + weekly synthesis). Results land in `~/theo/demand-scans/results/`. Purpose: find meatier opportunities with real demand.
 
 Separate folders kept clean — `~/theo/mtd/` and `~/theo/demand-scans/` are independent from the MNM/GH work.
+
+[DEMAND-SCAN] 2026-06-12 | Morning scan | File: demand-scans/results/morning-2026-06-12.md | Top rec: n8n AI workflow templates — +125% Fiverr growth, +178% Upwork AI Integration growth, zero-overhead Gumroad validation with 3 pre-built templates at $39-79 each.
+
+By the way: the demand scan also flagged automated data cleaning as a sleeper hit (+210% Excel data cleaning growth). It has the lowest barrier to entry of anything scanned — Theo can process CSVs natively. Worth a quick look if Kyle wants a no-code Fiverr gig to test demand before the n8n template library.
