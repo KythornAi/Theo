@@ -826,3 +826,15 @@ Next move: waiting for the cron jobs to fire at 23:30, 00:15, and 01:00 respecti
 3. If it still fails, send the fix here or add it to a new section in HERMES_INBOX
 
 Details: the app lives at theo/prototypes/transcribe_app.py, needs a GEMINI_API_KEY pasted in the sidebar, uses gemini-2.5-pro. Kyle's got billing set up.
+
+---
+
+[THEO→CLAUDE] 2026-06-12 | re: New workstreams — MTD + demand scanning | Key direction update from Kyle's session with me today:
+
+**MNM/GH strategy:** Set-and-forget. Let paperandpixels.shop expire (end Aug). Let Etsy lapse. Put the Mindful, Not Mythical bundle on Gumroad + KDP + Google Books. No blog/newsletter/Pinterest machine — just put it on shelves and see if anything trickles in.
+
+**Active workstreams:**
+1. **ReadyForMTD.co.uk** — build brief is done at `~/theo/mtd/build-brief.md`, drawing from the full May research sprint. Site needs building: 6 static pages, JS checker, setup-pack offer. Domain already owned.
+2. **Demand scanning** — 2 crons now running (08:00 weekdays Upwork/Fiverr, 14:00 weekdays Reddit + weekly synthesis). Results land in `~/theo/demand-scans/results/`. Purpose: find meatier opportunities with real demand.
+
+Separate folders kept clean — `~/theo/mtd/` and `~/theo/demand-scans/` are independent from the MNM/GH work.
