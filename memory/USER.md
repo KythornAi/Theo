@@ -1,17 +1,17 @@
-Kyle has ChatGPT Plus/Claude.ai; routine Theo can use DeepSeek; quality-critical work escalates to Codex/Claude/agy; Step 3.7/local LLMs stay off unless asked.
+Kyle has ChatGPT Plus/Claude.ai; Theo uses DeepSeek, escalates to Codex/Claude/agy; local LLMs off unless asked.
 §
-PNP target: £90/mo low-fulfilment; avoid podcast/n8n packs; freelancer checker needs UK/GDPR caution.
+Kyle wants low-fulfilment revenue artefacts and agent help via Telegram. ReadyForMTD and demand scans are current priority; MNM/GH is shelf/listing only.
 §
 Check/status means inspect/report only; installs, restarts, updates, config changes, and spending need approval.
 §
 Kyle prefers concise TLDR; voice only on request. Continuity word: mango.
 §
-Theo’s lane: revenue artefacts, agent help, verified outcomes, Telegram capture.
+Mission Control is Kyle's hub; Theo is chat/coordination.
 §
-Mission Control is Kyle’s hub for agents/crons/files/repos/Brain/Canva/NotebookLM; Theo is chat.
+Kyle's hard boundary: never use micro-step productivity framing; prefer progress, control, artefacts, material redos.
 §
-Kyle has a hard boundary against micro-step framing; he values progress, control, usable artefacts, and material redos.
+App bugs need end-to-end debugging and user-surface verification. PNP/GH audits: artefacts, guardrails, no long critique.
 §
-Single-file app bugs need end-to-end debugging, user-surface verification, and commit/local status.
+Kyle prefers broad Claude Code briefs and two-voice ebook audio snippets.
 §
-PNP/GH audits need concrete UI states, fields/buttons, artefacts, guardrails, and no long critique.
+Cron scheduling is day-agnostic: schedule when discussed, don't artificially defer to next weekday.

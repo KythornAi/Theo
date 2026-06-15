@@ -1,15 +1,17 @@
-EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first. Product, market, status, decision, research, cron, and tool facts live in vault files.
+EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first. Product/market/decision/research/cron/tool facts live there.
 §
-Platform: Pop OS laptop /home/kylemoore. Hermes at ~/.hermes; workspace ~/theo; Brain vault ~/Brain.
+Platform: Pop OS laptop /home/kylemoore. Hermes ~/.hermes; workspace ~/theo; Brain ~/Brain. Keep live memory and ~/theo/memory mirrors aligned; watchdog limits MEMORY=5000, USER=3000.
 §
-Tool strategy: routine Theo/chat/cron uses DeepSeek V4 Flash via OpenRouter. Escalate to Codex for reasoning/code, Claude for writing, agy for multimodal. TinyFish first; Perplexity for cited synthesis; Firecrawl for complex crawls.
+Tools: routine Theo/chat/cron uses DeepSeek V4 Flash. Escalate to Codex for reasoning/code, Claude for writing, agy for multimodal. TinyFish first; Perplexity for synthesis; Firecrawl for crawls.
 §
-Protocol: Theo researches, Kyle chooses, Claude builds/drafts, Theo reviews, Kyle final-calls. HERMES_INBOX carries async Theo↔Claude handoffs.
+Protocol: Theo researches, Kyle chooses, Claude builds/drafts, Theo reviews, Kyle final-calls. HERMES_INBOX carries async handoffs.
 §
-Brain vault: PNP hub ~/Brain/01_Projects/Paper and Pixels/; Theo extended memory ~/Brain/03_Resources/Theo/; sync via git.
+PNP/GH: Daily Reset is flagship and never free; Task Paralysis Rescue is tabled. Let paperandpixels.shop expire Aug 2026 and do not renew Etsy. MNM/GH is set-and-forget on Gumroad, KDP, Google Books.
 §
-Memory files: live canonical ~/.hermes/memories/MEMORY.md and repo mirror ~/theo/memory/MEMORY.md stay aligned; USER.md mirrors too. Watchdog: ~/theo/scripts/memory-watchdog.sh.
+Customer-facing GH/PNP work avoids hidden AI, medical/therapy/cure claims, unclear save/button logic, and launch-scope creep.
 §
-PNP/GH guardrails: Daily Reset is flagship and never free; Task Paralysis Rescue is tabled. Grounded Humanity uses Carlton Embers pen name; first offer is Mindful, Not Mythical ebook + 60 ADHD cards. Gumroad first. Avoid hidden AI promises, medical/therapy/cure claims, and unclear save/button logic.
+Active workstreams: ReadyForMTD.co.uk brief lives at ~/theo/mtd/build-brief.md. Demand-scan crons watch Upwork/Fiverr/Reddit; results in ~/theo/demand-scans/results/.
 §
-Hermes ops: if write_file/patch fails, clear mutation verifier with a later successful write_file/patch to the same path; terminal append does not clear it. Telegram /version (/v) reports Hermes version, release date, and upstream SHA for bug reports.
+MNM audio: Edge TTS + Python/pydub in ~/theo/prototypes/ makes two-host chapter podcasts. Gemini transcription app: transcribe_app.py.
+§
+Data-analysis reporting: Theo gathers/processes real/current data, Claude writes narrative, Kyle adds commercial judgment. Competitive analysis needs Perplexity sonar-pro plus Firecrawl scraping of offerings, pricing, and traffic sources.
