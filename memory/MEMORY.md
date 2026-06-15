@@ -1,6 +1,6 @@
-EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first. Product/market/decision/research/cron/tool facts live there.
+EXTENDED MEMORY: ~/Brain/03_Resources/Theo/ — read _index.md first; product, market, decision, research, cron, and tool facts live there.
 §
-Platform: Pop OS laptop /home/kylemoore. Hermes ~/.hermes; workspace ~/theo; Brain ~/Brain. Keep live memory and ~/theo/memory mirrors aligned; watchdog limits MEMORY=5000, USER=3000.
+Platform: Pop OS /home/kylemoore. Hermes ~/.hermes; workspace ~/theo; Brain ~/Brain. Keep live memory and ~/theo/memory mirrors aligned; watchdog limits MEMORY=5000, USER=3000.
 §
 Tools: routine Theo/chat/cron uses DeepSeek V4 Flash. Escalate to Codex for reasoning/code, Claude for writing, agy for multimodal. TinyFish first; Perplexity for synthesis; Firecrawl for crawls.
 §
@@ -10,8 +10,8 @@ PNP/GH: Daily Reset is flagship and never free; Task Paralysis Rescue is tabled.
 §
 Customer-facing GH/PNP work avoids hidden AI, medical/therapy/cure claims, unclear save/button logic, and launch-scope creep.
 §
-Active workstreams: ReadyForMTD.co.uk brief lives at ~/theo/mtd/build-brief.md. Demand-scan crons watch Upwork/Fiverr/Reddit; results in ~/theo/demand-scans/results/.
+Active workstreams: ReadyForMTD.co.uk brief at ~/theo/mtd/build-brief.md. Demand-scan crons watch Upwork/Fiverr/Reddit; results in ~/theo/demand-scans/results/; Monday-only 08:00 and 14:00 from 2026-06-15.
 §
 MNM audio: Edge TTS + Python/pydub in ~/theo/prototypes/ makes two-host chapter podcasts. Gemini transcription app: transcribe_app.py.
 §
-Data-analysis reporting: Theo gathers/processes real/current data, Claude writes narrative, Kyle adds commercial judgment. Competitive analysis needs Perplexity sonar-pro plus Firecrawl scraping of offerings, pricing, and traffic sources.
+Data-analysis reporting: Theo gathers/processes real/current data, Claude writes narrative, Kyle adds commercial judgment. Use Perplexity sonar-pro plus Firecrawl for competitive analysis.

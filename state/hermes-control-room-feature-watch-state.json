@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-06-11T09:05:51.250287+00:00",
+  "updated_at": "2026-06-15T09:05:16.170204+00:00",
   "heads": {
-    "agent": "02f878ec5ac665bd9d7be7ec7093cd017e1084f9",
-    "webui": "f64b06ab4fd6252fbe364f4a1afa680d914bef55"
+    "agent": "cc14b74718aaab8f3dc69c004b4dccf67077a1e1",
+    "webui": "48860418c958ccef47c600e071f1298b97440274"
   }
 }

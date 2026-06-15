@@ -25,8 +25,10 @@ Each file contains:
 
 | Job | Schedule | Scope |
 |-----|----------|-------|
-| `demand-scan-morning` | 08:00 weekdays | Upwork + Fiverr fresh scans |
-| `demand-scan-afternoon` | 14:00 weekdays | Reddit + weekly roundup |
+| `demand-scan-morning` | Mondays 08:00 | Upwork + Fiverr fresh scans |
+| `demand-scan-afternoon` | Mondays 14:00 | Reddit + weekly synthesis |
+
+Cadence was reduced from weekdays to Monday-only on 2026-06-15 after daily results stabilised. Reevaluate if Monday scans start showing larger week-to-week swings.
 
 ## Opportunities worth scanning for
 
