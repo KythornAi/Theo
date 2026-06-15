@@ -91,11 +91,12 @@ If gateway fails on start, check logs — most common cause is Telegram polling 
 
 | Tier | Model | When |
 |------|-------|------|
-| Chat (default) | `gpt-5.5` via openai-codex (ChatGPT Plus OAuth) | All Telegram conversations and most tasks |
-| Cron | `gpt-5.5` via openai-codex (ChatGPT Plus OAuth) | Scheduled research jobs |
+| Chat (default) | `deepseek/deepseek-v4-flash` via OpenRouter | All Telegram conversations and most tasks (switched from gpt-5.5 on 2026-06-06, see `~/theo` commit `f90a205`) |
+| Cron | mostly `gpt-5.5` via openai-codex (ChatGPT Plus OAuth); some jobs pinned to `deepseek/deepseek-v4-flash` | Scheduled research jobs — check `~/.hermes/cron/jobs.json` per-job `model` field |
 | Deep think | `gpt-5.5` via Codex CLI | Complex analysis — invoked via `codex-think` skill |
 
 Codex CLI auth: ChatGPT Plus OAuth (Kyle's subscription). Token stored at `~/.codex/`.
+Default model/provider live in `~/.hermes/config.yaml` under `model:` — check there before trusting this table, it has drifted before.
 If Codex auth expires, Kyle needs to run `codex` once in a terminal on the laptop to re-auth.
 
 ---
@@ -164,6 +165,8 @@ Run these in order — every session, no exceptions:
 5. Scan `HERMES_INBOX.md` for any `[THEO→CLAUDE]` entries — these are messages from Theo that need a response. Respond by appending `[CLAUDE→THEO] YYYY-MM-DD | <subject> | <response>` to HERMES_INBOX.md, then commit and push on the laptop.
 6. Report a brief summary to Kyle: Theo's current status, any messages from Theo, open blockers.
 7. Ask Kyle: what is Theo doing wrong, or what needs setting up?
+
+**Maintenance — keep HERMES_INBOX.md small:** This file is read in full every session by both Claude and Theo, so it must stay short. If it grows beyond ~150 lines, archive acknowledged/completed entries to `archive/YYYY-MM/HERMES_INBOX-archive-through-YYYY-MM-DD.md` on the laptop (via SSH — see Git Sync Rules), reset Section 1 to a short pointer note and Section 4 to empty, commit and push, then notify Theo via `[CLAUDE→THEO]` (draft the message for Kyle's approval first, per Session Wrap Up step 2). Last done: 2026-06-15 (856 → ~10 lines, archived to `archive/2026-06/HERMES_INBOX-archive-through-2026-06-07.md`).
 
 ---
 
