@@ -7,8 +7,13 @@
 - `data-analysis-opportunity-2026-06-12.md` (prior work)
 - `competitive-landscape-data-analysis-2026-06-12.md` (prior work)
 - `deep-competitive-analysis-2026-06-12.md` (prior work)
+- `side-hustle-compiled-opportunity-2026-06-17.md` (this file — includes Claude Code gap review + follow-up research on 2026-06-17)
 
 **Purpose:** Final structured output for Codex to act on.
+
+**⚠️ NOTE FOR CODEX:** Throughout this document "Theo" refers to this AI agent (Hermes Agent by Nous Research — an autonomous AI assistant running locally). "TinyFish" is a web search & fetch tool used by Theo for market research. "Claude Code" refers to Claude Code CLI (Anthropic).
+
+**⚠️ SCORING HONESTY:** All scores in Section 1 are subjective assessments based on qualitative research (Reddit threads, marketplace listings, direct page fetches). They provide directional comparison, not measurement. No formal rubric was applied. See Section 7 (Scoring Context) for details on how each dimension was assessed.
 
 ---
 
@@ -36,6 +41,15 @@ Justification:
 - **Tool fit (5):** Theo processes CSVs, Claude writes narrative, Kyle adds human review. This is exactly the Theo+Claude+Kyle workflow the demand scans identified.
 
 Review/Reputation Gap (28) ties White-Label (28) for second place. Review wins the tiebreaker on speed to first sale (4 vs 2) — you can produce a review audit from public data without any client cooperation, meaning you can deliver value *before* asking for payment.
+
+**⚠️ SCORING HONESTY (continued):** These scores are directional, not measured. Each dimension was assessed qualitatively:
+- **Pain intensity:** estimated from Reddit/forum sentiment frequency and emotional language
+- **Ability to pay:** inferred from typical revenue of target businesses + existing marketplace spend on related services
+- **Ease of data collection:** based on whether data is public, standardised, or requires client cooperation
+- **Repeatability:** based on natural business cycle (monthly, quarterly, one-off)
+- **Speed to first sale:** based on whether a sample can be produced without client cooperation
+- **Tool fit:** assessed against Theo+TinyFish+Claude workflow capabilities
+- **Monthly retention likelihood:** inferred from subscription patterns in analogous services
 
 ---
 
@@ -187,39 +201,49 @@ From the public business scans research. Sorted by likely conversion likelihood 
 
 ### The Experiment: "One Free Snapshot, Three Paid Conversions" (7 Days)
 
+**⚠️ NOTE: This experiment targets solicitors first, not Etsy/Shopify stores (see Section 7.1 — sole traders cannot be cold-emailed under UK PECR). The original Shopify prospect targets (Chocolates & Charms, MiLeo Scents, allabouteveshop) are now organic/friction-based outreach only, not cold email.**
+
 #### Target prospect type
-**Ecommerce (Shopify) store owners in the UK** — specifically the 3 Shopify stores already identified:
-- Chocolates & Charms (Tiree, Scotland) — complete inventory collapse, highest urgency
-- MiLeo Scents (UK) — thin data + pricing problem
-- allabouteveshop (eco home décor) — thin descriptions + no reviews
+**Solicitor practices in the UK (LLPs/Limited companies)** — start with the 5 solicitors already identified:
+- Jennings Solicitors (Llanelli) — copyright 2020, no booking, highest urgency among cash-flow-positive businesses
+- Lovedays Solicitors (Derbyshire) — 4 offices, 2019 copyright, no FAQ/booking
+- Graceland Solicitors (London) — Legal Aid franchise under-leveraged
+- SABZ Solicitors (London) — multi-service, no FAQ/booking
+- Innes Johnston Solicitors (Fife) — 3 offices, stale digital presence
 
 These are the strongest prospects because:
-1. Their data issue is visible from public sources — no cooperation needed to identify the problem
-2. The issue is urgent (zero revenue for Chocolates & Charms)
-3. They're already in the research — zero cold discovery cost
+1. They are **corporate subscribers** under PECR — cold email is lawful without prior consent
+2. They have established cash flow (not struggling with £0 revenue)
+3. Their data issues are visible from public sources — no cooperation needed to identify the problem
+4. They're already in the research — zero cold discovery cost
+5. A single solicitor conversion at £147/mo proves the concept with a solid business, not a struggling one
+
+**Secondary (if solicitor outreach doesn't convert):** Pivot to organic outreach via contact forms for the 3 Shopify stores, with value-first framing (not a sales pitch). See Section 7.1 for legal constraints.
 
 #### Offer structure and price
-- **Free "Business Health Snapshot"** (2-page PDF) — email it to them. Contains 3–5 public-data findings specific to their shop.
+- **Free "Business Health Snapshot"** (2-page PDF) — email it to them. Contains 3 public-data findings specific to their practice.
 - If they engage: **One-off Full Health Report — £147**
 - If they want ongoing: **Monthly Reports — £147/mo**
 
 The free snapshot is the hook. It demonstrates value before asking for anything. If they don't respond to the free email, no cost incurred.
 
-#### How to find and approach them
-**Step 1:** Find an email or contact form for each business.
-- Chocolates & Charms: Likely has a contact page on their Shopify site
-- MiLeo Scents: Same — contact page, Instagram link, or email
-- allabouteveshop: Same approach
+**How to find and approach them**
+**Step 1:** Find an email or contact form for each solicitor practice.
+- Jennings Solicitors: contact page / enquiries email on their website
+- Lovedays Solicitors: same — contact page or office email
+- Graceland Solicitors: same approach
+- SABZ Solicitors: same approach
+- Innes Johnston Solicitors: same approach
 
 **Step 2:** Send a short, specific email:
 
-> Subject: Quick data find on [Shop Name]
+> Subject: Quick data find on [Firm Name]
 >
 > Hi [Name],
 >
-> I noticed your [Shopify/Etsy] store while doing market research. I found [1 specific data point — e.g. "all 12 products are sold out" or "your £10 free shipping threshold is likely eating margin on single-item orders"].
+> I noticed your [law firm/dental practice] while doing market research. I found [1 specific data point — e.g. "your website copyright says 2019 and there's no online booking system" or "your Legal Aid franchise is a strong differentiator that's not visible in your digital presence"].
 >
-> I put together a free 2-page Business Health Snapshot with 3 findings + recommendations. Want me to send it over?
+> I put together a free 2-page Business Health Snapshot with 3 findings + recommendations specific to your practice. Want me to send it over?
 >
 > No charge, no commitment. Just data you can use.
 >
@@ -227,32 +251,32 @@ The free snapshot is the hook. It demonstrates value before asking for anything.
 
 **Step 3:** If they say yes, deliver the full 2-page snapshot within 24 hours.
 
-#### What success looks like
-- **Minimum viable win:** 1 of 3 prospects responds positively
-- **Good win:** 1 prospect converts to a £147 full report
+#### What success looks like (at realistic 3-5% cold email response rates)
+- **Minimum viable win:** 1 of 20+ solicitors responds positively to the free snapshot offer
+- **Good win:** 1-2 prospects request the snapshot, and 1 converts to a £147 full report
 - **Excellent win:** 1 prospect converts to £147/mo recurring
-- **Stretch:** 2+ prospects convert
+- **Stretch:** 2+ prospects convert to any paid tier
 
 #### What the deliverable actually is
-**Free Snapshot (2 pages):**
-- Page 1: "We Found" — 3 specific data findings from public sources (e.g. "Your entire store is sold out — this costs you £X/month in lost revenue")
+**Free Snapshot (2 pages) — solicitor version:**
+- Page 1: "We Found" — 3 specific data findings from public sources (e.g. "Your website copyright says 2020 — Google treats stale content as a ranking signal. Competitors with recent dates get 15-25% more web-to-lead conversions.")
 - Page 2: "What To Do About It" — 3 actionable recommendations + offer of full report
 
 **Full Health Report (5-7 pages):**
 - Executive summary (1 page)
-- Data completeness audit (1 page)
-- Pricing & positioning analysis vs competitors (1-2 pages)
-- Conversion gap analysis (1 page)
+- Digital presence audit: website freshness, booking system, FAQ, contact options (1 page)
+- Competitor benchmarking: how your online presence compares to 2-3 local competitors (1-2 pages)
+- Conversion gap analysis: estimated lost leads from missing features (1 page)
 - Prioritised action roadmap (1 page)
 
 #### Fallback plan
-**If Shopify prospects don't convert in week 1:**
-Pivot to **free review audit for local service businesses** (solicitors). Use the 5 solicitor prospects already identified. Offer a free "Review Health Snapshot" — shows them their Google review velocity vs competitors, response rate gap, and sentiment themes. Same structure, different data layer.
+**If solicitor outreach doesn't convert in week 1:**
+Pivot to **free review audit for the 3 Shopify stores** (Chocolates & Charms, MiLeo Scents, allabouteveshop). Use their website contact forms with value-first framing (see Section 7.1 for legal guardrails). Offer a free "Business Health Snapshot" — shows them their product data gaps, pricing position, and conversion issues. Same structure, different data layer.
 
-**Key advantage of the solicitor fallback:** Review data is 100% public (Google, Yelp). You can produce the full snapshot without any cooperation — email it to them as a surprise deliverable showing value. They can't ignore a PDF that has their business name, their competitors, and specific data about their reputation.
+**Key advantage of the Shopify fallback:** Product data is 100% public (Shopify product pages). You can produce the full snapshot without any cooperation — submit it through their contact form as a value demonstration.
 
 **If both fail:**
-Abandon active outreach and build a Gumroad product listing for "Shopify Health Report — £147" to sell passively. Use the sample report as the product preview.
+Abandon active outreach and build a Gumroad product listing for "Shopify Health Report — £147" or "Solicitor Digital Audit — £147" to sell passively. Use the sample report as the product preview.
 
 ---
 
@@ -281,13 +305,206 @@ Abandon active outreach and build a Gumroad product listing for "Shopify Health 
 
 | Our Price | Position vs Market |
 |---|---|
-| £147/mo | Below Fiverr dashboard retainers ($300-1,500) — feels like a deal |
-| £147/mo | Above Fiverr basic gigs ($40-245) — signals higher quality |
-| £147/mo | Cheaper than 1 hour of senior Upwork analyst ($100-200/h) |
-| £147/mo | 3-10% of agency minimum retainer ($4,500-10k/mo) — no-brainer comparison |
+| £147/mo (~$186 USD) | INSIDE the Fiverr range at low-mid end — not below it |
+| £147/mo (~$186 USD) | Below Reporting Ninja/Swydo/AgencyAnalytics mid-tier for equivalent value |
+| £147/mo (~$186 USD) | Below 1 hour of senior Upwork analyst ($100-200/h) — good value signal |
+| £147/mo (~$186 USD) | 10-30% of agency reputation package (Birdeye $299-449/mo) — clear value gap |
+| **Corrected position:** The value proposition is "better format (narrative report, not dashboard), recurring, personalised" — not "cheaper than competitors."|
 
 *Write the report in GBP. Position as a UK-based service for trust. No hourly billing — always fixed-price reports.*
 
 ---
 
-*Compiled 2026-06-17 from 5 research files. See individual files for full sourcing, search queries, and method details.*
+## Section 7: Critical Context for Codex
+
+### 7.1 GDPR & PECR Compliance — The Outreach Strategy Must Change
+
+**This is the most important gap in the original document.** UK law materially affects who we can contact and how.
+
+**The law (PECR Reg 22 + ICO guidance):**
+- **Limited companies / LLPs / Scottish partnerships** ("corporate subscribers") — CAN be cold-emailed without prior consent, provided you identify yourself and include an opt-out. This covers all 5 solicitors identified.
+- **Sole traders and general partnerships** (unincorporated) — treated as **individuals** under PECR. You MUST have prior consent (opt-in) to send marketing emails. The "soft opt-in" only applies to existing customers, not prospects.
+- **Etsy/Shopify store owners** — the vast majority of small Etsy shops and many Shopify stores ARE sole traders. This means the original outreach plan to cold-email them is **legally risky** without consent.
+
+**What this means for our outreach:**
+
+| Prospect Type | Legal Structure (likely) | Can we cold email? | Action |
+|---|---|---|---|
+| Chocolates & Charms (Shopify) | Sole trader | ❌ Need consent first | Cannot use cold email |
+| allabouteveshop (Shopify) | Sole trader (likely) | ❌ Need consent first | Cannot use cold email |
+| MiLeo Scents (Shopify) | Sole trader (likely) | ❌ Need consent first | Cannot use cold email |
+| All 12 Etsy shops | Sole traders | ❌ Need consent first | Skip or use opt-in channels |
+| Jennings Solicitors | LLP / Limited company | ✅ Yes (corporate subscriber) | Cold email is safe |
+| Graceland Solicitors | LLP / Limited company | ✅ Yes | Cold email is safe |
+| Lovedays Solicitors | LLP / Limited company | ✅ Yes | Cold email is safe |
+| SABZ Solicitors | LLP / Limited company | ✅ Yes | Cold email is safe |
+| Innes Johnston Solicitors | LLP / Limited company | ✅ Yes | Cold email is safe |
+| Chancery Dental | Limited company / LLP | ✅ Likely yes | Cold email is likely safe |
+
+**Revised outreach strategy:**
+1. **Priority: Solicitors and dental practice** — these are corporate subscribers; cold email is lawful. Start here.
+2. **For sole traders (Etsy/Shopify):** Do NOT cold-email them. They are individuals under PECR and require prior consent. Use opt-in channels if available — LinkedIn (requires a connection first; watch LinkedIn TOS which prohibits bulk unsolicited messaging to non-connections), relevant Facebook/industry groups where you offer value first, or a website contact form with genuinely helpful value-first framing (not a disguised sales pitch — intent matters more than language per ICO guidance).
+3. **Every email must include:** your identity, your contact address, a clear unsubscribe/opt-out link, and a note about how you obtained their data.
+4. **No LIA needed for PECR compliance with sole traders** — PECR Reg 22 requires consent or soft opt-in for individual subscribers. A Legitimate Interest Assessment (under GDPR) does NOT override PECR's consent requirement. They are separate legal frameworks. LIA is relevant for data-processing lawfulness under GDPR (separate from whether you can SEND the email). **For outreach to sole traders:** the channel must provide prior consent or fall within the soft opt-in exception (existing customer relationship only).
+
+**Reference:** ICO guidance on electronic mail marketing ([ico.org.uk](https://ico.org.uk/for-organisations/direct-marketing-and-privacy-and-electronic-communications/guide-to-pecr/electronic-and-telephone-marketing/electronic-mail-marketing/)), LinkedIn article by Hybrid Legal on B2B cold outreach.
+
+### 7.2 Prospect Re-Ranking — Pain ≠ Ability to Pay
+
+**The original ranking (#1 = Chocolates & Charms) optimises for "urgent visible problem" but ignores "capacity to pay."** This is the most dangerous gap in the original document.
+
+**The problem:**
+- Chocolates & Charms: ALL products sold out, **zero current revenue**. They cannot pay £147/mo for a data report.
+- KuteeraClothing: ~£30-60 total in 2 years. £147/mo exceeds their entire historical revenue.
+- BurnEng: ~£15-25 total in 3 years. Same problem.
+- The solicitors: established businesses with cash flow, staff, ongoing revenue.
+
+**Re-ranked prospect list (ability to pay × pain):**
+
+| New Rank | Business | Cash Flow Reality | Best Offer Fit | Outreach Channel |
+|---|---|---|---|---|
+| 1 | **Jennings Solicitors** | Established 100-year firm, LLP, cash flow positive | Data Health Report | Cold email (legal) |
+| 2 | **Lovedays Solicitors** | 4 offices, established, cash flow positive | Data Health Report | Cold email (legal) |
+| 3 | **Graceland Solicitors** | London firm, Legal Aid franchise, cash flow positive | Review/Reputation Gap OR Data Health | Cold email (legal) |
+| 4 | **SABZ Solicitors** | London firm, multi-service, cash flow positive | Data Health Report | Cold email (legal) |
+| 5 | **Chancery Dental** | Established dental practice, cash flow positive | Data Health Report | Cold email (legal) |
+| 6 | **Innes Johnston Solicitors** | 3 offices, Fife, cash flow positive | Data Health Report | Cold email (legal) |
+| 7 | **Chocolates & Charms** | £0 revenue currently, not paying for reports | Data Health Report (free snapshot ONLY) | Contact form with value-first |
+| 8 | **allabouteveshop** | Low revenue, limited ability to pay | Data Health Report (free snapshot ONLY) | Facebook group / organic |
+| 9 | **MiLeo Scents** | Low revenue, limited ability to pay | Data Health Report (free snapshot ONLY) | Facebook group / organic |
+| 10 | **12 Etsy shops** | Minimal revenue, cannot afford £147/mo | Free snapshot + low-cost report (£47) | Skip active outreach; build product instead |
+
+**Revised experiment:** Start with 1-2 solicitors (cold email, legally safe). If they convert, the model works with solid businesses. The Etsy/Shopify sole traders become a lower-effort, long-tail play via a Gumroad product listing.
+
+### 7.3 Competition We Need to Acknowledge
+
+**The original doc claimed "no competition" for local service businesses and white-label reporting. This is incorrect.** Here's the real landscape:
+
+| Competitor Type | Examples | Pricing | Our Position |
+|---|---|---|---|
+| All-in-one reputation platforms | Birdeye, Yext, Podium | £235-350/mo per location | We're £147/mo (cheaper), narrative-focused; they're dashboard-heavy |
+| White-label reporting tools | Reporting Ninja ($20/mo), Swydo, AgencyAnalytics | $20-300/mo (tools, not services) | We provide **analysis + narrative**, not just dashboard software |
+| Local SEO agencies | Hundreds of UK agencies serving solicitors/dentists | £500-2,000/mo | We're data-specific, not SEO. Less overlap than it seems |
+| CRO/UX auditors | Conversion-rate specialists | £500-5,000 one-off | We're cheaper, data-first, recurring |
+| Shopify app ecosystem | Triple Whale, Northbeam, Klaviyo | $50-500/mo (apps) | Apps give dashboards; we give narrative + action plan |
+| Fiverr freelancers | Various data analyst gigs | $40-245 one-off | We're recurring, higher quality, narrative format |
+
+**Key competitive insight:** The real gap is not "no competition" but "no one offers a **narrative business health report as a standalone, recurring product under £200/mo**." Platforms give dashboards. Freelancers give one-off analyses. Agencies bundle it into £2k+ monthly retainers. A narrative PDF report at £147/mo sits in an unoccupied price/format sweet spot.
+
+### 7.4 Cold Email Response Rate Reality
+
+**The original doc assumes "1 of 3 responds positively" — this is unrealistic by a factor of 5-10×.**
+
+Industry benchmarks (2025-2026):
+- Average B2B cold email response rate: **3-5%** (Belkins 2025 study, Reachoutly 2026)
+- Above-average: **5-8%**
+- Exceptional: **10%+**
+- "1 of 3" = 33% — would be record-breaking
+
+**Revised expectations for a 10-email outreach:**
+- **Realistic response:** 0-1 replies (0-10% response rate)
+- **Good outcome:** 1 positive reply (10%)
+- **Excellent outcome:** 1 conversion to a paid report from 10 outreach emails
+- **"Minimum viable win" should be:** 1 positive engagement from 20+ outreach attempts
+
+This means outreach volume matters more than message polish. Send 20-50 personalised emails to get 1-3 meaningful responses.
+
+### 7.5 Currency Conversion Correction
+
+**The original doc's pricing philosophy compares £147 to USD figures without FX conversion, overstating the value gap.**
+
+- £147 GBP = ~$186 USD (June 2026 exchange rate: ~1 GBP = 1.27 USD)
+- Fiverr low-end: $40-245 (£31-193)
+- Fiverr mid/high-end retainers: $300-1,500 (£236-1,181)
+- **Corrected positioning:** £147/mo ($186) sits INSIDE the Fiverr range at the low-mid end, not below it. The value proposition must be "better format, recurring, narrative" not "cheaper than competitors."
+
+### 7.6 Why Shopify Owners Would Pay for a PDF Report
+
+**The original doc didn't answer: "Shopify Analytics is free — why pay £147/mo for a PDF?"**
+
+Shopify Analytics limitations (verified from community and Shopify blog):
+- Reports are metric-focused, not narrative — no "what this means for your business"
+- No cross-data-source synthesis (Google Ads + Shopify + inventory = silos)
+- Common complaints: slow report generation, missing metrics, poor customisation (Shopify Community forum, 2025-2026)
+- No competitive benchmarking (how do you compare to peers?)
+- No human interpretation — numbers without context
+
+**Our value-add:** We provide the interpretation layer. A Shopify owner can see "17% cart abandonment" in their dashboard but doesn't know if that's normal, good, or terrible for their category. Our report gives context, benchmarks, and prioritised actions. This is the "what to do about it" that dashboards don't deliver.
+
+### 7.7 Revenue Projections at Realistic Conversion Rates
+
+**Assumptions:**
+- Cold email to solicitor prospects: 10-20 emails = 1 reply (5-10% response)
+- Reply to paid conversion: 30-50% (strong for a low-cost service)
+- Monthly churn: 10-15%/mo (estimate — no data yet; calibrate post-launch)
+- Theo time per report: ~2 hours of data processing + drafting
+- Kyle review time: ~1 hour per report
+- Total time per report: ~3 hours
+
+| Scenario | Emails Sent | Responses | Conversions | Monthly Recurring Revenue | Monthly Hours |
+|---|---|---|---|---|---|
+| Slow start (Month 1) | 20 | 1-2 | 0-1 client at £147/mo | £0-147 | ~3h |
+| Building (Month 3) | 20/mo (cumulative) | 1-3/mo | 2-4 clients | £294-588 | ~6-12h |
+| Steady state (Month 6) | 20/mo (cumulative) | 1-3/mo | 4-8 clients | £588-1,176 | ~12-24h |
+| Good case (Month 12) | — | — | 10-15 clients + 1 agency | £1,500-3,500 | ~30-45h |
+
+**Key insight:** This is a part-time side hustle at scale (5-8 clients = ~15-24h/mo for £735-1,176/mo). It does not replace a salary without agency white-label deals scaling it up.
+
+### 7.8 Free Snapshot Conversion Mechanism
+
+**The original doc described a free 2-page snapshot but didn't differentiate it from the paid report — risking the free version giving away the value.**
+
+**Free Snapshot (2 pages) — teaser only:**
+- 1-2 high-level findings (not the full analysis)
+- Example: "Your products average 12-word descriptions. Top performers in your category average 40+."
+- Does NOT include: the competitor benchmark table, the full gap analysis, or the action roadmap
+- Ends with: "Want the full 5-page report with competitor benchmarks, pricing analysis, and a prioritised action plan? Reply 'YES' and I'll send it over."
+
+**Paid Full Report (5-7 pages) — what they unlock:**
+- Full competitor benchmark data (real shops, actual prices, review counts)
+- Complete product data completeness score with per-product breakdown
+- Pricing position analysis with £ impact estimates
+- Prioritised action roadmap with expected conversion impact
+- One-month performance tracking baseline (for recurring clients)
+
+### 7.9 "Theo" Dependency — Backup Plan
+
+**The original doc assumes Theo is always available.** If Theo (this AI agent) is unavailable for a report cycle:
+- Fallback: Manually process Shopify CSV exports using a Python script (pre-written template at `~/theo/prototypes/`)
+- Claude Code can replicate Theo's data-processing steps with clear instructions
+- For long-term resilience: build a small automation script that covers the top 3 report types
+
+### 7.10 White-Label Competition Reality Check
+
+**Original claim: "Less competition: most white-label providers focus on ad management, not pure analytics/reporting."**
+
+**Reality:** White-label reporting tools (Reporting Ninja from $20/mo, Swydo, AgencyAnalytics, Reveal BI) are abundant and cheap. They provide the dashboard/reporting platform, not the analysis.
+
+**Our differentiator:** We're not a tool — we're a **service** that produces analysis. An agency can buy Reporting Ninja for $20/mo but still needs someone to interpret data and write the narrative. That's where we sit. This is a stronger pitch: "We do the analysis part so your team doesn't have to."
+
+---
+
+## Appendix A: Gap Analysis Results
+
+This file was reviewed by **Claude Code CLI** (Anthropic claude-sonnet-4) on 2026-06-17. Gaps identified were:
+- Scoring subjectivity (addressed via Section 1 disclaimers)
+- GDPR/PECR compliance (addressed via Section 7.1)
+- Prospect ranking inverted by ability to pay (addressed via Section 7.2)
+- Competition not acknowledged (addressed via Section 7.3)
+- Unrealistic cold email response rates (addressed via Section 7.4)
+- Currency conversion missing (addressed via Section 7.5)
+- Missing "why buy" vs free tools (addressed via Section 7.6)
+- No revenue projections (addressed via Section 7.7)
+- Free snapshot conversion mechanism undefined (addressed via Section 7.8)
+- Theo dependency not addressed (addressed via Section 7.9)
+- White-label competition claim unverified (addressed via Section 7.10)
+- 11 of 21 prospects unaccounted for — in original research files but not in compiled table
+
+Follow-up sources used for gap research:
+- ICO guidance on PECR electronic mail marketing
+- LinkedIn article by Hybrid Legal on UK B2B cold outreach compliance
+- Belkins 2025 cold email response rate study
+- Reachoutly 2026 cold email benchmarks
+- Birdeye pricing pages (2026)
+- Shopify Analytics community complaints (2025-2026)
+- Reporting Ninja, Swydo, AgencyAnalytics pricing pages
