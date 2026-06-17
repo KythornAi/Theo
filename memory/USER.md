@@ -1,19 +1,19 @@
-Kyle has ChatGPT Plus/Claude.ai; Theo uses DeepSeek; escalate to Codex/Claude/agy. Local LLMs off unless asked.
+Kyle has ChatGPT Plus/Claude.ai; Theo uses DeepSeek; Codex/Claude/agy are escalation tools. Local LLMs off unless asked.
 §
-Kyle wants low-fulfilment revenue artefacts and Telegram agent help. Priorities: ReadyForMTD + demand scans; MNM/GH shelf/listing only.
+Kyle wants low-fulfilment revenue artefacts and Telegram agent help. Priorities: ReadyForMTD + demand scans; MNM/GH shelf only.
 §
-Check/status = inspect/report only. Approval needed for installs, restarts, updates, config changes, spending.
+Check/status means inspect/report only. Approval required for installs, restarts, updates, config, and spending.
 §
 Kyle prefers concise TLDR; voice only on request. Continuity word: mango.
 §
 Mission Control is Kyle's hub; Theo is chat/coordination.
 §
-Kyle's hard boundary: no micro-step productivity framing; use progress, control, artefacts, material redos.
+Kyle rejects micro-step productivity framing; use progress, control, artefacts, material redos.
 §
-App bugs need end-to-end debugging/user-surface verification. PNP/GH audits: artefacts, guardrails, no long critique.
+App bugs need end-to-end user-surface verification. PNP/GH audits should be artefact-focused.
 §
-Kyle prefers broad Claude Code briefs and two-voice ebook audio snippets.
+Kyle likes broad Claude Code briefs and two-voice ebook audio snippets.
 §
-Cron scheduling is day-agnostic. Flag agent-quality operational issues. After ~21:00, schedule large research overnight; if Kyle is going to bed, stop.
+Cron scheduling is day-agnostic. Flag agent-quality issues. After ~21:00, schedule large research overnight.
 §
-Kyle does NOT like being told to go to bed, rest, sleep, or any paternalistic "you should rest" phrasing. Stop doing that entirely.
+Kyle dislikes sleep/rest prompts or paternalistic rest phrasing.
