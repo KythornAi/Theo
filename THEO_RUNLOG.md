@@ -125,3 +125,4 @@
 2026-06-15 | Nightly memory consolidation | Compacted live/mirror MEMORY to 1,514 chars / 68.8% and USER to 948 chars / 68.9%; synced demand-scan Monday cadence in memory, README, Brain cron registry, project status, and research registry; cron state healthy.
 2026-06-16 | Daytime memory consolidation | No memory edits needed; live/mirror MEMORY aligned at 1,514 chars / 68.8%, USER aligned at 948 chars / 68.9%; cron state healthy; no Brain vault edits needed.
 2026-06-16 | Nightly memory consolidation | No memory edits needed; live/mirror MEMORY aligned at 1,514 chars / 68.8%, USER aligned at 948 chars / 68.9%; cron state healthy; no Brain vault edits needed.
+2026-06-17 | Daytime memory consolidation | Compacted/synced USER.md to 958 chars / 69.7%; MEMORY aligned at 1,514 chars / 68.8%; cron state healthy; no Brain vault edits needed.
