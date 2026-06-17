@@ -15,3 +15,5 @@ Active workstreams: ReadyForMTD.co.uk brief at ~/theo/mtd/build-brief.md. Demand
 MNM audio: Edge TTS + Python/pydub in ~/theo/prototypes/ makes two-host chapter podcasts. Gemini transcription app: transcribe_app.py.
 §
 Data-analysis reporting: Theo gathers/processes real/current data, Claude writes narrative, Kyle adds commercial judgment. Use Perplexity sonar-pro plus Firecrawl for competitive analysis.
+§
+Cross-AI research review workflow: use cross-ai-research-review skill. Claude Code CLI with --model opus --effort high for deepest gap analysis; --model sonnet for lighter/faster passes. Codex brief → Claude Code review. Claude brief → Codex review.

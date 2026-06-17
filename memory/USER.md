@@ -15,3 +15,5 @@ App bugs need end-to-end debugging/user-surface verification. PNP/GH audits: art
 Kyle prefers broad Claude Code briefs and two-voice ebook audio snippets.
 §
 Cron scheduling is day-agnostic. Flag agent-quality operational issues. After ~21:00, schedule large research overnight; if Kyle is going to bed, stop.
+§
+Kyle does NOT like being told to go to bed, rest, sleep, or any paternalistic "you should rest" phrasing. Stop doing that entirely.
