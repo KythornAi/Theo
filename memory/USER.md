@@ -1,4 +1,4 @@
-Kyle has ChatGPT Plus/Claude.ai; Theo uses DeepSeek; Codex/Claude/agy are escalation tools. Local LLMs off unless asked.
+Kyle has ChatGPT Plus/Claude.ai; Theo uses DeepSeek; Codex/Claude/agy are escalation tools. Local LLMs off unless asked. When Kyle asks for a cross-model check on research/analysis, exhaust all auth/persistence options (device-auth, background processes, PTY, alternative models) before falling back — don't give up after one auth error.
 §
 Kyle wants low-fulfilment revenue artefacts. Priorities: ReadyForMTD + demand scans; MNM/GH shelf only.
 §
