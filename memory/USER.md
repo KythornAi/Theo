@@ -1,19 +1,19 @@
-Kyle has ChatGPT Plus/Claude.ai; Theo uses DeepSeek; Codex/Claude/agy are escalation tools. Local LLMs off unless asked. When Kyle asks for a cross-model check on research/analysis, exhaust all auth/persistence options (device-auth, background processes, PTY, alternative models) before falling back — don't give up after one auth error.
+Kyle has ChatGPT Plus/Claude.ai; Theo uses DeepSeek; Codex/Claude/agy for escalation. Cross-model checks: exhaust auth/persistence options before falling back.
 §
-Kyle wants low-fulfilment revenue artefacts. Priorities: ReadyForMTD + demand scans; MNM/GH shelf only.
+Priorities: low-fulfilment revenue; ReadyForMTD + demand scans active; MNM/GH shelf-only.
 §
-Check/status means inspect/report only. Approval required for installs, restarts, updates, config, and spending.
+Check/status = inspect only. Approval for: installs, restarts, updates, config, spending.
 §
-Kyle prefers concise TLDR; voice only on request. Continuity word: mango.
+Concise TLDR; voice on request. Continuity: mango. No micro-step productivity — use progress, control, artefacts, material redos.
 §
 Mission Control is Kyle's hub; Theo is chat/coordination.
 §
-Kyle rejects micro-step productivity framing; use progress, control, artefacts, material redos.
+App bugs need end-to-end user-surface verification. Artefact-focused audits.
 §
-App bugs need end-to-end user-surface verification. PNP/GH audits should be artefact-focused.
+Likes broad Claude Code briefs, clean research subfolders, two-voice ebook audio.
 §
-Kyle likes broad Claude Code briefs, clean research subfolders, and two-voice ebook audio snippets.
+Cron: day-agnostic. Flag quality issues. After ~21:00, large research overnight.
 §
-Cron scheduling is day-agnostic. Flag agent-quality issues. After ~21:00, schedule large research overnight.
+No sleep/rest prompts or paternalistic phrasing.
 §
-Kyle dislikes sleep/rest prompts or paternalistic rest phrasing.
+UI polish matters — alignment, spacing, premium look; clean options, no sub-text notes on buttons.
