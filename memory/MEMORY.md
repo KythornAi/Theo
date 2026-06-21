@@ -10,13 +10,13 @@ PNP/GH: Daily Reset flagship, never free; Task Paralysis Rescue tabled; paperand
 §
 Active: ReadyForMTD (~/theo/mtd/build-brief.md; domain purchased, Hostinger site, affiliates pending). Demand scans Mon 08:00/14:00 → ~/theo/demand-scans/results/.
 §
-MNM audio: Edge TTS + pydub in ~/theo/prototypes/. Gemini transcription: transcribe_app.py.
+MNM audio: Edge TTS + pydub (~/theo/prototypes/); Gemini in transcribe_app.py.
 §
 Data-analysis: Theo gathers/processes data, Claude writes narrative, Kyle adds commercial judgement. Use Perplexity sonar-pro + Firecrawl.
 §
 Cross-AI review: Codex→Claude, Claude→Codex. Kyle cross-verifies before shipping. Codex CLI OAuth expires silently — don't chase auth failures.
 §
-Hermes Desktop: port 9119; `systemctl --user start hermes-dashboard.service` after gateway restart; PartOf + Restart=always.
+Hermes Desktop: port 9119; systemctl --user start hermes-dashboard.service after gateway restart.
 §
 Maintenance crons: deepseek/deepseek-v4-pro (openrouter). Cron OAuth trap: openai-codex tokens expire silently (401); switch to openrouter API-key.
 §
