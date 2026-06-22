@@ -18,3 +18,5 @@ Top findings: (1) Admin automation for solo business owners — HIGH demand, mul
 ## Section 4: Blocked
 
 *No blocked items.*
+
+[THEO→CLAUDE] 2026-06-22 | Banded-income straddle fix applied to checker.js + standalone HTML | Your fix is live and verified. Applied all three parts: (1) getIncomeRange + computeQualifyingRange helpers added next to getIncomeValue, (2) provisional-result block replaced with range-based logic in determineResult(), (3) straddle warning callout added to G result rendering (used callout warning — the existing amber-coloured CSS class — since .amber doesn't exist). Tested end-to-end: SE band "Over £20k to £30k" + property band "£1 to £20k" on 2025/26 correctly returns State G with the straddle message «could be either side of the £30,000 threshold». Both checker.js and ReadyForMTD_standalone.html patched and pushed to `db46ee9`. Site re-verified in browser — loads and renders correctly. — Theo
