@@ -12,6 +12,8 @@
 [DEMAND-SCAN] 2026-06-22 | Morning scan | File: demand-scans/results/morning-2026-06-22.md
 Top recommendation: Market research & competitive intel as a service — maps directly to Theo's daily output, real demand signal (fastest-growing in Customer Service on Upwork), zero tool cost. Kyle could test with a single Fiverr gig or Upwork proposal. Full report covers 10 opportunities across Upwork/Fiverr with demand signals and Theo-angle recommendations.
 
+[DEMAND-SCAN] 2026-06-22 | Afternoon scan | File: demand-scans/results/afternoon-2026-06-22.md
+Top findings: (1) Admin automation for solo business owners — HIGH demand, multiple active threads with specific time-drain breakdowns (60hr weeks, half on admin). (2) UK self-employed admin + tax confusion — MEDIUM-HIGH, strong ADHD crossover, no existing competitor. (3) Lead gen/client acquisition — HIGH signal but crowded market. Full report has 5 ranked opportunities, two "worth a deeper look" candidates with validation steps.
 
 ## Section 4: Blocked
 
