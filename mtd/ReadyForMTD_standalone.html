@@ -878,23 +878,16 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
 
 /* Source links */
 .source-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: inline;
   font-size: .8125rem;
   font-weight: 600;
   color: var(--teal-deep);
-  padding: 4px 10px;
-  border-radius: var(--r-sm);
-  background: var(--teal-soft);
-  text-decoration: none;
-  margin-left: 6px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
 }
-.source-link:hover { text-decoration: underline; }
-.source-link::after {
-  content: "\\2197";
-  font-size: .8em;
-  opacity: .6;
+.source-link:hover {
+  color: var(--teal);
 }
 
 /* Email opt-in */
@@ -982,7 +975,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
 /* ---------- Tables ---------- */
 .tbl { width: 100%; border-collapse: collapse; font-size: .9375rem; }
 .tbl th, .tbl td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--hairline-soft); }
-.tbl th { font-weight: 600; color: var(--steel); font-size: .8125rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tbl th { font-weight: 700; color: var(--steel); font-size: .8125rem; text-transform: uppercase; letter-spacing: 0.04em; }
 .tbl td { color: var(--slate); }
 .tbl tr:hover td { background: var(--surface-soft); }
 .tbl td.num, .tbl th.num { text-align: right; font-variant-numeric: tabular-nums; }
@@ -1206,12 +1199,12 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
     </a>
     <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" onclick="var n=document.querySelector('.nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'));"><span></span></button>
     <nav class="nav" aria-label="Primary">
-      <a href="/" class="active">Checker</a>
-      <a href="/mtd-for-sole-traders/">Sole traders</a>
-      <a href="/mtd-for-landlords/">Landlords</a>
-      <a href="/mtd-deadlines/">Deadlines</a>
-      <a href="/mtd-software/">Software</a>
-      <a href="/mtd-faq/">FAQ</a>
+      <a href="./" class="active">Checker</a>
+      <a href="mtd-for-sole-traders/">Sole traders</a>
+      <a href="mtd-for-landlords/">Landlords</a>
+      <a href="mtd-deadlines/">Deadlines</a>
+      <a href="mtd-software/">Software</a>
+      <a href="mtd-faq/">FAQ</a>
     </nav>
   </div>
 </header>
@@ -1225,7 +1218,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
     <p class="lead">Free MTD readiness checker for UK sole traders and landlords. Find your likely start date using HMRC's current income thresholds. No email, HMRC login, UTR or National Insurance number needed for your result.</p>
     <div class="hero-actions">
       <a href="#checker" class="btn btn-clay btn-lg">Check my MTD position &rarr;</a>
-      <a href="/mtd-faq/" class="btn btn-secondary btn-lg">What income should I include?</a>
+      <a href="mtd-faq/" class="btn btn-secondary btn-lg">What income should I include?</a>
     </div>
     <div class="hero-trust">
       <span class="chip"><span class="dot dot-blue"></span> Uses HMRC-published thresholds</span>
@@ -1332,27 +1325,27 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
     <div class="grid grid-2 mt-3">
       <div class="card card-sm">
         <h4>Is MTD based on profit or turnover?</h4>
-        <p>The threshold is not based on your profit. It is based on gross self-employment and property income before expenses. That is the test HMRC uses. <a href="/mtd-faq/#profit-or-turnover">See the full answer &rarr;</a></p>
+        <p>The threshold is not based on your profit. It is based on gross self-employment and property income before expenses. That is the test HMRC uses. <a href="mtd-faq/#profit-or-turnover">See the full answer &rarr;</a></p>
       </div>
       <div class="card card-sm">
         <h4>Do PAYE wages count?</h4>
-        <p>No. Employment income reported through PAYE does not count toward the MTD qualifying-income threshold, though it may still matter for your tax return. <a href="/mtd-faq/#paye-counts">See the full answer &rarr;</a></p>
+        <p>No. Employment income reported through PAYE does not count toward the MTD qualifying-income threshold, though it may still matter for your tax return. <a href="mtd-faq/#paye-counts">See the full answer &rarr;</a></p>
       </div>
       <div class="card card-sm">
         <h4>I am both a landlord and a sole trader. Are they combined?</h4>
-        <p>Yes. HMRC adds gross self-employment income and your share of gross property income together to get your qualifying income. <a href="/mtd-faq/#combined">See the full answer &rarr;</a></p>
+        <p>Yes. HMRC adds gross self-employment income and your share of gross property income together to get your qualifying income. <a href="mtd-faq/#combined">See the full answer &rarr;</a></p>
       </div>
       <div class="card card-sm">
         <h4>Can I keep using spreadsheets?</h4>
-        <p>You may be able to use spreadsheets with bridging software, but the right setup depends on your records and income sources. <a href="/mtd-faq/#spreadsheets">See the full answer &rarr;</a></p>
+        <p>You may be able to use spreadsheets with bridging software, but the right setup depends on your records and income sources. <a href="mtd-faq/#spreadsheets">See the full answer &rarr;</a></p>
       </div>
       <div class="card card-sm">
         <h4>Is a quarterly update the same as a tax return?</h4>
-        <p>No. Quarterly updates are summaries of income and expenses. You still submit one tax return by 31 January following the tax year. <a href="/mtd-faq/#quarterly-vs-return">See the full answer &rarr;</a></p>
+        <p>No. Quarterly updates are summaries of income and expenses. You still submit one tax return by 31 January following the tax year. <a href="mtd-faq/#quarterly-vs-return">See the full answer &rarr;</a></p>
       </div>
       <div class="card card-sm">
         <h4>Will you email me or sell my details?</h4>
-        <p>No. The checker gives you an instant result with no email required. Email is optional, only after your result, and only if you tick a box. <a href="/mtd-faq/#email">See the full answer &rarr;</a></p>
+        <p>No. The checker gives you an instant result with no email required. Email is optional, only after your result, and only if you tick a box. <a href="mtd-faq/#email">See the full answer &rarr;</a></p>
       </div>
     </div>
   </div>
@@ -1402,24 +1395,24 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
     <div>
       <h5>Checker</h5>
       <ul>
-        <li><a href="/">MTD checker</a></li>
-        <li><a href="/mtd-for-sole-traders/">For sole traders</a></li>
-        <li><a href="/mtd-for-landlords/">For landlords</a></li>
-        <li><a href="/mtd-deadlines/">Deadlines</a></li>
+        <li><a href="./">MTD checker</a></li>
+        <li><a href="mtd-for-sole-traders/">For sole traders</a></li>
+        <li><a href="mtd-for-landlords/">For landlords</a></li>
+        <li><a href="mtd-deadlines/">Deadlines</a></li>
       </ul>
     </div>
     <div>
       <h5>Guides</h5>
       <ul>
-        <li><a href="/mtd-software/">Software</a></li>
-        <li><a href="/mtd-faq/">FAQ</a></li>
+        <li><a href="mtd-software/">Software</a></li>
+        <li><a href="mtd-faq/">FAQ</a></li>
       </ul>
     </div>
     <div>
       <h5>Legal</h5>
       <ul>
-        <li><a href="/privacy/">Privacy</a></li>
-        <li><a href="/disclaimer/">Disclaimer</a></li>
+        <li><a href="privacy/">Privacy</a></li>
+        <li><a href="disclaimer/">Disclaimer</a></li>
       </ul>
     </div>
     <div class="footer-fineprint">
@@ -2432,7 +2425,9 @@ function renderResult() {
   const result = determineResult();
   const body = document.getElementById('checker-body');
   body.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  // hide nav
+  // hide nav + header
+  const header = document.querySelector('.checker-header');
+  if (header) header.style.display = 'none';
   const nav = document.querySelector('.checker-nav');
   if (nav) nav.style.display = 'none';
   // hide progress
@@ -2791,6 +2786,8 @@ function resetChecker() {
   const body = document.getElementById('checker-body');
   body.innerHTML = '';
   // restore nav + progress
+  const header = document.querySelector('.checker-header');
+  if (header) header.style.display = '';
   const nav = document.querySelector('.checker-nav');
   if (nav) nav.style.display = '';
   const prog = document.querySelector('.checker-progress');

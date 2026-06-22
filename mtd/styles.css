@@ -532,6 +532,14 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
   letter-spacing: -0.02em;
   line-height: 1.25;
 }
+.screen-step-title {
+  font-size: .8125rem;
+  font-weight: 600;
+  color: var(--teal-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-1);
+}
 .screen-helper {
   font-size: .9375rem;
   color: var(--muted);
@@ -539,6 +547,12 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
   line-height: 1.5;
 }
 .screen-helper a { font-weight: 600; }
+.opts-footnote {
+  font-size: .8125rem;
+  color: var(--muted);
+  margin-top: var(--space-3);
+  line-height: 1.5;
+}
 
 /* Answer options as cards */
 .opts { display: flex; flex-direction: column; gap: 10px; }
@@ -564,7 +578,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
   background: var(--teal-soft);
   box-shadow: 0 2px 8px rgba(27,127,121,.08);
 }
-.opt[aria-pressed="true"], .opt[data-selected="true"] {
+.opt[aria-pressed="true"], .opt[aria-checked="true"], .opt[data-selected="true"] {
   border-color: var(--teal-deep);
   background: var(--teal-soft);
   box-shadow: inset 0 0 0 1px var(--teal-deep), 0 2px 8px rgba(18,90,85,.10);
@@ -579,13 +593,24 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
   display: grid; place-items: center;
   transition: var(--t-fast);
   background: var(--card);
+  position: relative;
 }
 .opt .check { border-radius: var(--r-sm); }
 .opt[aria-pressed="true"] .radio,
+.opt[aria-checked="true"] .radio,
 .opt[data-selected="true"] .radio {
   border-color: var(--teal-deep);
   background: var(--teal-deep);
-  box-shadow: inset 0 0 0 3px var(--card);
+}
+.opt[aria-pressed="true"] .radio::after,
+.opt[aria-checked="true"] .radio::after,
+.opt[data-selected="true"] .radio::after {
+  content: "";
+  width: 10px; height: 6px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translate(1px, -1px);
+  position: absolute;
 }
 .opt[aria-pressed="true"] .check,
 .opt[data-selected="true"] .check {
@@ -611,13 +636,13 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
 }
 
 /* Multi-select grid */
-.opts-multi {
+.opts-multi, .opts-s0 {
   display: grid;
   gap: 10px;
   grid-template-columns: 1fr 1fr;
 }
 @media (max-width: 560px) {
-  .opts-multi { grid-template-columns: 1fr; }
+  .opts-multi, .opts-s0 { grid-template-columns: 1fr; }
 }
 
 /* Exact income field */
@@ -675,11 +700,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
 /* Checker nav buttons */
 .checker-nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: 12px;
-  margin-top: var(--space-4);
-  padding-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-soft);
   border-top: 1px solid var(--hairline-soft);
 }
 
@@ -841,23 +866,16 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
 
 /* Source links */
 .source-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: inline;
   font-size: .8125rem;
   font-weight: 600;
   color: var(--teal-deep);
-  padding: 4px 10px;
-  border-radius: var(--r-sm);
-  background: var(--teal-soft);
-  text-decoration: none;
-  margin-left: 6px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
 }
-.source-link:hover { text-decoration: underline; }
-.source-link::after {
-  content: "\\2197";
-  font-size: .8em;
-  opacity: .6;
+.source-link:hover {
+  color: var(--teal);
 }
 
 /* Email opt-in */
@@ -945,7 +963,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
 /* ---------- Tables ---------- */
 .tbl { width: 100%; border-collapse: collapse; font-size: .9375rem; }
 .tbl th, .tbl td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--hairline-soft); }
-.tbl th { font-weight: 600; color: var(--steel); font-size: .8125rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tbl th { font-weight: 700; color: var(--steel); font-size: .8125rem; text-transform: uppercase; letter-spacing: 0.04em; }
 .tbl td { color: var(--slate); }
 .tbl tr:hover td { background: var(--surface-soft); }
 .tbl td.num, .tbl th.num { text-align: right; font-variant-numeric: tabular-nums; }

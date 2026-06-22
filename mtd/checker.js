@@ -1001,7 +1001,9 @@ function renderResult() {
   const result = determineResult();
   const body = document.getElementById('checker-body');
   body.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  // hide nav
+  // hide nav + header
+  const header = document.querySelector('.checker-header');
+  if (header) header.style.display = 'none';
   const nav = document.querySelector('.checker-nav');
   if (nav) nav.style.display = 'none';
   // hide progress
@@ -1360,6 +1362,8 @@ function resetChecker() {
   const body = document.getElementById('checker-body');
   body.innerHTML = '';
   // restore nav + progress
+  const header = document.querySelector('.checker-header');
+  if (header) header.style.display = '';
   const nav = document.querySelector('.checker-nav');
   if (nav) nav.style.display = '';
   const prog = document.querySelector('.checker-progress');
