@@ -1,0 +1,2834 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReadyForMTD.co.uk | Free MTD for Income Tax Readiness Checker for UK Sole Traders and Landlords</title>
+<meta name="description" content="Free Making Tax Digital readiness checker for UK sole traders and landlords. Find your likely MTD for Income Tax start date using HMRC's current income thresholds. No email, HMRC login, UTR or National Insurance number needed for your result.">
+<link rel="canonical" href="https://readyformtd.co.uk/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ReadyForMTD.co.uk - shared stylesheet
+   Inter font, warm cream palette, multi-colour accents.
+   WCAG 2.1 AA, mobile-first, pill buttons, soft shadows.
+   ============================================================ */
+
+/* ---------- Design tokens ---------- */
+:root {
+  /* Brand palette */
+  --teal: #1b7f79;
+  --teal-deep: #125a55;
+  --teal-soft: #e7f2f0;
+  --teal-line: #bcded9;
+  --clay: #df6a4c;
+  --clay-deep: #a8442a;
+  --clay-soft: #fbe7df;
+  --gold: #e2a73c;
+  --gold-deep: #7a5a14;
+  --gold-soft: #f8eccf;
+  --blue: #3a6fb0;
+  --blue-deep: #2c5790;
+  --blue-soft: #e4ecf6;
+
+  /* Surfaces */
+  --page: #f7f3ec;
+  --card: #ffffff;
+  --surface: #f3eee3;
+  --surface-soft: #faf7f1;
+  --hairline: #e3dccf;
+  --hairline-soft: #ece5d8;
+
+  /* Ink */
+  --ink: #14161a;
+  --slate: #2f3338;
+  --steel: #45484e;
+  --muted: #666a71;
+
+  /* Amber / warning */
+  --amber: #875500;
+  --amber-soft: #f8eed7;
+  --amber-line: #ecd9ac;
+
+  /* Radii */
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-full: 9999px;
+
+  /* Shadows */
+  --shadow-rest: 0 3px 8px rgba(20,22,26,.16);
+  --shadow-hover: 0 9px 22px rgba(20,22,26,.26);
+  --shadow-card: 0 1px 3px rgba(20,22,26,.08), 0 1px 2px rgba(20,22,26,.04);
+  --shadow-lift: 0 6px 20px rgba(20,22,26,.12);
+
+  /* Layout */
+  --maxw: 1120px;
+  --gutter: clamp(16px, 4vw, 32px);
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+  --space-7: 80px;
+
+  /* Type */
+  --font: "Inter", system-ui, -apple-system, sans-serif;
+  --fs-body: 1.0625rem;        /* 17px at 100% */
+  --fs-lead: 1.25rem;
+  --fs-h4: 1.375rem;
+  --fs-h3: 1.625rem;
+  --fs-h2: clamp(1.75rem, 4vw, 2.25rem);
+  --fs-h1: clamp(2.25rem, 6vw, 3.5rem);
+  --fs-display: clamp(2.75rem, 7vw, 4.5rem);
+
+  /* Transitions */
+  --t-fast: 140ms ease;
+  --t-med: 280ms ease;
+  --t-slow: 520ms cubic-bezier(.22,.61,.36,1);
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--slate);
+  background: var(--page);
+  font-feature-settings: "cv05", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: var(--teal-deep); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font-family: inherit; font-size: inherit; cursor: pointer; border: none; background: none; }
+ul, ol { padding-left: 1.25em; }
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4, h5, h6 { color: var(--ink); line-height: 1.18; font-weight: 700; letter-spacing: -0.02em; }
+h1 { font-size: var(--fs-h1); font-weight: 800; }
+h2 { font-size: var(--fs-h2); font-weight: 800; }
+h3 { font-size: var(--fs-h3); font-weight: 700; }
+h4 { font-size: var(--fs-h4); font-weight: 600; }
+p { color: var(--slate); }
+strong { font-weight: 700; color: var(--ink); }
+em { font-style: italic; }
+small { font-size: 0.875rem; }
+.lead { font-size: var(--fs-lead); color: var(--steel); line-height: 1.5; }
+.muted { color: var(--muted); }
+
+/* ---------- Layout primitives ---------- */
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+.section { padding-block: var(--space-6); }
+.section-sm { padding-block: var(--space-4); }
+.section-lg { padding-block: var(--space-7); }
+.center-text { text-align: center; }
+
+.grid { display: grid; gap: var(--space-3); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 880px) {
+  .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .section { padding-block: var(--space-5); }
+  .section-lg { padding-block: var(--space-5); }
+}
+
+/* ---------- Skip link ---------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 12px 20px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 0 0 var(--r-md) 0;
+  z-index: 9999;
+  font-weight: 600;
+  font-size: .9rem;
+}
+.skip-link:focus {
+  left: 0;
+  top: 0;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ---------- Site header ---------- */
+.site-header {
+  background: rgba(247,243,236,.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline-soft);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 1.125rem;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.03em;
+}
+.brand:hover { text-decoration: none; }
+.brand .mark {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--teal), var(--teal-deep));
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(18,90,85,.3);
+}
+.brand .name { display: flex; flex-direction: column; line-height: 1.1; }
+.brand .name .top { font-size: 1.0625rem; }
+.brand .name .top em { font-style: normal; color: var(--teal-deep); font-weight: 800; }
+.brand .name .bot { font-size: .6875rem; color: var(--muted); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav a {
+  padding: 8px 14px;
+  border-radius: var(--r-full);
+  font-size: .9375rem;
+  font-weight: 500;
+  color: var(--steel);
+  text-decoration: none;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.nav a:hover {
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav a.active { background: var(--teal-soft); color: var(--teal-deep); font-weight: 600; }
+
+.nav-toggle {
+  display: none;
+  width: 40px; height: 40px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--card);
+  align-items: center; justify-content: center;
+}
+.nav-toggle span { display: block; width: 20px; height: 2px; background: var(--ink); position: relative; }
+.nav-toggle span::before, .nav-toggle span::after {
+  content: ""; position: absolute; left: 0; width: 20px; height: 2px; background: var(--ink);
+  transition: var(--t-fast);
+}
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+
+@media (max-width: 760px) {
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: var(--card);
+    border-bottom: 1px solid var(--hairline);
+    padding: var(--space-2);
+    flex-direction: column;
+    align-items: stretch;
+    box-shadow: var(--shadow-lift);
+  }
+  .nav.open { display: flex; }
+  .nav a { padding: 12px 16px; border-radius: var(--r-md); }
+  .nav-toggle { display: inline-flex; }
+  .brand .name .bot { display: none; }
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border-radius: var(--r-full);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+  box-shadow: var(--shadow-rest);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover { text-decoration: none; }
+.btn:active { transform: translateY(0); }
+
+.btn-primary {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal);
+}
+.btn-primary:hover { background: var(--teal-deep); color: #fff; transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+
+.btn-clay {
+  background: var(--clay-deep);
+  color: #fff;
+  border-color: var(--clay-deep);
+}
+.btn-clay:hover { background: var(--clay); color: #fff; transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+
+.btn-secondary {
+  background: #fff;
+  color: var(--ink);
+  border-color: var(--hairline);
+  box-shadow: var(--shadow-rest);
+}
+.btn-secondary:hover {
+  background: #a6d2cc;
+  border-color: var(--teal-deep);
+  color: var(--teal-deep);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--steel);
+  border-color: var(--hairline);
+  box-shadow: none;
+}
+.btn-ghost:hover {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--hairline);
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-sm { padding: 8px 18px; font-size: .875rem; }
+.btn-lg { padding: 16px 34px; font-size: 1.125rem; }
+.btn-block { width: 100%; }
+
+.btn:disabled, .btn[disabled] {
+  background: var(--surface);
+  color: var(--muted);
+  border-color: var(--hairline);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Focus ring for keyboard nav */
+.btn:focus-visible, a:focus-visible, button:focus-visible, [tabindex]:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+.card-sm { padding: var(--space-3); }
+.card-lg { padding: var(--space-5); }
+.card-flat { box-shadow: none; }
+
+.card h3, .card h4 { margin-bottom: var(--space-2); }
+.card p + p { margin-top: var(--space-2); }
+
+/* ---------- Badge / chip ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--r-full);
+  font-size: .8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.badge-teal { background: var(--teal-soft); color: var(--teal-deep); border: 1px solid var(--teal-line); }
+.badge-clay { background: var(--clay-soft); color: var(--clay-deep); border: 1px solid #f0c9b8; }
+.badge-gold { background: var(--gold-soft); color: var(--gold-deep); border: 1px solid #ddc89a; }
+.badge-blue { background: var(--blue-soft); color: var(--blue-deep); border: 1px solid #b3c4da; }
+.badge-amber { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-line); }
+.badge-ink { background: var(--surface); color: var(--slate); border: 1px solid var(--hairline); }
+
+.dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-clay { background: var(--clay); }
+.dot-gold { background: var(--gold); }
+.dot-blue { background: var(--blue); }
+.dot-teal { background: var(--teal); }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 50% at 85% 15%, rgba(226,167,60,.20), transparent 70%),
+    radial-gradient(ellipse 55% 55% at 12% 85%, rgba(223,106,76,.18), transparent 70%),
+    linear-gradient(160deg, var(--teal-deep) 0%, var(--teal) 55%, #169e95 100%);
+  color: #fff;
+  padding-block: clamp(48px, 9vw, 90px) clamp(40px, 6vw, 64px);
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 100% at 50% 0%, rgba(255,255,255,.06), transparent 60%);
+  pointer-events: none;
+}
+.hero .wrap { position: relative; z-index: 1; }
+.hero h1 { color: #fff; max-width: 22ch; }
+.hero .lead { color: rgba(255,255,255,.82); max-width: 52ch; margin-top: var(--space-2); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: var(--space-4); }
+
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: var(--space-4);
+}
+.hero-trust .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: var(--r-full);
+  background: rgba(255,255,255,.13);
+  border: 1px solid rgba(255,255,255,.22);
+  color: #fff;
+  font-size: .8125rem;
+  font-weight: 500;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.hero-trust .chip .dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+}
+
+@media (max-width: 560px) {
+  .hero { padding-block: 40px 32px; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn { width: 100%; }
+  .hero-trust { gap: 8px; }
+  .hero-trust .chip { font-size: .75rem; padding: 6px 10px; }
+}
+
+/* ---------- Hero + checker card integration ---------- */
+.hero-checker-zone {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(32px, 5vw, 48px);
+}
+
+/* ---------- Checker ---------- */
+.checker-card {
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  box-shadow: 0 12px 40px rgba(20,22,26,.10), 0 2px 8px rgba(20,22,26,.06);
+  overflow: hidden;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.checker-header {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--hairline-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  background: var(--surface-soft);
+}
+.checker-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .8125rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+.checker-progress .bar {
+  width: 120px;
+  max-width: 40vw;
+  height: 6px;
+  background: var(--hairline);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+.checker-progress .bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--teal-deep));
+  border-radius: var(--r-full);
+  transition: width var(--t-slow);
+  width: 0%;
+}
+.checker-reset {
+  font-size: .8125rem;
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  border: 1px solid transparent;
+  transition: var(--t-fast);
+}
+.checker-reset:hover { color: var(--teal-deep); border-color: var(--teal-line); background: var(--teal-soft); }
+
+.checker-body {
+  padding: clamp(24px, 4vw, 40px);
+  min-height: 280px;
+}
+
+/* Screen transitions */
+.screen { display: none; }
+.screen.active { display: block; animation: screenIn var(--t-slow) both; }
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .screen.active { animation: none; }
+  * { scroll-behavior: auto !important; }
+  .btn:hover { transform: none; }
+  .hero::after { display: none; }
+}
+
+.screen-q {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: var(--space-1);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.screen-step-title {
+  font-size: .8125rem;
+  font-weight: 600;
+  color: var(--teal-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-1);
+}
+.screen-helper {
+  font-size: .9375rem;
+  color: var(--muted);
+  margin-bottom: var(--space-3);
+  line-height: 1.5;
+}
+.screen-helper a { font-weight: 600; }
+.opts-footnote {
+  font-size: .8125rem;
+  color: var(--muted);
+  margin-top: var(--space-3);
+  line-height: 1.5;
+}
+
+/* Answer options as cards */
+.opts { display: flex; flex-direction: column; gap: 10px; }
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--card);
+  cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast), transform var(--t-fast);
+  text-align: left;
+  font-size: 1rem;
+  color: var(--ink);
+  width: 100%;
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+.opt:hover {
+  border-color: var(--teal);
+  background: var(--teal-soft);
+  box-shadow: 0 2px 8px rgba(27,127,121,.08);
+}
+.opt[aria-pressed="true"], .opt[aria-checked="true"], .opt[data-selected="true"] {
+  border-color: var(--teal-deep);
+  background: var(--teal-soft);
+  box-shadow: inset 0 0 0 1px var(--teal-deep), 0 2px 8px rgba(18,90,85,.10);
+  font-weight: 600;
+}
+
+.opt .radio, .opt .check {
+  flex-shrink: 0;
+  width: 20px; height: 20px;
+  border: 2px solid var(--hairline);
+  border-radius: 50%;
+  display: grid; place-items: center;
+  transition: var(--t-fast);
+  background: var(--card);
+  position: relative;
+}
+.opt .check { border-radius: var(--r-sm); }
+.opt[aria-pressed="true"] .radio,
+.opt[aria-checked="true"] .radio,
+.opt[data-selected="true"] .radio {
+  border-color: var(--teal-deep);
+  background: var(--teal-deep);
+}
+.opt[aria-pressed="true"] .radio::after,
+.opt[aria-checked="true"] .radio::after,
+.opt[data-selected="true"] .radio::after {
+  content: "";
+  width: 10px; height: 6px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translate(1px, -1px);
+  position: absolute;
+}
+.opt[aria-pressed="true"] .check,
+.opt[data-selected="true"] .check {
+  border-color: var(--teal-deep);
+  background: var(--teal-deep);
+  color: #fff;
+}
+.opt[aria-pressed="true"] .check::after {
+  content: "";
+  width: 10px; height: 6px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+
+.opt-label { flex: 1; }
+.opt-note {
+  font-size: .8125rem;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* Multi-select grid */
+.opts-multi, .opts-s0 {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 560px) {
+  .opts-multi, .opts-s0 { grid-template-columns: 1fr; }
+}
+
+/* Exact income field */
+.field-row {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: var(--surface-soft);
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--r-md);
+}
+.field-row label {
+  display: block;
+  font-size: .875rem;
+  font-weight: 600;
+  color: var(--steel);
+  margin-bottom: 6px;
+}
+.input-£ {
+  width: 100%;
+  max-width: 240px;
+  padding: 10px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  font-family: inherit;
+  font-size: 1.0625rem;
+  color: var(--ink);
+  background: var(--card);
+}
+.input-£:focus { border-color: var(--teal); outline: 2px solid var(--teal-soft); }
+.input-£::-webkit-outer-spin-button,
+.input-£::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.input-£[type="number"] { -moz-appearance: textfield; }
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: var(--space-2);
+  padding: 10px 14px;
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  font-size: .9375rem;
+  color: var(--steel);
+  background: var(--card);
+  transition: var(--t-fast);
+}
+.check-row:hover { border-color: var(--teal-line); background: var(--teal-soft); }
+.check-row input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--teal-deep);
+  cursor: pointer;
+}
+
+/* Checker nav buttons */
+.checker-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-soft);
+  border-top: 1px solid var(--hairline-soft);
+}
+
+/* Out-of-scope / info panel inline */
+.info-panel {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--r-md);
+  font-size: .9375rem;
+  line-height: 1.5;
+}
+.info-panel.amber { background: var(--amber-soft); border: 1px solid var(--amber-line); color: var(--amber); }
+.info-panel.blue { background: var(--blue-soft); border: 1px solid #b3c4da; color: var(--blue-deep); }
+.info-panel.teal { background: var(--teal-soft); border: 1px solid var(--teal-line); color: var(--teal-deep); }
+
+/* ---------- Result ---------- */
+#result-screen { display: none; }
+#result-screen.active { display: block; }
+
+.result-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: var(--space-3);
+}
+
+.result-headline {
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: var(--space-2);
+}
+
+.result-confidence {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: .875rem;
+  color: var(--muted);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+.result-confidence strong { color: var(--steel); font-weight: 600; }
+
+.result-section {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--hairline-soft);
+}
+.result-section:first-of-type { border-top: none; padding-top: 0; }
+.result-section h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Income breakdown table */
+.income-breakdown {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9375rem;
+  margin-top: var(--space-2);
+}
+.income-breakdown th, .income-breakdown td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.income-breakdown th {
+  font-weight: 600;
+  color: var(--steel);
+  font-size: .8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-bottom: 6px;
+}
+.income-breakdown td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--ink);
+  font-family: inherit;
+}
+.income-breakdown tr.excluded td { color: var(--muted); }
+.income-breakdown tr.excluded td.num { font-weight: 400; }
+.income-breakdown tr.total td {
+  border-top: 2px solid var(--teal-line);
+  border-bottom: none;
+  font-weight: 700;
+  padding-top: 14px;
+  color: var(--ink);
+}
+.income-breakdown tr.total td.num {
+  color: var(--teal-deep);
+  font-size: 1.125rem;
+}
+
+/* Deadline calendar */
+.deadline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: var(--space-2);
+}
+.deadline-cell {
+  background: var(--surface-soft);
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--r-md);
+  padding: 12px;
+  text-align: center;
+}
+.deadline-cell .q { font-size: .75rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.deadline-cell .d { font-size: 1.125rem; font-weight: 700; color: var(--ink); margin-top: 2px; }
+@media (max-width: 560px) {
+  .deadline-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Action list */
+.action-list {
+  list-style: none;
+  padding: 0;
+  counter-reset: action;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: var(--space-2);
+}
+.action-list li {
+  counter-increment: action;
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface-soft);
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--r-md);
+  font-size: .9375rem;
+  line-height: 1.5;
+  color: var(--slate);
+}
+.action-list li::before {
+  content: counter(action);
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: .8125rem;
+  font-weight: 700;
+}
+
+/* Source links */
+.source-link {
+  display: inline;
+  font-size: .8125rem;
+  font-weight: 600;
+  color: var(--teal-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+.source-link:hover {
+  color: var(--teal);
+}
+
+/* Email opt-in */
+.email-block {
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  background: var(--surface-soft);
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--r-md);
+}
+.email-block h4 { font-size: 1.0625rem; margin-bottom: 6px; }
+.email-block p { font-size: .875rem; color: var(--muted); margin-bottom: var(--space-2); }
+.email-consents { display: flex; flex-direction: column; gap: 8px; margin: var(--space-2) 0; }
+.email-consents label {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: .875rem;
+  color: var(--steel);
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  transition: background var(--t-fast);
+}
+.email-consents label:hover { background: var(--card); }
+.email-consents input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--teal-deep); margin-top: 1px; flex-shrink: 0; }
+.email-field {
+  display: flex;
+  gap: 8px;
+  margin-top: var(--space-2);
+}
+.email-field input[type="email"] {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  font-family: inherit;
+  font-size: 1rem;
+  background: var(--card);
+}
+
+/* ---------- Feature panels (icon badges) ---------- */
+.feature-panel {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: var(--space-3);
+  border-radius: var(--r-lg);
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  height: 100%;
+  transition: transform var(--t-med), box-shadow var(--t-med);
+}
+.feature-panel:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.feature-panel .icon {
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.feature-panel .icon.teal { background: var(--teal); }
+.feature-panel .icon.clay { background: var(--clay-deep); }
+.feature-panel .icon.gold { background: var(--gold-deep); }
+.feature-panel .icon.blue { background: var(--blue-deep); }
+.feature-panel h4 { margin-bottom: 4px; }
+.feature-panel p { font-size: .9375rem; color: var(--steel); line-height: 1.5; }
+
+/* ---------- Info rows ---------- */
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--hairline-soft);
+  font-size: .9375rem;
+}
+.info-row:last-child { border-bottom: none; }
+.info-row .label { font-weight: 600; color: var(--ink); min-width: 140px; flex-shrink: 0; }
+.info-row .val { color: var(--slate); flex: 1; }
+
+/* ---------- Tables ---------- */
+.tbl { width: 100%; border-collapse: collapse; font-size: .9375rem; }
+.tbl th, .tbl td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--hairline-soft); }
+.tbl th { font-weight: 700; color: var(--steel); font-size: .8125rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tbl td { color: var(--slate); }
+.tbl tr:hover td { background: var(--surface-soft); }
+.tbl td.num, .tbl th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.tbl tr:last-child td { border-bottom: none; }
+
+/* ---------- Callout ---------- */
+.callout {
+  padding: var(--space-3);
+  border-radius: var(--r-md);
+  font-size: .9375rem;
+  line-height: 1.55;
+  margin: var(--space-2) 0;
+}
+.callout.disclaimer { background: var(--surface); border: 1px solid var(--hairline); border-left: 4px solid var(--muted); color: var(--steel); }
+.callout.warning { background: var(--amber-soft); border: 1px solid var(--amber-line); border-left: 4px solid var(--amber); color: var(--amber); }
+.callout.trust { background: var(--teal-soft); border: 1px solid var(--teal-line); border-left: 4px solid var(--teal); color: var(--teal-deep); }
+.callout p { margin: 0; color: inherit; }
+.callout p + p { margin-top: 8px; }
+
+/* ---------- Section heading ---------- */
+.eyebrow {
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+  margin-bottom: 8px;
+}
+.section-h { margin-bottom: var(--space-3); }
+.section-h p { color: var(--steel); max-width: 65ch; margin-top: var(--space-1); }
+
+/* ---------- Two-col ---------- */
+.split {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+@media (max-width: 880px) { .split { grid-template-columns: 1fr; } }
+
+/* ---------- FAQ accordion ---------- */
+.faq-item {
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.faq-q {
+  width: 100%;
+  text-align: left;
+  padding: 18px 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+.faq-q:hover { color: var(--teal-deep); }
+.faq-q .chev {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  color: var(--teal);
+  transition: transform var(--t-med);
+  font-size: 1.25em;
+  line-height: 1;
+}
+.faq-q[aria-expanded="true"] .chev { transform: rotate(45deg); }
+.faq-a {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--t-slow), padding var(--t-slow);
+}
+.faq-a.open {
+  max-height: 600px;
+  padding-bottom: 18px;
+}
+.faq-a .inner { color: var(--slate); line-height: 1.6; font-size: .9375rem; }
+.faq-a .inner p + p { margin-top: 10px; }
+
+/* ---------- Software cards ---------- */
+.sw-card {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: var(--space-3);
+  background: var(--card);
+  box-shadow: var(--shadow-card);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform var(--t-med), box-shadow var(--t-med);
+}
+.sw-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.sw-card h4 { display: flex; align-items: center; gap: 8px; }
+.sw-card .audience { display: flex; gap: 6px; flex-wrap: wrap; }
+.sw-card .body { font-size: .9375rem; color: var(--steel); line-height: 1.5; flex: 1; }
+.sw-card .meta { font-size: .8125rem; color: var(--muted); padding-top: 10px; border-top: 1px solid var(--hairline-soft); }
+.sw-card .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.sw-card .affiliate-note { font-size: .75rem; color: var(--muted); font-style: italic; }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  margin-top: auto;
+  background: var(--ink);
+  color: rgba(255,255,255,.7);
+  padding-block: var(--space-5) var(--space-4);
+  font-size: .875rem;
+  line-height: 1.6;
+}
+.site-footer .wrap { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: var(--space-4); }
+@media (max-width: 760px) { .site-footer .wrap { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .site-footer .wrap { grid-template-columns: 1fr; } }
+
+.site-footer h5 { color: #fff; font-size: .8125rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; font-weight: 700; }
+.site-footer a { color: rgba(255,255,255,.65); }
+.site-footer a:hover { color: #fff; text-decoration: underline; }
+.site-footer ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+
+.footer-brand .mark {
+  width: 36px; height: 36px;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--teal), var(--teal-deep));
+  display: inline-grid;
+  place-items: center;
+  color: #fff;
+  font-size: .8125rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.footer-brand p { color: rgba(255,255,255,.55); font-size: .8125rem; }
+
+.footer-fineprint {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid rgba(255,255,255,.1);
+  font-size: .75rem;
+  color: rgba(255,255,255,.45);
+  max-width: 65ch;
+  line-height: 1.6;
+}
+.footer-fineprint a { color: rgba(255,255,255,.6); }
+
+/* ---------- Hero band on inner pages ---------- */
+.page-hero {
+  background:
+    radial-gradient(ellipse 50% 50% at 90% 10%, rgba(226,167,60,.16), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 8% 90%, rgba(223,106,76,.14), transparent 70%),
+    linear-gradient(160deg, var(--teal-deep) 0%, var(--teal) 60%, #159e95 100%);
+  color: #fff;
+  padding-block: clamp(40px, 6vw, 64px) clamp(32px, 4vw, 48px);
+}
+.page-hero h1 { color: #fff; }
+.page-hero .lead { color: rgba(255,255,255,.82); max-width: 60ch; margin-top: var(--space-1); }
+
+/* ---------- Utility ---------- */
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mt-4 { margin-top: 32px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+.gap-2 { gap: 16px; }
+.flex { display: flex; }
+.wrap-flex { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.text-right { text-align: right; }
+.hidden { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Print ---------- */
+@media print {
+  .site-header, .site-footer, .nav, .checker-nav, .hero-trust, .hero-actions { display: none !important; }
+  .hero, .page-hero { background: none; color: var(--ink); }
+  .hero h1, .page-hero h1 { color: var(--ink); }
+  .hero .lead, .page-hero .lead { color: var(--steel); }
+  .card, .checker-card { box-shadow: none; border: 1px solid var(--hairline); }
+  body { background: #fff; }
+  .result-section { page-break-inside: avoid; }
+  a { color: var(--teal-deep); text-decoration: underline; }
+  .source-link { background: none; padding: 0; }
+}
+
+/* ---------- Inter font via Google Fonts ---------- */
+/* Loaded via <link> in HTML head for performance. The @font-face declarations
+   are handled by Google's CSS. We only need the family name here. */
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ReadyForMTD Checker",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "description": "Free Making Tax Digital for Income Tax readiness checker for UK sole traders and landlords. Instant result, no email gate.",
+  "url": "https://readyformtd.co.uk/",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" }
+}
+</script>
+<script defer data-domain="readyformtd.co.uk" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="/" class="brand" aria-label="ReadyForMTD.co.uk home">
+      <span class="mark">R</span>
+      <span class="name">
+        <span class="top">Ready<em>For</em>MTD</span>
+        <span class="bot">.co.uk</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" onclick="var n=document.querySelector('.nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'));"><span></span></button>
+    <nav class="nav" aria-label="Primary">
+      <a href="./" class="active">Checker</a>
+      <a href="mtd-for-sole-traders/">Sole traders</a>
+      <a href="mtd-for-landlords/">Landlords</a>
+      <a href="mtd-deadlines/">Deadlines</a>
+      <a href="mtd-software/">Software</a>
+      <a href="mtd-faq/">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- Hero band -->
+<section class="hero">
+  <div class="wrap">
+    <h1>Check if Making Tax Digital for Income Tax applies to you, and when you may need to start.</h1>
+    <p class="lead">Free MTD readiness checker for UK sole traders and landlords. Find your likely start date using HMRC's current income thresholds. No email, HMRC login, UTR or National Insurance number needed for your result.</p>
+    <div class="hero-actions">
+      <a href="#checker" class="btn btn-clay btn-lg">Check my MTD position &rarr;</a>
+      <a href="mtd-faq/" class="btn btn-secondary btn-lg">What income should I include?</a>
+    </div>
+    <div class="hero-trust">
+      <span class="chip"><span class="dot dot-blue"></span> Uses HMRC-published thresholds</span>
+      <span class="chip"><span class="dot dot-clay"></span> No HMRC login required</span>
+      <span class="chip"><span class="dot dot-gold"></span> No email needed for your result</span>
+      <span class="chip"><span class="dot dot-blue"></span> Informational, not tax advice</span>
+    </div>
+
+    <!-- Checker card on warm beige below the band -->
+    <div class="hero-checker-zone" id="checker">
+      <div class="checker-card">
+        <div class="checker-header">
+          <div class="checker-progress" aria-live="polite">
+            <span id="progress-text">Step 1 of 1</span>
+            <span class="bar"><span class="bar-fill" id="progress-bar"></span></span>
+          </div>
+          <button class="checker-reset" id="btn-reset" aria-label="Start again">Start again</button>
+        </div>
+        <div class="checker-body" id="checker-body">
+          <!-- Screens are built dynamically by checker.js -->
+        </div>
+        <div class="checker-nav">
+          <button class="btn btn-ghost btn-sm" id="btn-back" aria-label="Go back">&larr; Back</button>
+          <button class="btn btn-primary" id="btn-next">Continue</button>
+        </div>
+      </div>
+      <p class="muted" style="text-align:center;font-size:.75rem;margin-top:12px;">Last checked against HMRC guidance: <span data-last-checked>2026-06-20</span>. Not affiliated with HMRC or GOV.UK.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Who this is for -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-h center-text">
+      <div class="eyebrow">Who this is for</div>
+      <h2>Built for people who need a clear answer, fast</h2>
+      <p class="center-text" style="margin-inline:auto;">No account, no email wall, no software pitch before you see your result. Just your answers and HMRC's rules.</p>
+    </div>
+    <div class="grid grid-3 mt-3">
+      <div class="feature-panel">
+        <div class="icon teal" aria-hidden="true">S</div>
+        <div>
+          <h4>Sole traders</h4>
+          <p>Self-employed people registered for Self Assessment who want to know if their gross income puts them in scope.</p>
+        </div>
+      </div>
+      <div class="feature-panel">
+        <div class="icon clay" aria-hidden="true">L</div>
+        <div>
+          <h4>Landlords</h4>
+          <p>UK property and foreign property landlords who need to know if rental income counts toward the threshold.</p>
+        </div>
+      </div>
+      <div class="feature-panel">
+        <div class="icon gold" aria-hidden="true">M</div>
+        <div>
+          <h4>Mixed income</h4>
+          <p>People with both self-employment and property income, or who are unsure whether PAYE, dividends or pensions count.</p>
+        </div>
+      </div>
+    </div>
+    <p class="center-text mt-3 muted" style="font-size:.875rem">This checker is not for limited companies, partnerships as entities, VAT-only MTD, or detailed tax planning.</p>
+  </div>
+</section>
+
+<!-- What we ask / what you get -->
+<section class="section" style="background:var(--surface-soft);">
+  <div class="wrap split">
+    <div>
+      <div class="eyebrow">What we ask</div>
+      <h2 class="section-h">About 10 questions. No personal identifiers.</h2>
+      <p>We ask for the income figures HMRC uses for MTD, whether you have already submitted a Self Assessment return, and whether you may need an exemption route. We do not need your:</p>
+      <ul style="margin-top:12px;color:var(--steel);font-size:.9375rem;line-height:1.7">
+        <li>National Insurance number</li>
+        <li>UTR (Unique Taxpayer Reference)</li>
+        <li>HMRC login or Government Gateway details</li>
+        <li>Address or bank details</li>
+        <li>Email, unless you choose to opt in after your result</li>
+      </ul>
+    </div>
+    <div>
+      <div class="eyebrow">What you get</div>
+      <h2 class="section-h">A clear result with the maths shown</h2>
+      <ul style="color:var(--steel);font-size:.9375rem;line-height:1.7">
+        <li>Your likely MTD start wave: April 2026, April 2027, April 2028, not currently in scope, or unclear.</li>
+        <li>The qualifying income figure used and how it was calculated.</li>
+        <li>What to prepare next: records, software, sign-up, HMRC or adviser check if needed.</li>
+        <li>Source links to the exact GOV.UK pages for every rule used.</li>
+        <li>Quarterly update deadlines for your start date.</li>
+      </ul>
+      <a href="#checker" class="btn btn-primary mt-3">Check my MTD position &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- Common worries -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-h center-text">
+      <div class="eyebrow">Common worries</div>
+      <h2>The questions people ask before they start</h2>
+    </div>
+    <div class="grid grid-2 mt-3">
+      <div class="card card-sm">
+        <h4>Is MTD based on profit or turnover?</h4>
+        <p>The threshold is not based on your profit. It is based on gross self-employment and property income before expenses. That is the test HMRC uses. <a href="mtd-faq/#profit-or-turnover">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>Do PAYE wages count?</h4>
+        <p>No. Employment income reported through PAYE does not count toward the MTD qualifying-income threshold, though it may still matter for your tax return. <a href="mtd-faq/#paye-counts">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>I am both a landlord and a sole trader. Are they combined?</h4>
+        <p>Yes. HMRC adds gross self-employment income and your share of gross property income together to get your qualifying income. <a href="mtd-faq/#combined">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>Can I keep using spreadsheets?</h4>
+        <p>You may be able to use spreadsheets with bridging software, but the right setup depends on your records and income sources. <a href="mtd-faq/#spreadsheets">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>Is a quarterly update the same as a tax return?</h4>
+        <p>No. Quarterly updates are summaries of income and expenses. You still submit one tax return by 31 January following the tax year. <a href="mtd-faq/#quarterly-vs-return">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>Will you email me or sell my details?</h4>
+        <p>No. The checker gives you an instant result with no email required. Email is optional, only after your result, and only if you tick a box. <a href="mtd-faq/#email">See the full answer &rarr;</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Threshold table summary -->
+<section class="section" style="background:var(--surface-soft);">
+  <div class="wrap">
+    <div class="section-h center-text">
+      <div class="eyebrow">The thresholds</div>
+      <h2>HMRC's phased rollout at a glance</h2>
+      <p class="center-text" style="margin-inline:auto;">Qualifying income means gross self-employment and property income before expenses. "More than" means above the threshold, not at it.</p>
+    </div>
+    <div class="card mt-3" style="max-width:680px;margin-inline:auto">
+      <table class="tbl">
+        <thead>
+          <tr><th>Tax return figures used</th><th class="num">Qualifying income</th><th>Likely MTD start</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2024/25</td><td class="num">More than &pound;50,000</td><td>6 April 2026</td></tr>
+          <tr><td>2025/26</td><td class="num">More than &pound;30,000</td><td>6 April 2027</td></tr>
+          <tr><td>2026/27</td><td class="num">More than &pound;20,000</td><td>6 April 2028 (announced, not yet fully legislated)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="center-text mt-2 muted" style="font-size:.8125rem">Source: <a href="https://www.gov.uk/guidance/find-out-if-and-when-you-need-to-use-making-tax-digital-for-income-tax" target="_blank" rel="noopener noreferrer">GOV.UK: Find out if and when you need to use MTD for Income Tax</a></p>
+  </div>
+</section>
+
+<!-- Disclaimer -->
+<section class="section-sm">
+  <div class="wrap">
+    <div class="callout disclaimer" style="max-width:760px;margin-inline:auto">
+      <p>This checker provides general information based on publicly available HMRC guidance. It is not tax advice, accounting advice, or a substitute for checking your own position with HMRC or a qualified adviser. Your result depends on the information you enter and the rules in force when the page was last updated. Last checked: <span data-last-checked>2026-06-20</span>.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <div class="mark">R</div>
+      <p>ReadyForMTD.co.uk is an independent MTD for Income Tax readiness checker for UK sole traders and landlords. Not affiliated with HMRC or GOV.UK.</p>
+    </div>
+    <div>
+      <h5>Checker</h5>
+      <ul>
+        <li><a href="./">MTD checker</a></li>
+        <li><a href="mtd-for-sole-traders/">For sole traders</a></li>
+        <li><a href="mtd-for-landlords/">For landlords</a></li>
+        <li><a href="mtd-deadlines/">Deadlines</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Guides</h5>
+      <ul>
+        <li><a href="mtd-software/">Software</a></li>
+        <li><a href="mtd-faq/">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="privacy/">Privacy</a></li>
+        <li><a href="disclaimer/">Disclaimer</a></li>
+      </ul>
+    </div>
+    <div class="footer-fineprint">
+      <p>This checker provides general information based on publicly available HMRC guidance. It is not tax advice. Not affiliated with HMRC or GOV.UK. Some links may be affiliate links in future. Last checked against HMRC guidance: <span data-last-checked>2026-06-20</span>. &copy; 2026 ReadyForMTD.co.uk.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   ReadyForMTD.co.uk - checker.js
+   Client-side MTD for Income Tax readiness checker.
+   No data leaves the browser. No localStorage of personal data.
+   All threshold logic and result states in one config block.
+   ============================================================ */
+
+/* ============================================================
+   CONFIG BLOCK - HMRC rule table + result-state definitions.
+   This is the single source of truth for the tax logic.
+   When HMRC updates thresholds, edit this block and update
+   HMRC_LAST_CHECKED below.
+   ============================================================ */
+
+const HMRC_LAST_CHECKED = '2026-06-20'; // date this logic was last checked against GOV.UK guidance
+
+const HMRC_SOURCES = {
+  eligibility:   'https://www.gov.uk/guidance/find-out-if-and-when-you-need-to-use-making-tax-digital-for-income-tax',
+  qualifying:    'https://www.gov.uk/guidance/work-out-your-qualifying-income-for-making-tax-digital-for-income-tax',
+  useMtd:        'https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax',
+  useMtdBefore:  'https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax/before-you-use-this-guide',
+  quarterly:    'https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax/send-quarterly-updates',
+  signup:        'https://www.gov.uk/guidance/sign-up-for-making-tax-digital-for-income-tax',
+  chooseSoftware:'https://www.gov.uk/guidance/choose-the-right-software-for-making-tax-digital-for-income-tax',
+  findSoftware:  'https://www.gov.uk/guidance/find-software-that-works-with-making-tax-digital-for-income-tax',
+  exemption:     'https://www.gov.uk/guidance/find-out-if-you-can-get-an-exemption-from-making-tax-digital-for-income-tax',
+  penalty:       'https://www.gov.uk/guidance/penalties-for-making-tax-digital-for-income-tax',
+  policy:        'https://www.gov.uk/government/publications/extension-of-making-tax-digital-for-income-tax-self-assessment-to-sole-traders-and-landlords/making-tax-digital-for-income-tax-self-assessment-for-sole-traders-and-landlords',
+  threshold20k:  'https://www.gov.uk/government/publications/making-tax-digital-for-income-tax-self-assessment-reducing-the-mandation-threshold-from-30000-to-20000-from-april-2028/reduction-of-the-mandation-threshold-from-30000-to-20000-from-april-2028',
+  hmrcChecker:   'https://www.tax.service.gov.uk/guidance/check-if-you-need-to-use-making-tax-digital-for-income-tax/start/about-this-guidance'
+};
+
+// Phased rollout. "more than £X" wording per HMRC.
+const THRESHOLD_TABLE = [
+  { year: '2024/25', threshold: 50000, startDate: '6 April 2026', wave: 'April 2026', cohort: 'first' },
+  { year: '2025/26', threshold: 30000, startDate: '6 April 2027', wave: 'April 2027', cohort: 'second' },
+  { year: '2026/27', threshold: 20000, startDate: '6 April 2028', wave: 'April 2028', cohort: 'third' }
+];
+
+// Today's date for post-start-date logic. Uses real current date.
+const TODAY = new Date();
+const FIRST_WAVE_START = new Date('2026-04-06');
+const FIRST_Q_DEADLINE = new Date('2026-08-07');
+
+// Quarterly deadlines (standard update periods).
+const QUARTERLY_DEADLINES = [
+  { period: '6 April to 5 July',      deadline: '7 August' },
+  { period: '6 April to 5 October',   deadline: '7 November' },
+  { period: '6 April to 5 January',   deadline: '7 February' },
+  { period: '6 April to 5 April',     deadline: '7 May (following the tax year)' }
+];
+
+// Income bands. banded buttons with optional exact.
+const INCOME_BANDS = [
+  { id: 'zero',      label: '£0',                      min: 0,     max: 0,      flag: 'none' },
+  { id: '1-20',      label: '£1 to £20,000',           min: 1,     max: 20000,  flag: 'band' },
+  { id: '20-30',     label: 'Over £20,000 to £30,000', min: 20001, max: 30000,  flag: 'band' },
+  { id: '30-50',     label: 'Over £30,000 to £50,000', min: 30001, max: 50000,  flag: 'band' },
+  { id: 'over50',    label: 'Over £50,000',            min: 50001, max: Infinity, flag: 'band' },
+  { id: 'notsure',   label: 'Not sure',               min: null,  max: null,    flag: 'unsure' }
+];
+
+/* ============================================================
+   STATE - collected answers. Stored in memory only, never persisted.
+   ============================================================ */
+
+const state = {
+  scope: null,                // 'self' | 'client' | 'vat' | 'unsure'
+  roles: [],                  // multi-select of income roles
+  selfAssessment: null,       // 'filed' | 'registered' | 'new' | 'no' | 'unsure'
+  figuresBasis: null,         // '2024/25' | '2025/26' | '2026/27' | 'estimate' | 'unsure'
+  seIncomeBand: null,          // band id
+  seIncomeExact: null,         // optional exact number
+  propIncomeBand: null,        // band id
+  propIncomeExact: null,
+  jointProperty: false,
+  propShareUnsure: false,
+  ukResident: null,            // 'yes' | 'no' | 'unsure' (only if foreign property)
+  accountingPeriod: null,      // 'full12' | 'shorter' | 'longer' | 'unsure'
+  sourcesOngoing: null,        // 'all' | 'some' | 'none' | 'unsure'
+  amendedReturn: null,         // 'no' | 'yes' | 'maybe' | 'unsure'
+  hmrcLetter: null,             // 'yes' | 'no' | 'unsure'
+  exemptionFlags: [],          // ['digital', 'no-ni', 'other', 'none', 'unsure']
+  recordKeeping: null,         // 'paper' | 'spreadsheet' | 'software' | 'landlord-sw' | 'accountant' | 'mixed' | 'none'
+  softwareReadiness: null,     // 'yes' | 'unsure-sw' | 'spreadsheet-bridge' | 'accountant' | 'no' | 'unsure'
+  screenIndex: 0
+};
+
+/* ============================================================
+   SCREEN DEFINITIONS - order + conditional display.
+   Each screen has an id, and a `showIf` predicate.
+   ============================================================ */
+
+const SCREENS = [
+  { id: 's0',  label: 'Scope',                 showIf: () => true },
+  { id: 's1',  label: 'Your income',          showIf: () => state.scope === 'self' || state.scope === 'client' || state.scope === 'unsure' },
+  { id: 's1b', label: 'UK tax residence',     showIf: () => state.roles.includes('foreign-property') },
+  { id: 's2',  label: 'Self Assessment',      showIf: () => true },
+  { id: 's3',  label: 'Tax year',              showIf: () => true },
+  { id: 's3b', label: 'Trading period',        showIf: () => hasSEOrProperty() },
+  { id: 's4',  label: 'Self-employment income', showIf: () => state.roles.includes('sole-trader') },
+  { id: 's5',  label: 'Property income',       showIf: () => state.roles.includes('uk-property') || state.roles.includes('foreign-property') },
+  { id: 's5b', label: 'Amended return',        showIf: () => hasSEOrProperty() && (state.figuresBasis === '2024/25' || state.figuresBasis === '2025/26' || state.figuresBasis === '2026/27') },
+  { id: 's5c', label: 'HMRC letter',            showIf: () => hasSEOrProperty() },
+  { id: 's6',  label: 'Ongoing sources',       showIf: () => hasSEOrProperty() },
+  { id: 's7',  label: 'Exemptions',             showIf: () => true },
+  { id: 's8',  label: 'Record keeping',        showIf: () => true },
+  { id: 's9',  label: 'Software readiness',     showIf: () => true }
+];
+
+function hasSEOrProperty() {
+  return state.roles.includes('sole-trader') || state.roles.includes('uk-property') || state.roles.includes('foreign-property');
+}
+
+/* ============================================================
+   QUALIFYING INCOME CALCULATION
+   qualifying = gross_self_employment + gross_property_share
+   Excluded: PAYE, dividends, pensions, partnership share, ltd company.
+   ============================================================ */
+
+function getIncomeValue(bandId, exact) {
+  if (exact !== null && exact !== undefined && exact !== '' && !isNaN(exact)) {
+    return Number(exact);
+  }
+  const band = INCOME_BANDS.find(b => b.id === bandId);
+  if (!band || band.flag === 'unsure' || band.min === null) return null;
+  // use band midpoint as a conservative estimate for display
+  if (band.max === Infinity) return band.min; // "over £50k" returns 50001 as floor
+  if (band.min === 0 && band.max === 0) return 0;
+  return Math.round((band.min + band.max) / 2);
+}
+
+// Range-aware: returns {min,max} for a band or an exact value, or null if "not sure".
+function getIncomeRange(bandId, exact) {
+  if (exact !== null && exact !== undefined && exact !== '' && !isNaN(exact)) {
+    const n = Number(exact);
+    return { min: n, max: n };
+  }
+  const band = INCOME_BANDS.find(b => b.id === bandId);
+  if (!band || band.flag === 'unsure' || band.min === null) return null;
+  return { min: band.min, max: band.max }; // over50 has max: Infinity, which is fine
+}
+
+// Combined qualifying-income range across self-employment + property.
+function computeQualifyingRange() {
+  const seSel = state.roles.includes('sole-trader');
+  const propSel = state.roles.includes('uk-property') || state.roles.includes('foreign-property');
+  const se = seSel ? getIncomeRange(state.seIncomeBand, state.seIncomeExact) : { min: 0, max: 0 };
+  const prop = propSel ? getIncomeRange(state.propIncomeBand, state.propIncomeExact) : { min: 0, max: 0 };
+  if (se === null || prop === null) return null; // an answer is "not sure"
+  return { min: se.min + prop.min, max: se.max + prop.max };
+}
+
+function computeQualifyingIncome() {
+  const se = (state.roles.includes('sole-trader'))
+    ? getIncomeValue(state.seIncomeBand, state.seIncomeExact)
+    : 0;
+  const prop = (state.roles.includes('uk-property') || state.roles.includes('foreign-property'))
+    ? getIncomeValue(state.propIncomeBand, state.propIncomeExact)
+    : 0;
+  if (se === null || prop === null) return null;
+  return se + prop;
+}
+
+/* ============================================================
+   RESULT STATE LOGIC (A-G)
+   Order matters: check F (out of scope) and E (no SA history)
+   before income-based A/B/C, then G (edge case) overlays.
+   ============================================================ */
+
+function determineResult() {
+  const qi = computeQualifyingIncome();
+  const hasQualifyingSource = hasSEOrProperty();
+  const edgeFlags = collectEdgeFlags();
+
+  // State F: probably out of scope for this checker.
+  if (!hasQualifyingSource) {
+    return buildResult('F', qi, edgeFlags);
+  }
+  // If only "none of these / not sure" selected with no qualifying source.
+  if (state.roles.length === 0 || state.roles.every(r => ['paye','dividends','pension','partnership','ltd-only','none'].includes(r))) {
+    return buildResult('F', qi, edgeFlags);
+  }
+
+  // State E: not enough Self Assessment history yet.
+  if (state.selfAssessment === 'new' || state.selfAssessment === 'registered' || state.selfAssessment === 'no') {
+    // Has relevant income but no submitted return yet.
+    if (hasQualifyingSource) {
+      return buildResult('E', qi, edgeFlags);
+    }
+  }
+
+  // State D: not currently in scope based on income entered.
+  // But we must check the relevant year's threshold first for A/B/C.
+  const yearBasis = state.figuresBasis;
+  const thresholdRow = THRESHOLD_TABLE.find(t => t.year === yearBasis);
+
+  // If figures basis is estimate or unsure, we use the most recent entered year
+  // but flag confidence lower.
+  let provisionalResult = null;
+
+  const range = computeQualifyingRange();
+
+  if (thresholdRow && range !== null) {
+    const t = thresholdRow.threshold;
+    // Exactly on the threshold from an exact figure: HMRC's test is "more than",
+    // so it is not in scope, but nudge them to double-check.
+    if (range.min === t && range.max === t) {
+      return buildResult('G', qi, edgeFlags, { boundary: true, thresholdRow });
+    }
+    if (range.min > t) {
+      if (yearBasis === '2024/25') provisionalResult = 'A';
+      else if (yearBasis === '2025/26') provisionalResult = 'B';
+      else if (yearBasis === '2026/27') provisionalResult = 'C';
+    } else if (range.max <= t) {
+      provisionalResult = 'D';
+    } else {
+      // Range straddles the threshold -> cannot say confidently.
+      return buildResult('G', qi, edgeFlags, { straddle: true, thresholdRow });
+    }
+  }
+
+  // If figures basis is estimate/unsure, we still produce a provisional
+  // but mark confidence as "indicative".
+  if (yearBasis === 'estimate' || yearBasis === 'unsure') {
+    // Use 2025/26 as a reasonable default for indicative, but flag.
+    // Actually, we cannot route without a year. Return G with an indicative flag.
+    if (provisionalResult === null) {
+      return buildResult('G', qi, edgeFlags, { indicativeNoYear: true });
+    }
+  }
+
+  // If no income entered (not sure bands), route to G.
+  if (qi === null && hasQualifyingSource) {
+    return buildResult('G', qi, edgeFlags, { incomeUnknown: true });
+  }
+
+  // If all sources ceased => D/G.
+  if (state.sourcesOngoing === 'none') {
+    return buildResult('D', qi, edgeFlags, { allCeased: true });
+  }
+
+  // If hard edge flags exist, overlay G.
+  if (edgeFlags.length > 0 && provisionalResult && (provisionalResult === 'A' || provisionalResult === 'B' || provisionalResult === 'C')) {
+    // Keep the A/B/C but add edge warning panel. We return the primary
+    // state but mark confidence as "needs HMRC check".
+    return buildResult(provisionalResult, qi, edgeFlags, { edgeOverlay: true });
+  }
+  if (edgeFlags.length > 0 && !provisionalResult) {
+    return buildResult('G', qi, edgeFlags);
+  }
+
+  if (provisionalResult) {
+    return buildResult(provisionalResult, qi, edgeFlags);
+  }
+
+  // Fallback: not enough info.
+  return buildResult('G', qi, edgeFlags, { fallback: true });
+}
+
+function collectEdgeFlags() {
+  const flags = [];
+  if (state.exemptionFlags.includes('digital')) flags.push({ key: 'digital', label: 'Possible digital exclusion', source: HMRC_SOURCES.exemption });
+  if (state.exemptionFlags.includes('no-ni')) flags.push({ key: 'no-ni', label: 'No National Insurance number', source: HMRC_SOURCES.exemption });
+  if (state.exemptionFlags.includes('other')) flags.push({ key: 'other', label: 'Possible exemption for another reason', source: HMRC_SOURCES.exemption });
+  if (state.jointProperty) flags.push({ key: 'joint', label: 'Jointly owned property', source: HMRC_SOURCES.qualifying });
+  if (state.propShareUnsure) flags.push({ key: 'share-unsure', label: 'Property share not known', source: HMRC_SOURCES.qualifying });
+  if (state.roles.includes('foreign-property')) flags.push({ key: 'foreign', label: 'Foreign property income', source: HMRC_SOURCES.qualifying });
+  if (state.roles.includes('partnership')) flags.push({ key: 'partnership', label: 'Partnership income (individual share does not count the same way)', source: HMRC_SOURCES.qualifying });
+  if (state.sourcesOngoing === 'some') flags.push({ key: 'some-ceased', label: 'One or more sources ceased', source: HMRC_SOURCES.qualifying });
+  if (state.sourcesOngoing === 'unsure') flags.push({ key: 'ongoing-unsure', label: 'Not sure whether sources are ongoing', source: HMRC_SOURCES.qualifying });
+  if (state.ukResident === 'no' || state.ukResident === 'unsure') flags.push({ key: 'residence', label: 'UK tax residence uncertain', source: HMRC_SOURCES.qualifying });
+  if (state.accountingPeriod && state.accountingPeriod !== 'full12') flags.push({ key: 'period', label: 'Accounting period not a full 12 months', source: HMRC_SOURCES.qualifying });
+  if (state.amendedReturn === 'yes' || state.amendedReturn === 'maybe') flags.push({ key: 'amended', label: 'Amended return may affect qualifying income', source: HMRC_SOURCES.qualifying });
+  if (state.hmrcLetter === 'yes') flags.push({ key: 'letter', label: 'You have had an MTD letter from HMRC', source: HMRC_SOURCES.eligibility });
+  return flags;
+}
+
+/* ============================================================
+   BUILD RESULT OBJECT
+   Returns a structured result the renderer uses.
+   ============================================================ */
+
+function buildResult(stateKey, qi, edgeFlags, extra = {}) {
+  const meta = RESULT_META[stateKey];
+  let confidence = meta.confidence;
+  let startDate = null;
+  let wave = null;
+
+  if (stateKey === 'A' || stateKey === 'B' || stateKey === 'C') {
+    const row = THRESHOLD_TABLE.find(t => {
+      if (stateKey === 'A') return t.year === '2024/25';
+      if (stateKey === 'B') return t.year === '2025/26';
+      if (stateKey === 'C') return t.year === '2026/27';
+      return false;
+    });
+    startDate = row.startDate;
+    wave = row.wave;
+
+    // Post-start-date logic for State A (today is past 6 April 2026).
+    if (stateKey === 'A' && TODAY >= FIRST_WAVE_START) {
+      // Already in the April 2026 wave.
+      confidence = 'medium';
+      // Check if first quarterly deadline has passed too.
+      if (TODAY >= FIRST_Q_DEADLINE) {
+        extra.postFirstQ = true;
+      }
+      extra.alreadyStarted = true;
+    }
+
+    if (extra.edgeOverlay) confidence = 'needs HMRC check';
+    if (state.figuresBasis === 'estimate' || state.figuresBasis === 'unsure') confidence = 'indicative only';
+  }
+
+  if (stateKey === 'G') confidence = 'needs HMRC check';
+  if (stateKey === 'D') confidence = 'medium';
+  if (stateKey === 'E') confidence = 'high';
+  if (stateKey === 'F') confidence = 'high';
+
+  return {
+    stateKey,
+    meta,
+    qi,
+    edgeFlags,
+    extra,
+    confidence,
+    startDate,
+    wave,
+    today: TODAY,
+    lastChecked: HMRC_LAST_CHECKED
+  };
+}
+
+const RESULT_META = {
+  A: {
+    headline: 'You are likely in the April 2026 MTD for Income Tax wave.',
+    status: 'likely in scope',
+    colour: 'teal',
+    confidence: 'high',
+    blurb: 'Based on your answers, your qualifying income is more than £50,000 on 2024/25 figures. HMRC says the first MTD for Income Tax wave starts from 6 April 2026 for sole traders and landlords above this threshold.'
+  },
+  B: {
+    headline: 'You are likely in the April 2027 MTD for Income Tax wave.',
+    status: 'likely in scope',
+    colour: 'teal',
+    confidence: 'high',
+    blurb: 'Based on your answers, your qualifying income is more than £30,000 on 2025/26 figures. HMRC says the second wave starts from 6 April 2027 for sole traders and landlords above this threshold.'
+  },
+  C: {
+    headline: 'You are likely in the April 2028 MTD for Income Tax wave.',
+    status: 'likely in scope',
+    colour: 'teal',
+    confidence: 'high',
+    blurb: 'Based on your answers, your qualifying income is more than £20,000 on 2026/27 figures. The April 2028 wave is announced, but not yet fully legislated. HMRC says the threshold will drop to over £20,000 from 6 April 2028.'
+  },
+  D: {
+    headline: 'Based on your answers, you do not appear to be in the current MTD for Income Tax rollout yet.',
+    status: 'likely not in scope',
+    colour: 'amber',
+    confidence: 'medium',
+    blurb: 'Your qualifying income is at or below the relevant threshold for the tax year you selected. This could change if your gross self-employment or property income rises above a future threshold.'
+  },
+  E: {
+    headline: 'MTD for Income Tax usually starts after you have submitted a Self Assessment tax return.',
+    status: 'not yet',
+    colour: 'amber',
+    confidence: 'high',
+    blurb: 'You have relevant self-employment or property income, but HMRC says you do not need to start MTD for Income Tax until after your first Self Assessment tax return. Your future MTD position will depend on your qualifying income on the relevant return.'
+  },
+  F: {
+    headline: 'This checker may not apply to your situation.',
+    status: 'probably out of scope',
+    colour: 'amber',
+    confidence: 'high',
+    blurb: 'Based on your answers, you do not have self-employment or property income that counts toward the MTD for Income Tax qualifying-income threshold. MTD for Income Tax applies to sole traders and landlords with self-employment or property income.'
+  },
+  G: {
+    headline: 'Your answer includes something that may need a HMRC or adviser check.',
+    status: 'edge case',
+    colour: 'amber',
+    confidence: 'needs HMRC check',
+    blurb: 'We can show a provisional indication, but one or more of your answers falls into an area where HMRC guidance or a qualified adviser should confirm your position. This checker cannot decide edge cases for you.'
+  }
+};
+
+/* ============================================================
+   RENDERING - builds the DOM for each screen and the result.
+   The checker is a single card with animated screen swaps.
+   ============================================================ */
+
+let currentScreenIdx = 0;
+let visibleScreens = [];
+
+function computeVisibleScreens() {
+  visibleScreens = SCREENS.filter(s => s.showIf());
+  return visibleScreens;
+}
+
+function renderProgress() {
+  const total = visibleScreens.length;
+  const done = currentScreenIdx;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const bar = document.getElementById('progress-bar');
+  const txt = document.getElementById('progress-text');
+  if (bar) bar.style.width = pct + '%';
+  if (txt) txt.textContent = 'Step ' + (done + 1) + ' of ' + total;
+}
+
+function showScreen(idx) {
+  // idx is within visibleScreens
+  currentScreenIdx = idx;
+  const screen = visibleScreens[idx];
+  const body = document.getElementById('checker-body');
+  // hide all
+  body.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  // build screen content if not already
+  let el = document.getElementById(screen.id);
+  if (!el) {
+    el = buildScreen(screen);
+    body.appendChild(el);
+  }
+  el.classList.add('active');
+  // focus management: move focus to the screen question
+  setTimeout(() => {
+    const q = el.querySelector('.screen-q');
+    if (q) q.setAttribute('tabindex', '-1'), q.focus();
+  }, 50);
+  renderProgress();
+  updateNav();
+  // fire analytics
+  trackEvent('checker_step', { step: screen.id, label: screen.label });
+  if (idx === 0) trackEvent('checker_start');
+  // scroll into view on mobile
+  if (window.innerWidth < 760) {
+    const card = document.querySelector('.checker-card');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateNav() {
+  const back = document.getElementById('btn-back');
+  const next = document.getElementById('btn-next');
+  if (!back || !next) return;
+  const isLast = currentScreenIdx === visibleScreens.length - 1;
+  const isFirst = currentScreenIdx === 0;
+  back.style.visibility = isFirst ? 'hidden' : 'visible';
+  if (isLast) {
+    next.textContent = 'See my result';
+    next.classList.remove('btn-secondary');
+    next.classList.add('btn-clay');
+    next.setAttribute('aria-label', 'Show my MTD readiness result');
+  } else {
+    next.textContent = 'Continue';
+    next.classList.remove('btn-clay');
+    next.classList.add('btn-primary');
+  }
+  // disable next until the current screen has a valid answer
+  next.disabled = !screenAnswered(visibleScreens[currentScreenIdx]);
+}
+
+function screenAnswered(screen) {
+  switch (screen.id) {
+    case 's0': return !!state.scope;
+    case 's1': return state.roles.length > 0;
+    case 's1b': return !!state.ukResident;
+    case 's2': return !!state.selfAssessment;
+    case 's3': return !!state.figuresBasis;
+    case 's3b': return !!state.accountingPeriod;
+    case 's4': return !!state.seIncomeBand;
+    case 's5': return !!state.propIncomeBand;
+    case 's5b': return !!state.amendedReturn;
+    case 's5c': return !!state.hmrcLetter;
+    case 's6': return !!state.sourcesOngoing;
+    case 's7': return state.exemptionFlags.length > 0;
+    case 's8': return !!state.recordKeeping;
+    case 's9': return !!state.softwareReadiness;
+    default: return true;
+  }
+}
+
+/* ============================================================
+   SCREEN BUILDERS - each returns a DOM element.
+   ============================================================ */
+
+function buildScreen(screen) {
+  const el = document.createElement('div');
+  el.className = 'screen';
+  el.id = screen.id;
+  el.setAttribute('role', 'group');
+  el.setAttribute('aria-label', screen.label);
+  switch (screen.id) {
+    case 's0':  buildS0(el); break;
+    case 's1':  buildS1(el); break;
+    case 's1b': buildS1b(el); break;
+    case 's2':  buildS2(el); break;
+    case 's3':  buildS3(el); break;
+    case 's3b': buildS3b(el); break;
+    case 's4':  buildS4(el); break;
+    case 's5':  buildS5(el); break;
+    case 's5b': buildS5b(el); break;
+    case 's5c': buildS5c(el); break;
+    case 's6':  buildS6(el); break;
+    case 's7':  buildS7(el); break;
+    case 's8':  buildS8(el); break;
+    case 's9':  buildS9(el); break;
+  }
+  return el;
+}
+
+function q(el, text) {
+  const h = document.createElement('div');
+  h.className = 'screen-q';
+  h.textContent = text;
+  el.appendChild(h);
+  return h;
+}
+function helper(el, text) {
+  const p = document.createElement('div');
+  p.className = 'screen-helper';
+  p.innerHTML = text;
+  el.appendChild(p);
+  return p;
+}
+function optsWrap(el, multi = false) {
+  const w = document.createElement('div');
+  w.className = multi ? 'opts opts-multi' : 'opts';
+  w.setAttribute('role', multi ? 'group' : 'radiogroup');
+  w.setAttribute('aria-label', 'Answer options');
+  el.appendChild(w);
+  return w;
+}
+
+function option(w, id, label, note, multi) {
+  const b = document.createElement('button');
+  b.className = 'opt';
+  b.type = 'button';
+  b.dataset.opt = id;
+  b.setAttribute(multi ? 'aria-pressed' : 'aria-checked', 'false');
+  const dot = document.createElement('span');
+  dot.className = multi ? 'check' : 'radio';
+  dot.setAttribute('aria-hidden', 'true');
+  b.appendChild(dot);
+  const lab = document.createElement('span');
+  lab.className = 'opt-label';
+  lab.textContent = label;
+  if (note) {
+    const n = document.createElement('span');
+    n.className = 'opt-note';
+    n.textContent = note;
+    lab.appendChild(n);
+  }
+  b.appendChild(lab);
+  w.appendChild(b);
+  return b;
+}
+
+// Screen 0: Scope
+function buildS0(el) {
+  const stepTitle = document.createElement('div');
+  stepTitle.className = 'screen-step-title';
+  stepTitle.textContent = 'About your check';
+  el.appendChild(stepTitle);
+  q(el, 'What are you checking?');
+  helper(el, 'This checker is for Making Tax Digital for <strong>Income Tax</strong>, not VAT.');
+  const w = optsWrap(el);
+  w.classList.add('opts-s0');
+  option(w, 'self', 'MTD for Income Tax, for myself');
+  option(w, 'client', 'MTD for Income Tax, for someone else');
+  option(w, 'vat', 'MTD for VAT');
+  option(w, 'unsure', "I'm not sure");
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true');
+    b.classList.add('selected');
+    state.scope = b.dataset.opt;
+    if (state.scope === 'vat') {
+      // show out-of-scope panel inline, then stop
+      showVatPanel(el);
+    } else {
+      removeVatPanel(el);
+    }
+    updateNav();
+  }));
+  // If the user already answered, preselect
+  if (state.scope) {
+    const b = w.querySelector('[data-opt="' + state.scope + '"]');
+    if (b) b.setAttribute('aria-checked','true'), b.classList.add('selected');
+    if (state.scope === 'vat') showVatPanel(el);
+  }
+}
+
+function showVatPanel(el) {
+  removeVatPanel(el);
+  const p = document.createElement('div');
+  p.className = 'info-panel blue';
+  p.id = 'vat-panel';
+  p.innerHTML = '<strong>Out of scope.</strong> This checker is for MTD for Income Tax, not VAT returns. For MTD for VAT, read the official guidance: <a href="' + HMRC_SOURCES.eligibility + '" target="_blank" rel="noopener noreferrer">GOV.UK MTD for Income Tax eligibility</a>. If you are not sure which applies to you, choose "Not sure" above and continue.';
+  el.appendChild(p);
+}
+function removeVatPanel(el) {
+  const p = document.getElementById('vat-panel');
+  if (p) p.remove();
+}
+
+// Screen 1: Income role (multi-select)
+function buildS1(el) {
+  const stepTitle = document.createElement('div');
+  stepTitle.className = 'screen-step-title';
+  stepTitle.textContent = 'Your income';
+  el.appendChild(stepTitle);
+  q(el, 'Which of these describe you?');
+  helper(el, 'Select all that apply. We use this to work out your qualifying income.');
+  const w = optsWrap(el, true);
+  option(w, 'sole-trader', 'I am a sole trader or self-employed', null, true);
+  option(w, 'uk-property', 'I have UK property or rental income', null, true);
+  option(w, 'foreign-property', 'I have foreign property income', null, true);
+  option(w, 'paye', 'I am employed through PAYE', 'Does not count toward the MTD threshold.', true);
+  option(w, 'dividends', 'I receive dividends', 'Does not count toward the MTD threshold.', true);
+  option(w, 'pension', 'I receive pension income', 'State and private pensions do not count.', true);
+  option(w, 'partnership', 'I have partnership income', 'An individual partner\'s share of profit does not count the same way. Personal self-employment or property income can still count.', true);
+  option(w, 'ltd-only', 'I run a limited company only', 'MTD for Income Tax usually does not apply to limited companies.', true);
+  option(w, 'none', 'None of these, or not sure', null, true);
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    const id = b.dataset.opt;
+    const pressed = b.getAttribute('aria-pressed') === 'true';
+    if (id === 'none') {
+      // exclusive
+      w.querySelectorAll('.opt').forEach(o => {
+        o.setAttribute('aria-pressed','false'); o.classList.remove('selected');
+        const oid = o.dataset.opt;
+        if (state.roles.includes(oid)) state.roles = state.roles.filter(r => r !== oid);
+      });
+      if (!pressed) {
+        b.setAttribute('aria-pressed','true'); b.classList.add('selected');
+        state.roles = ['none'];
+      } else {
+        state.roles = [];
+      }
+    } else {
+      // toggle, and clear 'none' if something else is chosen
+      if (state.roles.includes('none')) state.roles = state.roles.filter(r => r !== 'none');
+      const noneBtn = w.querySelector('[data-opt="none"]');
+      if (noneBtn) { noneBtn.setAttribute('aria-pressed','false'); noneBtn.classList.remove('selected'); }
+      if (!pressed) {
+        b.setAttribute('aria-pressed','true'); b.classList.add('selected');
+        state.roles.push(id);
+      } else {
+        b.setAttribute('aria-pressed','false'); b.classList.remove('selected');
+        state.roles = state.roles.filter(r => r !== id);
+      }
+    }
+    updateNav();
+  }));
+  // preselect
+  state.roles.forEach(id => {
+    const b = w.querySelector('[data-opt="' + id + '"]');
+    if (b) { b.setAttribute('aria-pressed','true'); b.classList.add('selected'); }
+  });
+  // footnote
+  const fn = document.createElement('div');
+  fn.className = 'opts-footnote';
+  fn.innerHTML = 'PAYE, dividends and pensions don\'t count toward the MTD threshold, but may still matter for your tax return.';
+  el.appendChild(fn);
+}
+
+// Screen 1b: UK tax residence (conditional on foreign property)
+function buildS1b(el) {
+  q(el, 'Were you UK tax resident in the relevant tax year?');
+  helper(el, 'This only appears because you selected foreign property income. If you were UK tax resident, HMRC counts UK and foreign property income on your Self Assessment return. If you were not UK resident, the rules differ. <a href="' + HMRC_SOURCES.qualifying + '" target="_blank" rel="noopener noreferrer">Read the GOV.UK qualifying income guidance</a>.');
+  const w = optsWrap(el);
+  option(w, 'yes', 'Yes, I was UK tax resident');
+  option(w, 'no', 'No, I was not UK tax resident');
+  option(w, 'unsure', 'Not sure');
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.ukResident = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.ukResident) {
+    const b = w.querySelector('[data-opt="' + state.ukResident + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+}
+
+// Screen 2: Self Assessment status
+function buildS2(el) {
+  q(el, 'Have you registered for Self Assessment and submitted a tax return before?');
+  helper(el, 'HMRC says you do not need to start MTD for Income Tax until after your first Self Assessment tax return, and sign-up requires a recent submitted return. <a href="' + HMRC_SOURCES.signup + '" target="_blank" rel="noopener noreferrer">Read the GOV.UK sign-up guidance</a>.');
+  const w = optsWrap(el);
+  option(w, 'filed', 'Yes, I have submitted a Self Assessment tax return');
+  option(w, 'registered', 'I am registered but have not submitted my first return yet');
+  option(w, 'new', 'I expect to register, or I am new to Self Assessment');
+  option(w, 'no', 'No');
+  option(w, 'unsure', 'Not sure');
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.selfAssessment = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.selfAssessment) {
+    const b = w.querySelector('[data-opt="' + state.selfAssessment + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+}
+
+// Screen 3: Tax year / figures basis
+function buildS3(el) {
+  const stepTitle = document.createElement('div');
+  stepTitle.className = 'screen-step-title';
+  stepTitle.textContent = 'Your figures';
+  el.appendChild(stepTitle);
+  q(el, 'Which figures are you using?');
+  helper(el, 'HMRC uses the figure from a specific tax return to decide your start date.');
+  const w = optsWrap(el);
+  w.classList.add('opts-s0');
+  option(w, '2024/25', '2024 to 2025 tax return');
+  option(w, '2025/26', '2025 to 2026 tax return');
+  option(w, '2026/27', '2026 to 2027 tax return');
+  option(w, 'estimate', 'A current estimate (not from a filed return)');
+  option(w, 'unsure', 'Not sure');
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.figuresBasis = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.figuresBasis) {
+    const b = w.querySelector('[data-opt="' + state.figuresBasis + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+}
+
+// Screen 3b: Accounting period length
+function buildS3b(el) {
+  q(el, 'Was your trading or property period roughly a full 12 months?');
+  helper(el, 'HMRC may annualise income for shorter or longer accounting periods. If your period was not a standard 12 months, your qualifying income calculation may need an HMRC or adviser check. <a href="' + HMRC_SOURCES.qualifying + '" target="_blank" rel="noopener noreferrer">Read the GOV.UK qualifying income guidance</a>.');
+  const w = optsWrap(el);
+  option(w, 'full12', 'Yes, roughly a full 12 months');
+  option(w, 'shorter', 'Shorter than 12 months');
+  option(w, 'longer', 'Longer than 12 months');
+  option(w, 'unsure', 'Not sure');
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.accountingPeriod = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.accountingPeriod) {
+    const b = w.querySelector('[data-opt="' + state.accountingPeriod + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+}
+
+// Screen 4: Self-employment gross income
+function buildS4(el) {
+  q(el, 'What was your gross self-employment income before expenses?');
+  helper(el, 'Gross income means income before expenses. It is not your profit. Use your turnover. <a href="' + HMRC_SOURCES.qualifying + '" target="_blank" rel="noopener noreferrer">See the GOV.UK example</a>.');
+  const w = optsWrap(el);
+  INCOME_BANDS.forEach(b => option(w, b.id, b.label));
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.seIncomeBand = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.seIncomeBand) {
+    const b = w.querySelector('[data-opt="' + state.seIncomeBand + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+  // Optional exact field
+  const row = document.createElement('div');
+  row.className = 'field-row';
+  row.innerHTML = '<label for="se-exact">Optional: enter an exact amount if you know it</label><input id="se-exact" class="input-money" type="number" min="0" step="100" inputmode="numeric" placeholder="e.g. 54000" value="' + (state.seIncomeExact || '') + '">';
+  el.appendChild(row);
+  const inp = row.querySelector('input');
+  inp.addEventListener('input', () => {
+    state.seIncomeExact = inp.value === '' ? null : Number(inp.value);
+    updateNav();
+  });
+  // Example
+  const ex = document.createElement('div');
+  ex.className = 'info-panel teal';
+  ex.innerHTML = 'Example: £31,000 turnover from self-employment plus £21,000 rent received equals £52,000 qualifying income.';
+  el.appendChild(ex);
+}
+
+// Screen 5: Property gross income
+function buildS5(el) {
+  q(el, 'What was your share of gross property or rental income before expenses?');
+  helper(el, 'Use your share of the rent or property income, before expenses. For jointly owned property, only your share counts. <a href="' + HMRC_SOURCES.qualifying + '" target="_blank" rel="noopener noreferrer">Read the GOV.UK qualifying income guidance</a>.');
+  const w = optsWrap(el);
+  INCOME_BANDS.forEach(b => option(w, b.id, b.label));
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.propIncomeBand = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.propIncomeBand) {
+    const b = w.querySelector('[data-opt="' + state.propIncomeBand + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+  // Optional exact
+  const row = document.createElement('div');
+  row.className = 'field-row';
+  row.innerHTML = '<label for="prop-exact">Optional: enter an exact amount if you know it</label><input id="prop-exact" class="input-money" type="number" min="0" step="100" inputmode="numeric" placeholder="e.g. 21000" value="' + (state.propIncomeExact || '') + '">';
+  el.appendChild(row);
+  const inp = row.querySelector('input');
+  inp.addEventListener('input', () => {
+    state.propIncomeExact = inp.value === '' ? null : Number(inp.value);
+    updateNav();
+  });
+  // Joint ownership + share unsure
+  const c1 = document.createElement('label');
+  c1.className = 'check-row';
+  c1.innerHTML = '<input type="checkbox" id="joint-prop"><span>This is from jointly owned property.</span>';
+  el.appendChild(c1);
+  const cb1 = c1.querySelector('input');
+  cb1.checked = state.jointProperty;
+  cb1.addEventListener('change', () => { state.jointProperty = cb1.checked; });
+  const c2 = document.createElement('label');
+  c2.className = 'check-row';
+  c2.innerHTML = '<input type="checkbox" id="share-unsure"><span>I am not sure what my share is.</span>';
+  el.appendChild(c2);
+  const cb2 = c2.querySelector('input');
+  cb2.checked = state.propShareUnsure;
+  cb2.addEventListener('change', () => { state.propShareUnsure = cb2.checked; });
+}
+
+// Screen 5b: Amended return
+function buildS5b(el) {
+  q(el, 'Are these figures from an amended Self Assessment return, or might they change?');
+  helper(el, 'GOV.UK says amendments can affect qualifying income and start date. If an amendment increases income above a threshold after the relevant tax year starts, it will not be considered for that tax year. This is a nuance, so we flag it. <a href="' + HMRC_SOURCES.qualifying + '" target="_blank" rel="noopener noreferrer">Read the GOV.UK guidance</a>.');
+  const w = optsWrap(el);
+  option(w, 'no', 'No, these are original figures');
+  option(w, 'yes', 'Yes, the return was amended');
+  option(w, 'maybe', 'Maybe, I might amend or I am not sure');
+  option(w, 'unsure', 'Not sure');
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.amendedReturn = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.amendedReturn) {
+    const b = w.querySelector('[data-opt="' + state.amendedReturn + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+}
+
+// Screen 5c: HMRC letter
+function buildS5c(el) {
+  q(el, 'Have you had an MTD letter from HMRC?');
+  helper(el, 'HMRC writes to some sole traders and landlords before their start date. It remains your responsibility to check and sign up even if you have not had a letter. <a href="' + HMRC_SOURCES.eligibility + '" target="_blank" rel="noopener noreferrer">Read the GOV.UK eligibility guidance</a>.');
+  const w = optsWrap(el);
+  option(w, 'yes', 'Yes, I have had an MTD letter');
+  option(w, 'no', 'No, I have not had a letter');
+  option(w, 'unsure', 'Not sure');
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.hmrcLetter = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.hmrcLetter) {
+    const b = w.querySelector('[data-opt="' + state.hmrcLetter + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+}
+
+// Screen 6: Ongoing / ceased sources
+function buildS6(el) {
+  q(el, 'Are the self-employment or property sources you entered still ongoing?');
+  helper(el, 'If all sources have ceased, you may not need MTD for Income Tax. If some have ceased but you still have a continuing source, HMRC has specific rules. <a href="' + HMRC_SOURCES.qualifying + '" target="_blank" rel="noopener noreferrer">Read the GOV.UK guidance on ceased sources</a>.');
+  const w = optsWrap(el);
+  option(w, 'all', 'Yes, all are still ongoing');
+  option(w, 'some', 'One or more have ceased, but I still have at least one source');
+  option(w, 'none', 'All self-employment and property sources have ceased');
+  option(w, 'unsure', 'Not sure');
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.sourcesOngoing = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.sourcesOngoing) {
+    const b = w.querySelector('[data-opt="' + state.sourcesOngoing + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+}
+
+// Screen 7: Exemptions / digital exclusion
+function buildS7(el) {
+  q(el, 'Do any of these apply to you?');
+  helper(el, 'HMRC decides exemptions. This checker cannot confirm an exemption. Selecting any option routes you to HMRC guidance. <a href="' + HMRC_SOURCES.exemption + '" target="_blank" rel="noopener noreferrer">Read the GOV.UK exemption guidance</a>.');
+  const w = optsWrap(el, true);
+  option(w, 'digital', 'I may be digitally excluded', null, true);
+  option(w, 'no-ni', 'I do not have a National Insurance number', null, true);
+  option(w, 'other', 'I think I may be exempt for another reason', null, true);
+  option(w, 'none', 'None of these', null, true);
+  option(w, 'unsure', 'Not sure', null, true);
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    const id = b.dataset.opt;
+    const pressed = b.getAttribute('aria-pressed') === 'true';
+    // 'none' and 'unsure' are exclusive-ish; we allow toggling but clear others
+    if (id === 'none' || id === 'unsure') {
+      // clear all others
+      w.querySelectorAll('.opt').forEach(o => {
+        o.setAttribute('aria-pressed','false'); o.classList.remove('selected');
+        const oid = o.dataset.opt;
+        if (state.exemptionFlags.includes(oid)) state.exemptionFlags = state.exemptionFlags.filter(r => r !== oid);
+      });
+      if (!pressed) {
+        b.setAttribute('aria-pressed','true'); b.classList.add('selected');
+        state.exemptionFlags = [id];
+      } else { state.exemptionFlags = []; }
+    } else {
+      // clear none/unsure
+      ['none','unsure'].forEach(x => {
+        if (state.exemptionFlags.includes(x)) state.exemptionFlags = state.exemptionFlags.filter(r => r !== x);
+        const nb = w.querySelector('[data-opt="' + x + '"]');
+        if (nb) { nb.setAttribute('aria-pressed','false'); nb.classList.remove('selected'); }
+      });
+      if (!pressed) {
+        b.setAttribute('aria-pressed','true'); b.classList.add('selected');
+        state.exemptionFlags.push(id);
+      } else {
+        b.setAttribute('aria-pressed','false'); b.classList.remove('selected');
+        state.exemptionFlags = state.exemptionFlags.filter(r => r !== id);
+      }
+    }
+    updateNav();
+  }));
+  state.exemptionFlags.forEach(id => {
+    const b = w.querySelector('[data-opt="' + id + '"]');
+    if (b) { b.setAttribute('aria-pressed','true'); b.classList.add('selected'); }
+  });
+}
+
+// Screen 8: Record keeping
+function buildS8(el) {
+  q(el, 'How do you keep records now?');
+  helper(el, 'This does not affect your eligibility. It helps us tailor your next steps.');
+  const w = optsWrap(el);
+  const opts = [
+    ['paper','Paper or manual notes'],
+    ['spreadsheet','Spreadsheet'],
+    ['software','Accounting software'],
+    ['landlord-sw','Landlord or property software'],
+    ['accountant','My accountant or bookkeeper handles it'],
+    ['mixed','Mixed methods'],
+    ['none','I do not keep regular records yet']
+  ];
+  opts.forEach(([id,label]) => option(w, id, label));
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.recordKeeping = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.recordKeeping) {
+    const b = w.querySelector('[data-opt="' + state.recordKeeping + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+}
+
+// Screen 9: Software readiness
+function buildS9(el) {
+  q(el, 'Do you already have software or help that can handle MTD for Income Tax?');
+  helper(el, 'This does not affect your eligibility. It helps us suggest next steps. HMRC-recognised software can keep digital records, send quarterly updates, and submit the tax return. <a href="' + HMRC_SOURCES.chooseSoftware + '" target="_blank" rel="noopener noreferrer">Read the GOV.UK software guidance</a>.');
+  const w = optsWrap(el);
+  const opts = [
+    ['yes','Yes, I use software that says it supports MTD for Income Tax'],
+    ['unsure-sw','I use software, but I am not sure if it supports MTD for Income Tax'],
+    ['spreadsheet-bridge','I use spreadsheets and may need bridging software'],
+    ['accountant','My accountant or bookkeeper will handle it'],
+    ['no','No, not yet'],
+    ['unsure','Not sure']
+  ];
+  opts.forEach(([id,label]) => option(w, id, label));
+  w.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    w.querySelectorAll('.opt').forEach(o => { o.setAttribute('aria-checked','false'); o.classList.remove('selected'); });
+    b.setAttribute('aria-checked','true'); b.classList.add('selected');
+    state.softwareReadiness = b.dataset.opt;
+    updateNav();
+  }));
+  if (state.softwareReadiness) {
+    const b = w.querySelector('[data-opt="' + state.softwareReadiness + '"]');
+    if (b) { b.setAttribute('aria-checked','true'); b.classList.add('selected'); }
+  }
+}
+
+/* ============================================================
+   RESULT RENDERER
+   Builds the full result page inside the checker card.
+   ============================================================ */
+
+function renderResult() {
+  const result = determineResult();
+  const body = document.getElementById('checker-body');
+  body.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  // hide nav + header
+  const header = document.querySelector('.checker-header');
+  if (header) header.style.display = 'none';
+  const nav = document.querySelector('.checker-nav');
+  if (nav) nav.style.display = 'none';
+  // hide progress
+  const prog = document.querySelector('.checker-progress');
+  if (prog) prog.style.display = 'none';
+  const reset = document.querySelector('.checker-reset');
+  if (reset) reset.style.display = 'none';
+
+  // build result
+  let resEl = document.getElementById('result-screen');
+  if (!resEl) {
+    resEl = document.createElement('div');
+    resEl.id = 'result-screen';
+    resEl.className = 'screen';
+    body.appendChild(resEl);
+  }
+  resEl.innerHTML = '';
+  resEl.classList.add('active');
+
+  // 1. Status badge
+  const status = document.createElement('div');
+  status.className = 'result-status';
+  const badge = document.createElement('span');
+  badge.className = 'badge badge-' + result.meta.colour;
+  badge.textContent = result.meta.status;
+  status.appendChild(badge);
+  resEl.appendChild(status);
+
+  // 2. Headline
+  const h = document.createElement('div');
+  h.className = 'result-headline';
+  h.textContent = result.meta.headline;
+  resEl.appendChild(h);
+
+  // 3. Confidence + last checked
+  const conf = document.createElement('div');
+  conf.className = 'result-confidence';
+  conf.innerHTML = '<span><strong>Confidence:</strong> ' + result.confidence + '</span><span><strong>Checked against HMRC guidance:</strong> ' + HMRC_LAST_CHECKED + '</span>';
+  resEl.appendChild(conf);
+
+  // Post-start-date variant for State A
+  if (result.extra.alreadyStarted) {
+    const panel = document.createElement('div');
+    panel.className = 'callout trust';
+    panel.innerHTML = '<p>You appear to already be in the April 2026 wave. You should already be keeping digital records. ' + (result.extra.postFirstQ ? 'Your first quarterly update deadline (7 August 2026) has passed. File it as soon as possible. ' : 'Your first quarterly update is due 7 August 2026. ') + 'If you have not signed up yet, <a href="' + HMRC_SOURCES.signup + '" target="_blank" rel="noopener noreferrer">read the GOV.UK sign-up guidance now</a>.</p>';
+    resEl.appendChild(panel);
+  }
+
+  // Straddle warning for banded income that could go either side of a threshold.
+  if (result.extra.straddle && result.extra.thresholdRow) {
+    const panel = document.createElement('div');
+    panel.className = 'callout warning';
+    panel.innerHTML = '<p>Based on the income bands you chose, your qualifying income could be either side of the £' + result.extra.thresholdRow.threshold.toLocaleString('en-GB') + ' threshold. Enter an exact figure, or check the <a href="' + HMRC_SOURCES.qualifying + '" target="_blank" rel="noopener noreferrer">HMRC qualifying-income guidance</a>, to be sure.</p>';
+    resEl.appendChild(panel);
+  }
+
+  // 4. Qualifying income breakdown
+  if (result.qi !== null && (result.stateKey === 'A' || result.stateKey === 'B' || result.stateKey === 'C' || result.stateKey === 'D' || result.stateKey === 'G')) {
+    const sec = document.createElement('div');
+    sec.className = 'result-section';
+    sec.innerHTML = '<h3>Your qualifying income calculation</h3>';
+    const tbl = document.createElement('table');
+    tbl.className = 'income-breakdown';
+    let rows = '';
+    if (state.roles.includes('sole-trader')) {
+      const seVal = getIncomeValue(state.seIncomeBand, state.seIncomeExact);
+      rows += '<tr><td>Gross self-employment income (before expenses)</td><td class="num">' + formatMoney(seVal) + '</td></tr>';
+    }
+    if (state.roles.includes('uk-property') || state.roles.includes('foreign-property')) {
+      const pVal = getIncomeValue(state.propIncomeBand, state.propIncomeExact);
+      rows += '<tr><td>Gross property income, your share (before expenses)</td><td class="num">' + formatMoney(pVal) + '</td></tr>';
+    }
+    rows += '<tr class="total"><td>Combined qualifying income</td><td class="num">' + formatMoney(result.qi) + '</td></tr>';
+    // excluded
+    const excluded = [];
+    if (state.roles.includes('paye')) excluded.push('PAYE employment income');
+    if (state.roles.includes('dividends')) excluded.push('Dividends');
+    if (state.roles.includes('pension')) excluded.push('State and private pensions');
+    if (state.roles.includes('partnership')) excluded.push('Individual partnership profit share');
+    if (state.roles.includes('ltd-only')) excluded.push('Limited company salary and dividends');
+    excluded.forEach(x => rows += '<tr class="excluded"><td>' + x + ' (not counted for threshold)</td><td class="num">not added</td></tr>');
+    tbl.innerHTML = '<thead><tr><th>Income source</th><th class="num">Amount</th></tr></thead><tbody>' + rows + '</tbody>';
+    sec.appendChild(tbl);
+    const note = document.createElement('p');
+    note.className = 'muted';
+    note.style.fontSize = '.8125rem';
+    note.style.marginTop = '10px';
+    note.innerHTML = 'HMRC generally uses gross self-employment and property income before expenses for the MTD for Income Tax threshold. This checker does not calculate your tax or profit. <a class="source-link" href="' + HMRC_SOURCES.qualifying + '" target="_blank" rel="noopener noreferrer">GOV.UK qualifying income</a>';
+    sec.appendChild(note);
+    resEl.appendChild(sec);
+  }
+
+  // 5. Why you got this result
+  const why = document.createElement('div');
+  why.className = 'result-section';
+  why.innerHTML = '<h3>Why you got this result</h3><p>' + result.meta.blurb + ' <a class="source-link" href="' + HMRC_SOURCES.eligibility + '" target="_blank" rel="noopener noreferrer">GOV.UK eligibility</a></p>';
+  resEl.appendChild(why);
+
+  // 6. Deadline / calendar panel for in-scope A/B/C
+  if ((result.stateKey === 'A' || result.stateKey === 'B' || result.stateKey === 'C') && result.startDate) {
+    const cal = document.createElement('div');
+    cal.className = 'result-section';
+    cal.innerHTML = '<h3>Key deadlines</h3><p style="font-size:.9375rem;color:var(--steel)">Start date: <strong>' + result.startDate + '</strong>. Quarterly update deadlines (standard periods):</p>';
+    const grid = document.createElement('div');
+    grid.className = 'deadline-grid';
+    QUARTERLY_DEADLINES.forEach(qd => {
+      const cell = document.createElement('div');
+      cell.className = 'deadline-cell';
+      cell.innerHTML = '<div class="q">' + qd.period + '</div><div class="d">' + qd.deadline + '</div>';
+      grid.appendChild(cell);
+    });
+    cal.appendChild(grid);
+    const final = document.createElement('p');
+    final.style.fontSize = '.8125rem';
+    final.style.color = 'var(--muted)';
+    final.style.marginTop = '10px';
+    final.innerHTML = 'Final declaration (tax return) and payment deadline remains 31 January following the tax year. For the April 2026 cohort: tax return for 2026/27 is due 31 January 2028. <a class="source-link" href="' + HMRC_SOURCES.useMtdBefore + '" target="_blank" rel="noopener noreferrer">GOV.UK first-year table</a>';
+    cal.appendChild(final);
+
+    // 2026/27 soft-landing note
+    if (result.stateKey === 'A') {
+      const soft = document.createElement('div');
+      soft.className = 'info-panel amber';
+      soft.style.marginTop = '12px';
+      soft.innerHTML = '<strong>Soft landing for 2026/27:</strong> There are no penalty points for late quarterly updates in the 2026/27 tax year. Final declaration and late payment penalties still apply. <a class="source-link" href="' + HMRC_SOURCES.penalty + '" target="_blank" rel="noopener noreferrer">GOV.UK penalties</a>';
+      cal.appendChild(soft);
+    }
+    resEl.appendChild(cal);
+  }
+
+  // 7. Next 3-5 actions
+  const act = document.createElement('div');
+  act.className = 'result-section';
+  act.innerHTML = '<h3>Next steps</h3>';
+  const list = document.createElement('ol');
+  list.className = 'action-list';
+  const actions = buildActionList(result);
+  actions.forEach(a => {
+    const li = document.createElement('li');
+    li.innerHTML = a;
+    list.appendChild(li);
+  });
+  act.appendChild(list);
+  resEl.appendChild(act);
+
+  // 8. Edge-case warning panel (only if triggered)
+  if (result.edgeFlags && result.edgeFlags.length > 0) {
+    const edge = document.createElement('div');
+    edge.className = 'result-section';
+    edge.innerHTML = '<h3>Edge case warnings</h3>';
+    const panel = document.createElement('div');
+    panel.className = 'callout warning';
+    let html = '<p>Your answer includes something that may need a HMRC or adviser check. This checker cannot decide edge cases for you.</p><ul style="margin-top:8px;padding-left:1.2em">';
+    result.edgeFlags.forEach(f => {
+      html += '<li style="margin-bottom:4px">' + f.label + ' <a class="source-link" href="' + f.source + '" target="_blank" rel="noopener noreferrer">GOV.UK</a></li>';
+    });
+    html += '</ul>';
+    panel.innerHTML = html;
+    edge.appendChild(panel);
+    resEl.appendChild(edge);
+  }
+
+  // 9. Software readiness panel
+  const sw = document.createElement('div');
+  sw.className = 'result-section';
+  sw.innerHTML = '<h3>Software readiness</h3><p style="font-size:.9375rem;color:var(--steel)">MTD software needs to keep digital records, send quarterly updates, and support the final tax return. HMRC does not recommend any product. <a class="source-link" href="' + HMRC_SOURCES.findSoftware + '" target="_blank" rel="noopener noreferrer">GOV.UK software finder</a></p>';
+  resEl.appendChild(sw);
+
+  // 10. Result disclaimer
+  const disc = document.createElement('div');
+  disc.className = 'callout disclaimer';
+  disc.innerHTML = '<p>Your result is an estimate based on the figures you entered. If your income sources are mixed, jointly owned, recently started or ceased, or if you may be exempt, check HMRC guidance or speak to a qualified adviser before relying on this result.</p>';
+  resEl.appendChild(disc);
+
+  // 11. Verify with HMRC link
+  const verify = document.createElement('div');
+  verify.style.textAlign = 'center';
+  verify.style.marginTop = 'var(--space-3)';
+  verify.innerHTML = '<p style="font-size:.9375rem;color:var(--steel)">Always verify your result against the <a href="' + HMRC_SOURCES.hmrcChecker + '" target="_blank" rel="noopener noreferrer"><strong>official HMRC checker on GOV.UK</strong></a>.</p>';
+  resEl.appendChild(verify);
+
+  // 12. Email opt-in (after result)
+  const email = document.createElement('div');
+  email.className = 'email-block';
+  email.innerHTML = '<h4>Optional: get a reminder or copy</h4><p>Email is optional and only after your result. We do not store your answers. No pre-ticked boxes.</p>';
+  const consents = document.createElement('div');
+  consents.className = 'email-consents';
+  consents.innerHTML =
+    '<label><input type="checkbox" name="em-result"><span><strong>Email me this result.</strong> Service message, one-off.</span></label>' +
+    '<label><input type="checkbox" name="em-reminders"><span><strong>Send me MTD deadline reminders.</strong> Periodic service reminders before my quarterly dates.</span></label>' +
+    '<label><input type="checkbox" name="em-marketing"><span><strong>Send me product updates and guides.</strong> Marketing. You can unsubscribe at any time.</span></label>';
+  email.appendChild(consents);
+  const field = document.createElement('div');
+  field.className = 'email-field';
+  field.innerHTML = '<input type="email" name="em-addr" placeholder="your@email.co.uk" aria-label="Email address"><button class="btn btn-primary btn-sm" id="em-submit" disabled>Send</button>';
+  email.appendChild(field);
+  resEl.appendChild(email);
+  // wire email submit
+  const submitBtn = field.querySelector('#em-submit');
+  const addrInp = field.querySelector('input');
+  const checks = consents.querySelectorAll('input[type=checkbox]');
+  function updateEmailBtn() {
+    const anyChecked = Array.from(checks).some(c => c.checked);
+    const validEmail = addrInp.value && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(addrInp.value);
+    submitBtn.disabled = !(anyChecked && validEmail);
+  }
+  checks.forEach(c => c.addEventListener('change', updateEmailBtn));
+  addrInp.addEventListener('input', updateEmailBtn);
+  submitBtn.addEventListener('click', () => {
+    if (submitBtn.disabled) return;
+    const which = Array.from(checks).filter(c => c.checked).map(c => c.name);
+    trackEvent('email_optin', { which });
+    email.innerHTML = '<p style="color:var(--teal-deep);font-weight:600">Thanks. If you asked for a result copy or reminders, we will be in touch. This is a demo build, so no email was actually sent or stored.</p>';
+  });
+
+  // 13. Print / copy buttons
+  const pc = document.createElement('div');
+  pc.style.display = 'flex';
+  pc.style.gap = '10px';
+  pc.style.justifyContent = 'center';
+  pc.style.marginTop = 'var(--space-3)';
+  pc.style.flexWrap = 'wrap';
+  pc.innerHTML = '<button class="btn btn-secondary btn-sm" onclick="window.print()">Print result</button><button class="btn btn-secondary btn-sm" id="copy-result">Copy summary</button>';
+  resEl.appendChild(pc);
+  document.getElementById('copy-result').addEventListener('click', copyResultSummary);
+
+  // 14. Restart button
+  const restart = document.createElement('div');
+  restart.style.textAlign = 'center';
+  restart.style.marginTop = 'var(--space-3)';
+  restart.innerHTML = '<button class="btn btn-ghost btn-sm" id="restart-btn">Start again</button>';
+  resEl.appendChild(restart);
+  document.getElementById('restart-btn').addEventListener('click', resetChecker);
+
+  // scroll to top of card
+  const card = document.querySelector('.checker-card');
+  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // analytics
+  trackEvent('checker_complete', { state: result.stateKey });
+  trackEvent('result_state', { state: result.stateKey, confidence: result.confidence });
+}
+
+function buildActionList(result) {
+  const actions = [
+    'Check your result against the <a href="' + HMRC_SOURCES.hmrcChecker + '" target="_blank" rel="noopener noreferrer">official HMRC checker on GOV.UK</a>.',
+    'Confirm your gross self-employment and property income from the relevant Self Assessment return.',
+    'Decide how you will keep digital records before your start date.'
+  ];
+  // record-keeping tailored
+  if (state.recordKeeping === 'paper' || state.recordKeeping === 'none') {
+    actions.push('Start moving from paper to digital records before your start date.');
+  } else if (state.recordKeeping === 'spreadsheet') {
+    actions.push('Check whether <a href="' + HMRC_SOURCES.chooseSoftware + '" target="_blank" rel="noopener noreferrer">bridging software</a> is suitable for your records, or whether all-in-one software is simpler.');
+  } else if (state.recordKeeping === 'software' || state.recordKeeping === 'landlord-sw') {
+    actions.push('Check that your current software is listed in the <a href="' + HMRC_SOURCES.findSoftware + '" target="_blank" rel="noopener noreferrer">HMRC software finder</a> and supports MTD for Income Tax.');
+  } else if (state.recordKeeping === 'accountant') {
+    actions.push('Ask your accountant what they will handle, what you still need to record, and whether any software access is required.');
+  } else {
+    actions.push('Check whether your software or accountant can handle MTD for Income Tax.');
+  }
+  // software readiness tailored
+  if (state.softwareReadiness === 'no' || state.softwareReadiness === 'unsure' || state.softwareReadiness === 'unsure-sw') {
+    actions.push('Use the <a href="' + HMRC_SOURCES.findSoftware + '" target="_blank" rel="noopener noreferrer">GOV.UK software finder</a> to check compatible software before signing up.');
+  }
+  // in-scope: add quarterly deadline to calendar
+  if (result.stateKey === 'A' || result.stateKey === 'B' || result.stateKey === 'C') {
+    actions.push('Add your quarterly update deadlines (7 Aug, 7 Nov, 7 Feb, 7 May) to your calendar.');
+  }
+  // State E: add register/file
+  if (result.stateKey === 'E') {
+    actions.push('Register and file Self Assessment as required. <a href="' + HMRC_SOURCES.signup + '" target="_blank" rel="noopener noreferrer">Use HMRC sign-up guidance</a> once you have filed.');
+  }
+  // State F: redirect
+  if (result.stateKey === 'F') {
+    actions.length = 0;
+    actions.push('This checker is for MTD for Income Tax, which applies to sole traders and landlords with self-employment or property income. If you think you might be affected, <a href="' + HMRC_SOURCES.eligibility + '" target="_blank" rel="noopener noreferrer">read the GOV.UK eligibility guidance</a>.');
+    actions.push('If you are VAT-registered, read the <a href="https://www.gov.uk/guidance/making-tax-digital-for-vat" target="_blank" rel="noopener noreferrer">GOV.UK MTD for VAT guidance</a> instead.');
+  }
+  // State G: HMRC check
+  if (result.stateKey === 'G') {
+    actions.push('Because your answer includes an edge case, <a href="' + HMRC_SOURCES.eligibility + '" target="_blank" rel="noopener noreferrer">check HMRC guidance</a> or speak to a qualified adviser before relying on this result.');
+  }
+  // cap at 5
+  return actions.slice(0, 5);
+}
+
+function formatMoney(v) {
+  if (v === null || v === undefined || isNaN(v)) return 'Not entered';
+  return '\u00A3' + v.toLocaleString('en-GB');
+}
+
+function copyResultSummary() {
+  const result = determineResult();
+  const lines = [];
+  lines.push('ReadyForMTD.co.uk result summary');
+  lines.push('State: ' + result.stateKey + ' - ' + result.meta.headline);
+  lines.push('Confidence: ' + result.confidence);
+  lines.push('Checked against HMRC guidance: ' + HMRC_LAST_CHECKED);
+  if (result.qi !== null) lines.push('Qualifying income: ' + formatMoney(result.qi));
+  if (result.startDate) lines.push('Likely start: ' + result.startDate);
+  lines.push('This is an estimate, not tax advice. Verify with HMRC.');
+  const txt = lines.join('\n');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(() => {
+      const btn = document.getElementById('copy-result');
+      if (btn) { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = 'Copy summary', 1800); }
+    }).catch(() => fallbackCopy(txt));
+  } else {
+    fallbackCopy(txt);
+  }
+}
+function fallbackCopy(txt) {
+  const ta = document.createElement('textarea');
+  ta.value = txt; ta.style.position='fixed'; ta.style.left='-9999px';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  ta.remove();
+  const btn = document.getElementById('copy-result');
+  if (btn) { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = 'Copy summary', 1800); }
+}
+
+/* ============================================================
+   NAVIGATION WIRING
+   ============================================================ */
+
+function wireNav() {
+  const back = document.getElementById('btn-back');
+  const next = document.getElementById('btn-next');
+  const reset = document.getElementById('btn-reset');
+  if (back) back.addEventListener('click', () => {
+    if (currentScreenIdx > 0) showScreen(currentScreenIdx - 1);
+  });
+  if (next) next.addEventListener('click', () => {
+    // first recompute visible screens in case conditional screens appeared
+    computeVisibleScreens();
+    if (currentScreenIdx < visibleScreens.length - 1) {
+      showScreen(currentScreenIdx + 1);
+    } else {
+      // last screen -> result
+      renderResult();
+    }
+  });
+  if (reset) reset.addEventListener('click', resetChecker);
+}
+
+function resetChecker() {
+  // clear state
+  Object.keys(state).forEach(k => {
+    if (k === 'roles' || k === 'exemptionFlags') state[k] = [];
+    else if (k === 'screenIndex') state[k] = 0;
+    else state[k] = null;
+  });
+  currentScreenIdx = 0;
+  // clear DOM
+  const body = document.getElementById('checker-body');
+  body.innerHTML = '';
+  // restore nav + progress
+  const header = document.querySelector('.checker-header');
+  if (header) header.style.display = '';
+  const nav = document.querySelector('.checker-nav');
+  if (nav) nav.style.display = '';
+  const prog = document.querySelector('.checker-progress');
+  if (prog) prog.style.display = '';
+  const reset = document.querySelector('.checker-reset');
+  if (reset) reset.style.display = '';
+  computeVisibleScreens();
+  showScreen(0);
+  trackEvent('checker_reset');
+}
+
+/* ============================================================
+   ANALYTICS - Plausible custom events.
+   Replace the endpoint with your Plausible instance as needed.
+   This is a no-op if Plausible is not loaded.
+   ============================================================ */
+
+function trackEvent(name, props) {
+  if (typeof window.plausible === 'function') {
+    try { window.plausible(name, { props: props || {} }); } catch(e) {}
+  }
+  // local debug log (remove in production if desired)
+  if (window.location.search.indexOf('debug=1') !== -1) {
+    console.log('[event]', name, props || {});
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  computeVisibleScreens();
+  wireNav();
+  showScreen(0);
+  // last-checked date in hero/elsewhere
+  document.querySelectorAll('[data-last-checked]').forEach(el => {
+    el.textContent = HMRC_LAST_CHECKED;
+  });
+});
+
+</script>
+</body>
+</html>

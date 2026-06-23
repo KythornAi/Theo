@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReadyForMTD.co.uk | Free MTD for Income Tax Readiness Checker for UK Sole Traders and Landlords</title>
+<meta name="description" content="Free Making Tax Digital readiness checker for UK sole traders and landlords. Find your likely MTD for Income Tax start date using HMRC's current income thresholds. No email, HMRC login, UTR or National Insurance number needed for your result.">
+<link rel="canonical" href="https://readyformtd.co.uk/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ReadyForMTD Checker",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "description": "Free Making Tax Digital for Income Tax readiness checker for UK sole traders and landlords. Instant result, no email gate.",
+  "url": "https://readyformtd.co.uk/",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" }
+}
+</script>
+<script defer data-domain="readyformtd.co.uk" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="/" class="brand" aria-label="ReadyForMTD.co.uk home">
+      <span class="mark">R</span>
+      <span class="name">
+        <span class="top">Ready<em>For</em>MTD</span>
+        <span class="bot">.co.uk</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" onclick="var n=document.querySelector('.nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'));"><span></span></button>
+    <nav class="nav" aria-label="Primary">
+      <a href="/" class="active">Checker</a>
+      <a href="/mtd-for-sole-traders/">Sole traders</a>
+      <a href="/mtd-for-landlords/">Landlords</a>
+      <a href="/mtd-deadlines/">Deadlines</a>
+      <a href="/mtd-software/">Software</a>
+      <a href="/mtd-faq/">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- Hero band -->
+<section class="hero">
+  <div class="wrap">
+    <h1>Check if Making Tax Digital for Income Tax applies to you, and when you may need to start.</h1>
+    <p class="lead">Free MTD readiness checker for UK sole traders and landlords. Find your likely start date using HMRC's current income thresholds. No email, HMRC login, UTR or National Insurance number needed for your result.</p>
+    <div class="hero-actions">
+      <a href="#checker" class="btn btn-clay btn-lg">Check my MTD position &rarr;</a>
+      <a href="/mtd-faq/" class="btn btn-secondary btn-lg">What income should I include?</a>
+    </div>
+    <div class="hero-trust">
+      <span class="chip"><span class="dot dot-blue"></span> Uses HMRC-published thresholds</span>
+      <span class="chip"><span class="dot dot-clay"></span> No HMRC login required</span>
+      <span class="chip"><span class="dot dot-gold"></span> No email needed for your result</span>
+      <span class="chip"><span class="dot dot-blue"></span> Informational, not tax advice</span>
+    </div>
+
+    <!-- Checker card on warm beige below the band -->
+    <div class="hero-checker-zone" id="checker">
+      <div class="checker-card">
+        <div class="checker-header">
+          <div class="checker-progress" aria-live="polite">
+            <span id="progress-text">Step 1 of 1</span>
+            <span class="bar"><span class="bar-fill" id="progress-bar"></span></span>
+          </div>
+          <button class="checker-reset" id="btn-reset" aria-label="Start again">Start again</button>
+        </div>
+        <div class="checker-body" id="checker-body">
+          <!-- Screens are built dynamically by checker.js -->
+        </div>
+        <div class="checker-nav">
+          <button class="btn btn-ghost btn-sm" id="btn-back" aria-label="Go back">&larr; Back</button>
+          <button class="btn btn-primary" id="btn-next">Continue</button>
+        </div>
+      </div>
+      <p class="muted" style="text-align:center;font-size:.75rem;margin-top:12px;">Last checked against HMRC guidance: <span data-last-checked>2026-06-20</span>. Not affiliated with HMRC or GOV.UK.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Who this is for -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-h center-text">
+      <div class="eyebrow">Who this is for</div>
+      <h2>Built for people who need a clear answer, fast</h2>
+      <p class="center-text" style="margin-inline:auto;">No account, no email wall, no software pitch before you see your result. Just your answers and HMRC's rules.</p>
+    </div>
+    <div class="grid grid-3 mt-3">
+      <div class="feature-panel">
+        <div class="icon teal" aria-hidden="true">S</div>
+        <div>
+          <h4>Sole traders</h4>
+          <p>Self-employed people registered for Self Assessment who want to know if their gross income puts them in scope.</p>
+        </div>
+      </div>
+      <div class="feature-panel">
+        <div class="icon clay" aria-hidden="true">L</div>
+        <div>
+          <h4>Landlords</h4>
+          <p>UK property and foreign property landlords who need to know if rental income counts toward the threshold.</p>
+        </div>
+      </div>
+      <div class="feature-panel">
+        <div class="icon gold" aria-hidden="true">M</div>
+        <div>
+          <h4>Mixed income</h4>
+          <p>People with both self-employment and property income, or who are unsure whether PAYE, dividends or pensions count.</p>
+        </div>
+      </div>
+    </div>
+    <p class="center-text mt-3 muted" style="font-size:.875rem">This checker is not for limited companies, partnerships as entities, VAT-only MTD, or detailed tax planning.</p>
+  </div>
+</section>
+
+<!-- What we ask / what you get -->
+<section class="section" style="background:var(--surface-soft);">
+  <div class="wrap split">
+    <div>
+      <div class="eyebrow">What we ask</div>
+      <h2 class="section-h">About 10 questions. No personal identifiers.</h2>
+      <p>We ask for the income figures HMRC uses for MTD, whether you have already submitted a Self Assessment return, and whether you may need an exemption route. We do not need your:</p>
+      <ul style="margin-top:12px;color:var(--steel);font-size:.9375rem;line-height:1.7">
+        <li>National Insurance number</li>
+        <li>UTR (Unique Taxpayer Reference)</li>
+        <li>HMRC login or Government Gateway details</li>
+        <li>Address or bank details</li>
+        <li>Email, unless you choose to opt in after your result</li>
+      </ul>
+    </div>
+    <div>
+      <div class="eyebrow">What you get</div>
+      <h2 class="section-h">A clear result with the maths shown</h2>
+      <ul style="color:var(--steel);font-size:.9375rem;line-height:1.7">
+        <li>Your likely MTD start wave: April 2026, April 2027, April 2028, not currently in scope, or unclear.</li>
+        <li>The qualifying income figure used and how it was calculated.</li>
+        <li>What to prepare next: records, software, sign-up, HMRC or adviser check if needed.</li>
+        <li>Source links to the exact GOV.UK pages for every rule used.</li>
+        <li>Quarterly update deadlines for your start date.</li>
+      </ul>
+      <a href="#checker" class="btn btn-primary mt-3">Check my MTD position &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- Common worries -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-h center-text">
+      <div class="eyebrow">Common worries</div>
+      <h2>The questions people ask before they start</h2>
+    </div>
+    <div class="grid grid-2 mt-3">
+      <div class="card card-sm">
+        <h4>Is MTD based on profit or turnover?</h4>
+        <p>The threshold is not based on your profit. It is based on gross self-employment and property income before expenses. That is the test HMRC uses. <a href="/mtd-faq/#profit-or-turnover">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>Do PAYE wages count?</h4>
+        <p>No. Employment income reported through PAYE does not count toward the MTD qualifying-income threshold, though it may still matter for your tax return. <a href="/mtd-faq/#paye-counts">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>I am both a landlord and a sole trader. Are they combined?</h4>
+        <p>Yes. HMRC adds gross self-employment income and your share of gross property income together to get your qualifying income. <a href="/mtd-faq/#combined">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>Can I keep using spreadsheets?</h4>
+        <p>You may be able to use spreadsheets with bridging software, but the right setup depends on your records and income sources. <a href="/mtd-faq/#spreadsheets">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>Is a quarterly update the same as a tax return?</h4>
+        <p>No. Quarterly updates are summaries of income and expenses. You still submit one tax return by 31 January following the tax year. <a href="/mtd-faq/#quarterly-vs-return">See the full answer &rarr;</a></p>
+      </div>
+      <div class="card card-sm">
+        <h4>Will you email me or sell my details?</h4>
+        <p>No. The checker gives you an instant result with no email required. Email is optional, only after your result, and only if you tick a box. <a href="/mtd-faq/#email">See the full answer &rarr;</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Threshold table summary -->
+<section class="section" style="background:var(--surface-soft);">
+  <div class="wrap">
+    <div class="section-h center-text">
+      <div class="eyebrow">The thresholds</div>
+      <h2>HMRC's phased rollout at a glance</h2>
+      <p class="center-text" style="margin-inline:auto;">Qualifying income means gross self-employment and property income before expenses. "More than" means above the threshold, not at it.</p>
+    </div>
+    <div class="card mt-3" style="max-width:680px;margin-inline:auto">
+      <table class="tbl">
+        <thead>
+          <tr><th>Tax return figures used</th><th class="num">Qualifying income</th><th>Likely MTD start</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2024/25</td><td class="num">More than &pound;50,000</td><td>6 April 2026</td></tr>
+          <tr><td>2025/26</td><td class="num">More than &pound;30,000</td><td>6 April 2027</td></tr>
+          <tr><td>2026/27</td><td class="num">More than &pound;20,000</td><td>6 April 2028 (announced, not yet fully legislated)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="center-text mt-2 muted" style="font-size:.8125rem">Source: <a href="https://www.gov.uk/guidance/find-out-if-and-when-you-need-to-use-making-tax-digital-for-income-tax" target="_blank" rel="noopener noreferrer">GOV.UK: Find out if and when you need to use MTD for Income Tax</a></p>
+  </div>
+</section>
+
+<!-- Disclaimer -->
+<section class="section-sm">
+  <div class="wrap">
+    <div class="callout disclaimer" style="max-width:760px;margin-inline:auto">
+      <p>This checker provides general information based on publicly available HMRC guidance. It is not tax advice, accounting advice, or a substitute for checking your own position with HMRC or a qualified adviser. Your result depends on the information you enter and the rules in force when the page was last updated. Last checked: <span data-last-checked>2026-06-20</span>.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <div class="mark">R</div>
+      <p>ReadyForMTD.co.uk is an independent MTD for Income Tax readiness checker for UK sole traders and landlords. Not affiliated with HMRC or GOV.UK.</p>
+    </div>
+    <div>
+      <h5>Checker</h5>
+      <ul>
+        <li><a href="/">MTD checker</a></li>
+        <li><a href="/mtd-for-sole-traders/">For sole traders</a></li>
+        <li><a href="/mtd-for-landlords/">For landlords</a></li>
+        <li><a href="/mtd-deadlines/">Deadlines</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Guides</h5>
+      <ul>
+        <li><a href="/mtd-software/">Software</a></li>
+        <li><a href="/mtd-faq/">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="/privacy/">Privacy</a></li>
+        <li><a href="/disclaimer/">Disclaimer</a></li>
+      </ul>
+    </div>
+    <div class="footer-fineprint">
+      <p>This checker provides general information based on publicly available HMRC guidance. It is not tax advice. Not affiliated with HMRC or GOV.UK. Some links may be affiliate links in future. Last checked against HMRC guidance: <span data-last-checked>2026-06-20</span>. &copy; 2026 ReadyForMTD.co.uk.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/checker.js"></script>
+</body>
+</html>
