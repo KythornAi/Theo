@@ -6,18 +6,22 @@ Tools: DeepSeek default; Codex for reasoning/code; Claude for writing; agy for m
 §
 Protocol: Theo researches → Kyle chooses → Claude builds/drafts → Theo reviews → Kyle final-calls.
 §
-PNP/GH: Daily Reset flagship, never free; Task Paralysis Rescue tabled; Etsy+paperandpixels.shop lapsed; MNM/GH shelf-only (Gumroad/KDP/Google Books).
+PNP/GH: Daily Reset (never free); MNM/GH shelf-only (Gumroad/KDP/Google Books). Task Paralysis Rescue tabled; Etsy lapsed.
 §
-Active: ReadyForMTD (domain purchased, Hostinger; Cloudflare-first→organic→affiliates). Served localhost:8081; standalone HTML ~/theo/mtd/. Demand scans Mon 08:00/14:00.
+Active: ReadyForMTD (domain, Hostinger; Cloudflare→organic→affiliates). localhost:8081; standalone ~/theo/mtd/. Demand scans Mon.
 §
 MNM audio: Edge TTS + pydub; Gemini in transcribe_app.py.
 §
-Data-analysis: Theo processes data, Claude writes narrative, Kyle adds judgement.
+Data: Theo processes data, Claude writes narrative, Kyle adds judgement.
 §
-Hermes: dashboard 9119; systemctl --user start hermes-dashboard after gateway restart. Agent v0.17.0. Codex CLI OAuth expires silently — don't chase.
+Hermes: dashboard 9119; start hermes-dashboard after gateway restart. v0.17.0. Codex OAuth expires silently — don't chase.
 §
-Crons: deepseek/deepseek-v4-pro; 10 active (memory x2, scratchpad x2, Hermes x3, demand x2, briefing x1). update-watch+relevance-digest on v4-flash since Jun 22 (was Codex OAuth-failing). OAuth trap: openai-codex=401.
+Crons: deepseek/deepseek-v4-pro; 10 active. update-watch+relevance-digest on v4-flash since Jun 22 (was OAuth-failing). OAuth trap: openai-codex=401. Credit-spend visibility wanted.
 §
 Telegram: no markdown tables; plain text, key:value, short sentences.
 §
-codex/: ~/theo/codex/mtd/ (MTD build + Brain ref), ~/theo/codex/data-intelligence/ (demand scans + side-hustle) for Codex/Claude sessions.
+codex/: ~/theo/codex/mtd/ + data-intelligence/ for Codex/Claude; synced via git.
+§
+Gateway restart: blocked inside gateway (all children trapped). Workaround: Claude from separate terminal. Confirmed 2026-06-23.
+§
+Auto-push: 30-min laptop cron pushes ~/theo/; commit, rest auto.
