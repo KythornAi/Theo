@@ -6,22 +6,22 @@ Tools: DeepSeek default; Codex for reasoning/code; Claude for writing; agy for m
 §
 Protocol: Theo researches → Kyle chooses → Claude builds/drafts → Theo reviews → Kyle final-calls.
 §
-PNP/GH: Daily Reset (never free); MNM/GH shelf-only (Gumroad/KDP/Google Books). Task Paralysis Rescue tabled; Etsy lapsed.
+PNP/GH: Daily Reset never-free; MNM shelf-only (Gumroad/KDP/Google Books). Task Paralysis Rescue tabled; Etsy lapsed.
 §
-Active: ReadyForMTD (domain, Hostinger; Cloudflare→organic→affiliates). localhost:8081; standalone ~/theo/mtd/. Demand scans Mon.
+Active: ReadyForMTD (domain, Hostinger; CF→organic→affiliates). localhost:8081; standalone ~/theo/mtd/. Demand scans Mon.
 §
 MNM audio: Edge TTS + pydub; Gemini in transcribe_app.py.
 §
 Data: Theo processes data, Claude writes narrative, Kyle adds judgement.
 §
-Hermes: dashboard 9119; start hermes-dashboard after gateway restart. v0.17.0. Codex OAuth expires silently — don't chase.
+Hermes: dashboard 9119; v0.17.0. Codex OAuth expires silently — don't chase.
 §
-Crons: deepseek/deepseek-v4-pro; 10 active. update-watch+relevance-digest on v4-flash since Jun 22 (was OAuth-failing). OAuth trap: openai-codex=401. Credit-spend visibility wanted.
+Crons: deepseek/deepseek-v4-pro, 10 active. update-watch+relevance-digest on v4-flash since Jun 22. OAuth trap: openai-codex=401. Credit visibility wanted.
 §
 Telegram: no markdown tables; plain text, key:value, short sentences.
 §
 codex/: ~/theo/codex/mtd/ + data-intelligence/ for Codex/Claude; synced via git.
 §
-Gateway restart: blocked inside gateway (all children trapped). Workaround: Claude from separate terminal. Confirmed 2026-06-23.
+Gateway restart: blocked inside (children trapped); use Claude from separate terminal. Parallel subagent updates crash WebUI — do Agent then WebUI separately. Confirmed 2026-06-25.
 §
 Auto-push: 30-min laptop cron pushes ~/theo/; commit, rest auto.
