@@ -23,3 +23,17 @@ brain_out/*.sync-conflict-*
 
 # Excalidraw metadata (keep the .excalidraw files, exclude metadata)
 *.excalidraw-library
+
+# Large/binary assets and backups (untracked — not for version control)
+assets/mnm-project/canva-zips/
+assets/mnm-project/gh-site-photos/
+assets/mnm-project/notebooklm-infographics/
+assets/mnm-project/notebooklm-mindmaps/
+assets/plr-inbox/
+demand-scans/*.xlsx
+demand-scans/*.zip
+demand-scans/perplexity_query.py
+prototypes/*.mp3
+skills-backup/
+memory-*-pre-update.md
+scripts/restart-webui-and-update.sh
