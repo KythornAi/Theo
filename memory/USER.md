@@ -1,19 +1,21 @@
-Kyle has ChatGPT Plus/Claude.ai; Theo uses DeepSeek; Codex/Claude/agy for escalation. Cross-model checks: exhaust auth/persistence options before falling back.
+Kyle: ChatGPT Plus/Claude.ai. Models: DeepSeek default; Codex for reasoning; Claude for writing; agy for multimodal. Cross-model: exhaust auth first.
 §
-Priorities: low-fulfilment revenue; ReadyForMTD + demand scans active; MNM/GH shelf-only.
+Priorities: low-fulfilment revenue; ReadyForMTD + demand scans; MNM/GH shelf-only.
 §
-Check/status = inspect only. Approval for: installs, restarts, updates, config, spending.
+Check/status = inspect only. Approval: installs, restarts, updates, config, spending.
 §
-Concise TLDR; voice on request. Continuity: mango. No micro-step productivity — use progress, control, artefacts, material redos.
+Concise; voice on request. No micro-steps. Kyle catching up → slow down, single asks.
 §
 Mission Control is Kyle's hub; Theo is chat/coordination.
 §
-App bugs need end-to-end user-surface verification. Artefact-focused audits.
+Bugs: end-to-end user-verification; artefact audits.
 §
-Likes broad Claude Code briefs, clean research subfolders, two-voice ebook audio.
+Likes clean research subfolders, two-voice ebook audio, broad Claude briefs.
 §
-Cron: day-agnostic. Flag quality issues. After ~21:00, large research overnight.
+Cron: day-agnostic. After 21:00, large research overnight. No sleep/rest paternalistic prompts.
 §
-No sleep/rest prompts or paternalistic phrasing.
+UI polish: alignment, spacing, premium look; clean options.
 §
-UI polish matters — alignment, spacing, premium look; clean options, no sub-text notes on buttons.
+Model swaps are deliberate evaluation — no handover prep needed.
+§
+Honest 'I don't know' over bluffing. 2 wrong in a row → correction saved.
