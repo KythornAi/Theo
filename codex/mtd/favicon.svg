@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark base -->
+  <rect width="32" height="32" rx="7" fill="#0d2420"/>
+  <!-- Teal inner layer -->
+  <rect x="3" y="3" width="26" height="26" rx="4.5" fill="#1b7f79" fill-opacity="0.35"/>
+  <!-- Terracotta ring -->
+  <rect x="1" y="1" width="30" height="30" rx="6.5" fill="none" stroke="#df6a4c" stroke-width="2"/>
+  <!-- R with dark halo so it pops off the teal -->
+  <text x="16" y="23" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-weight="700" text-anchor="middle" fill="#ffffff" stroke="#0d2420" stroke-width="1.5" paint-order="stroke fill">R</text>
+</svg>

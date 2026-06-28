@@ -194,14 +194,17 @@ small { font-size: 0.875rem; }
   width: 32px;
   height: 32px;
   border-radius: var(--r-md);
-  background: linear-gradient(135deg, var(--teal), var(--teal-deep));
+  background: #0d2420;
+  border: 2px solid #df6a4c;
+  box-shadow: inset 0 0 0 4px rgba(27,127,121,0.38), 0 2px 6px rgba(9,31,29,.45);
   display: grid;
   place-items: center;
   color: #fff;
   font-size: .75rem;
   font-weight: 800;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(18,90,85,.3);
+  -webkit-text-stroke: 1px #0d2420;
+  text-stroke: 1px #0d2420;
 }
 .brand .name { display: flex; flex-direction: column; line-height: 1.1; }
 .brand .name .top { font-size: 1.0625rem; }
@@ -409,6 +412,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
 }
 .hero .wrap { position: relative; z-index: 1; }
 .hero h1 { color: #fff; max-width: 22ch; }
+.hero h1 em { font-style: normal; color: var(--clay); }
 .hero .lead { color: rgba(255,255,255,.82); max-width: 52ch; margin-top: var(--space-2); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: var(--space-4); }
 
@@ -963,7 +967,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
 /* ---------- Tables ---------- */
 .tbl { width: 100%; border-collapse: collapse; font-size: .9375rem; }
 .tbl th, .tbl td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--hairline-soft); }
-.tbl th { font-weight: 700; color: var(--steel); font-size: .8125rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tbl th { font-weight: 700; color: #fff; background: var(--teal-deep); font-size: .8125rem; text-transform: uppercase; letter-spacing: 0.04em; }
 .tbl td { color: var(--slate); }
 .tbl tr:hover td { background: var(--surface-soft); }
 .tbl td.num, .tbl th.num { text-align: right; font-variant-numeric: tabular-nums; }
@@ -1087,13 +1091,17 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
 .footer-brand .mark {
   width: 36px; height: 36px;
   border-radius: var(--r-md);
-  background: linear-gradient(135deg, var(--teal), var(--teal-deep));
+  background: #0d2420;
+  border: 2px solid #df6a4c;
+  box-shadow: inset 0 0 0 5px rgba(27,127,121,0.38);
   display: inline-grid;
   place-items: center;
   color: #fff;
   font-size: .8125rem;
   font-weight: 800;
   margin-bottom: 12px;
+  -webkit-text-stroke: 1px #0d2420;
+  text-stroke: 1px #0d2420;
 }
 .footer-brand p { color: rgba(255,255,255,.55); font-size: .8125rem; }
 
@@ -1118,6 +1126,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-v
   padding-block: clamp(40px, 6vw, 64px) clamp(32px, 4vw, 48px);
 }
 .page-hero h1 { color: #fff; }
+.page-hero h1 em { font-style: normal; color: var(--clay); }
 .page-hero .lead { color: rgba(255,255,255,.82); max-width: 60ch; margin-top: var(--space-1); }
 
 /* ---------- Utility ---------- */
