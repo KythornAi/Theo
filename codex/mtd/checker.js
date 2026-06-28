@@ -130,6 +130,16 @@ function getIncomeValue(bandId, exact) {
   return Math.round((band.min + band.max) / 2);
 }
 
+// Display label for income: shows the band label with "(band)" suffix when no exact
+// figure was entered, or a formatted exact amount when one was.
+function getIncomeDisplay(bandId, exact) {
+  if (exact !== null && exact !== undefined && exact !== '' && !isNaN(exact)) {
+    return formatMoney(Number(exact));
+  }
+  const band = INCOME_BANDS.find(b => b.id === bandId);
+  return (band && band.flag !== 'unsure') ? band.label + ' (band)' : '—';
+}
+
 // Range-aware: returns {min,max} for a band or an exact value, or null if "not sure".
 function getIncomeRange(bandId, exact) {
   if (exact !== null && exact !== undefined && exact !== '' && !isNaN(exact)) {
@@ -1060,6 +1070,39 @@ function renderResult() {
     resEl.appendChild(panel);
   }
 
+  // Boundary: exact figure sits exactly on the threshold. HMRC's test is "more than".
+  if (result.extra.boundary && result.extra.thresholdRow) {
+    const t = result.extra.thresholdRow.threshold.toLocaleString('en-GB');
+    const panel = document.createElement('div');
+    panel.className = 'callout warning';
+    panel.innerHTML = '<p>You entered exactly £' + t + '. HMRC\'s test is <em>more than</em> £' + t + ', so you are not in scope on this figure. If your actual qualifying income is even slightly above this, you will be in scope. Check your exact Self Assessment figure before relying on this result.</p>';
+    resEl.appendChild(panel);
+  }
+
+  // No tax year: estimate or unsure basis, so no start date can be determined.
+  if (result.extra.indicativeNoYear) {
+    const panel = document.createElement('div');
+    panel.className = 'callout warning';
+    panel.innerHTML = '<p>You indicated you were using an estimate or were not sure which tax year to use. MTD start dates depend on a specific tax year\'s return. Go back and select a tax year to get a clearer result.</p>';
+    resEl.appendChild(panel);
+  }
+
+  // Income unknown: "not sure" band with no exact figure entered.
+  if (result.extra.incomeUnknown) {
+    const panel = document.createElement('div');
+    panel.className = 'callout warning';
+    panel.innerHTML = '<p>You selected \'Not sure\' for your income and did not enter an exact figure. To get a clearer result, go back and choose an income band or enter your qualifying income.</p>';
+    resEl.appendChild(panel);
+  }
+
+  // Fallback: no result path matched (should not normally occur).
+  if (result.extra.fallback) {
+    const panel = document.createElement('div');
+    panel.className = 'callout warning';
+    panel.innerHTML = '<p>We could not produce a confident result from your answers. This can happen with unusual combinations of income sources. Check your position using the <a href="' + HMRC_SOURCES.eligibility + '" target="_blank" rel="noopener noreferrer">HMRC eligibility guidance on GOV.UK</a>, or speak to a tax adviser.</p>';
+    resEl.appendChild(panel);
+  }
+
   // 4. Qualifying income breakdown
   if (result.qi !== null && (result.stateKey === 'A' || result.stateKey === 'B' || result.stateKey === 'C' || result.stateKey === 'D' || result.stateKey === 'G')) {
     const sec = document.createElement('div');
@@ -1069,14 +1112,15 @@ function renderResult() {
     tbl.className = 'income-breakdown';
     let rows = '';
     if (state.roles.includes('sole-trader')) {
-      const seVal = getIncomeValue(state.seIncomeBand, state.seIncomeExact);
-      rows += '<tr><td>Gross self-employment income (before expenses)</td><td class="num">' + formatMoney(seVal) + '</td></tr>';
+      rows += '<tr><td>Gross self-employment income (before expenses)</td><td class="num">' + getIncomeDisplay(state.seIncomeBand, state.seIncomeExact) + '</td></tr>';
     }
     if (state.roles.includes('uk-property') || state.roles.includes('foreign-property')) {
-      const pVal = getIncomeValue(state.propIncomeBand, state.propIncomeExact);
-      rows += '<tr><td>Gross property income, your share (before expenses)</td><td class="num">' + formatMoney(pVal) + '</td></tr>';
+      rows += '<tr><td>Gross property income, your share (before expenses)</td><td class="num">' + getIncomeDisplay(state.propIncomeBand, state.propIncomeExact) + '</td></tr>';
     }
-    rows += '<tr class="total"><td>Combined qualifying income</td><td class="num">' + formatMoney(result.qi) + '</td></tr>';
+    const seBanded = state.roles.includes('sole-trader') && (state.seIncomeExact === null || state.seIncomeExact === '');
+    const propBanded = (state.roles.includes('uk-property') || state.roles.includes('foreign-property')) && (state.propIncomeExact === null || state.propIncomeExact === '');
+    const totalNote = (seBanded || propBanded) ? ' <small style="font-weight:normal;color:var(--steel)">(band estimate)</small>' : '';
+    rows += '<tr class="total"><td>Combined qualifying income</td><td class="num">' + formatMoney(result.qi) + totalNote + '</td></tr>';
     // excluded
     const excluded = [];
     if (state.roles.includes('paye')) excluded.push('PAYE employment income');
@@ -1182,7 +1226,7 @@ function renderResult() {
   const verify = document.createElement('div');
   verify.style.textAlign = 'center';
   verify.style.marginTop = 'var(--space-3)';
-  verify.innerHTML = '<p style="font-size:.9375rem;color:var(--steel)">Always verify your result against the <a href="' + HMRC_SOURCES.hmrcChecker + '" target="_blank" rel="noopener noreferrer"><strong>official HMRC checker on GOV.UK</strong></a>.</p>';
+  verify.innerHTML = '<p style="font-size:.9375rem;color:var(--steel)">Always verify your result against the <a href="' + HMRC_SOURCES.hmrcChecker + '" target="_blank" rel="noopener noreferrer"><strong>official HMRC guidance on GOV.UK</strong></a>.</p>';
   resEl.appendChild(verify);
 
   // 12. Email opt-in (after result)
@@ -1249,7 +1293,7 @@ function renderResult() {
 
 function buildActionList(result) {
   const actions = [
-    'Check your result against the <a href="' + HMRC_SOURCES.hmrcChecker + '" target="_blank" rel="noopener noreferrer">official HMRC checker on GOV.UK</a>.',
+    'Check your result against the <a href="' + HMRC_SOURCES.hmrcChecker + '" target="_blank" rel="noopener noreferrer">official HMRC guidance on GOV.UK</a>.',
     'Confirm your gross self-employment and property income from the relevant Self Assessment return.',
     'Decide how you will keep digital records before your start date.'
   ];
