@@ -45,3 +45,6 @@ These are probably intentionally excluded (large binaries, backups), but there's
 
 [DEMAND-SCAN] 2026-06-29 | Morning scan | File: demand-scans/results/morning-2026-06-29.md
 Top recommendation: AI content repurposing studio — $3k-8k/mo retainers, maps perfectly to Theo's existing content workflow, explosive demand signal. Also: market research confirmed strengthening for 2nd consecutive week (no saturation yet). Full report covers 8 opportunities with demand signals across Upwork/Fiverr.
+
+[DEMAND-SCAN] 2026-06-29 | Afternoon scan | File: demand-scans/results/afternoon-2026-06-29.md
+Top finding: "Admin automation audit" as productised service — signal now in 3 consecutive scans. Reddit confirms business owners know they waste time but can't identify what to automate first. Also spotted: UK tradespeople evening-admin burden (3+ hrs/week on payment chasing, job notes, scheduling) — niche gap on Etsy worth investigating.
