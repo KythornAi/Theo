@@ -14,7 +14,7 @@ MNM audio: Edge TTS + pydub; Gemini in transcribe_app.py.
 §
 Data: Theo processes data, Claude writes narrative, Kyle adds judgement.
 §
-Hermes: dashboard 9119; v0.18.0. Approvals: smart (manual/smart/off; 'auto'→manual). cron_mode=deny. WebUI self-restart; agent updates via subprocess (avoids self-termination). Gateway restart blocked inside — use Claude. Parallel subagent updates crash WebUI — do Agent first then WebUI. Codex OAuth expires silently.
+Hermes: dashboard 9119; v0.18.0. Approvals: smart (manual/smart/off). cron_mode=deny. api_server Tailscale 100.126.155.50:8642. WebUI self-restart; agent updates via subprocess. Gateway restart blocked inside — use Claude. Parallel subagent updates crash WebUI — do Agent first then WebUI. Codex OAuth expires silently.
 §
 Crons: deepseek/deepseek-v4-pro, 10 active. update-watch+relevance-digest on v4-flash since Jun 22. OAuth trap: openai-codex=401. Credit visibility wanted.
 §
